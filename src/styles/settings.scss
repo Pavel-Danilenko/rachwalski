@@ -1,0 +1,164 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// settings.scss — головний конфіг проєкту
+// Змінюй тут → оновлюється скрізь автоматично
+// CSS vars генеруються в base/_variables.scss
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ─── Сітка ───────────────────────────────────────────────────────────────────
+$min-width: 320;
+$max-width: 1920;
+$max-width-container: 1200;
+$container-padding: 30;
+$container-width: $max-width-container + $container-padding;
+
+// ─── Брейкпоінти ─────────────────────────────────────────────────────────────
+$pc: $container-width;
+$tablet: 991.98;
+$mobile: 767.98;
+$mobile-small: 479.98;
+
+$breakpoints: (
+   "xs": 320,
+   "sm": 480,
+   "md": $mobile,
+   "lg": $tablet,
+   "xl": $pc,
+   "xxl": $max-width,
+);
+
+$responsive-type: 1;
+$container-selector-type: "bem";
+
+// ─── Типографіка — base ───────────────────────────────────────────────────────
+$font-primary: "Playfair Display";
+$font-secondary: "Playfair Display";
+$font-size-base: 16;
+$line-height: 1.5;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+// ─── Type Scale ───────────────────────────────────────────────────────────────
+// Єдина шкала розмірів для всього проєкту (fluid: min→max між $mobile та $pc).
+// Генерує CSS vars: --text-xs, --text-sm, ..., --text-hero
+// Використання в компонентах: font-size: var(--text-xl)
+// Або через міксін:           @include type-scale("xl")
+$type-scale: (
+   "xs": (
+      "min": 12,
+      "max": 14,
+   ),
+   "sm": (
+      "min": 14,
+      "max": 16,
+   ),
+   "base": (
+      "min": 16,
+      "max": 18,
+   ),
+   "lg": (
+      "min": 18,
+      "max": 22,
+   ),
+   "xl": (
+      "min": 22,
+      "max": 28,
+   ),
+   "2xl": (
+      "min": 28,
+      "max": 36,
+   ),
+   "3xl": (
+      "min": 32,
+      "max": 48,
+   ),
+   "4xl": (
+      "min": 40,
+      "max": 64,
+   ),
+   "hero": (
+      "min": 48,
+      "max": 96,
+   ),
+);
+
+// ─── Заголовки ────────────────────────────────────────────────────────────────
+// "scale" → ключ з $type-scale
+// null = не задається (inherit від батька)
+$headings-defaults: (
+   "weight": 700,
+   "family": "secondary",
+   "line-height": 1.2,
+   "letter-spacing": null,
+   "color": null,
+   "align": null,
+   "text-transform": null,
+   "margin-bottom": null, // px → rem автоматично
+);
+
+$headings: (
+   "h1": (
+      "scale": "hero",
+   ),
+   "h2": (
+      "scale": "3xl",
+   ),
+   "h3": (
+      "scale": "2xl",
+      "weight": 600,
+   ),
+   "h4": (
+      "scale": "xl",
+      "weight": 600,
+      "family": null,
+   ),
+   "h5": (
+      "scale": "lg",
+      "weight": 500,
+      "family": null,
+   ),
+   "h6": (
+      "scale": "base",
+      "weight": 500,
+      "family": null,
+   ),
+);
+
+// ─── Посилання ────────────────────────────────────────────────────────────────
+$link-color: null;
+$link-color-hover: null;
+$link-decoration: none;
+
+// ─── Кнопки ───────────────────────────────────────────────────────────────────
+$btn-font-weight: $font-weight-bold;
+$btn-font-size: null;
+
+// Кольори → base/_palette.scss
+
+// ─── Радіуси ─────────────────────────────────────────────────────────────────
+$radius: (
+   "sm": 4px,
+   "md": 8px,
+   "lg": 16px,
+   "xl": 24px,
+   "full": 9999px,
+);
+
+// ─── Z-index шари ────────────────────────────────────────────────────────────
+$z-index: (
+   "below": -1,
+   "default": 1,
+   "dropdown": 100,
+   "sticky": 200,
+   "overlay": 300,
+   "modal": 400,
+   "toast": 500,
+);
+
+// ─── Transitions ─────────────────────────────────────────────────────────────
+$transition: (
+   "fast": 0.15s ease,
+   "base": 0.3s ease,
+   "slow": 0.5s ease,
+   "bounce": 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+);

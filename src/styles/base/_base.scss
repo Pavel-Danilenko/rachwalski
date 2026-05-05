@@ -1,0 +1,12 @@
+// @import "_reset";
+
+// І для елементів з анімацією (щоб не спотворювало все)
+[transition-animate] {
+   transform-style: preserve-3d;
+   backface-visibility: hidden;
+}
+.lock body {
+   overflow: hidden;
+   touch-action: none;
+   overscroll-behavior: none;
+}

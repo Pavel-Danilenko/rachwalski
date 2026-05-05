@@ -1,0 +1,19 @@
+---
+//в цьому файлі створюємо потрібну кількість мадальних віконта наповняємо потрібним контентом
+// а далі просто підлючаємо в глобальному файлі і все мадальні вікна будуть виедені
+// після чого робимо виклик модального вікна через кнопку в
+// якої атрибут data-popup-open="id popup"
+// також треба робити import Popups from "@/components/popups/Popups.astro";
+// та підлючаємо сам <Popups /> в кінці body
+import MyPopup from "@components/popups/MyPopup.astro";
+import Icon from "@components/Icon.astro";
+---
+
+<MyPopup sf-section="popups" sf-global id="feedback">
+   <button data-popup-close><Icon name="close" class="" /></button>
+   content...
+</MyPopup>
+
+<script type="module">
+   import "/src/scripts/init/modal.js";
+</script>

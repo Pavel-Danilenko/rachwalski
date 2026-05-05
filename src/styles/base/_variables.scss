@@ -1,0 +1,52 @@
+// base/_variables.scss
+// Генерує CSS custom properties з settings.scss
+// Не редагуй вручну — змінюй значення в settings.scss
+@use "sass:map";
+@use "@styles/settings" as *;
+@use "@styles/utils/functions" as *;
+@use "palette" as *;
+
+:root {
+   // ─── Кольори A: плоский ───────────────────────────────────────────────────
+   @each $name, $value in $colors {
+      --color-#{$name}: #{$value};
+   }
+
+   // ─── Кольори B: шкала відтінків ───────────────────────────────────────────
+   // Активується коли в settings.scss розкоментуєш кольори в $color-scale
+   @if $color-scale != () {
+      @each $color-name, $shades in $color-scale {
+         @each $shade, $value in $shades {
+            --color-#{$color-name}-#{$shade}: #{$value};
+         }
+      }
+   }
+
+   // ─── Радіуси ──────────────────────────────────────────────────────────────
+   @each $name, $value in $radius {
+      --radius-#{$name}: #{$value};
+   }
+
+   // ─── Z-index ──────────────────────────────────────────────────────────────
+   @each $name, $value in $z-index {
+      --z-#{$name}: #{$value};
+   }
+
+   // ─── Transitions ──────────────────────────────────────────────────────────
+   @each $name, $value in $transition {
+      --transition-#{$name}: #{$value};
+   }
+
+   // ─── Типографіка ──────────────────────────────────────────────────────────
+   --font-primary:   #{$font-primary};
+   --font-secondary: #{$font-secondary};
+   --font-size-base: #{toRem($font-size-base)};
+   --line-height:    #{$line-height};
+
+   // ─── Type Scale → fluid CSS vars ─────────────────────────────────────────
+   // --text-xs, --text-sm, --text-base, --text-lg, --text-xl,
+   // --text-2xl, --text-3xl, --text-4xl, --text-hero
+   @each $name, $sizes in $type-scale {
+      --text-#{$name}: #{fluid-value(map.get($sizes, "min"), map.get($sizes, "max"))};
+   }
+}

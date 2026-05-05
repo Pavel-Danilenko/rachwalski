@@ -1,0 +1,49 @@
+---
+const { name, color, class: MyClass, size } = Astro.props;
+---
+
+<svg
+   class:list={["icon", MyClass]}
+   style={color ? `color: ${color}` : undefined}
+   data-icon={name}
+>
+   <use href={`#icon-${name}`}></use>
+</svg>
+
+<style scoped>
+   .icon {
+      display: block;
+      width: 1em;
+      height: 1em;
+      flex-shrink: 0;
+      fill: currentColor;
+      stroke: currentColor;
+   }
+</style>
+
+<script>
+   // Автоматичне підлаштування під viewBox іконки
+   document.addEventListener("DOMContentLoaded", () => {
+      const icons = document.querySelectorAll(".icon[data-icon]");
+
+      icons.forEach((icon) => {
+         const iconName = icon.getAttribute("data-icon");
+         const symbolId = `icon-${iconName}`;
+         const symbol = document.getElementById(symbolId);
+
+         if (symbol) {
+            const viewBox = symbol.getAttribute("viewBox");
+            if (viewBox) {
+               icon.setAttribute("viewBox", viewBox);
+
+               // Опціонально: зберігаємо aspect ratio
+               const [, , width, height] = viewBox.split(" ").map(Number);
+               if (width && height) {
+                  const aspectRatio = width / height;
+                  icon.setAttribute("preserveAspectRatio", "xMidYMid meet");
+               }
+            }
+         }
+      });
+   });
+</script>

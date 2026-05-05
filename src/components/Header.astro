@@ -1,0 +1,27 @@
+---
+// src/components/Header.astro
+import MenuCustom from "@components/menu/MenuCustom.astro";
+import "@styles/components/_header.scss";
+import Logo from "@components/Logo.astro";
+---
+
+<header sf-global sf-section="header" class="header" {...Astro.props}>
+   <div class="header__container">
+      <Logo sf-logo="logo" text="My Logo" />
+      <MenuCustom>
+         <div data-scroll-nav data-menu-overlay class="menu__test">
+            <ul class="menu__list">
+               <li class="menu__item">
+                  <a
+                     sf-id="menu_link"
+                     sf-url="menu_link_url"
+                     href="/about"
+                     class="menu__link"
+                     >About-us
+                  </a>
+               </li>
+            </ul>
+         </div>
+      </MenuCustom>
+   </div>
+</header>

@@ -1,0 +1,283 @@
+/* src/styles/animations/animations.css */
+
+/* Zoom анімація (для zoomTransition з transitions.ts) */
+@keyframes zoomIn {
+   from {
+      opacity: 0;
+      transform: scale(0.8);
+   }
+   to {
+      opacity: 1;
+      transform: scale(1);
+   }
+}
+
+@keyframes zoomOut {
+   from {
+      opacity: 1;
+      transform: scale(1);
+   }
+   to {
+      opacity: 0;
+      transform: scale(1.1);
+   }
+}
+
+/* Slide знизу */
+@keyframes slideInBottom {
+   from {
+      opacity: 0;
+      transform: translateY(100px);
+   }
+   to {
+      opacity: 1;
+      transform: translateY(0);
+   }
+}
+
+@keyframes slideOutBottom {
+   from {
+      opacity: 1;
+      transform: translateY(0);
+   }
+   to {
+      opacity: 0;
+      transform: translateY(-100px);
+   }
+}
+
+/* Fade з масштабуванням */
+@keyframes fadeInScale {
+   from {
+      opacity: 0;
+      transform: scale(0.95);
+   }
+   to {
+      opacity: 1;
+      transform: scale(1);
+   }
+}
+
+@keyframes fadeOutScale {
+   from {
+      opacity: 1;
+      transform: scale(1);
+   }
+   to {
+      opacity: 0;
+      transform: scale(1.05);
+   }
+}
+
+/* 3D Flip (вау!) */
+@keyframes flipIn {
+   from {
+      opacity: 0;
+      transform: rotateY(-90deg);
+   }
+   to {
+      opacity: 1;
+      transform: rotateY(0);
+   }
+}
+
+@keyframes flipOut {
+   from {
+      opacity: 1;
+      transform: rotateY(0);
+   }
+   to {
+      opacity: 0;
+      transform: rotateY(90deg);
+   }
+}
+
+/* Горизонтальний слайд (проста класика) */
+@keyframes slideInRight {
+   from {
+      opacity: 0;
+      transform: translateX(100px);
+   }
+   to {
+      opacity: 1;
+      transform: translateX(0);
+   }
+}
+
+@keyframes slideOutLeft {
+   from {
+      opacity: 1;
+      transform: translateX(0);
+   }
+   to {
+      opacity: 0;
+      transform: translateX(-100px);
+   }
+}
+
+/* Iris reveal (вау — кругле розкриття, як діафрагма) */
+@keyframes irisOpen {
+   from {
+      clip-path: circle(0% at 50% 50%);
+      opacity: 0;
+   }
+   to {
+      clip-path: circle(100% at 50% 50%);
+      opacity: 1;
+   }
+}
+
+@keyframes irisClose {
+   from {
+      clip-path: circle(100% at 50% 50%);
+      opacity: 1;
+   }
+   to {
+      clip-path: circle(0% at 50% 50%);
+      opacity: 0;
+   }
+}
+
+/* Curtain reveal (штори горизонтально) */
+@keyframes curtainOpen {
+   from {
+      clip-path: inset(0 50% 0 50%); /* Закрито по центру */
+      opacity: 0;
+   }
+   to {
+      clip-path: inset(0 0 0 0); /* Повністю відкрито */
+      opacity: 1;
+   }
+}
+
+@keyframes curtainClose {
+   from {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+   }
+   to {
+      clip-path: inset(0 50% 0 50%);
+      opacity: 0;
+   }
+}
+
+/* Glitch reveal (digital збій) */
+@keyframes glitchIn {
+   0% {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      transform: translate(0);
+      opacity: 1;
+      filter: hue-rotate(0deg);
+   }
+   10% {
+      clip-path: polygon(0 0, 100% 0, 100% 20%, 0 100%);
+      transform: translate(-5px);
+   }
+   20% {
+      clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+      transform: translate(5px);
+   }
+   30% {
+      clip-path: polygon(0 40%, 100% 0, 100% 60%, 0 100%);
+      transform: translate(-10px);
+      filter: hue-rotate(90deg);
+   }
+   40% {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 80%);
+      transform: translate(10px);
+   }
+   50% {
+      clip-path: polygon(0 0, 100% 50%, 100% 100%, 0 100%);
+      transform: translate(-5px);
+      filter: hue-rotate(180deg);
+   }
+   60% {
+      clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%);
+      transform: translate(5px);
+   }
+   70% {
+      clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+      transform: translate(-10px);
+      filter: hue-rotate(270deg);
+   }
+   80% {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 50%);
+      transform: translate(10px);
+   }
+   90% {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      transform: translate(-5px);
+      filter: hue-rotate(360deg);
+   }
+   100% {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      transform: translate(0);
+      opacity: 1;
+      filter: hue-rotate(0deg);
+   }
+}
+
+@keyframes glitchOut {
+   from {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      transform: translate(0);
+      opacity: 1;
+      filter: hue-rotate(0deg);
+   }
+   to {
+      clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+      transform: translate(0);
+      opacity: 0;
+      filter: hue-rotate(180deg);
+   }
+}
+
+/* 3D Cube rotate (потужний глибинний ефект) */
+@keyframes cubeIn {
+   from {
+      opacity: 0;
+      transform: rotateY(90deg) translateZ(300px) scale(0.8);
+   }
+   to {
+      opacity: 1;
+      transform: rotateY(0) translateZ(0) scale(1);
+   }
+}
+
+@keyframes cubeOut {
+   from {
+      opacity: 1;
+      transform: rotateY(0) translateZ(0) scale(1);
+   }
+   to {
+      opacity: 0;
+      transform: rotateY(-90deg) translateZ(300px) scale(0.8);
+   }
+}
+
+/* Магічний vortex portal (вихор з blur і glow для магії) */
+@keyframes vortexIn {
+   from {
+      opacity: 0;
+      transform: rotate(720deg) scale(0.3) translateZ(-500px);
+      filter: blur(20px) brightness(1.5);
+   }
+   to {
+      opacity: 1;
+      transform: rotate(0) scale(1) translateZ(0);
+      filter: blur(0) brightness(1);
+   }
+}
+
+@keyframes vortexOut {
+   from {
+      opacity: 1;
+      transform: rotate(0) scale(1) translateZ(0);
+      filter: blur(0) brightness(1);
+   }
+   to {
+      opacity: 0;
+      transform: rotate(-720deg) scale(0.3) translateZ(-500px);
+      filter: blur(30px) brightness(2);
+   }
+}

@@ -1,0 +1,25 @@
+// _split-text.scss
+
+[data-split] {
+   word-break: keep-all;
+   overflow-wrap: normal;
+}
+
+.split-text {
+   &__word {
+      display: inline-block;
+      white-space: nowrap; // слово не розривається
+   }
+
+   &__char {
+      display: inline-block;
+      will-change: transform, opacity, filter;
+      // Знімаємо will-change після завершення анімації через JS
+      // або можна залишити якщо анімація повторюється
+   }
+
+   &__space {
+      display: inline-block;
+      white-space: pre;
+   }
+}

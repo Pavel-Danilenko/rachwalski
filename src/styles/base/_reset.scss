@@ -1,0 +1,80 @@
+*,
+*::before,
+*::after {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+*::before,
+*::after {
+   display: block;
+}
+
+body,
+html {
+   height: 100%;
+}
+
+html {
+   font-size: 1rem;
+   scroll-behavior: smooth;
+}
+
+body {
+   font-family: var(--font-primary);
+   font-size: var(--font-size-base);
+}
+
+ul,
+ol {
+   list-style: none;
+}
+
+a {
+   text-decoration: none;
+   color: inherit;
+}
+button {
+   cursor: pointer;
+}
+button,
+input,
+select,
+textarea {
+   font-family: inherit;
+   font-size: inherit;
+   line-height: inherit;
+   border: none;
+   outline: none;
+   background: none;
+}
+
+table {
+   border-collapse: collapse;
+   border-spacing: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   font-size: inherit;
+   font-weight: inherit;
+}
+
+fieldset {
+   border: none;
+}
+
+:focus {
+   outline: none;
+}
+
+.--sprite {
+   width: 1em;
+   height: 1em;
+   display: block;
+}

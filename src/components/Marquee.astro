@@ -1,0 +1,66 @@
+---
+import "@styles/components/_marquee.scss";
+
+interface Props {
+   speed?: number;
+   speedTablet?: number;
+   speedMobile?: number;
+   space?: number;
+   spaceTablet?: number;
+   spaceMobile?: number;
+   direction?: "left" | "right" | "top" | "bottom";
+   pauseOnHover?: boolean;
+   startPosition?: number;
+   minWidth?: number;
+   maxWidth?: number;
+   class?: string;
+   sfMarquee?: string;
+}
+
+const {
+   speed = 10,
+   speedTablet,
+   speedMobile,
+   space = 30,
+   spaceTablet,
+   spaceMobile,
+   direction = "left",
+   pauseOnHover = false,
+   startPosition = 0,
+   minWidth,
+   maxWidth,
+   class: className = "",
+   sfMarquee,
+} = Astro.props;
+---
+
+<div
+   class:list={["marquee", className]}
+   data-marquee
+   data-marquee-speed={speed}
+   data-marquee-speed-tablet={speedTablet ?? speed}
+   data-marquee-speed-mobile={speedMobile ?? speedTablet ?? speed}
+   data-marquee-space={space}
+   data-marquee-space-tablet={spaceTablet ?? space}
+   data-marquee-space-mobile={spaceMobile ?? spaceTablet ?? space}
+   data-marquee-direction={direction}
+   data-marquee-start={startPosition}
+   {...pauseOnHover && { "data-marquee-pause": "" }}
+   {...minWidth && { "data-marquee-min-width": minWidth }}
+   {...maxWidth && { "data-marquee-max-width": maxWidth }}
+   sf-marquee={sfMarquee}
+>
+   <slot />
+</div>
+
+<style>
+   .marquee {
+      overflow: hidden;
+      width: 100%;
+   }
+</style>
+
+<script>
+   import { initMarquee } from "@scripts/init/marquee";
+   document.addEventListener("astro:page-load", initMarquee);
+</script>

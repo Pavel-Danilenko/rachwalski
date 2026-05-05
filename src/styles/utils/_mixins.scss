@@ -1,0 +1,114 @@
+@use "sass:math";
+@use "@styles/settings" as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BLEED GRID — секція де одна сторона йде до краю екрана, інша по сітці
+//
+// Встановлює CSS Grid з 4 іменованими лініями:
+//   [full-start] ← відступ → [content-start] ← ліво → [center] ← право → [content-end] ← відступ → [full-end]
+//
+// Міксіни для дочірніх елементів:
+//   bleed-left    — від краю екрана до центру  (медіа ліворуч)
+//   bleed-right   — від центру до краю екрана  (медіа праворуч)
+//   grid-left     — від сітки до центру        (текст ліворуч по сітці)
+//   grid-right    — від центру до сітки        (текст праворуч по сітці)
+//   full-width    — на всю ширину екрана
+//   container     — тільки в межах контейнера
+//
+// ПРИКЛАДИ:
+//   Медіа ліво + текст право:
+//     .section          { @include bleed-grid; gap: 40px; }
+//     .section__image   { @include bleed-left; }
+//     .section__content { @include grid-right; }
+//
+//   Текст ліво + медіа право:
+//     .section          { @include bleed-grid; gap: 40px; }
+//     .section__content { @include grid-left; }
+//     .section__image   { @include bleed-right; }
+//
+//   З кастомним gap:
+//     .section { @include bleed-grid(60px); }
+// ─────────────────────────────────────────────────────────────────────────────
+$_half: math.div($max-width-container, 2);
+$_pad:  math.div($container-padding, 2);
+
+// Відступ від краю екрана до початку контейнера (мін — container-padding/2)
+// max() як CSS функція: якщо вікно < контейнера — фіксований відступ $_pad
+$_offset: #{"max(#{$_pad}px, calc((100vw - #{$max-width-container}px) / 2 + #{$_pad}px))"};
+
+@mixin bleed-grid($gap: 0px) {
+   display: grid;
+   grid-template-columns:
+      [full-start]    #{$_offset}
+      [content-start] minmax(0, #{$_half}px)
+      [center]        minmax(0, #{$_half}px)
+      [content-end]   #{$_offset}
+      [full-end];
+   @if $gap != 0px { column-gap: $gap; }
+}
+
+// ── Дочірні елементи ─────────────────────────────────────────────────────────
+@mixin bleed-left   { grid-column: full-start    / center; }   // від краю до центру
+@mixin bleed-right  { grid-column: center        / full-end; } // від центру до краю
+@mixin grid-left    { grid-column: content-start / center; }   // від сітки до центру
+@mixin grid-right   { grid-column: center        / content-end; } // від центру до сітки
+@mixin full-width   { grid-column: full-start    / full-end; } // на весь екран
+@mixin container    { grid-column: content-start / content-end; } // тільки контейнер
+
+// ─────────────────────────────────────────────────────────────────────────────
+// type-scale($name) — застосовує розмір з $type-scale
+//
+// Використання:
+//   @include type-scale("xl");   → font-size: var(--text-xl)
+//   @include type-scale("hero"); → font-size: var(--text-hero)
+// ─────────────────────────────────────────────────────────────────────────────
+@mixin type-scale($name) {
+   font-size: var(--text-#{$name});
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// fluid($property, $min, $max, $from, $to)
+//
+// Плавно змінює будь-яку CSS властивість між двома брейкпоінтами.
+// $from/$to — числа px або bp("name") з $breakpoints мапи.
+//
+// За замовчуванням: $mobile (768) → $pc (1230)
+//
+// ПРИКЛАДИ:
+//   @include fluid(font-size, 16, 24);               → сітка за замовч.
+//   @include fluid(font-size, 16, 24, 320, 1920);    → свої параметри
+//   @include fluid(font-size, 16, 24, bp("sm"), bp("xxl")); → іменовані
+//   @include fluid(gap, 16, 40);
+//   @include fluid(padding, 20, 80, 480, 1440);
+// ─────────────────────────────────────────────────────────────────────────────
+@mixin fluid($property, $min, $max, $from: $mobile, $to: $pc) {
+   $slope: math.div($max - $min, $to - $from);
+   $intercept: $min - $slope * $from;
+   // Рядок в лапках — "+" залишається літералом, не конкатенацією Sass
+   $preferred: "#{$slope * 100}vw + #{$intercept}px";
+   #{$property}: clamp(#{$min}px, calc(#{$preferred}), #{$max}px);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// fluid-type($min, $max, $from, $to)
+// Shorthand для font-size
+//
+//   @include fluid-type(16, 24);
+//   @include fluid-type(14, 18, 320, 768);
+//   @include fluid-type(32, 96, bp("sm"), bp("xxl"));
+// ─────────────────────────────────────────────────────────────────────────────
+@mixin fluid-type($min, $max, $from: $mobile, $to: $pc) {
+   @include fluid(font-size, $min, $max, $from, $to);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// fluid-space($property, $min, $max, $from, $to)
+// Shorthand для відступів
+//
+//   @include fluid-space(padding-top, 40, 120);
+//   @include fluid-space(gap, 16, 40, 320, 1440);
+//   @include fluid-space(margin-bottom, 24, 80, bp("xs"), bp("xl"));
+// ─────────────────────────────────────────────────────────────────────────────
+@mixin fluid-space($property, $min, $max, $from: $mobile, $to: $pc) {
+   @include fluid($property, $min, $max, $from, $to);
+}

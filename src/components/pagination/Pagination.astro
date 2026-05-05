@@ -1,0 +1,161 @@
+---
+import "@styles/components/pagination/_pagination.scss";
+
+type AnimationVariant = "none" | "fade" | "slide" | "scale" | "blur";
+type NavVariant = "default" | "pill" | "minimal" | "outline" | "ghost";
+
+interface Props {
+   // ─── логіка ───────────────────────────────────────────────────────────────
+   perPage?: number;
+   itemSelector: string;
+   siblings?: number;
+
+   // ─── анімація контенту ────────────────────────────────────────────────────
+   animation?: AnimationVariant;
+   animationDuration?: number;
+   animationStagger?: number;
+   animationDirectional?: boolean;
+
+   // ─── навігація ────────────────────────────────────────────────────────────
+   navVariant?: NavVariant;
+   showInfo?: boolean;
+   showArrows?: boolean;
+   showFirstLast?: boolean;
+   showProgress?: boolean;
+
+   // ─── іконки (svg sprite) ──────────────────────────────────────────────────
+   iconPrev?: string;
+   iconNext?: string;
+   iconFirst?: string;
+   iconLast?: string;
+
+   // ─── рядки (i18n) ─────────────────────────────────────────────────────────
+   labelPrev?: string;
+   labelNext?: string;
+   labelFirst?: string;
+   labelLast?: string;
+   labelPage?: string; // шаблон: "Page {page} of {pages}"
+   labelInfo?: string; // шаблон: "{current} / {pages}"
+
+   // ─── поведінка ────────────────────────────────────────────────────────────
+   scrollTo?: boolean;
+   scrollOffset?: number;
+   keyboard?: boolean;
+   swipe?: boolean;
+   urlSync?: boolean;
+   urlParam?: string;
+
+   // ─── кастомні класи ───────────────────────────────────────────────────────
+   class?: string;
+   classContent?: string;
+   classNav?: string;
+   classBtn?: string;
+   classBtnActive?: string;
+   classBtnArrow?: string;
+   classEllipsis?: string;
+   classInfo?: string;
+   classProgress?: string;
+
+   // ─── Shopify: параметри для section schema ────────────────────────────────
+   sfPagination?: string; // "per_page,animation" — трансформується в index.ts
+}
+
+const {
+   perPage = 6,
+   itemSelector,
+   siblings = 1,
+
+   animation = "fade",
+   animationDuration = 300,
+   animationStagger = 40,
+   animationDirectional = true,
+
+   navVariant = "default",
+   showInfo = true,
+   showArrows = true,
+   showFirstLast = false,
+   showProgress = false,
+
+   iconPrev,
+   iconNext,
+   iconFirst,
+   iconLast,
+
+   labelPrev = "Previous page",
+   labelNext = "Next page",
+   labelFirst = "First page",
+   labelLast = "Last page",
+   labelPage = "Page {page} of {pages}",
+   labelInfo = "{current} / {pages}",
+
+   scrollTo = false,
+   scrollOffset = 0,
+   keyboard = false,
+   swipe = false,
+   urlSync = false,
+   urlParam = "page",
+
+   class: className,
+   classContent,
+   classNav,
+   classBtn,
+   classBtnActive,
+   classBtnArrow,
+   classEllipsis,
+   classInfo,
+   classProgress,
+   sfPagination,
+} = Astro.props;
+---
+
+<div
+   class:list={["pagination-wrapper", className]}
+   data-pagination-root
+   sf-pagination={sfPagination}
+   data-per-page={perPage}
+   data-item-selector={itemSelector}
+   data-siblings={siblings}
+   data-animation={animation}
+   data-animation-duration={animationDuration}
+   data-animation-stagger={animationStagger}
+   data-animation-directional={animationDirectional}
+   data-show-info={showInfo}
+   data-show-arrows={showArrows}
+   data-show-first-last={showFirstLast}
+   data-show-progress={showProgress}
+   data-icon-prev={iconPrev}
+   data-icon-next={iconNext}
+   data-icon-first={iconFirst}
+   data-icon-last={iconLast}
+   data-label-prev={labelPrev}
+   data-label-next={labelNext}
+   data-label-first={labelFirst}
+   data-label-last={labelLast}
+   data-label-page={labelPage}
+   data-label-info={labelInfo}
+   data-scroll-to={scrollTo}
+   data-scroll-offset={scrollOffset}
+   data-keyboard={keyboard}
+   data-swipe={swipe}
+   data-url-sync={urlSync}
+   data-url-param={urlParam}
+   data-class-btn={classBtn}
+   data-class-btn-active={classBtnActive}
+   data-class-btn-arrow={classBtnArrow}
+   data-class-ellipsis={classEllipsis}
+   data-class-info={classInfo}
+   data-class-progress={classProgress}
+>
+   <div class:list={["pagination-content", classContent]}>
+      <slot />
+   </div>
+   <nav
+      class:list={["pagination-nav", `pagination-nav--${navVariant}`, classNav]}
+      aria-label="Pagination"
+   >
+   </nav>
+</div>
+
+<script>
+   import "@scripts/init/pagination";
+</script>

@@ -1,0 +1,51 @@
+---
+import "@styles/components/_custom-checkbox.scss";
+
+interface Props {
+   name: string;
+   id?: string;
+   label?: string;
+   required?: boolean;
+   checked?: boolean;
+   disabled?: boolean;
+   value?: string;
+   class?: string;
+   [key: string]: any;
+}
+
+const {
+   name,
+   id = `checkbox-${name}`,
+   label,
+   required = false,
+   checked = false,
+   disabled = false,
+   value,
+   class: className = "",
+   ...rest
+} = Astro.props;
+---
+
+<label class="custom-checkbox">
+   <input
+      type="checkbox"
+      {id}
+      {name}
+      {value}
+      {required}
+      {checked}
+      {disabled}
+      {...rest}
+      class="custom-checkbox__input"
+   />
+
+   <span class="custom-checkbox__box"></span>
+
+   <span class="custom-checkbox__label">
+      <slot>{label}</slot>
+   </span>
+</label>
+
+<script>
+   import "@scripts/init/custom-checkbox";
+</script>

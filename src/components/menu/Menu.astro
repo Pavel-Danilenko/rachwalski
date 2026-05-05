@@ -1,0 +1,53 @@
+---
+// src/components/menu/Menu.astro
+import "@styles/components/_menu.scss";
+import type { MenuItem as MenuItemType } from "@config/menu";
+import MenuItem from "@components/menu/MenuItem.astro";
+import { useTranslations, getLangFromUrl } from "@i18n/utils";
+
+interface Props {
+   config?: MenuItemType[];
+   class?: string;
+}
+
+const { config, class: className } = Astro.props;
+const currentPath = Astro.url.pathname;
+const lang = getLangFromUrl(Astro.url);
+---
+
+<nav class:list={["menu", className]} data-menu>
+   {
+      config ? (
+         <div class="menu__container">
+            <button
+               class="menu__burger"
+               data-menu-trigger
+               aria-label="Toggle menu"
+               type="button"
+            >
+               <span />
+               <span />
+               <span />
+            </button>
+            <div class="menu__overlay" data-menu-overlay>
+               <ul class="menu__list">
+                  {config.map((item) => (
+                     <MenuItem
+                        item={item}
+                        currentPath={currentPath}
+                        lang={lang}
+                     />
+                  ))}
+               </ul>
+            </div>
+         </div>
+      ) : (
+         <slot />
+      )
+   }
+</nav>
+
+<script>
+   import "@scripts/init/menu";
+   import "@scripts/init/menu-active-links";
+</script>

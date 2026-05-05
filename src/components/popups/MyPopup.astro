@@ -1,0 +1,19 @@
+---
+// це просто готовий компонент який налаштований для роботи
+export interface Props {
+   id: string;
+   backdropClose?: boolean; // Не використовуємо зараз, але залишимо
+   class?: string;
+}
+
+const { id, class: customClass = "" } = Astro.props;
+import "@styles/components/_popup.scss";
+---
+
+<div data-lock data-popup={id} class="popup" aria-hidden="true">
+   <div class="popup__wrapper">
+      <div class={`popup__content ${customClass}`}>
+         <slot />
+      </div>
+   </div>
+</div>

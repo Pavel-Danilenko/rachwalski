@@ -1,0 +1,376 @@
+---
+import "@styles/components/_custom-datepicker.scss";
+
+interface Props {
+   name: string;
+   id?: string;
+
+   // Режим
+   mode?: "single" | "range" | "multiple";
+
+   // Значення
+   value?: string;
+   defaultValue?: string;
+
+   // Обмеження
+   minDate?: string;
+   maxDate?: string;
+   disabledDates?: string[];
+   disabledDaysOfWeek?: number[];
+
+   // Формат
+   format?: string;
+   locale?: string;
+   firstDayOfWeek?: number;
+
+   // UI опції
+   showShortcuts?: boolean;
+   showMultipleMonths?: number;
+   showYearDropdown?: boolean;
+   showMonthDropdown?: boolean;
+   showTodayButton?: boolean;
+   showClearButton?: boolean;
+
+   // 🎨 ІКОНКИ (sprite support)
+   iconCalendar?: string;
+   iconClear?: string;
+   iconPrev?: string;
+   iconNext?: string;
+   useInlineSvg?: boolean;
+
+   // Тексти (i18n) - ВСЕ через props!
+   placeholder?: string;
+   todayText?: string;
+   clearText?: string;
+   closeText?: string;
+   applyText?: string;
+   cancelText?: string;
+
+   // Назви місяців (i18n)
+   monthNames?: string[];
+   monthNamesShort?: string[];
+
+   // Назви днів (i18n)
+   dayNames?: string[];
+   dayNamesShort?: string[];
+   dayNamesMin?: string[];
+
+   // Shortcuts
+   shortcuts?: Array<{ label: string; value: string }>;
+
+   // Валідація
+   required?: boolean;
+   disabled?: boolean;
+   readonly?: boolean;
+
+   // 🔥 Data-атрибути для валідації (i18n)
+   "data-error-required"?: string;
+   "data-error-min-date"?: string;
+   "data-error-max-date"?: string;
+
+   // Стилі
+   theme?: "light" | "dark" | "auto";
+   color?: string;
+
+   // Додаткові класи
+   class?: string;
+
+   // Rest
+   [key: string]: any;
+}
+
+const {
+   name,
+   id = `datepicker-${name}`,
+   mode = "single",
+   value,
+   defaultValue,
+   minDate,
+   maxDate,
+   disabledDates = [],
+   disabledDaysOfWeek = [],
+   format = "DD.MM.YYYY",
+   locale = "en",
+   firstDayOfWeek = 1,
+   showShortcuts = false,
+   showMultipleMonths = 1,
+   showYearDropdown = true,
+   showMonthDropdown = true,
+   showTodayButton = true,
+   showClearButton = true,
+
+   // Іконки
+   iconCalendar,
+   iconClear,
+   iconPrev,
+   iconNext,
+   useInlineSvg = false,
+
+   // Візуальні стилі
+   monthsView = "cards",
+   yearsView = "grid",
+   transition = "slide",
+   showBreadcrumbs = true,
+   enableGestures = false,
+
+   placeholder = "Select date",
+   todayText = "Today",
+   clearText = "Clear",
+   closeText = "Close",
+   applyText = "Apply",
+   cancelText = "Cancel",
+   monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+   ],
+   monthNamesShort = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+   ],
+   dayNames = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+   ],
+   dayNamesShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+   dayNamesMin = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+   shortcuts = [],
+   required = false,
+   disabled = false,
+   readonly = false,
+   theme = "light",
+   color = "blue",
+   class: className = "",
+   ...rest
+} = Astro.props;
+
+// Визначаємо чи використовувати sprite
+const useSprite =
+   !useInlineSvg && (iconCalendar || iconClear || iconPrev || iconNext);
+
+// Витягуємо data-error атрибути для валідації
+const errorRequired = rest["data-error-required"];
+const errorMinDate = rest["data-error-min-date"];
+const errorMaxDate = rest["data-error-max-date"];
+---
+
+<div
+   class={`custom-datepicker ${className}`}
+   data-datepicker
+   data-name={name}
+   data-mode={mode}
+   data-format={format}
+   data-locale={locale}
+   data-first-day-of-week={firstDayOfWeek}
+   data-min-date={minDate}
+   data-max-date={maxDate}
+   data-disabled-dates={JSON.stringify(disabledDates)}
+   data-disabled-days-of-week={JSON.stringify(disabledDaysOfWeek)}
+   data-show-shortcuts={showShortcuts}
+   data-show-multiple-months={showMultipleMonths}
+   data-show-year-dropdown={showYearDropdown}
+   data-show-month-dropdown={showMonthDropdown}
+   data-show-today-button={showTodayButton}
+   data-show-clear-button={showClearButton}
+   data-placeholder={placeholder}
+   data-today-text={todayText}
+   data-clear-text={clearText}
+   data-close-text={closeText}
+   data-apply-text={applyText}
+   data-cancel-text={cancelText}
+   data-month-names={JSON.stringify(monthNames)}
+   data-month-names-short={JSON.stringify(monthNamesShort)}
+   data-day-names={JSON.stringify(dayNames)}
+   data-day-names-short={JSON.stringify(dayNamesShort)}
+   data-day-names-min={JSON.stringify(dayNamesMin)}
+   data-shortcuts={JSON.stringify(shortcuts)}
+   data-theme={theme}
+   data-color={color}
+   data-icon-calendar={iconCalendar}
+   data-icon-clear={iconClear}
+   data-icon-prev={iconPrev}
+   data-icon-next={iconNext}
+   data-use-sprite={useSprite}
+   data-months-view={monthsView}
+   data-years-view={yearsView}
+   data-transition={transition}
+   data-show-breadcrumbs={showBreadcrumbs}
+   data-enable-gestures={enableGestures}
+>
+   <!-- 🔥 ПРИХОВАНИЙ INPUT для форми (YYYY-MM-DD) - для валідації -->
+   <input
+      type="hidden"
+      {id}
+      {name}
+      {value}
+      {required}
+      {disabled}
+      data-error-required={errorRequired}
+      data-error-min-date={errorMinDate}
+      data-error-max-date={errorMaxDate}
+      class="datepicker-hidden-input"
+   />
+
+   <!-- Input поле для UI -->
+   <div class="datepicker-input-wrapper">
+      <input
+         type="text"
+         id={`${id}-display`}
+         {placeholder}
+         {disabled}
+         readonly
+         class="datepicker-input"
+         autocomplete="off"
+      />
+
+      <!-- Кнопка календаря -->
+      <button
+         type="button"
+         class="datepicker-toggle"
+         aria-label="Open calendar"
+         disabled={disabled}
+      >
+         {
+            iconCalendar && !useInlineSvg ? (
+               <svg class="icon">
+                  <use href={`#icon-${iconCalendar}`} />
+               </svg>
+            ) : (
+               <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  stroke="currentColor"
+               >
+                  <rect
+                     x="3"
+                     y="4"
+                     width="14"
+                     height="14"
+                     rx="2"
+                     ry="2"
+                     stroke-width="2"
+                  />
+                  <line x1="3" y1="9" x2="17" y2="9" stroke-width="2" />
+                  <line x1="7" y1="2" x2="7" y2="6" stroke-width="2" />
+                  <line x1="13" y1="2" x2="13" y2="6" stroke-width="2" />
+               </svg>
+            )
+         }
+      </button>
+
+      <!-- Кнопка очищення -->
+      {
+         showClearButton && (
+            <button
+               type="button"
+               class="datepicker-clear"
+               aria-label={clearText}
+               style="display: none;"
+            >
+               {iconClear && !useInlineSvg ? (
+                  <svg class="icon">
+                     <use href={`#icon-${iconClear}`} />
+                  </svg>
+               ) : (
+                  <svg
+                     width="16"
+                     height="16"
+                     viewBox="0 0 16 16"
+                     fill="none"
+                     stroke="currentColor"
+                  >
+                     <path
+                        d="M12 4L4 12M4 4l8 8"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                     />
+                  </svg>
+               )}
+            </button>
+         )
+      }
+   </div>
+
+   <!-- Календар (генерується JS) -->
+   <div class="datepicker-dropdown" style="display: none;">
+      <!-- Shortcuts (якщо включено) -->
+      {
+         showShortcuts && shortcuts.length > 0 && (
+            <div class="datepicker-shortcuts" />
+         )
+      }
+
+      <!-- Calendar container (генерується JS) -->
+      <div class="datepicker-calendar"></div>
+
+      <!-- Footer з кнопками (для range mode) -->
+      {
+         mode === "range" && (
+            <div class="datepicker-footer">
+               <button
+                  type="button"
+                  class="datepicker-btn datepicker-btn-cancel"
+               >
+                  {cancelText}
+               </button>
+               <button
+                  type="button"
+                  class="datepicker-btn datepicker-btn-apply"
+               >
+                  {applyText}
+               </button>
+            </div>
+         )
+      }
+
+      <!-- Today button -->
+      {
+         showTodayButton && (
+            <button type="button" class="datepicker-today-btn">
+               {todayText}
+            </button>
+         )
+      }
+   </div>
+</div>
+
+<script>
+   import "@scripts/init/custom-datepicker";
+</script>
+
+<style scoped>
+   .icon {
+      display: block;
+      width: 1em;
+      height: 1em;
+      flex-shrink: 0;
+      fill: currentColor;
+      stroke: currentColor;
+   }
+</style>

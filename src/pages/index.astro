@@ -1,0 +1,351 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/PageMain.astro";
+import MyImages from "@/components/MyImages.astro";
+import Image from "@assets/img/main-page/image.jpg";
+import Image2 from "@assets/img/main-page/gallery-img-2.png";
+import Gallery from "@/components/gallery.astro";
+import Icon from "@/components/Icon.astro";
+import Marquee from "@/components/Marquee.astro";
+import Tabs from "@/components/Tabs.astro";
+import Counter from "@components/Counter.astro";
+import Slider from "@components/sliders/Slider.astro";
+import Pagination from "@components/pagination/Pagination.astro";
+import Showmore from "@components/pagination/Showmore.astro";
+import Countdown from "@/components/countdown/Countdown.astro";
+---
+
+<BaseLayout title="Головна сторінка" description="Мій крутий стартер на Astro">
+   <PageMain>
+      <section sf-section="hero" class="hero">
+         <div class="hero__container">
+            <h1 sf-id="main_title" class="main__title">Hello Shopify</h1>
+            <div sf-id="main_content" class="main__content">
+               Hello Shopify! I'm Danylenko!
+            </div>
+            <a
+               sf-url="hero_btn_urlt"
+               sf-id="hero_btn"
+               class="main__link"
+               href="/product"
+               >Contact
+            </a>
+            <MyImages sf-image="hero_image" src={Image} alt="My image" />
+            <Icon name="close" class="test" color="green" />
+            <Countdown
+               deadline="2026-12-31T23:59:00"
+               variant="tiles"
+               animation="flip"
+               labels={{
+                  days: { short: "Д", long: "Дні" },
+                  hours: { short: "Год", long: "Години" },
+                  minutes: { short: "Хв", long: "Хвилини" },
+                  seconds: { short: "Сек", long: "Секунди" },
+               }}
+               labelFormat="short"
+               separator=":"
+            />
+         </div>
+      </section>
+
+      <section class="blog">
+         <div class="blog__container">
+            <h2 class="blog__title">Blog</h2>
+            <Showmore itemSelector=".blog__inner" perPage={1}>
+               <div class="blog__inner">
+                  <MyImages
+                     sf-image="hero_image"
+                     src={Image}
+                     alt="My image"
+                     wrapperClass="collection__item"
+                  />
+               </div>
+               <div class="blog__inner">
+                  <MyImages
+                     sf-image="hero_image"
+                     src={Image}
+                     alt="My image"
+                     wrapperClass="collection__item"
+                  />
+               </div>
+               <div class="blog__inner">
+                  <MyImages
+                     sf-image="hero_image"
+                     src={Image}
+                     alt="My image"
+                     wrapperClass="collection__item"
+                  />
+               </div>
+            </Showmore>
+         </div>
+      </section>
+      <section sf-section="featured-products" class="product">
+         <div class="product__container">
+            <h2 sf-id="product_title" class="product__title">Product</h2>
+            <Slider />
+            <div class="product__footer">
+               <a
+                  sf-id="collection_btn"
+                  sf-url="collection_btn_url"
+                  href="/collection"
+                  class="btn product__collection-btn"
+               >
+                  View all collection
+               </a>
+            </div>
+         </div>
+      </section>
+      <section sf-section="gallery" class="gallery">
+         <div class="gallery__container">
+            <h2 sf-id="gallery_title" class="gallery__title">Gallery</h2>
+            <Gallery sfGallery="gallery" collectionName="gallery" />
+         </div>
+      </section>
+
+      <section sf-section="stats" class="stats">
+         <div class="stats__container">
+            <h2 sf-id="stats_title" class="stats__title">My stats</h2>
+            <div class="stats__row">
+               <Counter sf-block target={1000} suffix="+" once={false} />
+            </div>
+         </div>
+      </section>
+
+      <section sf-section="about" class="about">
+         <div class="about__container">
+            <h2 sf-id="about_title" class="about__shopify">About Shopify</h2>
+            <div sf-id="about_content" class="about__content">
+               Hello Shopify! I'm Danylenko!
+            </div>
+            <a
+               sf-url="about_btn_url"
+               sf-id="about_btn"
+               class="about__link"
+               href="#">Test</a
+            >
+         </div>
+      </section>
+
+      <section class="collection">
+         <div class="collection__container" style="padding-block: 60px;">
+            <h2 class="collection__title">Collection</h2>
+            <Pagination
+               classContent="pagination__grid"
+               perPage={4}
+               itemSelector=".collection__item"
+               animation="slide"
+               animationDuration={800}
+               animationStagger={140}
+               showProgress={true}
+               navVariant="ghost"
+               scrollTo={true}
+               scrollOffset={80}
+            >
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+               <MyImages
+                  sf-image="hero_image"
+                  src={Image2}
+                  alt="My image"
+                  wrapperClass="collection__item"
+               />
+            </Pagination>
+         </div>
+         <section sf-section="tabs" class="tabs">
+            <div class="tabs__container">
+               <Tabs sfTabs="services">
+                  <Fragment slot="buttons">
+                     <button data-tab="tab1" class="tabs__button">
+                        Перший таб
+                     </button>
+                  </Fragment>
+                  <Fragment slot="panels">
+                     <div data-tab-content="tab1" class="tabs__panel">
+                        <h3 sf-id="title">Заголовок</h3>
+                        <div sf-id="text" sf-type="richtext">Текст...</div>
+                        <Gallery sfGallery="gallery" collectionName="gallery" />
+                        <MyImages
+                           sf-image="hero_image"
+                           src={Image}
+                           alt="My image"
+                        />
+                     </div>
+                  </Fragment>
+               </Tabs>
+            </div>
+         </section>
+      </section>
+   </PageMain>
+</BaseLayout>

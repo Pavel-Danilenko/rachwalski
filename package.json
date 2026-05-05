@@ -1,0 +1,45 @@
+{
+   "name": "adorable-astronaut",
+   "type": "module",
+   "version": "0.0.1",
+   "scripts": {
+      "dev": "astro dev",
+      "build": "astro build",
+      "build:plugin": "cross-env PUBLIC_IMAGE_MODE=plugin astro build",
+      "build:astro": "cross-env PUBLIC_IMAGE_MODE=astro astro build",
+      "preview": "astro preview",
+      "astro": "astro",
+      "build:static": "cross-env BUILD_MODE=static astro build",
+      "build-wp": "cross-env BUILD_MODE=wp astro build && find dist-wp -type f \\( -name \"*.png\" -o -name \"*.jpeg\" -o -name \"*.jpg\" \\) -delete && npx prettier --write dist-wp/**/*.html",
+      "preview:wp": "astro preview --dir dist-wp",
+      "build:shopify": "cross-env BUILD_MODE=shopify astro build",
+      "preview:shopify": "astro preview --dir dist-shopify"
+   },
+   "dependencies": {
+      "@astrojs/node": "^9.5.2",
+      "@fancyapps/ui": "^6.1.10",
+      "astro": "^5.16.6",
+      "astro-delete-unused-images": "^1.0.3",
+      "node-html-parser": "^7.1.0",
+      "nodemailer": "^7.0.13",
+      "swiper": "^12.1.2"
+   },
+   "devDependencies": {
+      "@astrojs/sitemap": "^3.6.0",
+      "@astrojs/ts-plugin": "^1.10.6",
+      "@datarose/vite-plugin-media-optimize": "^0.6.0",
+      "@playform/compress": "^0.2.0",
+      "@prettier/plugin-php": "^0.24.0",
+      "@shopify/prettier-plugin-liquid": "^1.10.0",
+      "@types/nodemailer": "^7.0.9",
+      "cross-env": "^10.1.0",
+      "cssnano": "^7.1.2",
+      "dotenv": "^17.2.3",
+      "prettier": "^3.7.4",
+      "prettier-plugin-astro": "^0.14.1",
+      "sass": "^1.97.1",
+      "sharp": "^0.34.5",
+      "vite-plugin-image-optimizer": "^2.0.3",
+      "vite-tsconfig-paths": "^6.0.3"
+   }
+}

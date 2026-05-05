@@ -1,0 +1,43 @@
+---
+const { title = "Danylenko Template Start", description = "" } = Astro.props;
+import Footer from "@components/footer.astro";
+import "@styles/main.scss";
+import Header from "@components/Header.astro";
+import Popups from "@components/popups/Popups.astro";
+import IconSprite from "@components/IconSprite.astro";
+import { googleFonts, buildGoogleFontsUrl } from "@config/fonts";
+
+const googleFontsUrl = buildGoogleFontsUrl(googleFonts);
+---
+
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      <meta name="generator" content={Astro.generator} />
+      <title>{title}</title>
+      {description && <meta name="description" content={description} />}
+
+      {googleFontsUrl && (
+         <>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+            <link rel="stylesheet" href={googleFontsUrl} />
+         </>
+      )}
+   </head>
+   <body>
+      <IconSprite />
+      <div class="wrapper">
+         <Header />
+         <slot />
+         <Footer>hello</Footer>
+      </div>
+      <Popups />
+      <script>
+         import "@scripts/app";
+      </script>
+   </body>
+</html>

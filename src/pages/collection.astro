@@ -1,0 +1,109 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/PageMain.astro";
+import Pagination from "@components/pagination/Pagination.astro";
+import CustomSelect from "@components/forms/CustomSelect.astro";
+import Image from "@assets/img/main-page/image.jpg";
+import "@styles/pages/_collection-page.scss";
+---
+
+<BaseLayout title="Collection" description="Сторінка колекції">
+   <PageMain sf-template="collection">
+      <section
+         sf-section="collection-template"
+         class="collection"
+         data-collection-page
+      >
+         <div class="collection__container">
+
+            <div class="collection__header">
+               <h1 class="collection__title" sf-id="title">All Products</h1>
+               <p class="collection__desc" sf-id="description">
+                  Browse our collection
+               </p>
+            </div>
+
+            <!-- Фільтр — JS будує кнопки динамічно з data-* карток -->
+            <div class="collection__filter" data-filter-root></div>
+
+            <!-- Sort bar — прив'язаний через data-sort-select в collection-filter.js -->
+            <div class="collection__sort-bar" data-sort-select>
+               <span class="collection__result-count" data-result-count></span>
+               <div class="collection__view-toggle" data-view-toggle>
+                  <button class="collection__view-btn is-active" data-view="grid" title="Grid view" type="button">
+                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <rect x="0" y="0" width="7" height="7" rx="1"/><rect x="9" y="0" width="7" height="7" rx="1"/>
+                        <rect x="0" y="9" width="7" height="7" rx="1"/><rect x="9" y="9" width="7" height="7" rx="1"/>
+                     </svg>
+                  </button>
+                  <button class="collection__view-btn" data-view="list" title="List view" type="button">
+                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <rect x="0" y="0" width="7" height="7" rx="1"/><rect x="9" y="2" width="7" height="3" rx="1"/>
+                        <rect x="0" y="9" width="7" height="7" rx="1"/><rect x="9" y="11" width="7" height="3" rx="1"/>
+                     </svg>
+                  </button>
+               </div>
+               <span class="collection__sort-label">Sort:</span>
+               <CustomSelect
+                  name="sort"
+                  options={[
+                     { value: "default", label: "Default" },
+                     { value: "price-asc", label: "Price ↑" },
+                     { value: "price-desc", label: "Price ↓" },
+                     { value: "name-asc", label: "Name A–Z" },
+                     { value: "name-desc", label: "Name Z–A" },
+                  ]}
+                  defaultValue="default"
+                  showClearButton={false}
+               />
+            </div>
+
+            <Pagination
+               itemSelector=".collection-card"
+               perPage={12}
+               animation="fade"
+               urlSync={true}
+               scrollTo={true}
+               scrollOffset={80}
+               sfPagination="per_page,per_page_tablet,per_page_mobile,animation,show_info,show_arrows,show_first_last,show_progress,siblings,scroll_to,scroll_offset,labels"
+            >
+               <div class="collection__grid" sf-source="collection_variants">
+                  <article class="collection-card" sf-block>
+                     <a class="collection-card__img-wrap" sf-field="url" href="#">
+                        <span class="collection-card__badge-wrap" sf-field="sale_badge_image"></span>
+                        <div class="collection-card__tags collection-card__tags--image" sf-field="tags_badge_image"></div>
+                        <img
+                           class="collection-card__img"
+                           sf-field="image"
+                           src={Image.src}
+                           alt="Product variant"
+                        />
+                     </a>
+                     <div class="collection-card__info">
+                        <div class="collection-card__tags" sf-field="tags_badge_info"></div>
+                        <h2 class="collection-card__title" sf-field="title">
+                           iPhone 17 Pro — Black / 256GB
+                        </h2>
+                        <p class="collection-card__desc" sf-field="short_description"></p>
+                        <div class="collection-card__price-wrap">
+                           <span class="collection-card__price" sf-field="price">
+                              $999
+                           </span>
+                           <span
+                              class="collection-card__price-old"
+                              sf-field="compare_price"
+                           ></span>
+                           <span sf-field="sale_badge_price"></span>
+                        </div>
+                        <a class="collection-card__btn btn" sf-field="url" href="#">
+                           View product
+                        </a>
+                     </div>
+                  </article>
+               </div>
+            </Pagination>
+
+         </div>
+      </section>
+   </PageMain>
+</BaseLayout>

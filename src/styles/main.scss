@@ -1,0 +1,96 @@
+// Глобальні стилі — підключаються в BaseLayout.astro
+//
+// ПРАВИЛО для toRem() у нових файлах:
+//   ✅ Якщо файл імпортується через import "..." в .astro → toRem() вже є (additionalData)
+//   ⚠️  Якщо файл підключається через @use з іншого .scss → додай вручну:
+//       @use "@styles/utils/functions" as *;
+//
+@use "sass:math";
+@use "@styles/settings" as *;
+
+@use "base/variables";   // CSS custom properties → з settings.scss (першим!)
+@use "base/reset";
+@use "base/typography";  // h1-h6, a, button — з settings.scss
+@use "base/base";
+// @import "base/typography"
+// @import "layout/grid"
+// @import "layout/header"
+// сторінкові стилі (якщо треба // ... компонент // @import "components/button" // ... інші layou
+// @import "../pages/index"; // або окремий pages/_home.scss
+@use "pages/main-page";
+// підключає глобально анімацію
+@use "animations/global-animations.css";
+// стилі для друку слів на сторінці (якщо потрібно)
+// @use "animations/typing";
+// стилі для розльоту слів (якщо потрібно)
+// @use "animations/split";
+
+//===============================
+//цей файл пілючати якщо верстка для shopify і туди писати всі стилі
+@use "layout/index";
+//===============================
+
+$container-selector: null !default;
+
+@if $container-selector-type == "bem" {
+   // BEM: будь-який блок__container
+   $container-selector: '[class*="__container"]';
+} @else if $container-selector-type == "class" {
+   // Звичайний клас
+   $container-selector: ".container";
+} @else {
+   @error "Unknown $container-selector-type: #{$container-selector-type}";
+}
+
+// src/styles/_container.scss
+
+@mixin container {
+   width: 100%;
+   max-width: toRem($container-width); // ← 1200 → 75rem (масштабується!)
+   padding-left: toRem(math.div($container-padding, 2)); // 0.9375rem
+   padding-right: toRem(math.div($container-padding, 2));
+   margin: 0 auto;
+
+   // Адаптив ($responsive-type: 2 — рекомендую ввімкнути)
+   @if $responsive-type == 2 {
+      @media (max-width: #{$tablet + px}) {
+         // media завжди px (неминуче)
+         max-width: toRem(970 + $container-padding); // ~62.5rem
+      }
+      @media (max-width: #{$mobile + px}) {
+         max-width: toRem(750 + $container-padding); // ~48.75rem
+      }
+      @media (max-width: #{$mobile-small + px}) {
+         max-width: none; // або toRem(100) якщо хочеш обмеження
+         padding-left: toRem(15); // менші відступи на мобілці
+         padding-right: toRem(15);
+      }
+   }
+}
+
+// Застосування
+
+// Wrapper
+.wrapper {
+   width: 100%;
+   min-height: 100%;
+   display: flex;
+   flex-direction: column;
+   overflow: clip;
+
+   min-width: toRem(
+      $min-width
+   ); // 320 → 20rem (масштабується, але min-width в rem ок)
+   overflow-x: hidden;
+   > main {
+      flex: 1 1 auto;
+   }
+   // Фікс для слайдерів
+   > * {
+      min-width: 0;
+   }
+}
+
+#{$container-selector} {
+   @include container;
+}

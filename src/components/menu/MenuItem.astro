@@ -1,0 +1,59 @@
+---
+// src/components/menu/MenuItem.astro
+import type { MenuItem } from "@config/menu";
+import { useTranslations, getLangFromUrl } from "@i18n/utils";
+
+interface Props {
+   item: MenuItem;
+   currentPath: string;
+   lang: keyof typeof import("@i18n/ui").ui;
+}
+
+const { item, currentPath, lang } = Astro.props;
+const t = useTranslations(lang);
+
+const isActive = currentPath === item.href;
+const hasSubmenu = item.submenu && item.submenu.length > 0;
+---
+
+<li class="menu__item">
+   {
+      hasSubmenu ? (
+         <>
+            <button
+               class="menu__link menu__link--dropdown"
+               data-menu-dropdown-toggle
+               data-expanded="false"
+               type="button"
+            >
+               {item.icon && <span class="menu__icon">{item.icon}</span>}
+               <span>{t(item.key)}</span>
+               <span class="menu__arrow" />
+            </button>
+
+            <ul class="menu__submenu" data-menu-dropdown>
+               <div class="menu__submenu-wrapper">
+                  <div class="menu__submenu-content">
+                     {item.submenu!.map((subItem) => (
+                        <Astro.self
+                           item={subItem}
+                           currentPath={currentPath}
+                           lang={lang}
+                        />
+                     ))}
+                  </div>
+               </div>
+            </ul>
+         </>
+      ) : (
+         <a
+            href={item.href}
+            class:list={["menu__link", { "menu__link--active": isActive }]}
+            target={item.target}
+         >
+            {item.icon && <span class="menu__icon">{item.icon}</span>}
+            <span>{t(item.key)}</span>
+         </a>
+      )
+   }
+</li>

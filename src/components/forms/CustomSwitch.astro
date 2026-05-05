@@ -1,0 +1,45 @@
+---
+import "@styles/components/_custom-switch.scss";
+interface Props {
+   name: string;
+   id?: string;
+   label?: string;
+   required?: boolean;
+   checked?: boolean;
+   disabled?: boolean;
+   class?: string;
+   [key: string]: any;
+}
+
+const {
+   name,
+   id = `switch-${name}`,
+   label,
+   required = false,
+   checked = false,
+   disabled = false,
+   class: className = "",
+   ...rest
+} = Astro.props;
+---
+
+<label class={`custom-switch ${className}`}>
+   <input
+      type="checkbox"
+      {id}
+      {name}
+      {required}
+      {checked}
+      {disabled}
+      {...rest}
+      class="custom-switch__input"
+   />
+
+   <span class="custom-switch__track">
+      <span class="custom-switch__thumb"></span>
+   </span>
+
+   <span class="custom-switch__label">
+      <slot>{label}</slot>
+   </span>
+</label>

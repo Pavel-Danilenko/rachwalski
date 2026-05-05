@@ -1,0 +1,25 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/PageMain.astro";
+import Accordion from "@/components/accordion.astro";
+import Icon from "@/components/Icon.astro";
+---
+
+<BaseLayout title="About us" description="Мій крутий стартер на Astro">
+   <PageMain>
+      <section sf-section="team" class="team">
+         <div class="team__container">
+            <h2 sf-id="main_title" class="main__title">Hello my team</h2>
+            <div sf-id="main_content" class="main__content">
+               My team the best
+            </div>
+            <a
+               sf-url="hero_btn_urlt"
+               sf-id="hero_btn"
+               class="main__link"
+               href="#">Contact</a
+            >
+         </div>
+      </section>
+   </PageMain>
+</BaseLayout>

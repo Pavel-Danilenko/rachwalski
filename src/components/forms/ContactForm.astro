@@ -1,0 +1,129 @@
+---
+import "@styles/components/contact-form.scss";
+
+interface Props {
+   // Backend type
+   backend?: "php" | "api";
+
+   // Action (опціонально, якщо хочеш свій шлях)
+   action?: string;
+
+   // 🔥 Email налаштування
+   recipientEmail?: string;
+   recipientName?: string;
+   senderName?: string;
+
+   // Інші props
+   method?: "POST" | "GET";
+   formId?: string;
+   successMessage?: string;
+   errorMessage?: string;
+
+   // 🎨 НОВІ: Modal налаштування
+   modalType?: "inline" | "modal"; // inline = внизу форми, modal = на весь екран
+   autoCloseDuration?: number; // Секунди автозакриття (0 = не закривати)
+   successIcon?: string; // ID іконки в sprite для success
+   errorIcon?: string; // ID іконки в sprite для error
+   successImage?: string; // URL картинки для success (якщо не іконка)
+   errorImage?: string; // URL картинки для error
+   lockScroll?: boolean; // 🔥 НОВИНКА: Блокувати скрол при відкритті moda
+   wizardId?: string;
+   wizardDisableNext?: boolean;
+}
+
+const {
+   backend = "php",
+   action,
+   method = "POST",
+   formId = "contact-form",
+   successMessage = "Дякуємо! Ваше повідомлення надіслано.",
+   errorMessage = "Помилка відправки. Спробуйте ще раз.",
+
+   // Email settings
+   recipientEmail,
+   recipientName,
+   senderName,
+
+   // Modal settings
+   modalType = "inline",
+   autoCloseDuration = 50,
+   successIcon = "check-circle",
+   errorIcon = "x-circle",
+   successImage,
+   errorImage,
+   lockScroll = false, // 🔥 За замовчуванням вимкнено
+   wizardId,
+   wizardDisableNext = false,
+} = Astro.props;
+
+const finalAction =
+   action || (backend === "php" ? "/api/send-email.php" : "/api/contact");
+---
+
+<form
+   id={formId}
+   action={finalAction}
+   method={method}
+   data-backend={backend}
+   data-success-message={successMessage}
+   data-error-message={errorMessage}
+   data-modal-type={modalType}
+   data-auto-close-duration={autoCloseDuration}
+   data-success-icon={successIcon}
+   data-error-icon={errorIcon}
+   data-success-image={successImage}
+   data-error-image={errorImage}
+   data-lock-scroll={lockScroll}
+   data-wizard={wizardId || undefined}
+   data-wizard-disable-next={wizardDisableNext ? "true" : undefined}
+>
+   {
+      recipientEmail && (
+         <input type="hidden" name="recipient_email" value={recipientEmail} />
+      )
+   }
+   {
+      recipientName && (
+         <input type="hidden" name="recipient_name" value={recipientName} />
+      )
+   }
+   {senderName && <input type="hidden" name="sender_name" value={senderName} />}
+
+   <slot />
+
+   <!-- Inline message (якщо modalType="inline") -->
+   {modalType === "inline" && <div class="form-message" />}
+</form>
+
+<!-- Modal (якщо modalType="modal") -->
+{
+   modalType === "modal" && (
+      <div class="form-modal" data-form-id={formId} style="display: none;">
+         <div class="form-modal__backdrop" />
+         <div class="form-modal__container">
+            <button type="button" class="form-modal__close" aria-label="Close">
+               <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+               >
+                  <path
+                     d="M18 6L6 18M6 6l12 12"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                  />
+               </svg>
+            </button>
+
+            <div class="form-modal__icon" />
+            <div class="form-modal__message" />
+         </div>
+      </div>
+   )
+}
+
+<script>
+   import "@scripts/init/contact-form";
+</script>

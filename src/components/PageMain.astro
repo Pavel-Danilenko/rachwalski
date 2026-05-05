@@ -1,0 +1,71 @@
+---
+import {
+   flip3D,
+   zoomTransition,
+   fadeWithScale,
+   horizontalSlide,
+   slideFromBottom,
+   irisReveal,
+   curtainReveal,
+   glitchReveal,
+   cube3DRotate,
+   magicVortex,
+} from "@/lib/transitions";
+
+interface Props {
+   class?: string;
+   id?: string;
+   transition?:
+      | "flip3D"
+      | "zoom"
+      | "fade"
+      | "slide"
+      | "slideBottom"
+      | "iris"
+      | "curtain"
+      | "glitch"
+      | "cube"
+      | "vortex";
+   duration?: number;
+   [key: string]: any;
+}
+
+const {
+   class: className,
+   id,
+   transition,
+   duration = 1000,
+   ...rest
+} = Astro.props;
+
+const isShopify = import.meta.env.BUILD_MODE === "shopify";
+
+const transitions: Record<string, any> = {
+   flip3D: flip3D,
+   zoom: zoomTransition,
+   fade: fadeWithScale,
+   slide: horizontalSlide,
+   slideBottom: slideFromBottom,
+   iris: irisReveal,
+   curtain: curtainReveal,
+   glitch: glitchReveal,
+   cube: cube3DRotate,
+   vortex: magicVortex,
+};
+
+const animate =
+   !isShopify && transition
+      ? transitions[transition]({ duration: `${duration / 1000}s` })
+      : undefined;
+---
+
+<main
+   id={id}
+   class:list={["page", className]}
+   data-transition-wrapper
+   data-transition-duration={transition ? duration : 0}
+   transition:animate={animate}
+   {...rest}
+>
+   <slot />
+</main>

@@ -1,0 +1,296 @@
+@use "swiper/css";
+@use "swiper/css/thumbs";
+
+// src/styles/pages/_product-page.scss
+
+.product-detail {
+   padding: 40px 0;
+
+   &__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+
+      @media (max-width: 768px) {
+         grid-template-columns: 1fr;
+         gap: 24px;
+      }
+   }
+
+   &__gallery {
+      overflow: hidden;
+      position: sticky;
+      top: 20px;
+   }
+
+   // ── Info ──────────────────────────────────────────────────────────────────
+   &__info {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+   }
+
+   &__title {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0;
+
+      @media (max-width: 768px) {
+         font-size: 24px;
+      }
+   }
+
+   // ── Ціна ──────────────────────────────────────────────────────────────────
+   &__price-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+   }
+
+   &__price {
+      font-size: 28px;
+      font-weight: 700;
+   }
+
+   &__price-old {
+      font-size: 20px;
+      color: #999;
+      text-decoration: line-through;
+   }
+
+   &__discount {
+      display: inline-block;
+      padding: 3px 8px;
+      background: #e53935;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 4px;
+
+      &:empty { display: none; }
+   }
+
+   // ── Короткий опис ─────────────────────────────────────────────────────────
+   &__short-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+
+      &:empty { display: none; }
+   }
+
+   // ── SKU ───────────────────────────────────────────────────────────────────
+   &__sku {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #888;
+
+      &:empty { display: none; }
+
+      &-label { font-weight: 600; color: #555; }
+      &-value { color: #333; }
+   }
+
+   // ── Іконки оплати ─────────────────────────────────────────────────────────
+   &__payment {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      &-label {
+         font-size: 13px;
+         color: #666;
+         white-space: nowrap;
+      }
+
+      &-icons {
+         display: flex;
+         align-items: center;
+         gap: 6px;
+         flex-wrap: wrap;
+      }
+
+      &-icon {
+         height: 24px;
+         width: auto;
+         border-radius: 3px;
+         border: 1px solid #e5e5e5;
+      }
+   }
+
+   // ── Доставка ──────────────────────────────────────────────────────────────
+   &__delivery {
+      font-size: 13px;
+      color: #444;
+      padding: 10px 14px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      line-height: 1.5;
+
+      &:empty { display: none; }
+   }
+
+   // ── Опис ─────────────────────────────────────────────────────────────────
+   &__desc {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #555;
+   }
+
+   // ── Варіанти ─────────────────────────────────────────────────────────────
+   &__variants {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      &-group {
+         display: flex;
+         flex-direction: column;
+         gap: 8px;
+      }
+
+      &-label {
+         font-size: 14px;
+         font-weight: 600;
+         color: #333;
+      }
+
+      &-options {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 8px;
+      }
+
+      &-btn {
+         padding: 6px 16px;
+         border: 1px solid #ddd;
+         border-radius: 6px;
+         background: #fff;
+         font-size: 14px;
+         cursor: pointer;
+         transition: border-color 0.2s, background 0.2s;
+
+         &:hover {
+            border-color: #999;
+         }
+
+         &.is-active {
+            border-color: #000;
+            background: #000;
+            color: #fff;
+         }
+      }
+   }
+
+   // ── Форма ─────────────────────────────────────────────────────────────────
+   &__form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+   }
+
+   // ── Кількість ─────────────────────────────────────────────────────────────
+   &__qty {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      width: fit-content;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+   }
+
+   &__qty-btn {
+      width: 40px;
+      height: 44px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+         background: #f5f5f5;
+      }
+   }
+
+   &__qty-input {
+      width: 50px;
+      height: 44px;
+      border: none;
+      border-left: 1px solid #ddd;
+      border-right: 1px solid #ddd;
+      text-align: center;
+      font-size: 16px;
+      outline: none;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+         -webkit-appearance: none;
+      }
+   }
+
+   // ── Кнопка ───────────────────────────────────────────────────────────────
+   &__btn {
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+         background: #333;
+      }
+
+      &.is-sold-out {
+         background: #999;
+         cursor: not-allowed;
+      }
+   }
+}
+
+// ── Product tabs — hide indicator/arrows when disabled via data-attrs ────────
+[data-indicator="false"] .tabs__indicator  { display: none !important; }
+[data-scrollable="false"] .tabs__arrow--left,
+[data-scrollable="false"] .tabs__arrow--right { display: none !important; }
+
+// ── Product tabs (bottom section) ────────────────────────────────────────────
+.product-tabs {
+   padding: 48px 0;
+   border-top: 1px solid #eee;
+
+   &__stacked-title {
+      display: none; // visible only when show_tabs=false (injected inline style reveals it)
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 16px;
+      padding-top: 32px;
+      border-top: 1px solid #eee;
+
+      &:first-child { padding-top: 0; border-top: none; }
+   }
+
+   &__content {
+      padding: 24px 0;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #444;
+
+      h2, h3, h4 { color: #111; margin-bottom: 12px; }
+      ul, ol { padding-left: 20px; }
+      li { margin-bottom: 6px; }
+      p { margin-bottom: 12px; }
+
+      &:empty { display: none; }
+   }
+}

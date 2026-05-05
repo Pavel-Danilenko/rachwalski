@@ -1,0 +1,123 @@
+---
+import "@styles/components/pagination/_show-more.scss";
+
+type AnimationVariant = "none" | "fade" | "slide-up" | "scale" | "blur";
+type ModeVariant = "batch" | "toggle";
+type DoneVariant = "hide" | "disabled";
+
+interface Props {
+   // ─── логіка ───────────────────────────────────────────────────────────────
+   perPage?: number;
+   itemSelector: string;
+   mode?: ModeVariant;
+
+   // ─── batch ────────────────────────────────────────────────────────────────
+   doneVariant?: DoneVariant;
+
+   // ─── toggle ───────────────────────────────────────────────────────────────
+   toggleHide?: boolean;
+
+   // ─── анімація ─────────────────────────────────────────────────────────────
+   animation?: AnimationVariant;
+   animationDuration?: number;
+   animationStagger?: number;
+
+   // ─── іконки (svg sprite) ──────────────────────────────────────────────────
+   icon?: string;
+   iconClose?: string;
+
+   // ─── рядки ────────────────────────────────────────────────────────────────
+   label?: string;
+   labelDone?: string;
+   labelToggleOpen?: string;
+   labelToggleClose?: string;
+   showCount?: boolean;
+
+   // ─── поведінка ────────────────────────────────────────────────────────────
+   scrollToNew?: boolean;
+   scrollOffset?: number;
+
+   // ─── кастомні класи ───────────────────────────────────────────────────────
+   class?: string; // wrapper
+   classContent?: string; // .show-more-content
+   classFooter?: string; // .show-more-footer
+   classBtn?: string; // кнопка — базові класи (завжди присутні)
+   classBtnDone?: string; // додається коли done/disabled
+   classBtnClose?: string; // додається коли toggle відкрито (labelToggleClose)
+   classInfo?: string; // info "6 / 20"
+}
+
+const {
+   perPage = 6,
+   itemSelector,
+   mode = "batch",
+
+   doneVariant = "hide",
+   toggleHide = true,
+
+   animation = "fade",
+   animationDuration = 300,
+   animationStagger = 40,
+
+   icon,
+   iconClose,
+
+   label = "Show more",
+   labelDone = "That's all",
+   labelToggleOpen = "Show all",
+   labelToggleClose = "Hide",
+   showCount = false,
+
+   scrollToNew = false,
+   scrollOffset = 0,
+
+   class: className,
+   classContent,
+   classFooter,
+   classBtn,
+   classBtnDone,
+   classBtnClose,
+   classInfo,
+} = Astro.props;
+---
+
+<div
+   class:list={["show-more-wrapper", className]}
+   data-show-more-root
+   data-per-page={perPage}
+   data-item-selector={itemSelector}
+   data-mode={mode}
+   data-done-variant={doneVariant}
+   data-toggle-hide={toggleHide}
+   data-animation={animation}
+   data-animation-duration={animationDuration}
+   data-animation-stagger={animationStagger}
+   data-icon={icon}
+   data-icon-close={iconClose}
+   data-label={label}
+   data-label-done={labelDone}
+   data-label-toggle-open={labelToggleOpen}
+   data-label-toggle-close={labelToggleClose}
+   data-show-count={showCount}
+   data-scroll-to-new={scrollToNew}
+   data-scroll-offset={scrollOffset}
+   data-class-btn={classBtn}
+   data-class-btn-done={classBtnDone}
+   data-class-btn-close={classBtnClose}
+   data-class-info={classInfo}
+>
+   <div class:list={["show-more-content", classContent]}>
+      <slot />
+   </div>
+
+   <div class:list={["show-more-footer", classFooter]}>
+      <button type="button" class:list={["show-more-btn", classBtn]}>
+         {label}{showCount ? " …" : ""}
+      </button>
+      <span class:list={["show-more-info", classInfo]}></span>
+   </div>
+</div>
+
+<script>
+   import "@scripts/init/show-more";
+</script>

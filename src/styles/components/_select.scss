@@ -1,0 +1,566 @@
+// @styles/components/custom-select.scss
+
+.custom-select-wrapper {
+   position: relative;
+   width: 100%;
+
+   .hidden-select {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      height: 0;
+   }
+}
+
+.custom-select {
+   position: relative;
+   width: 100%;
+
+   &__trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 12px 16px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+
+      &:hover:not(:disabled) {
+         border-color: #999;
+      }
+
+      &:focus {
+         outline: none;
+         border-color: #007bff;
+         box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+      }
+
+      &:disabled {
+         background: #f5f5f5;
+         cursor: not-allowed;
+         opacity: 0.6;
+      }
+   }
+
+   &__trigger-icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+   }
+
+   &__value {
+      flex: 1;
+      color: #999;
+      transition: color 0.3s ease;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      min-height: 20px;
+   }
+
+   &__clear-button {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      transition: color 0.2s ease;
+      flex-shrink: 0;
+
+      &:hover {
+         color: #dc3545;
+      }
+
+      svg {
+         width: 14px;
+         height: 14px;
+      }
+   }
+
+   &__arrow {
+      margin-left: 8px;
+      transition: transform 0.3s ease;
+      color: #666;
+      flex-shrink: 0;
+   }
+
+   &.is-open &__arrow {
+      transform: rotate(180deg);
+   }
+
+   &.has-value &__value {
+      color: #000;
+   }
+
+   &__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      background: #e3f2fd;
+      color: #007bff;
+      border-radius: 4px;
+      font-size: 13px;
+      transition: all 0.2s ease;
+
+      &:hover {
+         background: #d0e8ff;
+      }
+   }
+
+   &__tag-text {
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+   }
+
+   &__tag-remove {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #007bff;
+      transition: color 0.2s ease;
+      width: 16px;
+      height: 16px;
+
+      &:hover {
+         color: #dc3545;
+      }
+
+      svg {
+         width: 10px;
+         height: 10px;
+      }
+   }
+
+   &.max-selections-reached &__trigger {
+      animation: shake 0.5s;
+   }
+
+   @keyframes shake {
+      0%,
+      100% {
+         transform: translateX(0);
+      }
+      25% {
+         transform: translateX(-5px);
+      }
+      75% {
+         transform: translateX(5px);
+      }
+   }
+
+   &__dropdown {
+      position: absolute;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      display: none;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      max-height: 340px;
+      overflow: hidden;
+      flex-direction: column;
+
+      &.is-visible {
+         opacity: 1;
+         transform: translateY(0);
+      }
+   }
+
+   &.open-downward &__dropdown {
+      top: calc(100% + 4px);
+      bottom: auto;
+   }
+
+   &.open-upward &__dropdown {
+      bottom: calc(100% + 4px);
+      top: auto;
+      transform: translateY(10px);
+
+      &.is-visible {
+         transform: translateY(0);
+      }
+   }
+
+   &__search {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+      flex-shrink: 0;
+   }
+
+   &__search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+   }
+
+   &__search-input {
+      width: 100%;
+      padding: 8px 32px 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+
+      &:focus {
+         outline: none;
+         border-color: #007bff;
+      }
+   }
+
+   &__search-clear {
+      position: absolute;
+      right: 8px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.2s ease;
+
+      &:hover {
+         color: #666;
+      }
+
+      svg {
+         width: 12px;
+         height: 12px;
+      }
+   }
+
+   &__select-all {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+   }
+
+   &__select-all-btn {
+      width: 100%;
+      padding: 8px 12px;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #007bff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover:not(.is-disabled) {
+         background: #e9ecef;
+         border-color: #007bff;
+      }
+
+      &:active:not(.is-disabled) {
+         transform: scale(0.98);
+      }
+
+      &.is-disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         pointer-events: none;
+      }
+   }
+
+   &__options-container {
+      position: relative;
+      overflow-y: auto;
+      max-height: 280px;
+
+      &::-webkit-scrollbar {
+         width: 6px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+         background: #ddd;
+         border-radius: 3px;
+
+         &:hover {
+            background: #bbb;
+         }
+      }
+   }
+
+   &__options {
+      list-style: none;
+      padding: 4px 0;
+      margin: 0;
+   }
+
+   // 🆕 Групи з можливістю клікати (enableGroupSelection)
+   &__group-label {
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #f8f9fa;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      user-select: none;
+      transition: all 0.2s ease;
+
+      &:first-child {
+         border-top: none;
+      }
+
+      // 🆕 Стилі для клікабельних груп
+      &[role="button"] {
+         cursor: pointer;
+
+         &:hover {
+            background: #e9ecef;
+            color: #007bff;
+         }
+
+         &:active {
+            background: #dee2e6;
+         }
+      }
+   }
+
+   &__option {
+      display: flex;
+      align-items: flex-start;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      gap: 10px;
+
+      &:hover:not(.disabled),
+      &.focused:not(.disabled) {
+         background: #f5f5f5;
+      }
+
+      &.selected {
+         background: #e3f2fd;
+         color: #007bff;
+
+         &:hover,
+         &.focused {
+            background: #d0e8ff;
+         }
+      }
+
+      &.disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         pointer-events: none;
+      }
+   }
+
+   // 🆕 Іконки опцій
+   &__option-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      font-size: 16px;
+
+      img {
+         width: 20px;
+         height: 20px;
+         object-fit: contain;
+         border-radius: 2px;
+      }
+   }
+
+   &__option-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+   }
+
+   &__option-text {
+      font-size: 14px;
+      line-height: 1.4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+   }
+
+   &__option-description {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.3;
+
+      .selected & {
+         color: #0056b3;
+      }
+   }
+
+   &__highlight {
+      background: #fff3cd;
+      color: #856404;
+      padding: 2px 0;
+      border-radius: 2px;
+      font-weight: 500;
+   }
+
+   &__checkbox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      background: #fff;
+
+      svg {
+         opacity: 0;
+         transform: scale(0);
+         transition: all 0.2s ease;
+      }
+
+      .selected & {
+         border-color: #007bff;
+         background: #007bff;
+
+         svg {
+            opacity: 1;
+            transform: scale(1);
+            stroke: #fff;
+         }
+      }
+   }
+
+   &__no-results {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+      font-style: italic;
+   }
+
+   &__footer {
+      padding: 8px 16px;
+      border-top: 1px solid #eee;
+      background: #f9f9f9;
+      font-size: 13px;
+      color: #666;
+      flex-shrink: 0;
+   }
+
+   &__counter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      line-height: 1.5;
+
+      &-text {
+         color: #666;
+      }
+
+      &-current {
+         font-weight: 600;
+         color: #007bff;
+      }
+   }
+
+   // 🆕 Error state (валідація)
+   &.has-error {
+      .custom-select__trigger {
+         border-color: #dc3545;
+
+         &:focus {
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+         }
+      }
+   }
+
+   .form-group.error & {
+      &__trigger {
+         border-color: #dc3545;
+
+         &:focus {
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+         }
+      }
+   }
+
+   .form-group.success & {
+      &__trigger {
+         border-color: #28a745;
+
+         &:focus {
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+         }
+      }
+   }
+}
+
+.custom-select__tag-template {
+   display: none;
+}
+
+// 🆕 Адаптивність для мобільних
+@media (max-width: 768px) {
+   .custom-select {
+      &__option {
+         padding: 12px 16px;
+
+         // Більші зони для touch
+         &-icon {
+            width: 24px;
+            height: 24px;
+
+            img {
+               width: 24px;
+               height: 24px;
+            }
+         }
+      }
+
+      &__checkbox {
+         width: 20px;
+         height: 20px;
+      }
+
+      &__tag {
+         padding: 6px 10px;
+         font-size: 14px;
+      }
+
+      &__trigger {
+         padding: 14px 16px;
+      }
+   }
+}

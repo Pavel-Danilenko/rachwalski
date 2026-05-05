@@ -1,0 +1,71 @@
+// _typing.scss
+
+[data-typing] {
+   // Дозволяємо перенос по словах але не по літерах
+   word-break: keep-all;
+   overflow-wrap: normal;
+}
+
+.typing {
+   &__word {
+      display: inline-block;
+      white-space: nowrap; // Слово не розривається
+   }
+
+   &__space {
+      display: inline-block;
+      white-space: pre; // Зберігаємо пробіл
+   }
+
+   &__char {
+      display: inline-block;
+      will-change: opacity, transform;
+
+      // Прихована літера (до старту)
+      &--hidden {
+         opacity: 0;
+         visibility: hidden;
+      }
+
+      // Fade режим — плавна поява
+      &--fade {
+         animation: typingFadeIn 0.4s ease forwards;
+      }
+   }
+
+   &__cursor {
+      display: inline-block;
+      margin-left: 2px;
+      font-weight: 300;
+      animation: typingBlink 0.8s step-end infinite;
+      color: currentColor;
+   }
+
+   // Після завершення — курсор зупиняється (опціонально)
+   // &--done .typing__cursor {
+   //   animation: none;
+   // }
+}
+
+@keyframes typingFadeIn {
+   from {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(6px);
+   }
+   to {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+   }
+}
+
+@keyframes typingBlink {
+   0%,
+   100% {
+      opacity: 1;
+   }
+   50% {
+      opacity: 0;
+   }
+}

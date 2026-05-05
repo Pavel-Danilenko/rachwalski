@@ -1,0 +1,449 @@
+---
+import "@styles/components/_select.scss";
+
+interface Option {
+   value: string;
+   label: string;
+   description?: string;
+   disabled?: boolean;
+   icon?: string;
+}
+
+interface OptionGroup {
+   group: string;
+   items: Option[];
+   groupPlaceholder?: string;
+}
+
+interface Props {
+   name: string;
+   options: (Option | OptionGroup)[];
+   placeholder?: string;
+   required?: boolean;
+   searchable?: boolean;
+   searchPlaceholder?: string;
+   searchClearable?: boolean;
+   multiple?: boolean;
+   multipleSelectedText?: string;
+   multipleDisplayLimit?: number;
+   showRemovableTags?: boolean;
+   showSelectAll?: boolean;
+   selectAllText?: string;
+   deselectAllText?: string;
+   showClearButton?: boolean;
+   clearButtonText?: string;
+   noResultsText?: string;
+   highlightSearch?: boolean;
+   sortAlphabetically?: boolean;
+   virtualScroll?: boolean;
+   itemHeight?: number;
+   defaultValue?: string | string[];
+   errorRequired?: string;
+   disabled?: boolean;
+   maxSelections?: number;
+   showCounter?: boolean;
+   counterTextSelected?: string;
+   counterTextOf?: string;
+   counterTextRemaining?: string;
+   counterTextLimit?: string;
+   showClearAllButton?: boolean;
+   clearAllButtonText?: string;
+   maxDropdownHeight?: string;
+   enableGroupSelection?: boolean;
+}
+
+const {
+   name,
+   options,
+   placeholder = "Оберіть варіант",
+   required = false,
+   searchable = false,
+   searchPlaceholder = "Пошук...",
+   searchClearable = false,
+   multiple = false,
+   multipleSelectedText = "Вибрано:",
+   multipleDisplayLimit = 2,
+   showRemovableTags = false,
+   showSelectAll = false,
+   selectAllText = "Вибрати всі",
+   deselectAllText = "Скасувати все",
+   showClearButton = false,
+   clearButtonText = "Очистити",
+   noResultsText = "Нічого не знайдено",
+   highlightSearch = false,
+   sortAlphabetically = false,
+   virtualScroll = false,
+   itemHeight = 40,
+   defaultValue,
+   errorRequired,
+   disabled = false,
+   maxSelections,
+   showCounter = false,
+   counterTextSelected = "вибрано",
+   counterTextOf = "з",
+   counterTextRemaining = "залишилось",
+   counterTextLimit = "обмеження",
+   showClearAllButton = false,
+   clearAllButtonText = "Очистити все",
+   maxDropdownHeight = "80vh",
+   enableGroupSelection = false,
+} = Astro.props;
+
+const selectId = `custom-select-${name}-${Math.random().toString(36).substr(2, 9)}`;
+
+const isGroup = (item: Option | OptionGroup): item is OptionGroup => {
+   return "group" in item && "items" in item;
+};
+
+const sortOptions = (opts: Option[]): Option[] => {
+   if (!sortAlphabetically) return opts;
+   return [...opts].sort((a, b) => a.label.localeCompare(b.label));
+};
+
+let flatOptions: Option[] = [];
+let hasGroups = false;
+let processedOptions = options;
+
+options.forEach((item) => {
+   if (isGroup(item)) {
+      hasGroups = true;
+      flatOptions.push(...item.items);
+   } else {
+      flatOptions.push(item);
+   }
+});
+
+if (sortAlphabetically && !hasGroups) {
+   processedOptions = sortOptions(options as Option[]);
+} else if (sortAlphabetically && hasGroups) {
+   processedOptions = options.map((item) => {
+      if (isGroup(item)) {
+         return {
+            group: item.group,
+            items: sortOptions(item.items),
+            groupPlaceholder: item.groupPlaceholder,
+         };
+      }
+      return item;
+   });
+}
+---
+
+<div class="custom-select-wrapper" data-select-id={selectId}>
+   <div
+      class="custom-select"
+      data-multiple={multiple}
+      data-searchable={searchable}
+      data-disabled={disabled}
+      data-display-limit={multipleDisplayLimit}
+      data-removable-tags={showRemovableTags}
+      data-highlight-search={highlightSearch}
+      data-virtual-scroll={virtualScroll}
+      data-item-height={itemHeight}
+      data-multiple-text={multipleSelectedText}
+      data-max-dropdown-height={maxDropdownHeight}
+      data-enable-group-selection={enableGroupSelection ? "true" : "false"}
+   >
+      <button
+         type="button"
+         class="custom-select__trigger"
+         aria-haspopup="listbox"
+         disabled={disabled}
+      >
+         <span class="custom-select__value" data-placeholder={placeholder}>
+            {placeholder}
+         </span>
+
+         <div class="custom-select__trigger-icons">
+            <span
+               role="button"
+               tabindex="0"
+               class="custom-select__clear-button"
+               title={clearButtonText}
+               style="display: none; cursor: pointer;"
+               aria-label={clearButtonText}
+               data-enabled={showClearButton ? "true" : "false"}
+            >
+               <svg width="14" height="14" viewBox="0 0 14 14">
+                  <path
+                     d="M1 1L13 13M13 1L1 13"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     fill="none"></path>
+               </svg>
+            </span>
+
+            <svg
+               class="custom-select__arrow"
+               width="12"
+               height="8"
+               viewBox="0 0 12 8"
+            >
+               <path
+                  d="M1 1L6 6L11 1"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"></path>
+            </svg>
+         </div>
+      </button>
+
+      <div class="custom-select__dropdown">
+         {
+            searchable && (
+               <div class="custom-select__search">
+                  <div class="custom-select__search-wrapper">
+                     <input
+                        type="text"
+                        class="custom-select__search-input"
+                        placeholder={searchPlaceholder}
+                        autocomplete="off"
+                     />
+                     {searchClearable && (
+                        <button
+                           type="button"
+                           class="custom-select__search-clear"
+                           style="display: none;"
+                           aria-label="Очистити пошук"
+                        >
+                           <svg width="12" height="12" viewBox="0 0 12 12">
+                              <path
+                                 d="M1 1L11 11M11 1L1 11"
+                                 stroke="currentColor"
+                                 stroke-width="1.5"
+                                 fill="none"
+                              />
+                           </svg>
+                        </button>
+                     )}
+                  </div>
+               </div>
+            )
+         }
+
+         {
+            multiple && (showSelectAll || showClearAllButton) && (
+               <div class="custom-select__select-all">
+                  <button
+                     type="button"
+                     class="custom-select__select-all-btn"
+                     data-select-text={selectAllText}
+                     data-deselect-text={deselectAllText}
+                     data-clear-all-text={clearAllButtonText}
+                     data-has-max={maxSelections ? "true" : "false"}
+                  >
+                     {maxSelections && showClearAllButton
+                        ? clearAllButtonText
+                        : selectAllText}
+                  </button>
+               </div>
+            )
+         }
+
+         <div class="custom-select__options-container">
+            <ul class="custom-select__options" role="listbox">
+               {
+                  hasGroups
+                     ? processedOptions.map((item) => {
+                          if (isGroup(item)) {
+                             return (
+                                <>
+                                   <li
+                                      class="custom-select__group-label"
+                                      data-group-placeholder={
+                                         item.groupPlaceholder || ""
+                                      }
+                                      role={
+                                         enableGroupSelection
+                                            ? "button"
+                                            : undefined
+                                      }
+                                      tabindex={
+                                         enableGroupSelection ? "0" : undefined
+                                      }
+                                   >
+                                      {item.group}
+                                   </li>
+                                   {item.items.map((option) => (
+                                      <li
+                                         class={`custom-select__option ${option.disabled ? "disabled" : ""}`}
+                                         data-value={option.value}
+                                         data-label={option.label}
+                                         data-disabled={option.disabled}
+                                         data-group={item.group}
+                                         role="option"
+                                      >
+                                         {multiple && (
+                                            <span class="custom-select__checkbox">
+                                               <svg
+                                                  width="12"
+                                                  height="10"
+                                                  viewBox="0 0 12 10"
+                                               >
+                                                  <path
+                                                     d="M1 5L4.5 8.5L11 1.5"
+                                                     stroke="currentColor"
+                                                     stroke-width="2"
+                                                     fill="none"
+                                                  />
+                                               </svg>
+                                            </span>
+                                         )}
+                                         {option.icon && (
+                                            <span class="custom-select__option-icon">
+                                               {option.icon.startsWith(
+                                                  "http",
+                                               ) ||
+                                               option.icon.startsWith("/") ? (
+                                                  <img
+                                                     src={option.icon}
+                                                     alt=""
+                                                  />
+                                               ) : (
+                                                  option.icon
+                                               )}
+                                            </span>
+                                         )}
+                                         <div class="custom-select__option-content">
+                                            <span class="custom-select__option-text">
+                                               {option.label}
+                                            </span>
+                                            {option.description && (
+                                               <span class="custom-select__option-description">
+                                                  {option.description}
+                                               </span>
+                                            )}
+                                         </div>
+                                      </li>
+                                   ))}
+                                </>
+                             );
+                          }
+                          return null;
+                       })
+                     : (processedOptions as Option[]).map((option) => (
+                          <li
+                             class={`custom-select__option ${option.disabled ? "disabled" : ""}`}
+                             data-value={option.value}
+                             data-label={option.label}
+                             data-disabled={option.disabled}
+                             role="option"
+                          >
+                             {multiple && (
+                                <span class="custom-select__checkbox">
+                                   <svg
+                                      width="12"
+                                      height="10"
+                                      viewBox="0 0 12 10"
+                                   >
+                                      <path
+                                         d="M1 5L4.5 8.5L11 1.5"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         fill="none"
+                                      />
+                                   </svg>
+                                </span>
+                             )}
+                             {option.icon && (
+                                <span class="custom-select__option-icon">
+                                   {option.icon.startsWith("http") ||
+                                   option.icon.startsWith("/") ? (
+                                      <img src={option.icon} alt="" />
+                                   ) : (
+                                      option.icon
+                                   )}
+                                </span>
+                             )}
+                             <div class="custom-select__option-content">
+                                <span class="custom-select__option-text">
+                                   {option.label}
+                                </span>
+                                {option.description && (
+                                   <span class="custom-select__option-description">
+                                      {option.description}
+                                   </span>
+                                )}
+                             </div>
+                          </li>
+                       ))
+               }
+            </ul>
+
+            <div class="custom-select__no-results" style="display: none;">
+               {noResultsText}
+            </div>
+         </div>
+
+         {
+            multiple && (maxSelections || showCounter) && (
+               <div class="custom-select__footer">
+                  <span
+                     class="custom-select__counter"
+                     data-text-selected={counterTextSelected}
+                     data-text-of={counterTextOf}
+                     data-text-remaining={counterTextRemaining}
+                     data-text-limit={counterTextLimit}
+                     data-show-counter={showCounter ? "true" : "false"}
+                  >
+                     <span class="custom-select__counter-text" />
+                  </span>
+               </div>
+            )
+         }
+      </div>
+   </div>
+
+   <select
+      name={name}
+      id={selectId}
+      class="hidden-select"
+      required={required}
+      multiple={multiple}
+      disabled={disabled}
+      data-error-required={errorRequired}
+      data-max-selections={maxSelections}
+      tabindex="-1"
+   >
+      {!multiple && <option value="">{placeholder}</option>}
+      {
+         flatOptions.map((option) => (
+            <option
+               value={option.value}
+               disabled={option.disabled}
+               selected={
+                  defaultValue === option.value ||
+                  (Array.isArray(defaultValue) &&
+                     defaultValue.includes(option.value))
+               }
+            >
+               {option.label}
+            </option>
+         ))
+      }
+   </select>
+</div>
+
+{
+   showRemovableTags && (
+      <template class="custom-select__tag-template">
+         <span class="custom-select__tag">
+            <span class="custom-select__tag-text" />
+            <button type="button" class="custom-select__tag-remove">
+               <svg width="10" height="10" viewBox="0 0 10 10">
+                  <path
+                     d="M1 1L9 9M9 1L1 9"
+                     stroke="currentColor"
+                     stroke-width="1.5"
+                     fill="none"
+                  />
+               </svg>
+            </button>
+         </span>
+      </template>
+   )
+}
+
+<script>
+   import "@scripts/init/select";
+</script>

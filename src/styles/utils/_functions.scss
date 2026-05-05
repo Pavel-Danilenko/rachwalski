@@ -1,0 +1,36 @@
+@use "sass:math";
+@use "sass:map";
+@use "sass:string";
+@use "@styles/settings" as *;
+
+// ----------------------------
+
+/// px → rem
+@function toRem($px, $base: 16) {
+   @return math.div($px, $base) * 1rem;
+}
+
+/// px → em
+@function toEm($px, $context: 16) {
+   @return math.div($px, $context) * 1em;
+}
+
+/// Повертає fluid clamp() значення як рядок (для CSS vars)
+/// @example fluid-value(32, 64) → clamp(32px, calc(...), 64px)
+@function fluid-value($min, $max, $from: $mobile, $to: $pc) {
+   $slope: math.div($max - $min, $to - $from);
+   $intercept: $min - $slope * $from;
+   $preferred: "#{$slope * 100}vw + #{$intercept}px";
+   @return string.unquote("clamp(#{$min}px, calc(#{$preferred}), #{$max}px)");
+}
+
+/// Іменований брейкпоінт → число px
+/// @example bp("md") → 767.98
+/// @example bp("xl") → 1230
+@function bp($name) {
+   @if map.has-key($breakpoints, $name) {
+      @return map.get($breakpoints, $name);
+   }
+   @warn "Брейкпоінт `#{$name}` не знайдено. Доступні: #{map.keys($breakpoints)}";
+   @return null;
+}

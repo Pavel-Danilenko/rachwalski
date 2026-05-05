@@ -1,0 +1,124 @@
+// ========================================
+// accordion.scss
+// ========================================
+
+.accordion {
+   width: 100%;
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+
+   &__item {
+      border-bottom: 1px solid #e5e7eb;
+
+      &:first-child {
+         border-top: 1px solid #e5e7eb;
+      }
+   }
+
+   &__header {
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.2s;
+      & .icon {
+         transition: rotate 0.4s ease;
+      }
+      &:hover {
+      }
+
+      // Коли accordion неактивний
+      [data-accordion-active="false"] & {
+         cursor: default;
+         pointer-events: none;
+      }
+      &[aria-expanded="true"] .icon {
+         rotate: 180deg;
+      }
+   }
+
+   &__icon {
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+      margin-left: 0.5rem;
+
+      // Ховаємо іконку коли accordion неактивний
+      [data-accordion-active="false"] & {
+         display: none;
+      }
+   }
+
+   &__content {
+      height: 0;
+      overflow: hidden;
+      // transition встановлюється динамічно в JS
+   }
+
+   &__body {
+      padding: 1rem;
+   }
+}
+
+// Коли accordion неактивний - показуємо весь контент
+[data-accordion-active="false"] {
+   .accordion__content {
+      height: auto !important;
+      overflow: visible !important;
+   }
+}
+
+// ========================================
+// ДОКУМЕНТАЦІЯ - АТРИБУТИ
+// ========================================
+
+/*
+
+ОСНОВНІ АТРИБУТИ:
+
+1. data-accordion (обов'язковий)
+   - Вішаємо на головний контейнер accordion
+   - Приклад: <div data-accordion>...</div>
+
+2. data-accordion-multiple (опціональний)
+   - Дозволяє відкривати кілька пунктів одночасно
+   - Значення: "true" або відсутній (за замовчуванням false)
+   - Приклад: <div data-accordion data-accordion-multiple="true">
+
+3. data-accordion-default (опціональний)
+   - Індекси пунктів, які відкриті за замовчуванням (починаємо з 0)
+   - Значення: через кому
+   - Приклад: data-accordion-default="0,2" (відкриті перший і третій)
+
+4. data-accordion-min (опціональний)
+   - Мінімальна ширина екрану для роботи accordion (в пікселях)
+   - Приклад: data-accordion-min="768" (працює від 768px)
+
+5. data-accordion-max (опціональний)
+   - Максимальна ширина екрану для роботи accordion (в пікселях)
+   - Приклад: data-accordion-max="1024" (працює до 1024px)
+
+6. data-accordion-duration (опціональний)
+   - Швидкість анімації в мілісекундах
+   - За замовчуванням: 400ms
+   - Приклад: data-accordion-duration="600"
+
+7. data-accordion-item (обов'язковий)
+   - Вішаємо на кожен пункт accordion
+   - Приклад: <div data-accordion-item>...</div>
+
+8. data-accordion-trigger (обов'язковий)
+   - Вішаємо на кнопку/елемент який відкриває пункт
+   - Приклад: <button data-accordion-trigger>Заголовок</button>
+
+9. data-accordion-content (обов'язковий)
+   - Вішаємо на контейнер з контентом який показується/ховається
+   - Приклад: <div data-accordion-content>Контент</div>
+
+*/

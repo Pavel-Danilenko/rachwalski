@@ -1,0 +1,7 @@
+.test {
+   &:not(:last-child) {
+      margin-bottom: toRem(20);
+   }
+   font-size: toRem(20);
+   @include bleed-right;
+}

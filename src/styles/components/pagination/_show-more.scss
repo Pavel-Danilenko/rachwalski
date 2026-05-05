@@ -1,0 +1,124 @@
+// ─── ShowMore ─────────────────────────────────────────────────────────────────
+//
+// Базові стилі — мінімальні навмисно.
+// Кнопка стилізується через classBtn з твоєї системи кнопок.
+//
+// CSS змінні якщо не використовуєш свої класи:
+//   .my-section {
+//     --sm-btn-radius:       99px;
+//     --sm-btn-height:       48px;
+//     --sm-btn-border:       rgba(0,0,0,0.12);
+//     --sm-btn-hover-bg:     rgba(0,0,0,0.06);
+//     --sm-btn-active-bg:    #3b5bdb;
+//     --sm-btn-active-color: #fff;
+//   }
+
+// ─── Wrapper / Content ────────────────────────────────────────────────────────
+
+.show-more-wrapper {
+   // просто контейнер
+}
+
+.show-more-content {
+   // контент — нічого не чіпаємо
+}
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+
+.show-more-footer {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 10px;
+   margin-top: 32px;
+}
+
+// ─── Кнопка — базові стилі ────────────────────────────────────────────────────
+// Використовуються тільки якщо не передано classBtn з власної системи
+
+.show-more-btn {
+   --sm-btn-height: 42px;
+   --sm-btn-padding: 0 28px;
+   --sm-btn-radius: 8px;
+   --sm-btn-font-size: 14px;
+   --sm-btn-border: rgba(0, 0, 0, 0.12);
+   --sm-btn-hover-bg: rgba(0, 0, 0, 0.055);
+   --sm-btn-hover-border: rgba(0, 0, 0, 0.22);
+   --sm-btn-done-opacity: 0.35;
+
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   gap: 8px;
+   height: var(--sm-btn-height);
+   padding: var(--sm-btn-padding);
+
+   border: 0.5px solid var(--sm-btn-border);
+   border-radius: var(--sm-btn-radius);
+   background: transparent;
+   color: currentColor;
+
+   font-size: var(--sm-btn-font-size);
+   font-family: inherit;
+   font-weight: 500;
+   cursor: pointer;
+   user-select: none;
+
+   transition:
+      background 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease,
+      opacity 0.2s ease,
+      transform 0.12s ease;
+
+   // іконка зі спрайту
+   .icon,
+   svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+   }
+
+   &:hover:not(:disabled) {
+      background: var(--sm-btn-hover-bg);
+      border-color: var(--sm-btn-hover-border);
+   }
+
+   &:active:not(:disabled) {
+      transform: scale(0.97);
+   }
+
+   &--done {
+      opacity: var(--sm-btn-done-opacity);
+      cursor: default;
+      pointer-events: none;
+   }
+
+   &:disabled {
+      cursor: default;
+   }
+}
+
+// ─── Info ─────────────────────────────────────────────────────────────────────
+
+.show-more-info {
+   font-size: 11px;
+   letter-spacing: 0.04em;
+   color: rgba(0, 0, 0, 0.3);
+   font-variant-numeric: tabular-nums;
+}
+
+// ─── Dark mode ────────────────────────────────────────────────────────────────
+
+// @media (prefers-color-scheme: dark) {
+//   .show-more-btn {
+//     --sm-btn-border:       rgba(255, 255, 255, 0.12);
+//     --sm-btn-hover-bg:     rgba(255, 255, 255, 0.07);
+//     --sm-btn-hover-border: rgba(255, 255, 255, 0.25);
+//   }
+
+//   .show-more-info {
+//     color: rgba(255, 255, 255, 0.25);
+//   }
+// }

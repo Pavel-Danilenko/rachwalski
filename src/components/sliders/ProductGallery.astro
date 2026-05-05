@@ -1,0 +1,573 @@
+---
+import type { ImageMetadata } from "astro";
+
+export interface GalleryImage {
+   src: ImageMetadata;
+   alt?: string;
+}
+
+export interface Props {
+   images: GalleryImage[];
+   thumbsPosition?: "bottom" | "left" | "right" | "none";
+   fancybox?: boolean;
+   maxVisible?: number;
+   thumbGap?: number;
+   thumbRadius?: number;
+   thumbBorderColor?: string;
+   thumbBorderWidth?: number;
+   thumbScale?: boolean;
+   thumbFade?: boolean;
+   thumbArrows?: boolean;
+}
+
+const {
+   images,
+   thumbsPosition = "bottom",
+   fancybox = true,
+   maxVisible = 4,
+   thumbGap = 8,
+   thumbRadius = 6,
+   thumbBorderColor = "#000",
+   thumbBorderWidth = 2,
+   thumbScale = false,
+   thumbFade = false,
+   thumbArrows = false,
+} = Astro.props;
+
+const showThumbs = thumbsPosition !== "none";
+const isRow = thumbsPosition === "left" || thumbsPosition === "right";
+const thumbsFirst = thumbsPosition === "left";
+const needsSlider = images.length > maxVisible;
+---
+
+<div
+   class:list={["product-gallery", isRow && "product-gallery--row"]}
+   data-needs-slider={String(needsSlider)}
+   data-max-visible={maxVisible}
+   data-thumb-gap={thumbGap}
+   data-thumb-radius={thumbRadius}
+   data-thumb-border-color={thumbBorderColor}
+   data-thumb-border-width={thumbBorderWidth}
+   data-thumb-scale={String(thumbScale)}
+   data-thumb-fade={String(thumbFade)}
+   data-thumb-arrows={String(thumbArrows)}
+   data-is-row={String(isRow)}
+>
+   {
+      showThumbs && thumbsFirst && (
+         <div class="product-gallery__thumbs-wrap">
+            {thumbArrows && needsSlider && (
+               <button
+                  class="product-gallery__thumb-prev"
+                  aria-label="Previous"
+               >
+                  &#8592;
+               </button>
+            )}
+            <div class="product-gallery__thumbs swiper">
+               <div
+                  class="product-gallery__thumbs-inner swiper-wrapper"
+                  sf-product-gallery="thumbs"
+               >
+                  {images.map((img) => (
+                     <div
+                        class:list={[
+                           "product-gallery__thumb",
+                           needsSlider && "swiper-slide",
+                        ]}
+                     >
+                        <img
+                           src={img.src.src}
+                           alt={img.alt ?? ""}
+                           loading="lazy"
+                        />
+                     </div>
+                  ))}
+               </div>
+            </div>
+            {thumbArrows && needsSlider && (
+               <button class="product-gallery__thumb-next" aria-label="Next">
+                  &#8594;
+               </button>
+            )}
+         </div>
+      )
+   }
+
+   <div class="product-gallery__main swiper">
+      <div class="swiper-wrapper" sf-product-gallery="main">
+         {
+            images.map((img) => (
+               <div class="swiper-slide">
+                  {fancybox ? (
+                     <a
+                        data-fancybox="product-gallery"
+                        data-caption={img.alt ?? ""}
+                        href={img.src.src}
+                     >
+                        <img
+                           src={img.src.src}
+                           alt={img.alt ?? ""}
+                           loading="eager"
+                        />
+                     </a>
+                  ) : (
+                     <img
+                        src={img.src.src}
+                        alt={img.alt ?? ""}
+                        loading="eager"
+                     />
+                  )}
+               </div>
+            ))
+         }
+      </div>
+   </div>
+
+   {
+      showThumbs && !thumbsFirst && (
+         <div class="product-gallery__thumbs-wrap">
+            {thumbArrows && needsSlider && (
+               <button
+                  class="product-gallery__thumb-prev"
+                  aria-label="Previous"
+               >
+                  &#8592;
+               </button>
+            )}
+            <div class="product-gallery__thumbs swiper">
+               <div
+                  class="product-gallery__thumbs-inner swiper-wrapper"
+                  sf-product-gallery="thumbs"
+               >
+                  {images.map((img) => (
+                     <div
+                        class:list={[
+                           "product-gallery__thumb",
+                           needsSlider && "swiper-slide",
+                        ]}
+                     >
+                        <img
+                           src={img.src.src}
+                           alt={img.alt ?? ""}
+                           loading="lazy"
+                        />
+                     </div>
+                  ))}
+               </div>
+            </div>
+            {thumbArrows && needsSlider && (
+               <button class="product-gallery__thumb-next" aria-label="Next">
+                  &#8594;
+               </button>
+            )}
+         </div>
+      )
+   }
+</div>
+
+<style>
+   .product-gallery--row,
+   .product-gallery[data-thumbs-position="left"],
+   .product-gallery[data-thumbs-position="right"] {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+   }
+
+   /* Thumbs to the left — move thumbs-wrap before main via order */
+   .product-gallery[data-thumbs-position="left"] .product-gallery__thumbs-wrap {
+      order: -1;
+   }
+
+   /* Hidden thumbs */
+   .product-gallery[data-thumbs-position="none"] .product-gallery__thumbs-wrap {
+      display: none;
+   }
+
+   .product-gallery__main {
+      flex: 1;
+      min-width: 0;
+   }
+
+   .product-gallery__main .swiper-slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+   }
+
+   /* When main aspect-ratio is set via JS inline style, make images fill the container */
+   .product-gallery__main[style*="aspect-ratio"] .swiper-slide {
+      height: 100%;
+   }
+   .product-gallery__main[style*="aspect-ratio"] .swiper-slide img {
+      height: 100%;
+      object-fit: cover;
+   }
+   .product-gallery__main[style*="aspect-ratio"] .swiper-slide a {
+      height: 100%;
+   }
+
+   .product-gallery__main a {
+      display: block;
+      cursor: zoom-in;
+   }
+
+   .product-gallery__thumbs-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+   }
+
+   .product-gallery:not(.product-gallery--row):not([data-thumbs-position="left"]):not([data-thumbs-position="right"]) .product-gallery__thumbs-wrap {
+      flex-direction: row;
+      align-items: center;
+      max-width: 100%;
+      overflow: hidden;
+   }
+
+   .product-gallery__thumbs {
+      overflow: hidden;
+      flex: 1;
+      min-width: 0;
+   }
+
+   .product-gallery__thumbs-inner {
+      display: flex;
+   }
+
+   .product-gallery--row .product-gallery__thumbs,
+   .product-gallery[data-thumbs-position="left"] .product-gallery__thumbs,
+   .product-gallery[data-thumbs-position="right"] .product-gallery__thumbs {
+      width: 100%;
+   }
+
+   .product-gallery--row .product-gallery__thumbs-inner,
+   .product-gallery[data-thumbs-position="left"] .product-gallery__thumbs-inner,
+   .product-gallery[data-thumbs-position="right"] .product-gallery__thumbs-inner {
+      flex-direction: column;
+      width: 100%;
+   }
+
+   .product-gallery--row .product-gallery__thumb.swiper-slide,
+   .product-gallery[data-thumbs-position="left"] .product-gallery__thumb.swiper-slide,
+   .product-gallery[data-thumbs-position="right"] .product-gallery__thumb.swiper-slide {
+      width: 100% !important;
+   }
+
+   .product-gallery__thumb {
+      /* Fills available space equally; Swiper overrides width in slider mode */
+      flex: 1;
+      min-width: 0;
+      aspect-ratio: var(--gallery-thumb-ratio, 1 / 1);
+      cursor: pointer;
+      opacity: 0.5;
+      transition:
+         opacity 0.2s,
+         transform 0.2s,
+         border-color 0.2s;
+      overflow: hidden;
+      border-radius: 6px;
+      box-sizing: border-box;
+      border: var(--thumb-border-width, 2px) solid transparent;
+   }
+
+   /* BOTTOM: explicit px width overrides flex: 1 so Swiper uses the exact calculated size */
+   .product-gallery:not(.product-gallery--row):not([data-thumbs-position="left"]):not([data-thumbs-position="right"]) .product-gallery__thumb.swiper-slide {
+      flex: none !important;
+      width: var(--gallery-thumb-size, 80px) !important;
+      height: auto !important;
+   }
+
+   /* ROW: explicit height fills column, width = 100% of column */
+   .product-gallery--row .product-gallery__thumb,
+   .product-gallery[data-thumbs-position="left"] .product-gallery__thumb,
+   .product-gallery[data-thumbs-position="right"] .product-gallery__thumb {
+      aspect-ratio: unset;
+   }
+   .product-gallery--row .product-gallery__thumb.swiper-slide,
+   .product-gallery[data-thumbs-position="left"] .product-gallery__thumb.swiper-slide,
+   .product-gallery[data-thumbs-position="right"] .product-gallery__thumb.swiper-slide {
+      flex: none !important;
+      width: 100% !important;
+      height: var(--gallery-thumb-height, auto) !important;
+   }
+
+   .product-gallery__thumb.swiper-slide-thumb-active,
+   .product-gallery__thumb.is-active {
+      opacity: 1;
+      border-color: var(--thumb-border-color, #000);
+   }
+
+   .product-gallery__thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+   }
+
+   .product-gallery[data-thumb-scale="true"] .product-gallery__thumb:hover img {
+      transform: scale(1.08);
+   }
+
+   .product-gallery__thumb-prev,
+   .product-gallery__thumb-next {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-size: 16px;
+      color: currentColor;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+      flex-shrink: 0;
+   }
+
+   .product-gallery__thumb-prev:hover,
+   .product-gallery__thumb-next:hover {
+      opacity: 1;
+   }
+
+   /* Hide arrows when disabled in admin or when Swiper locks navigation */
+   .product-gallery[data-thumb-arrows="false"] .product-gallery__thumb-prev,
+   .product-gallery[data-thumb-arrows="false"] .product-gallery__thumb-next,
+   .product-gallery__thumb-prev.swiper-button-disabled,
+   .product-gallery__thumb-next.swiper-button-disabled,
+   .product-gallery__thumb-prev.swiper-button-lock,
+   .product-gallery__thumb-next.swiper-button-lock {
+      display: none;
+   }
+</style>
+
+<script>
+   import Swiper from "swiper";
+   import { Thumbs, FreeMode, Navigation } from "swiper/modules";
+   import "@scripts/init/gallery.js";
+
+   const parseRatio = (ratio: string): [number, number] => {
+      const parts = ratio.replace(":", "/").split("/").map(Number);
+      return [parts[0] || 1, parts[1] || 1];
+   };
+
+   window.addEventListener("load", () => {
+      document
+         .querySelectorAll<HTMLElement>(".product-gallery")
+         .forEach((el) => {
+            if (el.dataset.initialized) return;
+            el.dataset.initialized = "true";
+
+            const mainEl = el.querySelector<HTMLElement>(
+               ".product-gallery__main",
+            );
+            const thumbsEl = el.querySelector<HTMLElement>(
+               ".product-gallery__thumbs",
+            );
+            const needsSlider = el.dataset.needsSlider === "true";
+            const thumbsPosition = el.dataset.thumbsPosition ?? (el.dataset.isRow === "true" ? "left" : "bottom");
+            const isRow = thumbsPosition === "left" || thumbsPosition === "right";
+            const maxVisible = Math.max(2, parseInt(el.dataset.maxVisible ?? "4"));
+            const thumbGap = parseInt(el.dataset.thumbGap ?? "8");
+            const thumbRadius = parseInt(el.dataset.thumbRadius ?? "6");
+            const thumbBorderColor = el.dataset.thumbBorderColor ?? "#000";
+            const thumbBorderWidth = parseInt(
+               el.dataset.thumbBorderWidth ?? "2",
+            );
+            const thumbFade = el.dataset.thumbFade === "true";
+            const thumbArrows = el.dataset.thumbArrows === "true";
+            const thumbRatio = el.dataset.thumbRatio ?? "1/1";
+            const mainRatio  = el.dataset.mainRatio  ?? "auto";
+
+            el.style.setProperty("--thumb-border-color", thumbBorderColor);
+            el.style.setProperty("--thumb-border-width", `${thumbBorderWidth}px`);
+
+            // Bottom mode: thumb width = (containerWidth − (N−1)×gap) / N, set as px var
+            const syncThumbSize = () => {
+               if (isRow || !thumbsEl) return;
+               const w = thumbsEl.offsetWidth;
+               if (w > 0) {
+                  const size = Math.floor((w - (maxVisible - 1) * thumbGap) / maxVisible);
+                  el.style.setProperty("--gallery-thumb-size", `${size}px`);
+                  (thumbsEl as any).swiper?.update();
+               }
+            };
+
+            if (!isRow) {
+               el.style.setProperty("--gallery-thumb-ratio", thumbRatio.replace(":", " / "));
+               syncThumbSize();
+               window.addEventListener("resize", syncThumbSize);
+            }
+
+            // Main image aspect ratio
+            if (mainRatio !== "auto" && mainEl) {
+               mainEl.style.aspectRatio = mainRatio.replace(":", " / ");
+            }
+
+            el.querySelectorAll<HTMLElement>(".product-gallery__thumb").forEach(
+               (t) => {
+                  t.style.borderRadius = `${thumbRadius}px`;
+               },
+            );
+
+            if (thumbFade && thumbsEl) {
+               const direction = isRow ? "to bottom" : "to right";
+               (thumbsEl.style as any).WebkitMaskImage =
+                  `linear-gradient(${direction}, transparent 0%, black 10%, black 90%, transparent 100%)`;
+               thumbsEl.style.maskImage = `linear-gradient(${direction}, transparent 0%, black 10%, black 90%, transparent 100%)`;
+            }
+
+            // Row mode: column width = each-thumb-height × ratio
+            // Each thumb height = (main height − gaps) / maxVisible
+            const syncHeight = () => {
+               if (!isRow || !mainEl || !thumbsEl) return;
+               const h = mainEl.offsetHeight;
+               if (h > 0) {
+                  const wrap = thumbsEl.closest<HTMLElement>(
+                     ".product-gallery__thumbs-wrap",
+                  );
+                  const [rw, rh] = parseRatio(thumbRatio);
+                  const thumbH = (h - (maxVisible - 1) * thumbGap) / maxVisible;
+                  const colW = Math.round(thumbH * rw / rh);
+                  if (wrap) {
+                     wrap.style.height = `${h}px`;
+                     wrap.style.width = `${colW}px`;
+                  }
+                  thumbsEl.style.height = `${h}px`;
+                  // Set slide height so Swiper (slidesPerView:"auto") reads exact px
+                  el.style.setProperty("--gallery-thumb-height", `${Math.floor(thumbH)}px`);
+                  (thumbsEl as any).swiper?.update();
+               }
+            };
+
+            if (isRow && mainEl) {
+               // Set dimensions before Swiper init so it reads the correct height
+               syncHeight();
+               const firstImg = mainEl.querySelector("img");
+               if (!firstImg?.complete) {
+                  firstImg?.addEventListener("load", syncHeight);
+               }
+               window.addEventListener("resize", syncHeight);
+            }
+
+            let thumbsSwiper: Swiper | null = null;
+
+            if (thumbsEl && needsSlider) {
+               const prevEl = el.querySelector<HTMLElement>(
+                  ".product-gallery__thumb-prev",
+               );
+               const nextEl = el.querySelector<HTMLElement>(
+                  ".product-gallery__thumb-next",
+               );
+
+               thumbsSwiper = new Swiper(thumbsEl, {
+                  modules: thumbArrows ? [FreeMode, Navigation] : [FreeMode],
+                  spaceBetween: thumbGap,
+                  slidesPerView: "auto",
+                  freeMode: true,
+                  watchSlidesProgress: true,
+                  observer: true,
+                  observeParents: true,
+                  direction: isRow ? "vertical" : "horizontal",
+                  ...(thumbArrows &&
+                     prevEl &&
+                     nextEl && {
+                        navigation: { prevEl, nextEl },
+                     }),
+                  on: { init: syncHeight },
+               });
+
+               if (mainEl) {
+                  new Swiper(mainEl, {
+                     modules: [Thumbs],
+                     slidesPerView: 1,
+                     spaceBetween: 0,
+                     observer: true,
+                     observeParents: true,
+                     thumbs: { swiper: thumbsSwiper },
+                     on: { slideChange: syncHeight },
+                  });
+               }
+            } else if (thumbsEl && mainEl) {
+               const thumbItems = thumbsEl.querySelectorAll<HTMLElement>(
+                  ".product-gallery__thumb",
+               );
+               const inner = thumbsEl.querySelector<HTMLElement>(
+                  ".product-gallery__thumbs-inner",
+               );
+               if (inner) inner.style.gap = `${thumbGap}px`;
+
+               thumbItems[0]?.classList.add("is-active");
+
+               const mainSwiper = new Swiper(mainEl, {
+                  slidesPerView: 1,
+                  spaceBetween: 0,
+                  on: {
+                     init: syncHeight,
+                     slideChange: () => {
+                        thumbItems.forEach((t) =>
+                           t.classList.remove("is-active"),
+                        );
+                        thumbItems[mainSwiper.activeIndex]?.classList.add(
+                           "is-active",
+                        );
+                        syncHeight();
+                     },
+                  },
+               });
+
+               thumbItems.forEach((thumb, i) => {
+                  thumb.addEventListener("click", () => mainSwiper.slideTo(i));
+               });
+            } else if (mainEl) {
+               new Swiper(mainEl, {
+                  slidesPerView: 1,
+                  spaceBetween: 0,
+               });
+            }
+
+            // Gallery update handler: product-variants.js dispatches 'gallery:update'
+            // Runs here so thumbsSwiper reference and syncThumbSize are in scope
+            el.addEventListener('gallery:update', (event: any) => {
+               const images = event.detail?.images;
+               if (!images?.length) return;
+               const fancyboxEnabled = el.dataset.galleryFancybox === "true";
+               const mainSw = (mainEl as any)?.swiper;
+               if (!mainSw) return;
+
+               // Rebuild main slides
+               const mainSlides = images.map((img: any) => {
+                  const imgTag = `<img src="${img.src}" srcset="${img.srcset || ''}" sizes="(max-width: 768px) 100vw, 50vw" alt="${img.alt}" loading="eager" width="${img.width || ''}" height="${img.height || ''}">`;
+                  const inner = fancyboxEnabled
+                     ? `<a data-fancybox="product-gallery" href="${img.src}" data-caption="${img.alt}">${imgTag}</a>`
+                     : imgTag;
+                  return `<div class="swiper-slide">${inner}</div>`;
+               });
+               mainSw.wrapperEl.innerHTML = mainSlides.join('');
+               mainSw.updateSlides();
+               mainSw.updateSlidesClasses();
+               // Force wrapper to position 0 (slideTo(0) is no-op if activeIndex already 0)
+               mainSw.wrapperEl.style.transform = 'translate3d(0px,0px,0px)';
+               mainSw.wrapperEl.style.transitionDuration = '0ms';
+
+               // Rebuild thumbs
+               if (thumbsEl && thumbsSwiper) {
+                  thumbsSwiper.wrapperEl.innerHTML = images.map((img: any) =>
+                     `<div class="swiper-slide product-gallery__thumb"><img src="${img.thumb}" alt="${img.alt}" loading="eager"></div>`
+                  ).join('');
+                  thumbsSwiper.updateSlides();
+                  thumbsSwiper.updateSlidesClasses();
+                  thumbsSwiper.wrapperEl.style.transform = 'translate3d(0px,0px,0px)';
+                  thumbsSwiper.wrapperEl.style.transitionDuration = '0ms';
+                  if (mainSw.thumbs) {
+                     mainSw.thumbs.init();
+                     mainSw.thumbs.update(true);
+                  }
+               }
+
+               syncThumbSize();
+               if (fancyboxEnabled) (window as any).__galleryFancybox?.();
+            });
+         });
+   });
+</script>

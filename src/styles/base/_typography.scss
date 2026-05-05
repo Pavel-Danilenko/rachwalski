@@ -1,0 +1,80 @@
+// base/_typography.scss
+// Базова типографіка з settings.scss
+@use "sass:map";
+@use "@styles/settings" as *;
+@use "@styles/utils/functions" as *;
+
+// ─── Заголовки ────────────────────────────────────────────────────────────────
+@each $tag, $props in $headings {
+   // Мержимо defaults + per-heading (per-heading override defaults)
+   $cfg: map.merge($headings-defaults, $props);
+
+   // Розмір: з type-scale або прямі min/max
+   $scale-key: map.get($cfg, "scale");
+   $scale:     if($scale-key, map.get($type-scale, $scale-key), null);
+   $fs-min:    if($scale, map.get($scale, "min"), map.get($cfg, "min"));
+   $fs-max:    if($scale, map.get($scale, "max"), map.get($cfg, "max"));
+
+   #{$tag} {
+      // font-size
+      @if $fs-min and $fs-max {
+         font-size: var(--text-#{$scale-key}, #{fluid-value($fs-min, $fs-max)});
+      }
+
+      // font-weight
+      @if map.get($cfg, "weight") {
+         font-weight: map.get($cfg, "weight");
+      }
+
+      // font-family
+      $family: map.get($cfg, "family");
+      @if $family == "secondary" { font-family: var(--font-secondary); }
+      @else if $family == "primary" { font-family: var(--font-primary); }
+      // null → inherit
+
+      // line-height
+      @if map.get($cfg, "line-height") {
+         line-height: map.get($cfg, "line-height");
+      }
+
+      // letter-spacing
+      @if map.get($cfg, "letter-spacing") {
+         letter-spacing: map.get($cfg, "letter-spacing");
+      }
+
+      // color
+      @if map.get($cfg, "color") {
+         color: #{map.get($cfg, "color")};
+      }
+
+      // text-align
+      @if map.get($cfg, "align") {
+         text-align: map.get($cfg, "align");
+      }
+
+      // text-transform
+      @if map.get($cfg, "text-transform") {
+         text-transform: map.get($cfg, "text-transform");
+      }
+
+      // margin-bottom (px → rem)
+      @if map.get($cfg, "margin-bottom") {
+         margin-bottom: toRem(map.get($cfg, "margin-bottom"));
+      }
+   }
+}
+
+// ─── Посилання ────────────────────────────────────────────────────────────────
+a {
+   @if $link-decoration   { text-decoration: $link-decoration; }
+   @if $link-color        { color: #{$link-color}; }
+   @if $link-color-hover  { &:hover { color: #{$link-color-hover}; } }
+}
+
+// ─── Кнопки ───────────────────────────────────────────────────────────────────
+@if $btn-font-weight or $btn-font-size {
+   button {
+      @if $btn-font-weight { font-weight: $btn-font-weight; }
+      @if $btn-font-size   { font-size: toRem($btn-font-size); }
+   }
+}
