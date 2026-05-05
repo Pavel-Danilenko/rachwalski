@@ -59,18 +59,6 @@ async function loadModules() {
       imports.push(import("@scripts/init/scroll-nav"));
    }
 
-   if (document.querySelector("[data-qty-minus], [data-qty-plus]")) {
-      imports.push(import("@scripts/init/product-qty"));
-   }
-
-   if (document.querySelector("[data-option-name]")) {
-      imports.push(import("@scripts/init/product-variants"));
-   }
-
-   if (document.querySelector("[data-collection-page]")) {
-      imports.push(import("@scripts/init/collection-filter"));
-   }
-
    if (document.querySelector("[data-typing]")) {
       imports.push(import("@scripts/animation/typing"));
    }

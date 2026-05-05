@@ -1,7 +1,6 @@
 import { defineConfig } from "astro/config";
 import { ImageOptimize } from "@datarose/vite-plugin-media-optimize";
 import dotenv from "dotenv";
-import { shopifyIntegration } from "./src/integrations/shopify/index.ts";
 import deleteUnusedImages from "astro-delete-unused-images";
 import compress from "@playform/compress";
 import sitemap from "@astrojs/sitemap";
@@ -12,33 +11,25 @@ dotenv.config();
 const imageMode = process.env.PUBLIC_IMAGE_MODE || "plugin";
 const isStatic = process.env.BUILD_MODE === "static";
 const isWP = process.env.BUILD_MODE === "wp";
-const isShopify = process.env.BUILD_MODE === "shopify";
 
 const deleteUnused = process.env.PUBLIC_DELETE_UNUSED_IMAGES !== "true";
 
 console.log(
-   `${isWP ? "WP BUILD -" : isStatic ? "STATIC BUILD -" : isShopify ? "SHOPIFY BUILD -" : ""} IMAGE MODE:`,
+   `${isWP ? "WP BUILD -" : isStatic ? "STATIC BUILD -" : ""} IMAGE MODE:`,
    imageMode,
 );
 
 export default defineConfig({
    site: process.env.PUBLIC_SITE_URL || "https://example.com/",
-   outDir: isShopify
-      ? "./dist-shopify"
-      : isStatic
-        ? "./dist-static"
-        : isWP
-          ? "./dist-wp"
-          : "./dist",
+   outDir: isStatic ? "./dist-static" : isWP ? "./dist-wp" : "./dist",
 
-   output: isShopify || isStatic ? "static" : "server",
-   ...(!isShopify &&
-      !isStatic && {
-         adapter: node({ mode: "standalone" }),
-      }),
+   output: isStatic ? "static" : "server",
+   ...(!isStatic && {
+      adapter: node({ mode: "standalone" }),
+   }),
 
    build: {
-      minify: !(isWP || isShopify),
+      minify: !isWP,
    },
 
    vite: {
@@ -75,39 +66,22 @@ export default defineConfig({
          },
       },
 
-      ...((isWP || isShopify || isStatic) && {
+      ...((isWP || isStatic) && {
          build: {
             minify: isWP || isStatic ? "esbuild" : false,
             assetsInlineLimit: 0,
             cssCodeSplit: true,
             rollupOptions: {
                output: {
-                  entryFileNames: isShopify ? "[name].js" : "js/[name].js",
-                  chunkFileNames: isShopify ? "[name].js" : "js/[name].js",
+                  entryFileNames: "js/[name].js",
+                  chunkFileNames: "js/[name].js",
                   assetFileNames: (assetInfo) => {
-                     if (isShopify) return "[name][extname]";
-                     if (assetInfo.name?.endsWith(".css")) {
-                        if (
-                           assetInfo.name.match(/-\d+$/) ||
-                           assetInfo.name.includes("-")
-                        ) {
-                           return "css/main[extname]";
-                        }
-                        return "css/[name][extname]";
-                     }
-                     if (
-                        /\.(jpe?g|png|webp|avif|gif|svg)$/i.test(
-                           assetInfo.name || "",
-                        )
-                     ) {
+                     if (assetInfo.name?.endsWith(".css")) return "css/[name][extname]";
+                     if (/\.(jpe?g|png|webp|avif|gif|svg)$/i.test(assetInfo.name || "")) {
                         return "_astro/[name][extname]";
                      }
                      return "assets/[name][extname]";
                   },
-               },
-               manualChunks: (id) => {
-                  if (id.includes("astro")) return "astro-runtime";
-                  if (id.includes("components")) return "components";
                },
             },
          },
@@ -115,53 +89,45 @@ export default defineConfig({
    },
 
    integrations: [
-      deleteUnused && !isShopify && !isStatic && deleteUnusedImages({}),
-
+      deleteUnused && !isStatic && deleteUnusedImages({}),
       compress({
          CSS: false,
          JavaScript: false,
          SVG: false,
          JSON: false,
          Image: false,
-         HTML: isShopify
-            ? false
-            : isWP
-              ? {
-                   "html-minifier-terser": {
-                      removeComments: true,
-                      collapseWhitespace: false,
-                      removeAttributeQuotes: false,
-                      removeEmptyAttributes: true,
-                      minifyCSS: false,
-                      minifyJS: false,
-                      preserveLineBreaks: true,
-                      removeScriptTypeAttributes: true,
-                      removeStyleLinkTypeAttributes: true,
-                   },
-                }
-              : {
-                   "html-minifier-terser": {
-                      removeComments: true,
-                      collapseWhitespace: true,
-                      removeAttributeQuotes: true,
-                      removeEmptyAttributes: true,
-                      minifyCSS: false,
-                      minifyJS: false,
-                      preserveLineBreaks: false,
-                      removeScriptTypeAttributes: true,
-                      removeStyleLinkTypeAttributes: true,
-                   },
-                },
+         HTML: isWP
+            ? {
+                 "html-minifier-terser": {
+                    removeComments: true,
+                    collapseWhitespace: false,
+                    removeEmptyAttributes: true,
+                    minifyCSS: false,
+                    minifyJS: false,
+                    preserveLineBreaks: true,
+                    removeScriptTypeAttributes: true,
+                    removeStyleLinkTypeAttributes: true,
+                 },
+              }
+            : {
+                 "html-minifier-terser": {
+                    removeComments: true,
+                    collapseWhitespace: true,
+                    removeAttributeQuotes: true,
+                    removeEmptyAttributes: true,
+                    minifyCSS: false,
+                    minifyJS: false,
+                    preserveLineBreaks: false,
+                    removeScriptTypeAttributes: true,
+                    removeStyleLinkTypeAttributes: true,
+                 },
+              },
       }),
-
-      !isShopify &&
-         sitemap({
-            changefreq: "weekly",
-            priority: 0.7,
-            filter: (page) => !page.includes("/secret/"),
-         }),
-
-      isShopify && shopifyIntegration(),
+      sitemap({
+         changefreq: "weekly",
+         priority: 0.7,
+         filter: (page) => !page.includes("/secret/"),
+      }),
    ].filter(Boolean),
 
    server: {
@@ -172,6 +138,5 @@ export default defineConfig({
    preview: {
       host: true,
       port: 4321,
-      open: true,
    },
 });
