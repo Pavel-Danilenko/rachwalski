@@ -43,6 +43,12 @@ export default defineConfig({
             }),
       ].filter(Boolean),
 
+      build: {
+         // Barba.js replaces only data-barba container, not <head> link tags.
+         // Without this, page-specific CSS chunks are never loaded after navigation.
+         cssCodeSplit: isStatic ? false : true,
+      },
+
       css: {
          preprocessorOptions: {
             scss: {
