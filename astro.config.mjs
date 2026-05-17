@@ -72,7 +72,7 @@ export default defineConfig({
          },
       },
 
-      ...((isWP || isStatic) && {
+      ...(isWP && {
          build: {
             minify: isWP || isStatic ? "esbuild" : false,
             assetsInlineLimit: 0,
