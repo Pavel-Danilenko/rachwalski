@@ -46,7 +46,9 @@ export default defineConfig({
       build: {
          // Barba.js replaces only data-barba container, not <head> link tags.
          // Without this, page-specific CSS chunks are never loaded after navigation.
-         cssCodeSplit: isStatic ? false : true,
+         // Barba.js doesn't update <head> CSS links on navigation —
+         // all styles must be in one bundle for transitions to work correctly.
+         cssCodeSplit: isWP || isStatic ? false : true,
       },
 
       css: {
