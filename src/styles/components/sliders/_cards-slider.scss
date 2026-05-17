@@ -1,0 +1,53 @@
+// _cards-slider.scss
+// Стилізуй тут — змінні з settings.scss та palette.scss доступні автоматично
+@use "@styles/utils" as *;
+.cards-slider {
+   // .cards-slider__card
+   position: relative;
+
+   &__card {
+      @include fluid-space(padding, 20, 24);
+      flex-grow: 1;
+   }
+}
+.cards-slider .swiper {
+   margin-right: toRem(-15);
+}
+.cards-slider .swiper-wrapper {
+   @include respond-from("md") {
+      display: flex;
+      gap: toRem(12);
+   }
+}
+.cards-slider .swiper-slide {
+   display: flex;
+   flex-direction: column;
+   flex-grow: 1;
+   height: auto;
+   @include respond-from("md") {
+      flex-shrink: unset;
+   }
+}
+.cards-slider .slider__arrow {
+   position: relative;
+   top: auto;
+   font-size: toRem(12);
+   left: initial;
+   right: initial;
+   transform: translateY(-0%);
+   z-index: 2;
+   background-color: transparent;
+   color: var(--color-secondary);
+   border: solid var(--color-secondary) var(--border-sm);
+}
+.cards-slider__controls {
+   display: flex;
+   justify-content: center;
+   gap: toRem(12);
+   &:not(:first-child) {
+      margin-top: toRem(12);
+   }
+   @include respond-from("md") {
+      display: none;
+   }
+}

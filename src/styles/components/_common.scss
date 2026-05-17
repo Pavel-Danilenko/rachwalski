@@ -1,0 +1,332 @@
+// _common.scss — загальні стилі компонентів
+// Підключається глобально через components/_index.scss
+// Пиши тут стилі що повторюються на різних сторінках
+@use "@styles/utils" as *;
+@use "@styles/settings" as *;
+.t-center {
+   text-align: center;
+}
+.pt-180 {
+   @include fluid-space(padding-top, 88, 180);
+}
+.pb-80 {
+   @include fluid-space(padding-bottom, 40, 80);
+}
+
+.pt-80 {
+   @include fluid-space(padding-top, 40, 80);
+}
+.pb-35 {
+   @include fluid-space(padding-bottom, 25, 35);
+}
+.mb-60 {
+   &:not(:last-child) {
+      @include fluid-space(margin-bottom, 40, 60);
+   }
+}
+.mb-40 {
+   &:not(:last-child) {
+      @include fluid-space(margin-bottom, 30, 40);
+   }
+}
+.mt-1 {
+   margin-top: toRem(-1);
+}
+.mb-30 {
+   &:not(:last-child) {
+      margin-bottom: toRem(30);
+   }
+}
+.mb-20 {
+   &:not(:last-child) {
+      @include fluid-space(margin-bottom, 14, 20);
+   }
+}
+.mb-12 {
+   &:not(:last-child) {
+      margin-bottom: toRem(12);
+   }
+}
+// btns
+.btn {
+   display: inline-block;
+   font-weight: 600;
+   transition: var(--transition-base);
+   cursor: pointer;
+   text-align: center;
+   padding: toRem(12) toRem(24);
+   border-radius: var(--radius-xl);
+   line-height: 1.4;
+}
+
+.outline-btn {
+   padding: toRem(8) toRem(28);
+   border: var(--border-sm) solid var(--color-text);
+   color: var(--color-text);
+   font-weight: 600;
+   text-align: center;
+   background-color: transparent;
+   border-radius: var(--radius-xl);
+
+   @media (any-hover: hover) {
+      &:hover {
+         background-color: var(--color-text);
+         color: var(--color-secondary);
+      }
+   }
+   @include respond-to("md") {
+      width: 100%;
+   }
+}
+
+.white-btn {
+   border: var(--border-sm) solid var(--color-primary);
+   color: var(--color-primary);
+   background-color: transparent;
+
+   @media (any-hover: hover) {
+      &:hover {
+         background-color: var(--color-primary);
+         color: var(--color-primary-hover);
+      }
+   }
+   @include respond-to("md") {
+      width: 100%;
+   }
+}
+
+.black-btn {
+   border: var(--border-sm) solid var(--color-primary);
+   color: var(--color-primary-hover);
+   background-color: var(--color-primary);
+
+   @media (any-hover: hover) {
+      &:hover {
+         background-color: transparent;
+         color: var(--color-primary);
+      }
+   }
+   @include respond-to("md") {
+      width: 100%;
+   }
+}
+
+// borders
+.border-y {
+   border-top: 1px solid rgba(255, 255, 255, 0.2);
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.border-t {
+   border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.border-b {
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+//glass
+.glass-icon {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 50%;
+   flex-shrink: 0;
+   background: var(--color-light-blue-overlay);
+   box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.glass {
+   will-change: transform;
+   transform: translateZ(0);
+   background: var(--color-overlay-light);
+   backdrop-filter: blur(10px);
+   border: var(--border-sm) solid rgba(255, 255, 255, 0.3);
+}
+
+.t-style p {
+   &:not(:last-child) {
+      @include fluid-space(margin-bottom, 8, 12);
+   }
+}
+.fw-600 {
+   font-weight: 600;
+}
+
+.fw-500 {
+   font-weight: $font-weight-medium;
+}
+
+.fw-400 {
+   font-weight: 400;
+}
+.fs-14 {
+   font-size: toRem(14);
+}
+.fs-16 {
+   @include fluid-space(font-size, 14, 16);
+}
+.fs-24 {
+   @include fluid-space(font-size, 16, 24);
+}
+.fs-20 {
+   @include fluid-space(font-size, 16, 20);
+}
+
+.fs-32 {
+   @include fluid-space(font-size, 18, 32);
+}
+.fs-36 {
+   @include fluid-space(font-size, 24, 36);
+}
+.bg-white {
+   background-color: var(--color-bg-light);
+}
+
+.bg-white-medium {
+   background-color: var(--color-overlay-medium);
+   backdrop-filter: blur(12px);
+}
+
+.ct-black {
+   color: var(--color-black);
+}
+.br-8 {
+   border-radius: var(--radius-md);
+}
+.br-20 {
+   border-radius: var(--radius-lg);
+}
+.br-12 {
+   border-radius: toRem(12);
+}
+.br-30 {
+   @include fluid-space(border-radius, 16, 30);
+}
+.dark-gradient__top {
+   &::before {
+      content: "";
+      width: 100%;
+      height: 101%;
+      position: absolute;
+      top: toRem(-1);
+      left: 0;
+      z-index: 1;
+      background: var(--gradient-top-gradient);
+   }
+}
+.dark-gradient__bottom {
+   background: var(--gradient-bottom-gradient-dark);
+}
+.hero-mask {
+   &::before {
+      content: "";
+      position: absolute;
+      bottom: toRem(-1);
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-hero-mask);
+   }
+}
+.light-gradientp-top {
+   &::before {
+      content: "";
+      width: 100%;
+      height: toRem(140);
+      position: absolute;
+      top: toRem(-1);
+      left: 0;
+      z-index: 1;
+      background: var(--gradient-top-gradient-light);
+   }
+}
+.hero-mask-top {
+   &::after {
+      content: "";
+      width: 100%;
+      height: 50%;
+      position: absolute;
+      z-index: 1;
+      top: 0px;
+      left: 0;
+      background: var(--gradient-header-mask-dark-top);
+   }
+}
+
+.hero-gradient__bg {
+   position: absolute;
+   top: 0;
+   left: 0;
+   z-index: 0;
+   width: 100%;
+   &::before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      background: var(--gradient-prices-top-gradient);
+   }
+   &::after {
+      content: "";
+      width: 100%;
+      @include fluid-space(height, 300, 600);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 0;
+      background: var(--gradient-prices-bottom-gradient);
+   }
+}
+
+.hero-gradient__bg--height-100 {
+   height: 100%;
+}
+.hero-gradient__bg--fees {
+   height: 100svh;
+}
+
+.text-list {
+   ul {
+      &:not(:first-child) {
+         padding-top: toRem(6);
+      }
+      li {
+         position: relative;
+         padding-left: toRem(24);
+         &:not(:last-child) {
+            margin-bottom: toRem(6);
+         }
+         &::before {
+            content: "";
+            position: absolute;
+            @include fluid-space(left, 4, 8);
+            @include fluid-space(top, 8, 10);
+            width: toRem(4);
+            height: toRem(4);
+            border-radius: 50%;
+            background: var(--color-black);
+         }
+      }
+   }
+}
+
+// gradients
+.blog-hero-light {
+   &::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      left: 0;
+      z-index: 2;
+      @include fluid-space(height, 124, 210);
+      background: var(--gradient-blog-hero-light);
+      @include fluid-space(bottom, -1, -60);
+   }
+}

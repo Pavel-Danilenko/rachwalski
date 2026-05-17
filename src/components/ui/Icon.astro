@@ -1,0 +1,66 @@
+---
+/**
+ * Icon — SVG іконка зі спрайту
+ *
+ * @param {string}          name   - назва іконки (ім'я файлу без .svg)
+ * @param {number|string}   size   - розмір: число = px, рядок = будь-яка CSS одиниця
+ * @param {string}          color  - колір (CSS-значення або змінна)
+ * @param {string}          class  - додатковий CSS клас
+ *
+ * Іконки зберігаються в src/icons/*.svg
+ * Спрайт генерується в IconSprite.astro (підключений в BaseLayout)
+ */
+
+interface Props {
+   name: string;
+   size?: number | string;
+   color?: string;
+   class?: string;
+}
+
+const { name, size, color, class: className } = Astro.props;
+
+const sizeValue = size !== undefined
+   ? typeof size === "number" ? `${size}px` : size
+   : undefined;
+
+const styles = [
+   sizeValue ? `font-size: ${sizeValue}` : "",
+   color     ? `color: ${color}`         : "",
+].filter(Boolean).join("; ");
+---
+
+<svg
+   class:list={["icon", className]}
+   style={styles || undefined}
+   data-icon={name}
+   aria-hidden="true"
+   focusable="false"
+>
+   <use href={`#icon-${name}`}></use>
+</svg>
+
+<style>
+   .icon {
+      display: block;
+      width: 1em;
+      height: 1em;
+      flex-shrink: 0;
+      fill: currentColor;
+      stroke: currentColor;
+   }
+</style>
+
+<script>
+   function initIcons() {
+      document.querySelectorAll<SVGElement>(".icon[data-icon]").forEach((icon) => {
+         const symbol = document.getElementById(`icon-${icon.getAttribute("data-icon")}`);
+         if (!symbol) return;
+         const viewBox = symbol.getAttribute("viewBox");
+         if (viewBox) icon.setAttribute("viewBox", viewBox);
+      });
+   }
+
+   initIcons();
+   document.addEventListener("page:ready", initIcons);
+</script>

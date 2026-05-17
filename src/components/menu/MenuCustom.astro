@@ -1,25 +1,31 @@
 ---
-// src/components/menu/MenuCustom.astro
-import "@styles/components/_menu-custom.scss";
+import "@styles/components/menu/_menu-custom.scss";
 
 interface Props {
    class?: string;
    closeOthers?: boolean;
+   burgerLabel?: string;
 }
 
-const { class: className, closeOthers = false } = Astro.props;
+const {
+   class: className,
+   closeOthers = false,
+   burgerLabel = "Відкрити меню",
+} = Astro.props;
 ---
 
 <nav
    class:list={["menu-custom", className]}
    data-menu
    data-menu-close-others={closeOthers || undefined}
+   aria-label="Головна навігація"
 >
-   <!-- Бургер -->
    <button
       class="menu-custom__burger"
       data-menu-trigger
-      aria-label="Toggle menu"
+      aria-label={burgerLabel}
+      aria-expanded="false"
+      aria-controls="menu-overlay"
       type="button"
    >
       <span></span>
@@ -27,7 +33,6 @@ const { class: className, closeOthers = false } = Astro.props;
       <span></span>
    </button>
 
-   <!-- Весь контент меню (повна свобода!) -->
    <slot />
 </nav>
 

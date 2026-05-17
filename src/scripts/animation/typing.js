@@ -259,6 +259,6 @@ if (document.readyState === "loading") {
    initTyping();
 }
 
-document.addEventListener("astro:page-load", initTyping);
+document.addEventListener("page:ready", initTyping);
 
 export default Typing;

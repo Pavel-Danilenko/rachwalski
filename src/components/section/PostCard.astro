@@ -1,0 +1,46 @@
+---
+import "@styles/components/section/_post-card.scss";
+import Img from "@components/media/Img.astro";
+import Icon from "@components/ui/Icon.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+   post: CollectionEntry<"blog">;
+   class?: string;
+}
+
+const { post, class: className } = Astro.props;
+const { title, date, readTime, category, image } = post.data;
+
+const formattedDate = date.toLocaleDateString("en-GB", {
+   day: "numeric",
+   month: "short",
+   year: "numeric",
+});
+---
+
+<article class:list={["post-card", className]}>
+   <a href={`/blog/${post.slug}`} class="post-card__img-wrap">
+      <Img
+         src={image}
+         alt={title}
+         loading="lazy"
+         wrapperClass="post-card__img"
+      />
+   </a>
+   <div class="post-card__body">
+      <div class="post-card__meta">
+         <span class="post-card__date">{formattedDate}</span>
+         <div class="post-card__time">
+            <Icon name="clock-post" />
+            <span>{readTime} min read</span>
+         </div>
+      </div>
+      <a href={`/blog/${post.slug}`} class="post-card__title-link">
+         <h3 class="post-card__title">{title}</h3>
+      </a>
+      <div class="post-card__tags">
+         <span class="post-card__tag">{category}</span>
+      </div>
+   </div>
+</article>

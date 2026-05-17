@@ -1,0 +1,30 @@
+---
+import Icon from "@components/ui/Icon.astro";
+
+interface Props {
+   title: string;
+   open?: boolean;
+   class?: string;
+}
+
+const { title, open = false, class: className } = Astro.props;
+---
+
+<div
+   class:list={["sitemap__group", className]}
+   data-sitemap-group
+   data-sitemap-open={open || undefined}
+>
+   <button class="sitemap__group-trigger" data-sitemap-trigger type="button">
+      {title}
+      <Icon name="arrow-dawn" class="sitemap__arrow" />
+   </button>
+
+   <div class="sitemap__group-content">
+      <div class="sitemap__group-overflow">
+         <div class="sitemap__group-inner">
+            <slot />
+         </div>
+      </div>
+   </div>
+</div>

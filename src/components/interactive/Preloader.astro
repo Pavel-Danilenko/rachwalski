@@ -1,0 +1,45 @@
+---
+// Preloader.astro
+import "@styles/components/interactive/_preloader.scss";
+
+interface Props {
+   // Затримка перед зникненням після завантаження сторінки (мс)
+   hideDelay?: number;
+   // Тривалість fade out анімації (мс)
+   fadeDuration?: number;
+   // Мінімальний час показу прелоадера (мс)
+   minDisplayTime?: number;
+   // Час за який лічильник доходить до 90% (мс) — імітація швидкості завантаження
+   simulationDuration?: number;
+}
+
+const {
+   hideDelay = 500,
+   fadeDuration = 600,
+   minDisplayTime = 0,
+   simulationDuration = 800,
+} = Astro.props;
+---
+
+<div
+   class="preloader"
+   data-lock
+   id="preloader"
+   aria-hidden="true"
+   style="opacity: 0; visibility: hidden;"
+   data-hide-delay={hideDelay}
+   data-fade-duration={fadeDuration}
+   data-min-display-time={minDisplayTime}
+   data-simulation-duration={simulationDuration}
+>
+   <div class="preloader__counter">
+      <span class="preloader__number" id="preloaderNumber">0</span>
+      <span class="preloader__percent">%</span>
+   </div>
+   <div class="preloader__bar">
+      <div class="preloader__bar-fill" id="preloaderBar"></div>
+   </div>
+</div>
+<script>
+   import "@scripts/init/preloader";
+</script>

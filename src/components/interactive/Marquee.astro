@@ -1,0 +1,67 @@
+---
+import "@styles/components/interactive/_marquee.scss";
+
+interface Props {
+   // Швидкість — менше = швидше (пікселів за секунду ÷ 10)
+   speed?:        number;
+   speedTablet?:  number;
+   speedMobile?:  number;
+
+   // Відступ між елементами (px)
+   space?:        number;
+   spaceTablet?:  number;
+   spaceMobile?:  number;
+
+   // Напрямок прокрутки
+   direction?: "left" | "right" | "top" | "bottom";
+
+   // Пауза при наведенні курсору
+   pauseOnHover?: boolean;
+
+   // Зміщення початкової позиції (%)
+   startPosition?: number;
+
+   // Breakpoints — на яких розмірах активний (px)
+   minWidth?: number;
+   maxWidth?: number;
+
+   class?: string;
+}
+
+const {
+   speed         = 10,
+   speedTablet,
+   speedMobile,
+   space         = 30,
+   spaceTablet,
+   spaceMobile,
+   direction     = "left",
+   pauseOnHover  = false,
+   startPosition = 0,
+   minWidth,
+   maxWidth,
+   class: className = "",
+} = Astro.props;
+---
+
+<div
+   class:list={["marquee", className]}
+   data-marquee
+   data-marquee-speed={speed}
+   data-marquee-speed-tablet={speedTablet ?? speed}
+   data-marquee-speed-mobile={speedMobile ?? speedTablet ?? speed}
+   data-marquee-space={space}
+   data-marquee-space-tablet={spaceTablet ?? space}
+   data-marquee-space-mobile={spaceMobile ?? spaceTablet ?? space}
+   data-marquee-direction={direction}
+   data-marquee-start={startPosition}
+   data-marquee-pause={pauseOnHover ? "true" : undefined}
+   data-marquee-min-width={minWidth ?? undefined}
+   data-marquee-max-width={maxWidth ?? undefined}
+>
+   <slot />
+</div>
+
+<script>
+   import "@scripts/init/marquee";
+</script>

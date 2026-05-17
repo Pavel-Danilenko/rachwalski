@@ -1,17 +1,119 @@
 {
+   // ─── Color variables from palette ────────────────────────────────────────
+   "color variable": {
+      "prefix": "cv",
+      "scope": "scss,css",
+      "body": "var(--color-${1|text,text-muted,bg,bg-alt,surface,border,primary,primary-hover,secondary,secondary-hover,accent,accent-hover,white,black,blue,light-blue,overlay-dark,overlay-light,overlay-medium,bg-dark,bg-light,surface-dark,surface-glass,success,warning,error,info|})",
+      "description": "CSS color variable — всі кольори з palette.scss"
+   },
+
    // ─── fluid() — будь-яка властивість ──────────────────────────────────────
    "fluid": {
       "prefix": "fluid",
       "scope": "scss,css",
-      "body": ["@include fluid(${1|font-size,gap,padding,padding-top,padding-bottom,padding-left,padding-right,margin,margin-top,margin-bottom,width,height,border-radius|}, ${2:min}, ${3:max});"],
-      "description": "fluid(property, min, max) — від $mobile до $pc"
+      "body": [
+         "@include fluid(${1|font-size,gap,padding,padding-top,padding-bottom,padding-left,padding-right,margin,margin-top,margin-bottom,width,height,border-radius|}, ${2:min}, ${3:max});",
+      ],
+      "description": "fluid(property, min, max) — від $mobile до $pc",
    },
 
+   "respond-to breakpoint": {
+      "prefix": "rp",
+      "body": "@include respond-to(\"${1|xs,sm,md,lg,xl,xxl|}\") {\n\t$2\n}",
+      "description": "max-width  xs≤320 · sm≤480 · md≤768 · lg≤992 · xl≤1310 · xxl≤1440",
+   },
+   "respond-to xs  ≤320px": {
+      "prefix": "rp",
+      "body": "@include respond-to(\"xs\") {\n\t$0\n}",
+      "description": "max-width 320px",
+   },
+   "respond-to sm  ≤480px": {
+      "prefix": "rp",
+      "body": "@include respond-to(\"sm\") {\n\t$0\n}",
+      "description": "max-width 480px",
+   },
+   "respond-to md  ≤768px": {
+      "prefix": "rp",
+      "body": "@include respond-to(\"md\") {\n\t$0\n}",
+      "description": "max-width 768px",
+   },
+   "respond-to lg  ≤992px": {
+      "prefix": "rp",
+      "body": "@include respond-to(\"lg\") {\n\t$0\n}",
+      "description": "max-width 992px",
+   },
+   "respond-to xl  ≤1310px": {
+      "prefix": "rp",
+      "body": "@include respond-to(\"xl\") {\n\t$0\n}",
+      "description": "max-width 1310px",
+   },
+   "respond-to xxl ≤1440px": {
+      "prefix": "rp",
+      "body": "@include respond-to(\"xxl\") {\n\t$0\n}",
+      "description": "max-width 1440px",
+   },
+   "respond-to custom": {
+      "prefix": "rpc",
+      "body": "@include respond-to(${1:900}) {\n\t$2\n}",
+      "description": "respond-to кастомне px значення",
+   },
+   "respond-from breakpoint": {
+      "prefix": "rpf",
+      "body": "@include respond-from(\"${1|xs,sm,md,lg,xl,xxl|}\") {\n\t$2\n}",
+      "description": "min-width  xs≥320 · sm≥480 · md≥768 · lg≥992 · xl≥1310 · xxl≥1440",
+   },
+   "respond-from xs  ≥320px": {
+      "prefix": "rpf",
+      "body": "@include respond-from(\"xs\") {\n\t$0\n}",
+      "description": "min-width 320px",
+   },
+   "respond-from sm  ≥480px": {
+      "prefix": "rpf",
+      "body": "@include respond-from(\"sm\") {\n\t$0\n}",
+      "description": "min-width 480px",
+   },
+   "respond-from md  ≥768px": {
+      "prefix": "rpf",
+      "body": "@include respond-from(\"md\") {\n\t$0\n}",
+      "description": "min-width 768px",
+   },
+   "respond-from lg  ≥992px": {
+      "prefix": "rpf",
+      "body": "@include respond-from(\"lg\") {\n\t$0\n}",
+      "description": "min-width 992px",
+   },
+   "respond-from xl  ≥1310px": {
+      "prefix": "rpf",
+      "body": "@include respond-from(\"xl\") {\n\t$0\n}",
+      "description": "min-width 1310px",
+   },
+   "respond-from xxl ≥1440px": {
+      "prefix": "rpf",
+      "body": "@include respond-from(\"xxl\") {\n\t$0\n}",
+      "description": "min-width 1440px",
+   },
+   "respond-from custom": {
+      "prefix": "rpfc",
+      "body": "@include respond-from(${1:900}) {\n\t$2\n}",
+      "description": "respond-from кастомне px значення (mobile-first)",
+   },
+   "respond-between breakpoints": {
+      "prefix": "rpb",
+      "body": "@include respond-between(\"${1|xs,sm,md,lg,xl|}\", \"${2|sm,md,lg,xl,xxl|}\") {\n\t$3\n}",
+      "description": "respond-between(min, max) — діапазон між іменованими брейкпоінтами",
+   },
+   "respond-between custom": {
+      "prefix": "rpbc",
+      "body": "@include respond-between(${1:480}, ${2:1100}) {\n\t$3\n}",
+      "description": "respond-between кастомні px значення — діапазон",
+   },
    "fluid custom breakpoints": {
       "prefix": "fluidbp",
       "scope": "scss,css",
-      "body": ["@include fluid(${1|font-size,gap,padding,padding-top,padding-bottom,margin-top,margin-bottom,width,height|}, ${2:min}, ${3:max}, ${4|bp(\"xs\"),bp(\"sm\"),bp(\"md\"),bp(\"lg\"),bp(\"xl\"),bp(\"xxl\"),320,480,768,1024,1200,1440,1920|}, ${5|bp(\"xl\"),bp(\"xxl\"),bp(\"lg\"),1200,1440,1920|});"],
-      "description": "fluid з кастомними брейкпоінтами"
+      "body": [
+         "@include fluid(${1|font-size,gap,padding,padding-top,padding-bottom,margin-top,margin-bottom,width,height|}, ${2:min}, ${3:max}, ${4|bp(\"xs\"),bp(\"sm\"),bp(\"md\"),bp(\"lg\"),bp(\"xl\"),bp(\"xxl\"),320,480,768,1024,1200,1440,1920|}, ${5|bp(\"xl\"),bp(\"xxl\"),bp(\"lg\"),1200,1440,1920|});",
+      ],
+      "description": "fluid з кастомними брейкпоінтами",
    },
 
    // ─── fluid-type() — шрифти ────────────────────────────────────────────────
@@ -19,28 +121,32 @@
       "prefix": "ft",
       "scope": "scss,css",
       "body": ["@include fluid-type(${1:16}, ${2:24});"],
-      "description": "fluid-type(min, max) — font-size від $mobile до $pc"
+      "description": "fluid-type(min, max) — font-size від $mobile до $pc",
    },
 
    "fluid-type custom bp": {
       "prefix": "ftbp",
       "scope": "scss,css",
-      "body": ["@include fluid-type(${1:16}, ${2:24}, ${3|bp(\"xs\"),bp(\"sm\"),bp(\"md\"),bp(\"lg\"),bp(\"xl\"),bp(\"xxl\"),320,480,768|}, ${4|bp(\"xl\"),bp(\"xxl\"),bp(\"lg\"),1200,1440,1920|});"],
-      "description": "fluid-type з bp() брейкпоінтами"
+      "body": [
+         "@include fluid-type(${1:16}, ${2:24}, ${3|bp(\"xs\"),bp(\"sm\"),bp(\"md\"),bp(\"lg\"),bp(\"xl\"),bp(\"xxl\"),320,480,768|}, ${4|bp(\"xl\"),bp(\"xxl\"),bp(\"lg\"),1200,1440,1920|});",
+      ],
+      "description": "fluid-type з bp() брейкпоінтами",
    },
 
    "fluid-type custom numbers": {
       "prefix": "ftc",
       "scope": "scss,css",
       "body": ["@include fluid-type(${1:min}, ${2:max}, ${3:from}, ${4:to});"],
-      "description": "fluid-type з точними числами: min max from to (px)"
+      "description": "fluid-type з точними числами: min max from to (px)",
    },
 
    "fluid-type scale": {
       "prefix": "fts",
       "scope": "scss,css",
-      "body": ["@include type-scale(\"${1|xs,sm,base,lg,xl,2xl,3xl,4xl,hero|}\");"],
-      "description": "type-scale — font-size з $type-scale (CSS var)"
+      "body": [
+         "@include type-scale(\"${1|xs,sm,base,lg,xl,2xl,3xl,4xl,hero|}\");",
+      ],
+      "description": "type-scale — font-size з $type-scale (CSS var)",
    },
 
    // ─── fluid-space() — відступи ─────────────────────────────────────────────
@@ -48,49 +154,51 @@
       "prefix": "fg",
       "scope": "scss,css",
       "body": ["@include fluid-space(gap, ${1:16}, ${2:40});"],
-      "description": "fluid gap"
+      "description": "fluid gap",
    },
 
    "fluid padding": {
       "prefix": "fp",
       "scope": "scss,css",
       "body": ["@include fluid-space(padding, ${1:20}, ${2:80});"],
-      "description": "fluid padding"
+      "description": "fluid padding",
    },
 
    "fluid padding-top": {
       "prefix": "fpt",
       "scope": "scss,css",
       "body": ["@include fluid-space(padding-top, ${1:40}, ${2:120});"],
-      "description": "fluid padding-top"
+      "description": "fluid padding-top",
    },
 
    "fluid padding-bottom": {
       "prefix": "fpb",
       "scope": "scss,css",
       "body": ["@include fluid-space(padding-bottom, ${1:40}, ${2:120});"],
-      "description": "fluid padding-bottom"
+      "description": "fluid padding-bottom",
    },
 
    "fluid margin-top": {
       "prefix": "fmt",
       "scope": "scss,css",
       "body": ["@include fluid-space(margin-top, ${1:24}, ${2:80});"],
-      "description": "fluid margin-top"
+      "description": "fluid margin-top",
    },
 
    "fluid margin-bottom": {
       "prefix": "fmb",
       "scope": "scss,css",
       "body": ["@include fluid-space(margin-bottom, ${1:24}, ${2:80});"],
-      "description": "fluid margin-bottom"
+      "description": "fluid margin-bottom",
    },
 
    "fluid space custom": {
       "prefix": "fsbp",
       "scope": "scss,css",
-      "body": ["@include fluid-space(${1|gap,padding,padding-top,padding-bottom,margin-top,margin-bottom,row-gap,column-gap|}, ${2:min}, ${3:max}, ${4|bp(\"xs\"),bp(\"sm\"),bp(\"md\"),320,480,768|}, ${5|bp(\"xl\"),bp(\"xxl\"),1200,1440,1920|});"],
-      "description": "fluid-space з кастомними брейкпоінтами"
+      "body": [
+         "@include fluid-space(${1|gap,padding,padding-top,padding-bottom,margin-top,margin-bottom,row-gap,column-gap|}, ${2:min}, ${3:max}, ${4|bp(\"xs\"),bp(\"sm\"),bp(\"md\"),320,480,768|}, ${5|bp(\"xl\"),bp(\"xxl\"),1200,1440,1920|});",
+      ],
+      "description": "fluid-space з кастомними брейкпоінтами",
    },
 
    // ─── Bleed grid ──────────────────────────────────────────────────────────
@@ -101,168 +209,124 @@
          "@include bleed-grid(${1:40px});",
          "",
          "&__${2:image}   { @include ${3|bleed-left,bleed-right,grid-left,grid-right,full-width,container|}; }",
-         "&__${4:content} { @include ${5|grid-right,grid-left,bleed-left,bleed-right,full-width,container|}; }"
+         "&__${4:content} { @include ${5|grid-right,grid-left,bleed-left,bleed-right,full-width,container|}; }",
       ],
-      "description": "bleed-grid: секція де одна сторона до краю, інша по сітці"
+      "description": "bleed-grid: секція де одна сторона до краю, інша по сітці",
    },
 
    "bleed media left": {
       "prefix": "bl",
       "scope": "scss,css",
       "body": ["@include bleed-left;"],
-      "description": "від краю екрана до центру (медіа ліворуч)"
+      "description": "від краю екрана до центру (медіа ліворуч)",
    },
 
    "bleed media right": {
       "prefix": "br",
       "scope": "scss,css",
       "body": ["@include bleed-right;"],
-      "description": "від центру до краю екрана (медіа праворуч)"
+      "description": "від центру до краю екрана (медіа праворуч)",
    },
 
    "bleed grid left": {
       "prefix": "gl",
       "scope": "scss,css",
       "body": ["@include grid-left;"],
-      "description": "текст ліворуч по сітці"
+      "description": "текст ліворуч по сітці",
    },
 
    "bleed grid right": {
       "prefix": "gr",
       "scope": "scss,css",
       "body": ["@include grid-right;"],
-      "description": "текст праворуч по сітці"
+      "description": "текст праворуч по сітці",
    },
 
    "bleed full width": {
       "prefix": "fw",
       "scope": "scss,css",
       "body": ["@include full-width;"],
-      "description": "на весь екран (grid-column: full)"
+      "description": "на весь екран (grid-column: full)",
    },
 
    "bleed container": {
       "prefix": "gc",
       "scope": "scss,css",
       "body": ["@include container;"],
-      "description": "тільки в межах контейнера"
+      "description": "тільки в межах контейнера",
    },
 
    // ─── Media queries (em) ──────────────────────────────────────────────────
    "media mobile": {
       "prefix": "mqm",
       "scope": "scss,css",
-      "body": [
-         "@media (max-width: toEm(\\$mobile)) {",
-         "\t$0",
-         "}"
-      ],
-      "description": "@media max-width: toEm($mobile) → 47.99em (767px)"
+      "body": ["@media (max-width: toEm(\\$mobile)) {", "\t$0", "}"],
+      "description": "@media max-width: toEm($mobile) → 47.99em (767px)",
    },
 
    "media mobile-small": {
       "prefix": "mqms",
       "scope": "scss,css",
-      "body": [
-         "@media (max-width: toEm(\\$mobile-small)) {",
-         "\t$0",
-         "}"
-      ],
-      "description": "@media max-width: toEm($mobile-small) → 29.99em (479px)"
+      "body": ["@media (max-width: toEm(\\$mobile-small)) {", "\t$0", "}"],
+      "description": "@media max-width: toEm($mobile-small) → 29.99em (479px)",
    },
 
    "media tablet": {
       "prefix": "mqt",
       "scope": "scss,css",
-      "body": [
-         "@media (max-width: toEm(\\$tablet)) {",
-         "\t$0",
-         "}"
-      ],
-      "description": "@media max-width: toEm($tablet) → 61.99em (991px)"
+      "body": ["@media (max-width: toEm(\\$tablet)) {", "\t$0", "}"],
+      "description": "@media max-width: toEm($tablet) → 61.99em (991px)",
    },
 
    "media pc": {
       "prefix": "mqpc",
       "scope": "scss,css",
-      "body": [
-         "@media (max-width: toEm(\\$pc)) {",
-         "\t$0",
-         "}"
-      ],
-      "description": "@media max-width: toEm($pc) → container width в em"
+      "body": ["@media (max-width: toEm(\\$pc)) {", "\t$0", "}"],
+      "description": "@media max-width: toEm($pc) → container width в em",
    },
 
    "media min mobile": {
       "prefix": "mqmin",
       "scope": "scss,css",
-      "body": [
-         "@media (min-width: toEm(\\$mobile + 0.02)) {",
-         "\t$0",
-         "}"
-      ],
-      "description": "@media min-width: від $mobile і вище (em)"
+      "body": ["@media (min-width: toEm(\\$mobile + 0.02)) {", "\t$0", "}"],
+      "description": "@media min-width: від $mobile і вище (em)",
    },
 
    "media custom": {
       "prefix": "mqc",
       "scope": "scss,css",
-      "body": [
-         "@media (max-width: toEm(${1:1024})) {",
-         "\t$0",
-         "}"
-      ],
-      "description": "@media max-width кастомне значення → em"
+      "body": ["@media (max-width: toEm(${1:1024})) {", "\t$0", "}"],
+      "description": "@media max-width кастомне значення → em",
    },
 
    // ─── Pseudo elements ─────────────────────────────────────────────────────
    "before": {
       "prefix": "bef",
       "scope": "scss,css",
-      "body": [
-         "&::before {",
-         "\tcontent: \"\";",
-         "\t$0",
-         "}"
-      ],
-      "description": "&::before { content: '' }"
+      "body": ["&::before {", "\tcontent: \"\";", "\t$0", "}"],
+      "description": "&::before { content: '' }",
    },
 
    "after": {
       "prefix": "aft",
       "scope": "scss,css",
-      "body": [
-         "&::after {",
-         "\tcontent: \"\";",
-         "\t$0",
-         "}"
-      ],
-      "description": "&::after { content: '' }"
+      "body": ["&::after {", "\tcontent: \"\";", "\t$0", "}"],
+      "description": "&::after { content: '' }",
    },
 
    "before and after": {
       "prefix": "baft",
       "scope": "scss,css",
-      "body": [
-         "&::before,",
-         "&::after {",
-         "\tcontent: \"\";",
-         "\t$0",
-         "}"
-      ],
-      "description": "&::before, &::after { content: '' }"
+      "body": ["&::before,", "&::after {", "\tcontent: \"\";", "\t$0", "}"],
+      "description": "&::before, &::after { content: '' }",
    },
 
    // ─── :not(:last-child) patterns ──────────────────────────────────────────
    "not last-child margin-bottom": {
       "prefix": "nlc",
       "scope": "scss,css",
-      "body": [
-         "&:not(:last-child) {",
-         "\tmargin-bottom: toRem(${1:20});",
-         "}"
-      ],
-      "description": "&:not(:last-child) { margin-bottom: toRem() }"
+      "body": ["&:not(:last-child) {", "\tmargin-bottom: toRem(${1:20});", "}"],
+      "description": "&:not(:last-child) { margin-bottom: toRem() }",
    },
 
    "not last-child fluid margin-bottom": {
@@ -271,9 +335,9 @@
       "body": [
          "&:not(:last-child) {",
          "\t@include fluid-space(margin-bottom, ${1:16}, ${2:40});",
-         "}"
+         "}",
       ],
-      "description": "&:not(:last-child) { fluid margin-bottom }"
+      "description": "&:not(:last-child) { fluid margin-bottom }",
    },
 
    // ─── bp() — іменований брейкпоінт ────────────────────────────────────────
@@ -281,6 +345,21 @@
       "prefix": "bp",
       "scope": "scss,css",
       "body": ["bp(\"${1|xs,sm,md,lg,xl,xxl|}\")"],
-      "description": "bp(name) → значення брейкпоінту: xs=320 sm=480 md=768 lg=992 xl=1230 xxl=1920"
-   }
+      "description": "bp(name) → значення брейкпоінту: xs=320 sm=480 md=768 lg=992 xl=1230 xxl=1920",
+   },
+
+   // ─── any-hover ────────────────────────────────────────────────────────────
+   "any-hover": {
+      "prefix": "ah",
+      "scope": "scss,css",
+      "body": "@media (any-hover: hover) {\n\t&:hover {\n\t\t$0\n\t}\n}",
+      "description": "any-hover — hover тільки для пристроїв що підтримують hover (не touch)"
+   },
+
+   "any-hover wrapper": {
+      "prefix": "ahw",
+      "scope": "scss,css",
+      "body": "@media (any-hover: hover) {\n\t$0\n}",
+      "description": "any-hover — обгортка без &:hover (для кастомних селекторів)"
+   },
 }

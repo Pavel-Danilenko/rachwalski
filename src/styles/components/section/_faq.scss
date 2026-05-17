@@ -1,0 +1,92 @@
+@use "@styles/utils" as *;
+
+.faq {
+   // .faq__container
+
+   // .faq__row
+
+   &__row {
+      display: flex;
+      gap: toRem(20) toRem(40);
+      flex-wrap: wrap;
+   }
+
+   // .faq__column-left
+
+   &__column-left {
+      @include fluid-space(flex-basis, 280, 420);
+      flex-shrink: 0;
+      @include respond-to(670) {
+         flex-grow: 1;
+      }
+   }
+
+   // .faq__detail
+
+   &__detail {
+      @include respond-from("md") {
+         position: sticky;
+         top: toRem(20);
+      }
+      @include fluid-space(padding, 20, 24);
+   }
+
+   // .faq__column-right
+
+   &__column-right {
+      flex: 1;
+      flex-basis: toRem(320);
+   }
+
+   // .faq__accordion
+
+   &__accordion {
+   }
+}
+.faq-author {
+   display: flex;
+   align-items: center;
+   @include fluid-space(column-gap, 16, 20);
+   // .faq-author__description
+
+   &__img {
+      flex-shrink: 0;
+      @include fluid-space(width, 50, 100);
+      @include fluid-space(height, 50, 100);
+      overflow: hidden;
+   }
+
+   &__description {
+      display: flex;
+      flex-direction: column;
+      @include fluid-space(gap, 2, 8);
+   }
+}
+.faq-social {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: space-between;
+   align-items: center;
+   @include fluid-space(column-gap, 12, 20);
+   row-gap: toRem(18);
+   // .faq-social__row
+
+   &__row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      @include fluid-space(gap, 8, 16);
+   }
+
+   // .faq-social__link
+
+   &__link {
+      font-size: toRem(24);
+      color: var(--color-light-blue);
+      transition: var(--transition-base);
+      cursor: pointer;
+      &:hover {
+         color: var(--color-blue);
+      }
+   }
+}

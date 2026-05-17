@@ -1,0 +1,123 @@
+---
+import "@styles/components/layout/_footer.scss";
+import NavItem from "@components/menu/NavItem.astro";
+import ContactForm from "@components/forms/ContactForm.astro";
+import Icon from "@components/ui/Icon.astro";
+import Logo from "@components/ui/Logo.astro";
+import Img from "@components/media/Img.astro";
+import footerBg from "@assets/img/footer/footer-bg.png";
+
+interface Props {
+   copyright?: string;
+   class?: string;
+}
+
+const { copyright, class: className = "" } = Astro.props;
+
+const year = new Date().getFullYear();
+const copyrightText = copyright ?? `© ${year} RACHWALSKI. All rights reserved.`;
+---
+
+<footer class:list={["footer", className]}>
+   <Img
+      src={footerBg}
+      alt="footer background"
+      wrapperClass="footer__bg"
+      loading="lazy"
+   />
+
+   <div class="footer__container pt-80 pb-35">
+      <!-- Колонки — замінити через slot="grid" або редагувати тут -->
+      <div class="footer__grid">
+         <slot name="grid" />
+         <div class="footer__newslatter footer-newsletter">
+            <h2 class="footer-newsletter__title mb-12">
+               Stay Connected with Dr. Martin Rachwalski
+            </h2>
+            <div class="footer-newsletter__text mb-30 fs-20">
+               Subscribe to be the first who know about new treatments, expert
+               insights from Dr. Martin.
+            </div>
+
+            <div class="footer-newsletter__form footer-form mb-50">
+               <ContactForm
+                  backend="php"
+                  formKey="contact"
+                  successMessage="Thank you! We'll be in touch shortly."
+                  errorMessage="An error occurred while sending. Please try again."
+                  modalType="modal"
+               >
+                  <div class="form-fields footer-form__fields">
+                     <div class="form-group footer-form__group">
+                        <input
+                           class="footer-form__input glass"
+                           type="email"
+                           name="email"
+                           placeholder="Enter your email"
+                           required
+                           data-error-required="Enter your email address"
+                           data-error-email="Invalid email format"
+                           data-hint-corrected="Corrected to {domain}"
+                        />
+                     </div>
+
+                     <button
+                        class="btn white-btn footer-form__btn"
+                        type="submit"
+                     >
+                        Subscribe
+                     </button>
+                  </div>
+               </ContactForm>
+            </div>
+            <div class="footer-newsletter__icon">
+               <Icon name="daimond" />
+            </div>
+         </div>
+         <div class="footer__conatct footer-contact">
+            <div class="footer-contact__column-left">
+               <Logo
+                  href="/"
+                  imageSrc="/img/logo.svg"
+                  imageAlt="My Company"
+                  alwaysLink
+                  class="footer-contact__logo"
+               />
+               <div class="footer-contact__socials">
+                  <a href="#" class="footer-contact__link">
+                     <Icon name="instagram" />
+                  </a>
+                  <a href="#" class="footer-contact__link">
+                     <Icon name="linkedin" />
+                  </a>
+                  <a href="#" class="footer-contact__link">
+                     <Icon name="facebook" />
+                  </a>
+                  <a href="#" class="footer-contact__link">
+                     <Icon name="twitter" />
+                  </a>
+                  <a href="#" class="footer-contact__link">
+                     <Icon name="youtube" />
+                  </a>
+               </div>
+            </div>
+            <a href="" class="footer-contact__btn btn white-btn">
+               Book consultation
+            </a>
+         </div>
+      </div>
+   </div>
+
+   <!-- Нижня панель — замінити через slot="bottom" або редагувати тут -->
+   <div class="footer__bottom footer-copy__container">
+      <slot name="bottom">
+         <p class="footer__copyright">{copyrightText}</p>
+
+         <div class="footer__list">
+            <a href="#" class="footer__link">Privacy</a>
+            <a href="#" class="footer__link">Legal Mentions</a>
+            <a href="#" class="footer__link">Cookies</a>
+         </div>
+      </slot>
+   </div>
+</footer>

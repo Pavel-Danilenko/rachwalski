@@ -11,9 +11,18 @@
 
    // Розмір: з type-scale або прямі min/max
    $scale-key: map.get($cfg, "scale");
-   $scale:     if($scale-key, map.get($type-scale, $scale-key), null);
-   $fs-min:    if($scale, map.get($scale, "min"), map.get($cfg, "min"));
-   $fs-max:    if($scale, map.get($scale, "max"), map.get($cfg, "max"));
+   $scale: null;
+   @if $scale-key { $scale: map.get($type-scale, $scale-key); }
+
+   $fs-min: null;
+   $fs-max: null;
+   @if $scale {
+      $fs-min: map.get($scale, "min");
+      $fs-max: map.get($scale, "max");
+   } @else {
+      $fs-min: map.get($cfg, "min");
+      $fs-max: map.get($cfg, "max");
+   }
 
    #{$tag} {
       // font-size
@@ -72,9 +81,17 @@ a {
 }
 
 // ─── Кнопки ───────────────────────────────────────────────────────────────────
-@if $btn-font-weight or $btn-font-size {
-   button {
-      @if $btn-font-weight { font-weight: $btn-font-weight; }
-      @if $btn-font-size   { font-size: toRem($btn-font-size); }
+button,
+[type="button"],
+[type="submit"] {
+   @if $btn-font-weight  { font-weight: $btn-font-weight; }
+   @if $btn-font-size    { font-size:   toRem($btn-font-size); }
+   @if $btn-line-height  { line-height: $btn-line-height; }
+   @if $btn-transition   { transition:  $btn-transition; }
+
+   @if $btn-padding-y and $btn-padding-x {
+      padding: toRem($btn-padding-y) toRem($btn-padding-x);
    }
+
+   @if $btn-border-radius { border-radius: $btn-border-radius; }
 }

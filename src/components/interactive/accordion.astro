@@ -1,0 +1,40 @@
+---
+import "@styles/components/interactive/_accordion.scss";
+
+interface Props {
+   multiple?: boolean;
+   defaultOpen?: number[];
+   minWidth?: number;
+   maxWidth?: number;
+   duration?: number;
+   class?: string;
+   sfAccordion?: string;
+}
+
+const {
+   multiple = false,
+   defaultOpen = [],
+   minWidth,
+   maxWidth,
+   duration = 400,
+   class: className = "",
+   sfAccordion,
+} = Astro.props;
+
+const defaultOpenStr = defaultOpen.join(",");
+---
+
+<div
+   class={className}
+   data-accordion
+   data-accordion-multiple={multiple || undefined}
+   data-accordion-default={defaultOpenStr || undefined}
+   data-accordion-min={minWidth}
+   data-accordion-max={maxWidth}
+   data-accordion-duration={duration}
+   sf-accordion={sfAccordion}
+>
+   <slot />
+</div>
+
+<!-- ініціалізація через app.js → loadModules() при page:ready -->

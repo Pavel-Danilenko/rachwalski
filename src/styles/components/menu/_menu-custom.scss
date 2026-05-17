@@ -1,0 +1,58 @@
+@use "@styles/utils" as *;
+
+// ── Бургер ────────────────────────────────────────────────────────────────────
+.menu-custom {
+   &__burger {
+      display: none; // показується тільки на mobile через _header.scss
+      flex-direction: column;
+      gap: toRem(5);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: toRem(4);
+      position: relative;
+      z-index: var(--z-modal, 400);
+      color: var(--color-text);
+      // iOS: прибирає затримку 300ms і синій flash при тапі
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+
+      span {
+         display: block;
+         width: toRem(24);
+         height: 2px;
+         background: currentColor;
+         border-radius: 2px;
+         transition: transform var(--transition-base), opacity var(--transition-base);
+      }
+
+      // Бургер → хрестик
+      &[aria-expanded="true"] {
+         span:nth-child(1) { transform: translateY(#{toRem(7)}) rotate(45deg); }
+         span:nth-child(2) { opacity: 0; }
+         span:nth-child(3) { transform: translateY(#{toRem(-7)}) rotate(-45deg); }
+      }
+   }
+}
+
+// Показуємо бургер на mobile
+@media (max-width: 768px) {
+   .menu-custom__burger {
+      display: flex;
+   }
+}
+
+// ── Dropdown (accordion в меню) ───────────────────────────────────────────────
+// CSS Grid trick — прив'язано до атрибуту що JS встановлює автоматично
+// Не потрібен окремий клас — JS сам ставить data-menu-dropdown і data-menu-open
+[data-menu-dropdown] {
+   display: grid;
+   grid-template-rows: 0fr;
+   transition: grid-template-rows var(--transition-base);
+
+   > * { overflow: hidden; }
+
+   &[data-menu-open="true"] {
+      grid-template-rows: 1fr;
+   }
+}

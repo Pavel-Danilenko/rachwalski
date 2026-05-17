@@ -1,25 +1,51 @@
 // base/_variables.scss
-// Генерує CSS custom properties з settings.scss
-// Не редагуй вручну — змінюй значення в settings.scss
+// Генерує CSS custom properties з settings.scss та palette.scss
+// Не редагуй вручну — змінюй значення в settings.scss та _palette.scss
 @use "sass:map";
 @use "@styles/settings" as *;
 @use "@styles/utils/functions" as *;
 @use "palette" as *;
 
 :root {
-   // ─── Кольори A: плоский ───────────────────────────────────────────────────
-   @each $name, $value in $colors {
+   // ─── Бренд + утилітарні (незмінні) ───────────────────────────────────────
+   @each $name, $value in $colors-static {
       --color-#{$name}: #{$value};
    }
 
-   // ─── Кольори B: шкала відтінків ───────────────────────────────────────────
-   // Активується коли в settings.scss розкоментуєш кольори в $color-scale
+   // ─── Спеціальні кольори (не залежать від теми) ────────────────────────────
+   @each $name, $value in $colors-special {
+      --color-#{$name}: #{$value};
+   }
+
+   // ─── Стани ────────────────────────────────────────────────────────────────
+   @each $name, $value in $colors-state {
+      --color-#{$name}: #{$value};
+   }
+
+   // ─── Градієнти ────────────────────────────────────────────────────────────
+   @if $gradients != () {
+      @each $name, $value in $gradients {
+         --gradient-#{$name}: #{$value};
+      }
+   }
+
+   // ─── Шкала відтінків ──────────────────────────────────────────────────────
    @if $color-scale != () {
       @each $color-name, $shades in $color-scale {
          @each $shade, $value in $shades {
             --color-#{$color-name}-#{$shade}: #{$value};
          }
       }
+   }
+
+   // ─── Семантичні кольори — ТЕМНА тема (дефолт) ────────────────────────────
+   @each $name, $value in $dark {
+      --color-#{$name}: #{$value};
+   }
+
+   // ─── Бордери ─────────────────────────────────────────────────────────────
+   @each $name, $value in $border-widths {
+      --border-#{$name}: #{$value};
    }
 
    // ─── Радіуси ──────────────────────────────────────────────────────────────
@@ -38,15 +64,28 @@
    }
 
    // ─── Типографіка ──────────────────────────────────────────────────────────
-   --font-primary:   #{$font-primary};
+   --font-primary: #{$font-primary};
    --font-secondary: #{$font-secondary};
    --font-size-base: #{toRem($font-size-base)};
-   --line-height:    #{$line-height};
+   --font-weight-body: #{$font-weight-body};
+   --line-height: #{$line-height};
 
    // ─── Type Scale → fluid CSS vars ─────────────────────────────────────────
-   // --text-xs, --text-sm, --text-base, --text-lg, --text-xl,
-   // --text-2xl, --text-3xl, --text-4xl, --text-hero
    @each $name, $sizes in $type-scale {
-      --text-#{$name}: #{fluid-value(map.get($sizes, "min"), map.get($sizes, "max"))};
+      --text-#{$name}: #{fluid-value(
+            map.get($sizes, "min"),
+            map.get($sizes, "max")
+         )};
+   }
+
+   // ─── Сітка ────────────────────────────────────────────────────────────────
+   --container-max-width: #{toRem($max-width-container)};
+}
+
+// ─── Світла тема ─────────────────────────────────────────────────────────────
+// Перемикання: document.documentElement.dataset.theme = "light"
+[data-theme="light"] {
+   @each $name, $value in $light {
+      --color-#{$name}: #{$value};
    }
 }

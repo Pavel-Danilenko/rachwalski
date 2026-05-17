@@ -1,5 +1,7 @@
 @use "sass:math";
+@use "sass:meta";
 @use "@styles/settings" as *;
+@use "sass:map";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // BLEED GRID — секція де одна сторона йде до краю екрана, інша по сітці
@@ -30,7 +32,7 @@
 //     .section { @include bleed-grid(60px); }
 // ─────────────────────────────────────────────────────────────────────────────
 $_half: math.div($max-width-container, 2);
-$_pad:  math.div($container-padding, 2);
+$_pad: math.div($container-padding, 2);
 
 // Відступ від краю екрана до початку контейнера (мін — container-padding/2)
 // max() як CSS функція: якщо вікно < контейнера — фіксований відступ $_pad
@@ -39,21 +41,90 @@ $_offset: #{"max(#{$_pad}px, calc((100vw - #{$max-width-container}px) / 2 + #{$_
 @mixin bleed-grid($gap: 0px) {
    display: grid;
    grid-template-columns:
-      [full-start]    #{$_offset}
+      [full-start] #{$_offset}
       [content-start] minmax(0, #{$_half}px)
-      [center]        minmax(0, #{$_half}px)
-      [content-end]   #{$_offset}
+      [center] minmax(0, #{$_half}px)
+      [content-end] #{$_offset}
       [full-end];
-   @if $gap != 0px { column-gap: $gap; }
+   @if $gap != 0px {
+      column-gap: $gap;
+   }
+}
+// ─────────────────────────────────────────────────────────────────────────────
+// respond-to($bp)  — max-width (desktop-first)
+// respond-from($bp) — min-width (mobile-first)
+//
+//   @include respond-to("md")  { ... }  → max-width: 767.98px (іменований)
+//   @include respond-to(900)   { ... }  → max-width: 900px    (кастомне px)
+//   @include respond-from("md"){ ... }  → min-width: 768px    (іменований)
+//   @include respond-from(900) { ... }  → min-width: 900px    (кастомне px)
+// ─────────────────────────────────────────────────────────────────────────────
+@mixin respond-to($bp) {
+   @if meta.type-of($bp) == "number" {
+      @media (max-width: #{math.div($bp, 16)}em) { @content; }
+   } @else {
+      $value: map.get($breakpoints, $bp);
+      @if $value == null {
+         @warn "Брейкпоінт `#{$bp}` не знайдено. Доступні: #{map.keys($breakpoints)}";
+      } @else {
+         @media (max-width: #{math.div($value, 16)}em) { @content; }
+      }
+   }
 }
 
+// respond-between($min, $max) — діапазон між двома точками
+//   @include respond-between("md", "lg") { ... }  → min 768px and max 992px (іменовані)
+//   @include respond-between(480, 1100)  { ... }  → min 480px and max 1100px (кастомні px)
+//   @include respond-between("sm", 900) { ... }   → змішані
+// ─────────────────────────────────────────────────────────────────────────────
+@mixin respond-between($min, $max) {
+   $min-val: null;
+   $max-val: null;
+   @if meta.type-of($min) == "number" { $min-val: $min; } @else { $min-val: map.get($breakpoints, $min); }
+   @if meta.type-of($max) == "number" { $max-val: $max; } @else { $max-val: map.get($breakpoints, $max); }
+
+   @if $min-val == null {
+      @warn "respond-between: мін брейкпоінт `#{$min}` не знайдено.";
+   } @else if $max-val == null {
+      @warn "respond-between: макс брейкпоінт `#{$max}` не знайдено.";
+   } @else {
+      @media (min-width: #{math.div($min-val, 16)}em) and (max-width: #{math.div($max-val, 16)}em) {
+         @content;
+      }
+   }
+}
+
+@mixin respond-from($bp) {
+   @if meta.type-of($bp) == "number" {
+      @media (min-width: #{math.div($bp, 16)}em) { @content; }
+   } @else {
+      $value: map.get($breakpoints, $bp);
+      @if $value == null {
+         @warn "Брейкпоінт `#{$bp}` не знайдено. Доступні: #{map.keys($breakpoints)}";
+      } @else {
+         @media (min-width: #{math.div($value, 16)}em) { @content; }
+      }
+   }
+}
 // ── Дочірні елементи ─────────────────────────────────────────────────────────
-@mixin bleed-left   { grid-column: full-start    / center; }   // від краю до центру
-@mixin bleed-right  { grid-column: center        / full-end; } // від центру до краю
-@mixin grid-left    { grid-column: content-start / center; }   // від сітки до центру
-@mixin grid-right   { grid-column: center        / content-end; } // від центру до сітки
-@mixin full-width   { grid-column: full-start    / full-end; } // на весь екран
-@mixin container    { grid-column: content-start / content-end; } // тільки контейнер
+@mixin bleed-left {
+   grid-column: full-start / center;
+} // від краю до центру
+@mixin bleed-right {
+   grid-column: center / full-end;
+} // від центру до краю
+@mixin grid-left {
+   grid-column: content-start / center;
+} // від сітки до центру
+@mixin grid-right {
+   grid-column: center / content-end;
+} // від центру до сітки
+@mixin full-width {
+   grid-column: full-start / full-end;
+} // на весь екран
+@mixin container {
+   grid-column: content-start / content-end;
+} // тільки контейнер
 
 // ─────────────────────────────────────────────────────────────────────────────
 // type-scale($name) — застосовує розмір з $type-scale
@@ -86,7 +157,12 @@ $_offset: #{"max(#{$_pad}px, calc((100vw - #{$max-width-container}px) / 2 + #{$_
    $intercept: $min - $slope * $from;
    // Рядок в лапках — "+" залишається літералом, не конкатенацією Sass
    $preferred: "#{$slope * 100}vw + #{$intercept}px";
-   #{$property}: clamp(#{$min}px, calc(#{$preferred}), #{$max}px);
+   // clamp() requires min ≤ max — swap bounds when values are negative
+   @if $min <= $max {
+      #{$property}: clamp(#{$min}px, calc(#{$preferred}), #{$max}px);
+   } @else {
+      #{$property}: clamp(#{$max}px, calc(#{$preferred}), #{$min}px);
+   }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

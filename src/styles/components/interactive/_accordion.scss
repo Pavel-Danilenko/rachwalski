@@ -1,0 +1,149 @@
+@use "@styles/utils" as *;
+
+// ── Контейнер ─────────────────────────────────────────────────────────────────
+.accordion {
+   width: 100%;
+   display: flex;
+   flex-direction: column;
+}
+
+// ── Item ──────────────────────────────────────────────────────────────────────
+[data-accordion-item] {
+   border-bottom: 1px solid var(--color-border, #e5e7eb);
+   &:first-child {
+      border-top: 1px solid var(--color-border, #e5e7eb);
+   }
+}
+
+// ── Trigger (заголовок) ───────────────────────────────────────────────────────
+[data-accordion-trigger] {
+   width: 100%;
+   padding: toRem(16) toRem(20);
+   border: none;
+   background: transparent;
+   text-align: left;
+   cursor: pointer;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: toRem(12);
+   color: var(--color-text);
+   font-family: inherit;
+   transition:
+      color var(--transition-fast),
+      background var(--transition-fast);
+
+   // Іконка-стрілка
+   .icon,
+   [data-accordion-icon] {
+      flex-shrink: 0;
+      transition:
+         rotate var(--transition-base),
+         color var(--transition-fast);
+   }
+
+   // Відкритий стан
+   &[aria-expanded="true"] {
+      color: var(--color-primary);
+
+      .icon,
+      [data-accordion-icon] {
+         rotate: 180deg;
+      }
+   }
+}
+
+// ── Content — 3 шари ─────────────────────────────────────────────────────────
+// 1. Grid layer — анімація через grid-template-rows (не потребує scrollHeight)
+[data-accordion-content] {
+   display: grid;
+   grid-template-rows: 0fr;
+   transition: grid-template-rows var(--accordion-duration, 400ms) ease;
+
+   // 2. Overflow layer — обрізає вміст під час анімації
+   > * {
+      overflow: hidden;
+   }
+}
+
+// Відкритий стан — чистий CSS, JS тільки перемикає aria-expanded
+[data-accordion-trigger][aria-expanded="true"] + [data-accordion-content] {
+   grid-template-rows: 1fr;
+}
+
+// 3. Padding layer — тут задається відступ (не в overflow-обгортці,
+//    щоб не обрізати box-shadow, outline вкладених елементів)
+.accordion__body {
+   padding: toRem(12) toRem(20) toRem(20);
+}
+
+// ── Inactive (breakpoints: data-accordion-min / data-accordion-max) ───────────
+[data-accordion-active="false"] {
+   [data-accordion-content] {
+      grid-template-rows: 1fr !important;
+   }
+
+   [data-accordion-trigger] {
+      cursor: default;
+      pointer-events: none;
+
+      &:hover {
+         background: transparent;
+      }
+
+      .icon,
+      [data-accordion-icon] {
+         display: none;
+      }
+   }
+}
+
+// --------- faq
+.faq {
+   &__item {
+   }
+
+   &__body {
+      background: var(--color-blue);
+   }
+   &__accordion {
+      counter-reset: accordion-counter;
+
+      [data-accordion-item] {
+         counter-increment: accordion-counter;
+      }
+
+      [data-accordion-trigger] {
+         display: flex;
+         justify-content: flex-start;
+         align-items: flex-start;
+         font-weight: 300;
+         &::before {
+            flex-shrink: 0;
+            @include fluid-space(min-width, 28, 40);
+            content: "/" counter(accordion-counter, decimal-leading-zero);
+         }
+      }
+   }
+   .icon {
+      margin-left: auto;
+   }
+}
+.faq-accordion {
+   display: flex;
+   flex-direction: column;
+   row-gap: toRem(12);
+
+   &__inner {
+      @include fluid-space(padding-inline, 20, 24);
+   }
+   &__body {
+      background: var(--color-blue);
+      @include fluid-space(margin-bottom, 20, 24);
+      @include fluid-space(padding-block, 12, 16);
+      @include fluid-space(padding-inline, 12, 54);
+   }
+   &__btn {
+      @include fluid-space(padding, 20, 24);
+   }
+}

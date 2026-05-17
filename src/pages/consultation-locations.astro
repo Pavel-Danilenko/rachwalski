@@ -1,0 +1,152 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/ui/PageMain.astro";
+import Icon from "@components/ui/Icon.astro";
+import "@styles/pages/_consultation-locations.scss";
+import Img from "@components/media/Img.astro";
+import heroBgGradient from "@assets/img/other/bg.jpg";
+import SectionHeader from "@components/section/SectionHeader.astro";
+import LocationsMap from "@components/section/LocationsMap.astro";
+import Faq from "@components/section/Faq.astro";
+
+const faqItems = [
+   {
+      question: "How long is the recovery time after a facelift?",
+      answer:
+         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+   },
+   {
+      question: "Who is Dr. Martin Rachwalski?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What are his main areas of expertise?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he perform aesthetic surgical procedures?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What non-surgical aesthetic treatments are available?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Where are the consultation locations?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his academic and research background?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he treat complex congenital conditions?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "How can I book a consultation?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his professional affiliation in France?",
+      answer: "Lorem ipsum...",
+   },
+];
+---
+
+<BaseLayout
+   title="Consultation Locations"
+   description="Find Dr. Martin Rachwalski's consultation locations in Paris"
+>
+   <PageMain>
+      <section class="cl-locations">
+         <Img
+            src={heroBgGradient}
+            alt="Hero"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+            widths={[768, 1280, 1920]}
+         />
+         <div class="cl-locations__container pt-180 pb-80">
+            <div class="cl-locations__row">
+               <!-- Cabinet Paris 08 -->
+               <div class="cl-card glass br-20">
+                  <div class="cl-card__top mb-20">
+                     <div class="cl-card__name fs-24 fw-600">
+                        Cabinet Paris 08
+                     </div>
+                     <div class="cl-card__logo">
+                        <Icon name="cabinet-logo-1" />
+                     </div>
+                  </div>
+
+                  <div class="cl-card__address fs-20 border-y mb-20">
+                     <Icon name="pin" />
+                     <span>101 Rue de Miromesnil, 75008 Paris, France</span>
+                  </div>
+
+                  <div class="cl-card__hours-block fs-20">
+                     <div class="cl-card__hours-title fw-600">
+                        Office hours:
+                     </div>
+                     <div class="cl-card__hours">Mon–Fri 10:00 – 21:00</div>
+                     <div class="cl-card__hours">Saturday 9:00 – 20:00</div>
+                     <div class="cl-card__hours">Sunday 10:00 – 20:00</div>
+                  </div>
+
+                  <div class="cl-card__actions">
+                     <a href="#" class="btn black-btn">Book consultation</a>
+                  </div>
+               </div>
+
+               <!-- Cabinet Paris 16 -->
+               <div class="cl-card glass br-20">
+                  <div class="cl-card__top mb-20">
+                     <div class="cl-card__name fs-24 fw-600">
+                        Cabinet Paris 16
+                     </div>
+                     <div class="cl-card__logo">
+                        <Icon name="cabinet-logo-2" />
+                     </div>
+                  </div>
+
+                  <div class="cl-card__address fs-20 border-y mb-20">
+                     <Icon name="pin" />
+                     <span>23 Rue de Pergolèse, 75116 Paris, France</span>
+                  </div>
+
+                  <div class="cl-card__hours-block fs-20">
+                     <div class="cl-card__hours-title fw-600">
+                        Office hours:
+                     </div>
+                     <div class="cl-card__hours">Wednesday 14:00 – 20:00</div>
+                  </div>
+
+                  <div class="cl-card__actions">
+                     <a href="#" class="btn black-btn">Book consultation</a>
+                     <a href="#" class="btn white-btn">More Details</a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="contact-map">
+         <div class="contact-map__container mb-40">
+            <SectionHeader>
+               <h2 slot="left">Your consultation, your convenience</h2>
+               <div slot="right">
+                  Dr. Martin Rachwalski welcomes patients in multiple locations
+                  to make your visit as comfortable as possible.
+               </div>
+            </SectionHeader>
+         </div>
+         <LocationsMap />
+      </section>
+
+      <Faq items={faqItems} />
+   </PageMain>
+</BaseLayout>

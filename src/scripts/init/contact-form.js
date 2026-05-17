@@ -507,5 +507,5 @@ if (document.readyState === "loading") {
    initForms();
 }
 
-document.addEventListener("astro:page-load", initForms);
-document.addEventListener("astro:after-swap", initForms);
+document.addEventListener("page:ready", initForms);
+document.addEventListener("page:ready", initForms);

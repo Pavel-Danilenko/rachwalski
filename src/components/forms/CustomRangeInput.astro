@@ -1,0 +1,75 @@
+---
+import "@styles/components/forms/_range-input.scss";
+
+interface Props {
+   name: string;
+   min?: number;
+   max?: number;
+   step?: number;
+   value?: number;
+   required?: boolean;
+   disabled?: boolean;
+   unit?: string;
+   showValue?: boolean;
+   showMinMax?: boolean;
+   errorRequired?: string;
+}
+
+const {
+   name,
+   min = 0,
+   max = 100,
+   step = 1,
+   value = Math.round((min + max) / 2),
+   required = false,
+   disabled = false,
+   unit = "",
+   showValue = true,
+   showMinMax = false,
+   errorRequired,
+} = Astro.props;
+
+const percent = ((value - min) / (max - min)) * 100;
+---
+
+<div
+   class="range-input"
+   data-range-input
+   data-unit={unit}
+   style={`--range-fill: ${percent}%`}
+>
+   {showValue && (
+      <div class="range-input__value-wrap">
+         <span class="range-input__value" data-range-value>
+            {value}{unit}
+         </span>
+      </div>
+   )}
+
+   <div class="range-input__track-wrap">
+      {showMinMax && (
+         <span class="range-input__min">{min}{unit}</span>
+      )}
+
+      <input
+         type="range"
+         name={name}
+         class="range-input__input"
+         min={min}
+         max={max}
+         step={step}
+         value={value}
+         required={required}
+         disabled={disabled}
+         data-error-required={errorRequired}
+      />
+
+      {showMinMax && (
+         <span class="range-input__max">{max}{unit}</span>
+      )}
+   </div>
+</div>
+
+<script>
+   import "@scripts/init/range-input";
+</script>

@@ -1,0 +1,67 @@
+@use "@styles/utils" as *;
+
+// ── CSS-змінні прелоадера (перевизнач у проєкті якщо потрібні інші кольори) ──
+// Приклад: .preloader { --preloader-bg: var(--color-bg); --preloader-color: var(--color-text); }
+.preloader {
+   --preloader-bg:           #0a0a0a;
+   --preloader-color:        #ffffff;
+   --preloader-color-muted:  color-mix(in srgb, #fff 40%, transparent);
+   --preloader-bar-track:    color-mix(in srgb, #fff 10%, transparent);
+   --preloader-bar-fill:     #ffffff;
+}
+
+// ── Wrapper ───────────────────────────────────────────────────────────────────
+.preloader {
+   position: fixed;
+   inset: 0;
+   z-index: var(--z-modal, 400);
+   background-color: var(--preloader-bg);
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: toRem(32);
+   // transition задається динамічно через JS
+
+   // ── Лічильник ─────────────────────────────────────────────────────────────
+   &__counter {
+      display: flex;
+      align-items: baseline;
+      gap: toRem(4);
+      line-height: 1;
+   }
+
+   &__number {
+      font-size: clamp(toRem(80), 15vw, toRem(160));
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--preloader-color);
+      letter-spacing: -0.04em;
+      min-width: 3ch;
+      text-align: right;
+   }
+
+   &__percent {
+      font-size: clamp(toRem(24), 4vw, toRem(48));
+      font-weight: 400;
+      color: var(--preloader-color-muted);
+      letter-spacing: -0.02em;
+   }
+
+   // ── Прогрес-бар ───────────────────────────────────────────────────────────
+   &__bar {
+      width: min(toRem(320), 60vw);
+      height: 1px;
+      background-color: var(--preloader-bar-track);
+      border-radius: 1px;
+      overflow: hidden;
+   }
+
+   &__bar-fill {
+      height: 100%;
+      width: 0%;
+      background-color: var(--preloader-bar-fill);
+      border-radius: 1px;
+      transition: width 0.1s linear;
+   }
+}

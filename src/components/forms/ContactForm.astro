@@ -1,5 +1,5 @@
 ---
-import "@styles/components/contact-form.scss";
+import "@styles/components/forms/_contact-form.scss";
 
 interface Props {
    // Backend type
@@ -8,7 +8,11 @@ interface Props {
    // Action (опціонально, якщо хочеш свій шлях)
    action?: string;
 
-   // 🔥 Email налаштування
+   // Ключ форми — сервер сам знайде email з .env (FORM_<KEY>)
+   // Безпечніше ніж recipientEmail — email не потрапляє в HTML
+   formKey?: string;
+
+   // Прямий email отримувача (менш безпечно — видно в HTML)
    recipientEmail?: string;
    recipientName?: string;
    senderName?: string;
@@ -19,16 +23,19 @@ interface Props {
    successMessage?: string;
    errorMessage?: string;
 
-   // 🎨 НОВІ: Modal налаштування
+   // Modal налаштування
    modalType?: "inline" | "modal"; // inline = внизу форми, modal = на весь екран
    autoCloseDuration?: number; // Секунди автозакриття (0 = не закривати)
    successIcon?: string; // ID іконки в sprite для success
    errorIcon?: string; // ID іконки в sprite для error
    successImage?: string; // URL картинки для success (якщо не іконка)
    errorImage?: string; // URL картинки для error
-   lockScroll?: boolean; // 🔥 НОВИНКА: Блокувати скрол при відкритті moda
+   lockScroll?: boolean; // Блокувати скрол при відкритті modal
    wizardId?: string;
    wizardDisableNext?: boolean;
+
+   // Будь-які інші HTML-атрибути (data-*, aria-*, etc.) прокидуються напряму на <form>
+   [key: string]: unknown;
 }
 
 const {
@@ -40,6 +47,7 @@ const {
    errorMessage = "Помилка відправки. Спробуйте ще раз.",
 
    // Email settings
+   formKey,
    recipientEmail,
    recipientName,
    senderName,
@@ -51,10 +59,15 @@ const {
    errorIcon = "x-circle",
    successImage,
    errorImage,
-   lockScroll = false, // 🔥 За замовчуванням вимкнено
+   lockScroll = false,
    wizardId,
    wizardDisableNext = false,
+
+   // Решта — прокидаємо на <form> як HTML атрибути
+   ...rest
 } = Astro.props;
+
+void rest; // used in template as {...rest}
 
 const finalAction =
    action || (backend === "php" ? "/api/send-email.php" : "/api/contact");
@@ -76,9 +89,11 @@ const finalAction =
    data-lock-scroll={lockScroll}
    data-wizard={wizardId || undefined}
    data-wizard-disable-next={wizardDisableNext ? "true" : undefined}
+   {...rest}
 >
+   {formKey && <input type="hidden" name="form_key" value={formKey} />}
    {
-      recipientEmail && (
+      !formKey && recipientEmail && (
          <input type="hidden" name="recipient_email" value={recipientEmail} />
       )
    }

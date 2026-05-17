@@ -1,0 +1,285 @@
+@use "@styles/utils" as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Локальні змінні для switch
+// ─────────────────────────────────────────────────────────────────────────────
+$switch-track-width: 44;
+$switch-track-height: 24;
+$switch-track-radius: 12;
+$switch-thumb-size: 20;
+$switch-thumb-offset: 2;
+$switch-thumb-active-size: 24;
+
+$switch-gap: 12;
+$switch-label-font-size: 14;
+
+$switch-focus-outline: 2;
+$switch-focus-offset: 2;
+$switch-focus-shadow-size: 4;
+
+$switch-disabled-opacity: 0.6;
+$switch-error-shadow-size: 3;
+$switch-success-shadow-size: 2;
+
+// Мобільна версія
+$switch-track-width-mobile: 48;
+$switch-track-height-mobile: 26;
+$switch-thumb-size-mobile: 22;
+$switch-label-font-size-mobile: 15;
+$switch-gap-mobile: 14;
+
+// Тач-девайси
+$switch-track-width-touch: 52;
+$switch-track-height-touch: 28;
+$switch-track-radius-touch: 14;
+$switch-thumb-size-touch: 24;
+$switch-gap-touch: 16;
+
+.custom-switch {
+   display: inline-flex;
+   align-items: center;
+   gap: toRem($switch-gap);
+   cursor: pointer;
+   position: relative;
+   user-select: none;
+
+   // ============================
+   // ПРИХОВАНИЙ CHECKBOX
+   // ============================
+   &__input {
+      position: absolute !important;
+      width: toRem(1) !important;
+      height: toRem(1) !important;
+      padding: 0 !important;
+      margin: toRem(-1) !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+   }
+
+   // ============================
+   // TRACK (ДОРІЖКА)
+   // ============================
+   &__track {
+      position: relative;
+      flex-shrink: 0;
+      width: toRem($switch-track-width);
+      height: toRem($switch-track-height);
+      background: var(--color-border);
+      border-radius: toRem($switch-track-radius);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: inset 0 toRem(2) toRem(4) rgba(0, 0, 0, 0.1);
+   }
+
+   // ============================
+   // THUMB (КРУЖОК)
+   // ============================
+   &__thumb {
+      position: absolute;
+      top: toRem($switch-thumb-offset);
+      left: toRem($switch-thumb-offset);
+      width: toRem($switch-thumb-size);
+      height: toRem($switch-thumb-size);
+      background: var(--color-bg);
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow:
+         0 toRem(2) toRem(4) rgba(0, 0, 0, 0.2),
+         0 toRem(1) toRem(2) rgba(0, 0, 0, 0.1);
+   }
+
+   // ============================
+   // LABEL ТЕКСТ
+   // ============================
+   &__label {
+      flex: 1;
+      font-size: toRem($switch-label-font-size);
+      line-height: 1.5;
+      color: var(--color-text);
+      transition: color 0.2s ease;
+
+      a {
+         color: var(--color-primary);
+         text-decoration: underline;
+         transition: color 0.2s ease;
+
+         &:hover { opacity: 0.8; }
+      }
+
+      strong { font-weight: 600; }
+   }
+
+   // ============================
+   // HOVER СТАН
+   // ============================
+   &:hover &__track {
+      background: color-mix(in srgb, var(--color-border) 130%, #000);
+   }
+
+   &:hover &__thumb {
+      box-shadow:
+         0 toRem(4) toRem(8) rgba(0, 0, 0, 0.2),
+         0 toRem(2) toRem(4) rgba(0, 0, 0, 0.1);
+   }
+
+   // ============================
+   // FOCUS СТАН (Keyboard Navigation)
+   // ============================
+   &__input:focus-visible ~ &__track {
+      outline: toRem($switch-focus-outline) solid var(--color-primary);
+      outline-offset: toRem($switch-focus-offset);
+      box-shadow:
+         inset 0 toRem(2) toRem(4) rgba(0, 0, 0, 0.1),
+         0 0 0 toRem($switch-focus-shadow-size) color-mix(in srgb, var(--color-primary) 10%, transparent);
+   }
+
+   // ============================
+   // CHECKED СТАН
+   // ============================
+   &__input:checked ~ &__track {
+      background: linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 80%, #000) 100%);
+      box-shadow:
+         inset 0 toRem(2) toRem(4) rgba(0, 0, 0, 0.1),
+         0 toRem(4) toRem(8) color-mix(in srgb, var(--color-primary) 30%, transparent);
+   }
+
+   &__input:checked ~ &__track &__thumb {
+      transform: translateX(toRem($switch-track-width - $switch-thumb-size - $switch-thumb-offset * 2));
+      box-shadow:
+         0 toRem(4) toRem(8) rgba(0, 0, 0, 0.3),
+         0 toRem(2) toRem(4) rgba(0, 0, 0, 0.2);
+   }
+
+   // Hover на checked
+   &__input:checked ~ &__track:hover {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 80%, #000) 0%, color-mix(in srgb, var(--color-primary) 70%, #000) 100%);
+   }
+
+   // ============================
+   // DISABLED СТАН
+   // ============================
+   &__input:disabled ~ &__track {
+      background: var(--color-bg-alt);
+      cursor: not-allowed;
+      opacity: $switch-disabled-opacity;
+      box-shadow: none;
+   }
+
+   &__input:disabled ~ &__track &__thumb {
+      background: var(--color-border);
+      box-shadow: none;
+   }
+
+   &__input:disabled:checked ~ &__track {
+      background: color-mix(in srgb, var(--color-border) 150%, #000);
+   }
+
+   &__input:disabled ~ &__label {
+      color: var(--color-text-muted);
+      cursor: not-allowed;
+   }
+
+   &__input:disabled ~ * {
+      cursor: not-allowed;
+   }
+
+   // ============================
+   // ІНТЕГРАЦІЯ З ВАЛІДАЦІЄЮ
+   // ============================
+
+   // Error стан
+   .form-group.error & {
+      &__track {
+         box-shadow:
+            inset 0 toRem(2) toRem(4) rgba(0, 0, 0, 0.1),
+            0 0 0 toRem($switch-error-shadow-size) color-mix(in srgb, var(--color-error, #dc3545) 20%, transparent);
+      }
+
+      &__input:checked ~ &__track {
+         background: linear-gradient(135deg, var(--color-error, #dc3545) 0%, color-mix(in srgb, var(--color-error, #dc3545) 80%, #000) 100%);
+      }
+
+      &__label {
+         color: color-mix(in srgb, var(--color-error, #dc3545) 60%, #000);
+      }
+   }
+
+   // Success стан
+   .form-group.success & {
+      &__track {
+         box-shadow:
+            inset 0 toRem(2) toRem(4) rgba(0, 0, 0, 0.1),
+            0 0 0 toRem($switch-success-shadow-size) color-mix(in srgb, var(--color-success, #28a745) 20%, transparent);
+      }
+
+      &__input:checked ~ &__track {
+         background: linear-gradient(135deg, var(--color-success, #28a745) 0%, color-mix(in srgb, var(--color-success, #28a745) 80%, #000) 100%);
+      }
+   }
+
+   // ============================
+   // АНІМАЦІЇ ПРИ ВЗАЄМОДІЇ
+   // ============================
+
+   // Active стан (коли натискаєш)
+   &:active &__thumb {
+      width: toRem($switch-thumb-active-size);
+   }
+
+   &__input:checked ~ &__track:active &__thumb {
+      transform: translateX(toRem($switch-track-width - $switch-thumb-active-size - $switch-thumb-offset * 2));
+   }
+}
+
+// ============================
+// RESPONSIVE (МОБІЛЬНА ОПТИМІЗАЦІЯ)
+// ============================
+
+@media (max-width: toRem(640)) {
+   .custom-switch {
+      gap: toRem($switch-gap-mobile);
+
+      &__track {
+         width: toRem($switch-track-width-mobile);
+         height: toRem($switch-track-height-mobile);
+      }
+
+      &__thumb {
+         width: toRem($switch-thumb-size-mobile);
+         height: toRem($switch-thumb-size-mobile);
+      }
+
+      &__input:checked ~ &__track &__thumb {
+         transform: translateX(toRem($switch-track-width-mobile - $switch-thumb-size-mobile - $switch-thumb-offset * 2));
+      }
+
+      &__label {
+         font-size: toRem($switch-label-font-size-mobile);
+      }
+   }
+}
+
+// Touch devices оптимізація
+@media (hover: none) and (pointer: coarse) {
+   .custom-switch {
+      gap: toRem($switch-gap-touch);
+
+      &__track {
+         min-width: toRem($switch-track-width-touch);
+         min-height: toRem($switch-track-height-touch);
+         border-radius: toRem($switch-track-radius-touch);
+      }
+
+      &__thumb {
+         width: toRem($switch-thumb-size-touch);
+         height: toRem($switch-thumb-size-touch);
+      }
+
+      &__input:checked ~ &__track &__thumb {
+         transform: translateX(toRem($switch-track-width-touch - $switch-thumb-size-touch - $switch-thumb-offset * 2));
+      }
+   }
+}

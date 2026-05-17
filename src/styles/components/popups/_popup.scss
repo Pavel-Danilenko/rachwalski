@@ -1,0 +1,104 @@
+@use "@styles/utils" as *;
+
+// ── Backdrop ──────────────────────────────────────────────────────────────────
+body::after {
+   content: "";
+   position: fixed;
+   inset: 0;
+   opacity: 0;
+   pointer-events: none;
+   transition: opacity var(--transition-base);
+   z-index: calc(var(--z-modal, 400) - 1);
+}
+
+.popup-show body::after {
+   opacity: 1;
+}
+
+// ── Popup wrapper ─────────────────────────────────────────────────────────────
+.popup {
+   position: fixed;
+   inset: 0;
+   padding: toRem(20) toRem(16);
+   scrollbar-gutter: stable;
+   visibility: hidden;
+   pointer-events: none;
+   z-index: var(--z-modal, 400);
+   overflow-y: auto;
+   overscroll-behavior: none;
+   transition: visibility var(--transition-base);
+
+   &--open {
+      visibility: visible;
+      pointer-events: auto;
+   }
+}
+
+// ── Inner wrapper (центрування) ───────────────────────────────────────────────
+.popup__wrapper {
+   overflow: hidden;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   min-height: 100%;
+   width: 100%;
+}
+
+// ── Content (картка попапу) ───────────────────────────────────────────────────
+.popup__content {
+   position: relative;
+   background: transparent;
+   backdrop-filter: blur(toRem(12));
+   border-radius: var(--radius-lg);
+   padding: toRem(32) toRem(28);
+   width: 100%;
+   max-width: toRem(560);
+   border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
+
+   // Анімація появи — fade + translateY (плавніше ніж scale)
+   opacity: 0;
+   transform: translateY(toRem(-12));
+   transition:
+      opacity var(--transition-base),
+      transform var(--transition-base);
+
+   .popup--open & {
+      opacity: 1;
+      transform: translateY(0);
+   }
+}
+
+// ── Responsive ───────────────────────────────────────────────────────────────
+@include respond-to("md") {
+   .popup {
+      padding: toRem(8);
+   }
+
+   .popup__content {
+      padding: toRem(20) toRem(16);
+      border-radius: var(--radius-md);
+   }
+}
+
+// ── Кнопка закриття ───────────────────────────────────────────────────────────
+[data-popup-close] {
+   position: absolute;
+   top: toRem(16);
+   right: toRem(16);
+   width: toRem(44);
+   height: toRem(44);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: transparent;
+   border: 1px solid var(--color-text);
+   border-radius: var(--radius-full);
+   color: var(--color-text);
+   cursor: pointer;
+   font-size: toRem(20);
+   transition: opacity var(--transition-fast);
+
+   &:hover {
+      opacity: 0.7;
+   }
+}

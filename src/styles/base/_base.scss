@@ -5,8 +5,7 @@
    transform-style: preserve-3d;
    backface-visibility: hidden;
 }
-.lock body {
+// Блокування скролу при відкритті попапу / меню
+.lock {
    overflow: hidden;
-   touch-action: none;
-   overscroll-behavior: none;
 }

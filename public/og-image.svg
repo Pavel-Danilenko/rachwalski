@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#1a1a2e"/>
+  <rect x="40" y="40" width="1120" height="550" rx="16" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="12 6"/>
+  <text x="600" y="260" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#ffffff" text-anchor="middle">Назва сайту</text>
+  <text x="600" y="330" font-family="Arial, sans-serif" font-size="28" fill="#a5b4fc" text-anchor="middle">Коротке гасло або опис послуги</text>
+  <text x="600" y="430" font-family="Arial, sans-serif" font-size="18" fill="#6366f1" text-anchor="middle">⚠ Замін цей файл на реальне зображення 1200×630px (JPG/PNG)</text>
+  <text x="600" y="465" font-family="Arial, sans-serif" font-size="16" fill="#4f46e5" text-anchor="middle">→ /public/og-image.jpg або /public/og-image.png</text>
+</svg>

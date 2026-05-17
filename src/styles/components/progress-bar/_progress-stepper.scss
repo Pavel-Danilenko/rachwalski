@@ -1,0 +1,428 @@
+@use "@styles/utils" as *;
+.progress-stepper {
+   --stepper-progress: 0%;
+   --stepper-color: #3b82f6;
+   --stepper-color-inactive: #d1d5db;
+   --stepper-color-completed: #10b981;
+   --stepper-circle-size: 40px;
+   --stepper-line-thickness: 4px;
+   --stepper-gap: 16px;
+
+   position: relative;
+   width: 100%;
+
+   // ===== CONTAINER =====
+   &__container {
+      display: flex;
+      position: relative;
+   }
+
+   // ===== HORIZONTAL ORIENTATION =====
+   &--horizontal {
+      .progress-stepper__container {
+         flex-direction: row;
+         align-items: flex-start;
+      }
+
+      .progress-stepper__step {
+         flex-direction: column;
+         align-items: center;
+      }
+
+      .progress-stepper__line {
+         flex: 1;
+         height: var(--stepper-line-thickness);
+         margin: 0 var(--stepper-gap);
+         margin-top: calc(
+            var(--stepper-circle-size) / 2 - var(--stepper-line-thickness) / 2
+         );
+      }
+
+      .progress-stepper__step-content {
+         margin-top: 12px;
+         text-align: center;
+      }
+   }
+
+   // ===== VERTICAL ORIENTATION =====
+   &--vertical {
+      .progress-stepper__container {
+         flex-direction: column;
+         align-items: flex-start;
+      }
+
+      .progress-stepper__step {
+         flex-direction: row;
+         align-items: flex-start;
+         width: 100%;
+      }
+
+      .progress-stepper__line {
+         width: var(--stepper-line-thickness);
+         height: 60px;
+         margin: var(--stepper-gap) 0;
+         margin-left: calc(
+            var(--stepper-circle-size) / 2 - var(--stepper-line-thickness) / 2
+         );
+      }
+
+      .progress-stepper__step-content {
+         margin-left: 16px;
+         margin-top: calc((var(--stepper-circle-size) - 20px) / 2);
+         text-align: left;
+      }
+   }
+
+   // ===== RESPONSIVE (horizontal → vertical на mobile) =====
+   &--responsive {
+      @media (max-width: 768px) {
+         .progress-stepper__container {
+            flex-direction: column;
+            align-items: flex-start;
+         }
+
+         .progress-stepper__step {
+            flex-direction: row;
+            align-items: flex-start;
+            width: 100%;
+         }
+
+         .progress-stepper__line {
+            width: var(--stepper-line-thickness);
+            height: 40px;
+            margin: 8px 0;
+            margin-left: calc(
+               var(--stepper-circle-size) / 2 - var(--stepper-line-thickness) /
+                  2
+            );
+            flex: unset;
+            margin-right: 0;
+         }
+
+         .progress-stepper__step-content {
+            margin-left: 12px;
+            margin-top: calc((var(--stepper-circle-size) - 20px) / 2);
+            text-align: left;
+            margin-right: 0;
+         }
+
+         .progress-stepper__line-fill {
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 0;
+         }
+
+         // ✅ Вертикальне заповнення на mobile — тільки якщо $i > 1
+         @for $i from 1 through 10 {
+            @if $i > 1 {
+               &[data-current-step="#{$i}"] {
+                  @for $j from 1 through ($i - 1) {
+                     .progress-stepper__step:nth-child(#{$j * 2 - 1})
+                        + .progress-stepper__line
+                        .progress-stepper__line-fill {
+                        height: 100% !important;
+                        width: 100%;
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+
+   // ===== STEP =====
+   &__step {
+      display: flex;
+      position: relative;
+      transition: all 0.3s ease;
+   }
+
+   // ===== CIRCLE =====
+   &__step-circle {
+      width: var(--stepper-circle-size);
+      height: var(--stepper-circle-size);
+      min-width: var(--stepper-circle-size);
+      border-radius: 50%;
+      background-color: var(--stepper-color-inactive);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   }
+
+   &__step--active &__step-circle {
+      background-color: var(--stepper-color);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+      transform: scale(1.05);
+   }
+
+   &__step--completed &__step-circle {
+      background-color: var(--stepper-color-completed);
+   }
+
+   &__check-icon {
+      width: 20px;
+      height: 20px;
+   }
+
+   &__active-icon {
+      width: 20px;
+      height: 20px;
+   }
+
+   // ===== LINE =====
+   &__line {
+      background-color: var(--stepper-color-inactive);
+      position: relative;
+      overflow: hidden;
+      border-radius: 100px;
+   }
+
+   &__line-fill {
+      position: absolute;
+      background-color: var(--stepper-color-completed);
+      transition: all 0.6s ease;
+      border-radius: 100px;
+   }
+
+   &--horizontal &__line-fill {
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0;
+   }
+
+   &--vertical &__line-fill {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+   }
+
+   // ✅ Заповнення horizontal — тільки якщо $i > 1
+   &--horizontal {
+      @for $i from 1 through 10 {
+         @if $i > 1 {
+            &[data-current-step="#{$i}"] {
+               @for $j from 1 through ($i - 1) {
+                  .progress-stepper__step:nth-child(#{$j * 2 - 1})
+                     + .progress-stepper__line
+                     .progress-stepper__line-fill {
+                     width: 100%;
+                  }
+               }
+            }
+         }
+      }
+   }
+
+   // ✅ Заповнення vertical — тільки якщо $i > 1
+   &--vertical {
+      @for $i from 1 through 10 {
+         @if $i > 1 {
+            &[data-current-step="#{$i}"] {
+               @for $j from 1 through ($i - 1) {
+                  .progress-stepper__step:nth-child(#{$j * 2 - 1})
+                     + .progress-stepper__line
+                     .progress-stepper__line-fill {
+                     height: 100%;
+                  }
+               }
+            }
+         }
+      }
+   }
+
+   // ===== LABELS =====
+   &__step-content {
+      display: flex;
+      flex-direction: column;
+   }
+
+   &__step-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      transition: color 0.3s ease;
+   }
+
+   &__step--active &__step-label {
+      color: #111827;
+      font-weight: 600;
+   }
+
+   &__step--completed &__step-label {
+      color: #374151;
+   }
+
+   &__step-description {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+   }
+
+   // ===== МОДИФІКАТОРИ =====
+   &--no-labels {
+      .progress-stepper__step-content {
+         display: none;
+      }
+   }
+
+   &--no-descriptions {
+      .progress-stepper__step-description {
+         display: none;
+      }
+   }
+
+   &--no-line {
+      .progress-stepper__line {
+         display: none;
+      }
+
+      &.progress-stepper--horizontal {
+         .progress-stepper__step {
+            margin-right: var(--stepper-gap);
+
+            &:last-child {
+               margin-right: 0;
+            }
+         }
+      }
+
+      &.progress-stepper--vertical {
+         .progress-stepper__step {
+            margin-bottom: var(--stepper-gap);
+
+            &:last-child {
+               margin-bottom: 0;
+            }
+         }
+      }
+   }
+
+   &--no-numbers {
+      .progress-stepper__step-number {
+         display: none;
+      }
+
+      &.progress-stepper--no-checkmarks {
+         .progress-stepper__step-circle {
+            &::after {
+               content: "";
+               width: 12px;
+               height: 12px;
+               background: white;
+               border-radius: 50%;
+            }
+         }
+
+         .progress-stepper__step--active .progress-stepper__step-circle::after {
+            background: rgba(255, 255, 255, 0.9);
+         }
+      }
+   }
+
+   &--no-checkmarks {
+      .progress-stepper__check-icon {
+         display: none;
+      }
+
+      .progress-stepper__step--completed .progress-stepper__step-circle {
+         .progress-stepper__step-number {
+            display: flex;
+         }
+      }
+   }
+
+   // ===== SIZES =====
+   &--sm {
+      --stepper-circle-size: 32px;
+      --stepper-line-thickness: 3px;
+      --stepper-gap: 12px;
+
+      .progress-stepper__step-circle {
+         font-size: 14px;
+      }
+
+      .progress-stepper__check-icon,
+      .progress-stepper__active-icon {
+         width: 16px;
+         height: 16px;
+      }
+
+      .progress-stepper__step-label {
+         font-size: 12px;
+      }
+
+      .progress-stepper__step-description {
+         font-size: 11px;
+      }
+
+      &.progress-stepper--vertical .progress-stepper__line {
+         height: 40px;
+      }
+
+      @media (max-width: 768px) {
+         &.progress-stepper--responsive .progress-stepper__line {
+            height: 30px;
+         }
+      }
+   }
+
+   &--md {
+      --stepper-circle-size: 40px;
+      --stepper-line-thickness: 4px;
+      --stepper-gap: 16px;
+
+      &.progress-stepper--vertical .progress-stepper__line {
+         height: 60px;
+      }
+
+      @media (max-width: 768px) {
+         &.progress-stepper--responsive .progress-stepper__line {
+            height: 40px;
+         }
+      }
+   }
+
+   &--lg {
+      --stepper-circle-size: 48px;
+      --stepper-line-thickness: 5px;
+      --stepper-gap: 20px;
+
+      .progress-stepper__step-circle {
+         font-size: 18px;
+      }
+
+      .progress-stepper__check-icon,
+      .progress-stepper__active-icon {
+         width: 24px;
+         height: 24px;
+      }
+
+      .progress-stepper__step-label {
+         font-size: 16px;
+      }
+
+      .progress-stepper__step-description {
+         font-size: 13px;
+      }
+
+      &.progress-stepper--vertical .progress-stepper__line {
+         height: 80px;
+      }
+
+      @media (max-width: 768px) {
+         &.progress-stepper--responsive .progress-stepper__line {
+            height: 50px;
+         }
+      }
+   }
+}

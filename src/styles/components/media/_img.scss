@@ -1,0 +1,25 @@
+@use "@styles/utils" as *;
+.img-wrapper {
+   // ── Aspect ratio — вмикається якщо передані width і height ────────────
+   &[style*="--aspect-ratio"] {
+      aspect-ratio: var(--aspect-ratio);
+   }
+
+   &__img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+   }
+
+   // ── object-fit варіанти ────────────────────────────────────────────────
+   &[data-object-fit="contain"] &__img {
+      object-fit: contain;
+   }
+   &[data-object-fit="fill"] &__img {
+      object-fit: fill;
+   }
+   &[data-object-fit="none"] &__img {
+      object-fit: none;
+   }
+}

@@ -1,0 +1,101 @@
+@use "@styles/utils" as *;
+
+.number-input {
+   display: inline-flex;
+   align-items: center;
+   border: 1px solid var(--color-border, #ddd);
+   border-radius: var(--radius-md);
+   background: var(--color-bg, #fff);
+   overflow: hidden;
+   transition: border-color var(--transition-base), box-shadow var(--transition-base);
+
+   &:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 toRem(3) color-mix(in srgb, var(--color-primary) 15%, transparent);
+   }
+
+   // Стани валідації
+   .form-group.error & {
+      border-color: var(--color-error, #dc3545);
+      &:focus-within {
+         box-shadow: 0 0 0 toRem(3) color-mix(in srgb, var(--color-error, #dc3545) 15%, transparent);
+      }
+   }
+
+   .form-group.success & {
+      border-color: var(--color-success, #28a745);
+   }
+
+   // ── Кнопки ─────────────────────────────────────────────────────────────────
+   &__btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: toRem(42);
+      height: toRem(46);
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      color: var(--color-text-muted, #888);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+      user-select: none;
+
+      svg {
+         width: toRem(16);
+         height: toRem(16);
+         pointer-events: none;
+      }
+
+      &:hover:not(:disabled) {
+         background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+         color: var(--color-primary);
+      }
+
+      &:active:not(:disabled) {
+         background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+      }
+
+      &:disabled {
+         opacity: 0.35;
+         cursor: not-allowed;
+      }
+
+      &--minus {
+         border-right: 1px solid var(--color-border, #ddd);
+      }
+
+      &--plus {
+         border-left: 1px solid var(--color-border, #ddd);
+      }
+   }
+
+   // ── Поле вводу ─────────────────────────────────────────────────────────────
+   &__field {
+      flex: 1;
+      min-width: toRem(48);
+      padding: toRem(12) toRem(8);
+      border: none;
+      background: none;
+      font-size: var(--text-base);
+      font-family: inherit;
+      font-weight: 600;
+      color: var(--color-text);
+      text-align: center;
+      outline: none;
+
+      // Прибираємо стрілки браузера
+      appearance: textfield;
+      -moz-appearance: textfield;
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+         -webkit-appearance: none;
+         margin: 0;
+      }
+
+      &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+      }
+   }
+}

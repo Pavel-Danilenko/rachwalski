@@ -1,0 +1,84 @@
+@use "@styles/utils" as *;
+
+.cl-locations {
+   position: relative;
+
+   &__container {
+      position: relative;
+      z-index: 3;
+   }
+   &__row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      @include fluid-space(gap, 16, 24);
+      @include respond-to(860) {
+         grid-template-columns: repeat(1, 1fr);
+      }
+   }
+}
+
+.cl-card {
+   display: flex;
+   flex-direction: column;
+   @include fluid-space(padding, 20, 40);
+   // .cl-card__top — назва + лого
+   &__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      @include fluid-space(gap, 16, 40);
+   }
+
+   &__name {
+   }
+
+   &__logo {
+      @include fluid-space(height, 36, 80);
+      .icon {
+         width: 100%;
+         height: 100%;
+      }
+   }
+
+   // .cl-card__address
+   &__address {
+      display: flex;
+      align-items: center;
+      column-gap: toRem(10);
+      @include fluid-space(padding-block, 14, 20);
+      .icon {
+         font-size: toRem(22);
+         color: var(--color-blue);
+      }
+   }
+
+   // .cl-card__divider
+   &__divider {
+   }
+
+   // .cl-card__hours-block
+   &__hours-block {
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 20, 40);
+      }
+   }
+
+   &__hours-title {
+      &:not(:last-child) {
+         margin-bottom: toRem(8);
+      }
+   }
+
+   &__hours {
+   }
+
+   // .cl-card__actions
+   &__actions {
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      @include fluid-space(gap, 16, 24);
+      .btn {
+      }
+   }
+}

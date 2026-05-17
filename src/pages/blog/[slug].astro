@@ -1,0 +1,118 @@
+---
+export const prerender = true;
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/ui/PageMain.astro";
+import PostCard from "@components/section/PostCard.astro";
+import PostSidebar from "@components/section/PostSidebar.astro";
+import Img from "@components/media/Img.astro";
+import StepBanner from "@components/section/StepBanner.astro";
+import "@styles/pages/_post.scss";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+   const posts = await getCollection("blog");
+   return posts.map((post) => ({
+      params: { slug: post.slug },
+      props: { post },
+   }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const { title, excerpt, date, readTime, category, image, author, toc } =
+   post.data;
+
+const allPosts = await getCollection("blog");
+const related = allPosts
+   .filter((p) => p.slug !== post.slug && p.data.category === category)
+   .slice(0, 3);
+
+const formattedDate = date.toLocaleDateString("en-GB", {
+   day: "numeric",
+   month: "short",
+   year: "numeric",
+});
+---
+
+<BaseLayout title={title} description={excerpt}>
+   <PageMain>
+      <section class="post-hero">
+         <Img
+            src={image}
+            alt={title}
+            width={1920}
+            height={600}
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={88}
+            wrapperClass="post-hero__img"
+         />
+         <div class="post-hero__container pt-180 pb-80">
+            <div class="post-hero__meta">
+               <span class="post-hero__category">{category}</span>
+               <span class="post-hero__dot"></span>
+               <span class="post-hero__date">{formattedDate}</span>
+               <span class="post-hero__dot"></span>
+               <span class="post-hero__read-time">{readTime} min read</span>
+            </div>
+            <h1 class="post-hero__title">{title}</h1>
+         </div>
+      </section>
+
+      <section class="post-content">
+         <div class="post-content__container pt-80 pb-80">
+            <div class="post-content__layout">
+               <article class="post-content__main">
+                  <div class="post-body t-style">
+                     <Content />
+                  </div>
+                  <div class="post-author mt-40 glass br-20">
+                     <div class="post-author__avatar">
+                        <img
+                           src={author.avatar}
+                           alt={author.name}
+                           width={56}
+                           height={56}
+                           loading="lazy"
+                        />
+                     </div>
+                     <div class="post-author__info">
+                        <div class="post-author__name fw-600">
+                           {author.name}
+                        </div>
+                        <div class="post-author__specialty fs-14">
+                           {author.specialty}
+                        </div>
+                     </div>
+                  </div>
+               </article>
+
+               <PostSidebar {toc} {author} />
+            </div>
+         </div>
+      </section>
+
+      {
+         related.length > 0 && (
+            <section class="post-related">
+               <div class="post-related__container pb-80">
+                  <h2 class="post-related__title mb-40">Related blog posts</h2>
+                  <div class="post-related__grid">
+                     {related.map((p) => (
+                        <PostCard post={p} />
+                     ))}
+                  </div>
+               </div>
+            </section>
+         )
+      }
+
+      <section class="step-banner">
+         <div class="step-banner__container pt-80 pb-80">
+            <StepBanner />
+         </div>
+      </section>
+   </PageMain>
+</BaseLayout>

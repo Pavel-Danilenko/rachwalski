@@ -1,18 +1,32 @@
 ---
-// це просто готовий компонент який налаштований для роботи
-export interface Props {
+interface Props {
    id: string;
-   backdropClose?: boolean; // Не використовуємо зараз, але залишимо
+   backdropClose?: boolean;
+   maxWidth?: string;
    class?: string;
 }
 
-const { id, class: customClass = "" } = Astro.props;
-import "@styles/components/_popup.scss";
+const {
+   id,
+   backdropClose = true,
+   maxWidth,
+   class: customClass = "",
+} = Astro.props;
 ---
 
-<div data-lock data-popup={id} class="popup" aria-hidden="true">
+<div
+   data-popup={id}
+   data-backdrop-close={backdropClose}
+   class="popup"
+   aria-hidden="true"
+   role="dialog"
+   aria-modal="true"
+>
    <div class="popup__wrapper">
-      <div class={`popup__content ${customClass}`}>
+      <div
+         class:list={["popup__content", customClass]}
+         style={maxWidth ? `max-width: ${maxWidth}` : undefined}
+      >
          <slot />
       </div>
    </div>

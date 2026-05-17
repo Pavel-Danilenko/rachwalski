@@ -1,0 +1,70 @@
+.sitemap {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(toRem(180), 1fr));
+   gap: toRem(32) toRem(16);
+
+   // ── Trigger — прихований на десктопі ──────────────────────────────────
+   &__group-trigger {
+      display: none;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      padding: toRem(12) 0;
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+      cursor: pointer;
+      font-weight: 600;
+      color: inherit;
+      text-align: left;
+   }
+
+   &__arrow {
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+   }
+
+   &__group-inner {
+      display: flex;
+      flex-direction: column;
+   }
+
+   // ── Accordion mode — вмикається JS-класом ─────────────────────────────
+   &--accordion {
+      display: block;
+
+      .sitemap__group {
+         border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+
+         &:first-child { border-top: 1px solid var(--color-border, rgba(0, 0, 0, 0.1)); }
+      }
+
+      .sitemap__group-trigger {
+         display: flex;
+         border-bottom: none;
+      }
+
+      // 1 — grid (керує висотою)
+      .sitemap__group-content {
+         display: grid;
+         grid-template-rows: 0fr;
+         transition: grid-template-rows 0.3s ease;
+      }
+
+      // 2 — overflow (ховає контент при закритті)
+      .sitemap__group-overflow {
+         overflow: hidden;
+         min-height: 0;
+      }
+
+      // 3 — inner (padding якщо потрібен)
+      .sitemap__group-inner {
+         padding: toRem(8) 0;
+      }
+
+      .sitemap__group--open {
+         .sitemap__arrow { transform: rotate(180deg); }
+         .sitemap__group-content { grid-template-rows: 1fr; }
+      }
+   }
+}

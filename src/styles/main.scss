@@ -1,34 +1,27 @@
 // Глобальні стилі — підключаються в BaseLayout.astro
 //
 // ПРАВИЛО для toRem() у нових файлах:
-//   ✅ Якщо файл імпортується через import "..." в .astro → toRem() вже є (additionalData)
-//   ⚠️  Якщо файл підключається через @use з іншого .scss → додай вручну:
-//       @use "@styles/utils/functions" as *;
+//   ✅ additionalData автоматично додає @use "@styles/utils" as *; до будь-якого файлу
+//      який НЕ має його явно. Тобто нові файли без @use теж отримають toRem().
+//   ✅ Для файлів що підключаються через @use в _index.scss — додай рядок вручну:
+//      @use "@styles/utils" as *;   ← перший рядок файлу
+//      Це гарантує toRem() і при компіляції через ланцюжок @use.
 //
 @use "sass:math";
+@use "@styles/utils" as *;
 @use "@styles/settings" as *;
 
-@use "base/variables";   // CSS custom properties → з settings.scss (першим!)
+@use "base/variables"; // CSS custom properties → з settings.scss (першим!)
 @use "base/reset";
-@use "base/typography";  // h1-h6, a, button — з settings.scss
+@use "base/typography"; // h1-h6, a, button — з settings.scss
 @use "base/base";
-// @import "base/typography"
-// @import "layout/grid"
-// @import "layout/header"
-// сторінкові стилі (якщо треба // ... компонент // @import "components/button" // ... інші layou
-// @import "../pages/index"; // або окремий pages/_home.scss
-@use "pages/main-page";
-// підключає глобально анімацію
-@use "animations/global-animations.css";
-// стилі для друку слів на сторінці (якщо потрібно)
-// @use "animations/typing";
-// стилі для розльоту слів (якщо потрібно)
-// @use "animations/split";
 
-//===============================
-//цей файл пілючати якщо верстка для shopify і туди писати всі стилі
+// Всі компоненти глобально — потрібно для Barba.js
+// (Barba не оновлює <head>, тому CSS має бути доступний на кожній сторінці)
+@use "components/index" as components;
+@use "pages/main-page";
+@use "animations/global-animations.css";
 @use "layout/index";
-//===============================
 
 $container-selector: null !default;
 
@@ -81,7 +74,6 @@ $container-selector: null !default;
    min-width: toRem(
       $min-width
    ); // 320 → 20rem (масштабується, але min-width в rem ок)
-   overflow-x: hidden;
    > main {
       flex: 1 1 auto;
    }

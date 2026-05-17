@@ -64,6 +64,37 @@ class Tabs {
             this.showTab(tabId, true);
          });
       });
+
+      // Клавіатурна навігація (ARIA-стандарт)
+      this.nav.addEventListener("keydown", (e) => {
+         this.handleKeydown(e);
+      });
+   }
+
+   handleKeydown(e) {
+      const buttons = [...this.buttons];
+      const activeIndex = buttons.findIndex((b) => b.classList.contains("active"));
+      let nextIndex = activeIndex;
+
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+         e.preventDefault();
+         nextIndex = (activeIndex + 1) % buttons.length;
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+         e.preventDefault();
+         nextIndex = (activeIndex - 1 + buttons.length) % buttons.length;
+      } else if (e.key === "Home") {
+         e.preventDefault();
+         nextIndex = 0;
+      } else if (e.key === "End") {
+         e.preventDefault();
+         nextIndex = buttons.length - 1;
+      } else {
+         return;
+      }
+
+      const nextButton = buttons[nextIndex];
+      this.showTab(nextButton.dataset.tab, true);
+      nextButton.focus();
    }
 
    // 🔥 НОВА ФУНКЦІЯ: ініціалізація scrollable
@@ -298,6 +329,8 @@ class Tabs {
       const left = buttonRect.left - navRect.left + this.nav.scrollLeft;
       const width = buttonRect.width;
 
+      this.container.style.setProperty("--animation-duration", `${this.animationDuration}ms`);
+
       if (animate) {
          this.indicator.style.transition = `all ${this.animationDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
       } else {
@@ -327,5 +360,4 @@ if (document.readyState === "loading") {
    initTabs();
 }
 
-document.addEventListener("astro:page-load", initTabs);
-document.addEventListener("astro:after-swap", initTabs);
+document.addEventListener("page:ready", initTabs);

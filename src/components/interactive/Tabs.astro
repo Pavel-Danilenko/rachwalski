@@ -1,0 +1,71 @@
+---
+import "@styles/components/interactive/_tabs.scss";
+
+interface Props {
+   id?: string;
+   defaultTab?: string;
+   class?: string;
+   animation?: "none" | "fade" | "slide" | "scale" | "flip";
+   animationDuration?: number;
+   indicator?: boolean;
+   indicatorMinWidth?: number;
+   indicatorMaxWidth?: number;
+   scrollable?: boolean;
+}
+
+const {
+   id = "tabs-" + Math.random().toString(36).substr(2, 9),
+   defaultTab,
+   class: className = "",
+   animation = "none",
+   animationDuration = 300,
+   indicator = false,
+   indicatorMinWidth,
+   indicatorMaxWidth,
+   scrollable = false,
+} = Astro.props;
+---
+
+<div
+   class:list={["tabs", className, { "tabs--scrollable": scrollable }]}
+   data-tabs
+   data-default-tab={defaultTab}
+   data-animation={animation}
+   data-animation-duration={animationDuration}
+   data-indicator={indicator || undefined}
+   data-indicator-min-width={indicatorMinWidth ?? undefined}
+   data-indicator-max-width={indicatorMaxWidth ?? undefined}
+   id={id}
+   style={indicator && (indicatorMinWidth || indicatorMaxWidth)
+      ? `--indicator-min-width:${indicatorMinWidth ?? 0}px;--indicator-max-width:${indicatorMaxWidth ?? 99999}px`
+      : undefined}
+>
+   <div class="tabs__nav-wrapper">
+      {scrollable && (
+         <button class="tabs__arrow tabs__arrow--left" aria-label="Scroll left" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               <path d="M15 18l-6-6 6-6"/>
+            </svg>
+         </button>
+      )}
+
+      <div class="tabs__nav" role="tablist">
+         <slot name="buttons" />
+         {indicator && <div class="tabs__indicator" aria-hidden="true" />}
+      </div>
+
+      {scrollable && (
+         <button class="tabs__arrow tabs__arrow--right" aria-label="Scroll right" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               <path d="M9 18l6-6-6-6"/>
+            </svg>
+         </button>
+      )}
+   </div>
+
+   <div class="tabs__content">
+      <slot name="panels" />
+   </div>
+</div>
+
+<!-- ініціалізація через app.js → loadModules() при page:ready -->

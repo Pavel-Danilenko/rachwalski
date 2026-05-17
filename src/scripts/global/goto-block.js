@@ -82,7 +82,7 @@ function initHashScroll() {
    }
 
    window.addEventListener("load", scrollToHash, { once: true });
-   document.addEventListener("astro:page-load", scrollToHash);
+   document.addEventListener("page:ready", scrollToHash);
 }
 
 initGotoBlock();

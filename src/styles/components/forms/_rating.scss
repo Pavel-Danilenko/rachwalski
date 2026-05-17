@@ -1,0 +1,89 @@
+@use "@styles/utils" as *;
+
+.rating {
+   display: inline-flex;
+   flex-direction: column;
+   gap: toRem(6);
+
+   // ── Розміри ────────────────────────────────────────────────────────────────
+   --rating-size: #{toRem(32)};
+   --rating-color: var(--color-warning, #ffc107);
+   --rating-gap: #{toRem(4)};
+
+   &--sm { --rating-size: #{toRem(22)}; --rating-gap: #{toRem(2)}; }
+   &--md { --rating-size: #{toRem(32)}; --rating-gap: #{toRem(4)}; }
+   &--lg { --rating-size: #{toRem(44)}; --rating-gap: #{toRem(6)}; }
+
+   // ── Зірки ──────────────────────────────────────────────────────────────────
+   &__stars {
+      display: flex;
+      gap: var(--rating-gap);
+   }
+
+   &__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: toRem(4);
+      cursor: pointer;
+
+      &:has(input:disabled) {
+         cursor: default;
+         pointer-events: none;
+      }
+   }
+
+   &__input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+   }
+
+   &__icon {
+      width: var(--rating-size);
+      height: var(--rating-size);
+      color: var(--color-border, #ddd);
+      transition: color 0.15s ease, transform 0.15s ease, fill 0.15s ease;
+
+      &.is-filled {
+         color: var(--rating-color);
+         fill: var(--rating-color);
+      }
+
+      &.is-hovered {
+         transform: scale(1.15);
+      }
+   }
+
+   // Клік — bounce ефект
+   &__item:active &__icon {
+      transform: scale(0.88);
+   }
+
+   &__item-label {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted, #888);
+      text-align: center;
+   }
+
+   // ── Загальний лейбл ─────────────────────────────────────────────────────────
+   &__label {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted, #888);
+      min-height: toRem(20);
+      transition: opacity 0.2s ease;
+   }
+
+   // ── Вже оцінено ─────────────────────────────────────────────────────────────
+   &.is-rated &__icon.is-filled {
+      animation: rating-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+   }
+}
+
+@keyframes rating-pop {
+   0%   { transform: scale(1); }
+   50%  { transform: scale(1.3); }
+   100% { transform: scale(1); }
+}

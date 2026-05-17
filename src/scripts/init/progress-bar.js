@@ -325,7 +325,7 @@ if (document.readyState === "loading") {
 }
 
 // Astro View Transitions
-document.addEventListener("astro:page-load", () => {
+document.addEventListener("page:ready", () => {
    if (window.progressBar) {
       window.progressBar.destroy();
    }

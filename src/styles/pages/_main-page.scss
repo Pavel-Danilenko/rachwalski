@@ -1,20 +1,17 @@
-.product__footer {
-   margin-top: 32px;
-   display: flex;
-   justify-content: center;
-}
+@use "@styles/utils" as *;
 
-.product__collection-btn {
-   padding: 12px 32px;
-   font-size: 15px;
-   font-weight: 600;
-}
+.contact {
+   padding: toRem(80) 0;
 
-.pagination__grid {
-   display: grid;
-   grid-template-columns: 1fr 1fr;
-   gap: 40px 20px;
-   & .collection__item {
-      aspect-ratio: 100/60;
+   &__container {
+      max-width: toRem(560);
+      margin: 0 auto;
+      padding: 0 toRem(20);
    }
+
+   &__title {
+      margin-bottom: toRem(40);
+      text-align: center;
+   }
+
 }

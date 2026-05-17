@@ -274,6 +274,6 @@ if (document.readyState === "loading") {
    initSplitText();
 }
 
-document.addEventListener("astro:page-load", initSplitText);
+document.addEventListener("page:ready", initSplitText);
 
 export default SplitText;

@@ -1,0 +1,70 @@
+@use "@styles/utils" as *;
+
+.custom-search {
+   display: flex;
+   align-items: center;
+   gap: toRem(8);
+   padding-inline: toRem(14);
+   border-radius: var(--radius-xl);
+   height: toRem(44);
+
+   // .custom-search__icon
+   &__icon {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      color: var(--color-text-muted);
+
+      .icon {
+         font-size: toRem(16);
+      }
+   }
+
+   // .custom-search__input
+   &__input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--color-text);
+      font-size: toRem(14);
+      line-height: 1;
+
+      &::placeholder {
+         color: var(--color-text-muted);
+      }
+
+      // Скидаємо дефолтний хрестик браузера
+      &::-webkit-search-cancel-button {
+         display: none;
+      }
+   }
+
+   // .custom-search__clear
+   &__clear {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: toRem(20);
+      height: toRem(20);
+      border-radius: 50%;
+      background: var(--color-text-muted);
+      color: var(--color-bg);
+      cursor: pointer;
+      transition: background var(--transition-base);
+
+      .icon {
+         font-size: toRem(10);
+      }
+
+      &:hover {
+         background: var(--color-text);
+      }
+   }
+
+   // Показуємо кнопку тільки коли є текст
+   &.has-value &__clear {
+      display: flex;
+   }
+}

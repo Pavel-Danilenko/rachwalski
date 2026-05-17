@@ -1,0 +1,52 @@
+// Глобальний індекс всіх компонентних стилів
+// Підключається в main.scss → гарантує що CSS завжди доступний
+// (потрібно для Barba.js — він не оновлює <head> між переходами)
+
+// ── Media ─────────────────────────────────────────────────────────────────
+@use "media/img";
+@use "media/gallery";
+
+// ── Forms ─────────────────────────────────────────────────────────────────
+@use "forms/contact-form";
+@use "forms/custom-checkbox";
+@use "forms/custom-datepicker";
+@use "forms/custom-file-input";
+@use "forms/custom-radio";
+@use "forms/custom-switch";
+@use "forms/form-wizard";
+@use "forms/number-input";
+@use "forms/password-input";
+@use "forms/phone-input";
+@use "forms/range-input";
+@use "forms/rating";
+@use "forms/select";
+
+// ── Interactive ───────────────────────────────────────────────────────────
+@use "interactive/accordion";
+@use "interactive/marquee";
+@use "interactive/preloader";
+@use "interactive/tabs";
+
+// ── Menu ──────────────────────────────────────────────────────────────────
+@use "menu/menu-custom";
+
+// ── Pagination ────────────────────────────────────────────────────────────
+@use "pagination/pagination";
+@use "pagination/show-more";
+
+// ── Popups ────────────────────────────────────────────────────────────────
+@use "popups/popup";
+
+// ── Progress bar ──────────────────────────────────────────────────────────
+@use "progress-bar/progress-bar";
+@use "progress-bar/progress-stepper";
+
+// ── Sliders ───────────────────────────────────────────────────────────────
+@use "sliders/slider";
+@use "sliders/cards-slider";
+
+// ── UI ────────────────────────────────────────────────────────────────────
+@use "ui/card";
+
+// ── Common ────────────────────────────────────────────────────────────────
+@use "common";

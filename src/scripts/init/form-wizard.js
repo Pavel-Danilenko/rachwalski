@@ -701,54 +701,54 @@ class FormWizard {
    }
 
    /**
-    * Показати крок з анімацією
+    * Показати крок з анімацією (Swiper-like: enter + exit одночасно)
     */
    showStep(wizard, stepNumber) {
       const previousStep = wizard.steps[wizard.currentStep - 1];
       const nextStep = wizard.steps[stepNumber - 1];
 
-      if (previousStep && previousStep !== nextStep) {
-         previousStep.classList.add("wizard-step--exit");
-
-         setTimeout(() => {
-            previousStep.classList.remove(
-               "wizard-step--active",
-               "wizard-step--exit",
-            );
-            previousStep.classList.add("wizard-step--hidden");
-         }, 300);
-      }
-
-      setTimeout(
-         () => {
-            nextStep.classList.remove("wizard-step--hidden");
-            nextStep.classList.add("wizard-step--enter");
-
-            requestAnimationFrame(() => {
-               nextStep.classList.remove("wizard-step--enter");
-               nextStep.classList.add("wizard-step--active");
-            });
-
-            if (nextStep.hasAttribute("data-wizard-summary")) {
-               this.generateSummary(wizard, nextStep);
-            }
-         },
-         previousStep && previousStep !== nextStep ? 300 : 0,
-      );
-
       wizard.currentStep = stepNumber;
-
-      if (wizard.stepper) {
-         this.updateStepper(wizard.stepper, stepNumber);
-      }
-
+      if (wizard.stepper) this.updateStepper(wizard.stepper, stepNumber);
       this.toggleButtons(wizard);
-
-      const disableNextButton =
-         wizard.form.dataset.wizardDisableNext === "true";
-      if (disableNextButton) {
+      if (wizard.form.dataset.wizardDisableNext === "true") {
          this.updateNextButtonState(wizard);
       }
+
+      if (previousStep === nextStep) return;
+
+      // Генеруємо summary перед виміром висоти (щоб знати кінцеву висоту)
+      if (nextStep.hasAttribute("data-wizard-summary")) {
+         this.generateSummary(wizard, nextStep);
+      }
+
+      const wrapper = wizard.form.querySelector(".wizard-steps-wrapper");
+
+      // Фіксуємо поточну висоту перед переходом
+      if (wrapper) wrapper.style.height = previousStep.scrollHeight + "px";
+
+      // Знімаємо hidden з наступного кроку (ще невидимий — visibility:hidden з [data-wizard-step])
+      nextStep.classList.remove("wizard-step--hidden");
+      const nextHeight = nextStep.scrollHeight;
+
+      // Запускаємо enter-анімацію
+      nextStep.classList.add("wizard-step--enter");
+
+      // У наступному кадрі — одночасно запускаємо exit і оновлюємо висоту враппера
+      requestAnimationFrame(() => {
+         previousStep.classList.remove("wizard-step--active");
+         previousStep.classList.add("wizard-step--exit");
+         if (wrapper) wrapper.style.height = nextHeight + "px";
+      });
+
+      // Після завершення анімації — фіналізуємо класи
+      setTimeout(() => {
+         previousStep.classList.remove("wizard-step--exit");
+         previousStep.classList.add("wizard-step--hidden");
+         nextStep.classList.remove("wizard-step--enter");
+         nextStep.classList.add("wizard-step--active");
+         // Скидаємо явну висоту — далі управляє ResizeObserver
+         if (wrapper) wrapper.style.height = "";
+      }, 350);
    }
 
    /**
@@ -759,8 +759,8 @@ class FormWizard {
          this.collectStepData(wizard, i);
       }
 
-      // ✅ Текст кнопки з атрибуту — ніякого тексту в JS!
       const editButtonText = summaryStep.dataset.wizardEditText || "✎";
+      const editItemLabel  = summaryStep.dataset.wizardEditLabel || "Edit";
 
       const stepLabels = Array.from(wizard.steps).map((step, index) => {
          return (
@@ -777,51 +777,30 @@ class FormWizard {
 
          const stepLabel = stepLabels[stepNum - 1] || `Step ${stepNum}`;
 
-         const stepElement = wizard.steps[stepNum - 1];
-         const allFields = stepElement.querySelectorAll(
-            'input:not([type="hidden"]):not([type="submit"]), textarea, select',
-         );
-         const totalFields = allFields.length;
-         const filledFields = Object.keys(stepData).length;
-         const progressPercent =
-            totalFields > 0
-               ? Math.round((filledFields / totalFields) * 100)
-               : 0;
-
          html += `<div class="wizard-summary__section">`;
          html += `<div class="wizard-summary__section-header">`;
-         html += `<div class="wizard-summary__title-wrapper">`;
-         html += `<h3 class="wizard-summary__title">${stepLabel}</h3>`;
-         html += `<div class="wizard-summary__progress">`;
-         html += `<div class="wizard-summary__progress-bar">`;
-         html += `<div class="wizard-summary__progress-fill" style="width: ${progressPercent}%"></div>`;
+         html += `<span class="wizard-summary__title">${stepLabel}</span>`;
+         html += `<button type="button" class="wizard-summary__edit-btn" data-wizard-edit="${stepNum}">${editButtonText}</button>`;
          html += `</div>`;
-         html += `<span class="wizard-summary__progress-text">${filledFields}/${totalFields}</span>`;
-         html += `</div>`;
-         html += `</div>`;
-         html += `<button type="button" class="wizard-summary__edit" data-wizard-edit="${stepNum}">${editButtonText}</button>`;
-         html += `</div>`;
-         html += `<div class="wizard-summary__fields">`;
 
          Object.entries(stepData).forEach(([name, data]) => {
-            html += `<div class="wizard-summary__field" data-field-name="${name}">`;
-            html += `<span class="wizard-summary__field-label">${data.label}:</span>`;
-            html += `<span class="wizard-summary__field-value" data-editable-field="${name}">${data.value}</span>`;
-            html += `<button type="button" class="wizard-summary__field-edit" data-edit-field="${name}" data-step="${stepNum}">✏️</button>`;
+            html += `<div class="wizard-summary__item">`;
+            html += `<span class="wizard-summary__label">${data.label}:</span>`;
+            html += `<span class="wizard-summary__value">${data.value}</span>`;
+            html += `<button type="button" class="wizard-summary__item-edit" data-edit-field="${name}" data-step="${stepNum}" aria-label="${editItemLabel}">✎</button>`;
             html += `</div>`;
          });
 
-         html += `</div>`;
          html += `</div>`;
       });
 
       html += "</div>";
 
       const existing = summaryStep.querySelector(".wizard-summary");
-      if (existing) {
-         existing.remove();
-      }
-      summaryStep.insertAdjacentHTML("afterbegin", html);
+      if (existing) existing.remove();
+
+      // Вставляємо після існуючого заголовку (h2/h3), щоб він залишався зверху
+      summaryStep.insertAdjacentHTML("beforeend", html);
 
       summaryStep.querySelectorAll("[data-wizard-edit]").forEach((btn) => {
          btn.addEventListener("click", () => {
@@ -843,10 +822,8 @@ class FormWizard {
     * Inline редагування поля в підсумку
     */
    enableInlineEdit(wizard, fieldName, stepNum, editButton) {
-      const fieldContainer = editButton.closest(".wizard-summary__field");
-      const valueSpan = fieldContainer.querySelector(
-         ".wizard-summary__field-value",
-      );
+      const fieldContainer = editButton.closest(".wizard-summary__item");
+      const valueSpan = fieldContainer.querySelector(".wizard-summary__value");
 
       const stepElement = wizard.steps[stepNum - 1];
       const originalField = stepElement.querySelector(`[name="${fieldName}"]`);
@@ -901,16 +878,16 @@ class FormWizard {
          editElement.value = originalField.value;
       }
 
-      editElement.className = "wizard-summary__field-input";
+      editElement.className = "wizard-summary__edit-input";
 
       const saveBtn = document.createElement("button");
       saveBtn.type = "button";
-      saveBtn.className = "wizard-summary__field-save";
+      saveBtn.className = "wizard-summary__edit-save";
       saveBtn.textContent = "✓";
 
       const cancelBtn = document.createElement("button");
       cancelBtn.type = "button";
-      cancelBtn.className = "wizard-summary__field-cancel";
+      cancelBtn.className = "wizard-summary__edit-cancel";
       cancelBtn.textContent = "✗";
 
       valueSpan.insertAdjacentElement("afterend", editElement);
@@ -1092,14 +1069,14 @@ if (document.readyState === "loading") {
 }
 
 // Astro View Transitions
-document.addEventListener("astro:page-load", () => {
+document.addEventListener("page:ready", () => {
    if (window.formWizard) {
       window.formWizard.destroy();
    }
    window.formWizard = new FormWizard();
 });
 
-document.addEventListener("astro:after-swap", () => {
+document.addEventListener("page:ready", () => {
    if (window.formWizard) {
       window.formWizard.destroy();
    }

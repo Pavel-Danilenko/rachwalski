@@ -1,0 +1,274 @@
+@use "@styles/utils" as *;
+
+.rhinoplasty-hero {
+   // .rhinoplasty-hero__container
+   position: relative;
+
+   &__img {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+   }
+
+   &__container {
+      position: relative;
+      @include fluid-space(padding-top, 90, 128);
+      @include fluid-space(padding-bottom, 100, 168);
+      min-height: 110vh;
+      min-height: 110svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      z-index: 3;
+      @include respond-to("md") {
+         min-height: 100vh;
+         min-height: 100svh;
+      }
+   }
+
+   // .rhinoplasty-hero__title
+
+   &__title {
+   }
+}
+
+//------
+
+.services-info {
+   // .services-info__container
+   position: relative;
+
+   &__container {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+   }
+
+   // .services-info__item
+
+   &__item {
+      position: relative;
+      margin-top: toRem(-80);
+      @include fluid-space(padding, 20, 32);
+   }
+
+   // .services-info__row
+
+   &__row {
+      display: flex;
+      gap: toRem(24);
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 20, 24);
+      }
+   }
+
+   // .services-info__column-left
+
+   &__column-left {
+      display: flex;
+      align-items: center;
+      column-gap: toRem(12);
+   }
+
+   &__img {
+      width: toRem(50);
+      height: toRem(50);
+      overflow: hidden;
+      border-radius: var(--radius-md);
+   }
+
+   // .services-info__description
+
+   &__description {
+      display: flex;
+      flex-direction: column;
+      row-gap: toRem(4);
+   }
+
+   // .services-info__column-right
+
+   &__column-right {
+      @include respond-to("md") {
+         flex-grow: 1;
+      }
+   }
+}
+.services-content {
+   // .services-content__description
+
+   &__description {
+      @include fluid(font-size, 14, 24);
+      font-style: italic;
+   }
+}
+
+//------ .rhinoplasty-advantages
+
+.services-content {
+   // .services-content__container
+   position: relative;
+
+   &__container {
+      position: relative;
+      z-index: 2;
+   }
+
+   // .services-content__row
+
+   &__row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: toRem(24);
+      @include respond-to("md") {
+         flex-direction: column-reverse;
+      }
+   }
+
+   // .services-content__column-left
+
+   &__column-left {
+      flex: 1;
+      flex-basis: toRem(480);
+      align-items: flex-start;
+      width: 100%;
+   }
+
+   // .services-content__images
+
+   &__images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      @include fluid-space(gap, 8, 12);
+   }
+
+   &__img {
+      overflow: hidden;
+      width: 100%;
+   }
+
+   // .services-content__column-right
+
+   &__column-right {
+      flex-shrink: 0;
+      flex-basis: toRem(320);
+      @include respond-to(854) {
+         flex-grow: 1;
+         flex-basis: auto;
+      }
+   }
+}
+.services-facts {
+   // .services-facts__row
+
+   &__row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(toRem(320), 1fr));
+      @include fluid-space(gap, 8, 12);
+      @include respond-to(1100) {
+         grid-template-columns: repeat(auto-fit, minmax(toRem(280), 1fr));
+      }
+      @include respond-to("sm") {
+         grid-template-columns: repeat(auto-fit, minmax(toRem(240), 1fr));
+      }
+   }
+
+   // .services-facts__inner
+
+   &__inner {
+      @include fluid-space(padding, 20, 24);
+      display: flex;
+      align-items: center;
+      @include fluid-space(column-gap, 12, 18);
+   }
+
+   &__icon {
+      font-size: toRem(32);
+      flex-shrink: 0;
+   }
+}
+
+.services-goals {
+   // .services-goals__row
+
+   &__row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(toRem(340), 1fr));
+      @include fluid-space(gap, 8, 12);
+      @include respond-to(1100) {
+         grid-template-columns: repeat(auto-fit, minmax(toRem(280), 1fr));
+      }
+      @include respond-to("sm") {
+         grid-template-columns: repeat(auto-fit, minmax(toRem(240), 1fr));
+      }
+   }
+
+   // .services-goals__inner
+
+   &__inner {
+      @include fluid-space(padding, 20, 24);
+      display: flex;
+      align-items: flex-start;
+      @include fluid-space(column-gap, 12, 18);
+   }
+
+   // .services-goals__description
+
+   &__description {
+      display: flex;
+      flex-direction: column;
+      row-gap: toRem(4);
+   }
+
+   // .services-goals__title
+}
+.services-table {
+   // .services-table__title
+   padding: toRem(16);
+   position: sticky;
+   top: toRem(20);
+
+   // .services-table__list
+
+   &__list {
+      display: flex;
+      flex-direction: column;
+      row-gap: toRem(4);
+      position: relative;
+   }
+
+   // .services-table__link
+
+   &__link {
+      font-size: toRem(16);
+      color: var(--color-black);
+      @include fluid-space(padding-block, 8, 10);
+      @include fluid-space(padding-inline, 10, 14);
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+   }
+
+   // .services-table__indicator
+
+   &__indicator {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      left: 0;
+      border-radius: var(--radius-xl);
+      transition: var(--transition-slow);
+      background-color: var(--color-overlay-medium);
+   }
+}
+
+@media (min-width: toEm(768)) and (max-width: toEm(1000)) {
+   .cards-slider .swiper-wrapper {
+      flex-wrap: wrap;
+   }
+}

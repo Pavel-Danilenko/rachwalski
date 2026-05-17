@@ -1,0 +1,47 @@
+---
+import MenuCustom from "@components/menu/MenuCustom.astro";
+import NavItem from "@components/menu/NavItem.astro";
+import Logo from "@components/ui/Logo.astro";
+import "@styles/components/layout/_header.scss";
+
+interface Props {
+   class?: string;
+   sticky?: boolean;
+}
+
+const { class: className = "", sticky = false } = Astro.props;
+---
+
+<header class:list={["header", className, { "header--sticky": sticky }]}>
+   <div class="header__container">
+      <Logo href="/" text="My Logo" />
+
+      <div class="header__column-right">
+         <a href="#" data-popup-open="book" class="header__btn btn white-btn"
+            >Book consultation</a
+         >
+         <MenuCustom>
+            <div data-menu-overlay class="header__nav">
+               <ul class="header__nav-list">
+                  <li><NavItem nav="biography" class="header__nav-link" /></li>
+                  <li>
+                     <NavItem nav="rhinoplasty" class="header__nav-link" />
+                  </li>
+                  <li><NavItem nav="fees" class="header__nav-link" /></li>
+                  <li>
+                     <NavItem nav="clinicAlphand" class="header__nav-link" />
+                  </li>
+                  <li>
+                     <NavItem
+                        nav="consultationLocations"
+                        class="header__nav-link"
+                     />
+                  </li>
+                  <li><NavItem nav="blog" class="header__nav-link" /></li>
+                  <li><NavItem nav="contact" class="header__nav-link" /></li>
+               </ul>
+            </div>
+         </MenuCustom>
+      </div>
+   </div>
+</header>

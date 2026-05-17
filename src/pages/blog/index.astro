@@ -1,0 +1,127 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/ui/PageMain.astro";
+import PostCard from "@components/section/PostCard.astro";
+import Pagination from "@components/pagination/Pagination.astro";
+import "@styles/pages/_blog.scss";
+import { getCollection } from "astro:content";
+import CustomSearch from "@components/forms/CustomSearch.astro";
+import CustomSelect from "@components/forms/CustomSelect.astro";
+import Img from "@components/media/Img.astro";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import heroBgGradient from "@assets/img/other/bg.jpg";
+import heroImgRight from "@assets/img/blog/hero-img-right.png";
+import heroImgRightMobile from "@assets/img/blog/hero-img-right-mobile.png";
+import heroImgleft from "@assets/img/blog/hero-img-left.png";
+
+const posts = (await getCollection("blog")).sort(
+   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const uniqueCategories = [...new Set(posts.map((p) => p.data.category))];
+const categoryOptions = [
+   { value: "", label: "All categories" },
+   ...uniqueCategories.map((c) => ({ value: c, label: c })),
+];
+---
+
+<BaseLayout
+   title="Insights & Expertise"
+   description="Expert insights on facial surgery and aesthetic medicine from Dr. Martin Rachwalski"
+>
+   <PageMain>
+      <section class="blog-hero blog-hero-light">
+         <Img
+            src={heroBgGradient}
+            alt="Hero"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+            widths={[768, 1280, 1920]}
+         />
+         <ResponsiveImg
+            srcDesktop={heroImgRight}
+            srcMobile={heroImgRightMobile}
+            alt="Hero"
+            wrapperClass="blog-hero__img-right"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+         />
+         <Img
+            src={heroImgleft}
+            alt="Hero"
+            wrapperClass="blog-hero__img-left"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+         />
+         <div class="blog-hero__container pt-180">
+            <div class="blog-hero__inner">
+               <div class="blog-hero__label fw-600">Blog</div>
+               <h1 class="blog-hero__title">Insights & Expertise</h1>
+               <div class="blog-hero__text fs-20">
+                  Stay informed with expert articles on facial aesthetics,
+                  surgical innovations, and the latest advances in aesthetic
+                  medicine from Dr. Martin.
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="blog-list bg-white">
+         <div class="blog-list__container pt-80 pb-80">
+            <div class="blog-list__filters mb-40">
+               <div class="blog-list__search">
+                  <CustomSearch
+                     placeholder="Search articles..."
+                     data-blog-search
+                     data-debounce="300"
+                     data-min-chars="2"
+                     data-highlight="true"
+                  />
+               </div>
+               <div class="blog-list__categories" data-blog-filter>
+                  <CustomSelect
+                     options={categoryOptions}
+                     placeholder="All categories"
+                     name="blog-category"
+                  />
+               </div>
+            </div>
+
+            <p class="blog-search-empty" data-search-empty hidden>
+               No articles found for your search.
+            </p>
+
+            <Pagination
+               itemSelector=".post-card"
+               perPage={6}
+               navVariant="default"
+               showArrows={false}
+               showInfo={false}
+               showFirstLast={true}
+               iconFirst="arrow-dark-slider-left"
+               iconLast="arrow-dark-slider-right"
+               labelFirst="First page"
+               labelLast="Last page"
+               labelPrev="Previous page"
+               labelNext="Next page"
+               labelPage="Page {page} of {pages}"
+               labelInfo="{current} / {pages}"
+               urlSync={true}
+               scrollTo={true}
+               scrollOffset={80}
+            >
+               <div class="blog-list__grid">
+                  {posts.map((post) => <PostCard post={post} />)}
+               </div>
+            </Pagination>
+         </div>
+      </section>
+   </PageMain>
+</BaseLayout>

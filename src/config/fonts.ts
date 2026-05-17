@@ -33,8 +33,8 @@ export interface LocalFont {
 // Залиш [] якщо не використовуєш Google Fonts
 export const googleFonts: GoogleFont[] = [
    {
-      family: "Playfair Display",
-      weights: [400, 500, 700],
+      family: "DM Sans",
+      weights: [200, 300, 400, 500, 600, 700],
       subsets: ["latin", "cyrillic"],
       display: "swap",
    },

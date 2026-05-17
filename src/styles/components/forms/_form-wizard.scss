@@ -1,0 +1,294 @@
+@use "@styles/utils" as *;
+
+// ── Відступ між степпером і формою ───────────────────────────────────────────
+.progress-stepper + form,
+.progress-stepper + * + form {
+   margin-top: toRem(32);
+}
+
+// ── Wrapper ───────────────────────────────────────────────────────────────────
+.wizard-steps-wrapper {
+   position: relative;
+   overflow: hidden;
+   transition: height 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// ── Всі кроки: absolute + приховані за замовчуванням ─────────────────────────
+[data-wizard-step] {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   box-sizing: border-box;
+   visibility: hidden;
+   pointer-events: none;
+
+   // Картка
+   padding: toRem(24);
+   background: var(--color-bg-alt, #f5f5f5);
+   border-radius: var(--radius-lg);
+   border: 1px solid var(--color-border, #ddd);
+
+   .form-group { margin-bottom: toRem(16); &:last-child { margin-bottom: 0; } }
+}
+
+// ── Активний: в потоці → дає висоту wrapper ───────────────────────────────────
+.wizard-step--active {
+   position: relative !important;
+   visibility: visible !important;
+   pointer-events: auto !important;
+   transform: translateX(0) !important;
+}
+
+// ── Enter: приїжджає з правого боку ──────────────────────────────────────────
+.wizard-step--enter {
+   position: absolute !important;
+   top: 0;
+   left: 0;
+   width: 100%;
+   visibility: visible !important;
+   pointer-events: none;
+   z-index: 2;
+   animation: wizard-slide-in 0.32s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+   will-change: transform;
+}
+
+// ── Exit: їде до лівого боку ─────────────────────────────────────────────────
+.wizard-step--exit {
+   position: absolute !important;
+   top: 0;
+   left: 0;
+   width: 100%;
+   visibility: visible !important;
+   pointer-events: none;
+   z-index: 1;
+   animation: wizard-slide-out 0.32s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+   will-change: transform;
+}
+
+.wizard-step--hidden {
+   position: absolute !important;
+   visibility: hidden !important;
+   pointer-events: none !important;
+}
+
+// ── Вперед ────────────────────────────────────────────────────────────────────
+@keyframes wizard-slide-in {
+   from { transform: translateX(100%); }
+   to   { transform: translateX(0); }
+}
+@keyframes wizard-slide-out {
+   from { transform: translateX(0); }
+   to   { transform: translateX(-100%); }
+}
+
+// ── Назад ─────────────────────────────────────────────────────────────────────
+form[data-wizard-dir="back"] .wizard-step--enter { animation-name: wizard-slide-in-back; }
+form[data-wizard-dir="back"] .wizard-step--exit  { animation-name: wizard-slide-out-back; }
+
+@keyframes wizard-slide-in-back {
+   from { transform: translateX(-100%); }
+   to   { transform: translateX(0); }
+}
+@keyframes wizard-slide-out-back {
+   from { transform: translateX(0); }
+   to   { transform: translateX(100%); }
+}
+
+// ── Morph (data-wizard-transition="morph") ────────────────────────────────────
+form[data-wizard-transition="morph"] {
+   .wizard-step--enter { animation: wizard-morph-in 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+   .wizard-step--exit  { animation: wizard-morph-out 0.3s ease forwards; }
+}
+
+@keyframes wizard-morph-in {
+   from { opacity: 0; transform: scale(0.95) translateY(toRem(10)); }
+   to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes wizard-morph-out {
+   from { opacity: 1; transform: scale(1); }
+   to   { opacity: 0; transform: scale(1.03); }
+}
+
+// ── Заголовок кроку-підсумку ──────────────────────────────────────────────────
+.wizard-summary-title {
+   font-size: var(--text-base);
+   font-weight: 600;
+   color: var(--color-text);
+   margin: 0 0 toRem(16);
+}
+
+// ── Підсумок (wizard-summary) ─────────────────────────────────────────────────
+.wizard-summary {
+   display: flex;
+   flex-direction: column;
+   gap: toRem(12);
+
+   &__section {
+      padding: toRem(16);
+      background: var(--color-bg, #fff);
+      border: 1px solid var(--color-border, #ddd);
+      border-radius: var(--radius-md);
+   }
+
+   &__section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: toRem(12);
+      gap: toRem(12);
+   }
+
+   &__title { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); }
+
+   &__edit-btn {
+      padding: toRem(3) toRem(10);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--color-primary);
+      background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+      border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+      &:hover { background: color-mix(in srgb, var(--color-primary) 15%, transparent); }
+   }
+
+   &__item {
+      display: flex;
+      align-items: center;
+      gap: toRem(10);
+      padding: toRem(7) 0;
+      border-bottom: 1px solid var(--color-border, #ddd);
+      font-size: var(--text-sm);
+      &:last-child { border-bottom: none; }
+      &:hover .wizard-summary__item-edit { opacity: 1; }
+   }
+
+   &__label {
+      color: var(--color-text-muted, #888);
+      flex-shrink: 0;
+      width: toRem(120);
+   }
+   &__value { font-weight: 500; color: var(--color-text); flex: 1; word-break: break-word; }
+
+   // Кнопка-олівець на кожному рядку (з'являється при hover)
+   &__item-edit {
+      flex-shrink: 0;
+      opacity: 0;
+      padding: toRem(2) toRem(7);
+      font-size: toRem(13);
+      line-height: 1;
+      color: var(--color-primary);
+      background: color-mix(in srgb, var(--color-primary) 6%, transparent);
+      border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: opacity var(--transition-fast), background var(--transition-fast);
+      &:hover { background: color-mix(in srgb, var(--color-primary) 14%, transparent); }
+   }
+
+   // Inline редагування
+   &__edit-input {
+      flex: 1;
+      padding: toRem(3) toRem(8);
+      font-size: var(--text-sm);
+      font-family: inherit;
+      color: var(--color-text);
+      background: var(--color-bg, #fff);
+      border: 1px solid var(--color-primary);
+      border-radius: var(--radius-sm);
+      outline: none;
+      box-shadow: none;
+   }
+
+   &__edit-save,
+   &__edit-cancel {
+      flex-shrink: 0;
+      padding: toRem(2) toRem(8);
+      font-size: toRem(13);
+      line-height: 1;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid;
+      transition: background var(--transition-fast);
+   }
+   &__edit-save {
+      color: #fff;
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      &:hover { background: color-mix(in srgb, var(--color-primary) 85%, #000); }
+   }
+   &__edit-cancel {
+      color: var(--color-text-muted, #888);
+      background: var(--color-bg, #fff);
+      border-color: var(--color-border, #ddd);
+      &:hover { background: var(--color-bg-alt, #f5f5f5); }
+   }
+}
+
+// ── Кнопки ────────────────────────────────────────────────────────────────────
+.wizard-buttons {
+   display: flex;
+   gap: toRem(10);
+   margin-top: toRem(16);
+
+   [data-wizard-prev] {
+      padding: toRem(12) toRem(20);
+      min-width: toRem(110);
+      background: var(--color-bg, #fff);
+      color: var(--color-text-muted, #888);
+      border: 1px solid var(--color-border, #ddd);
+      border-radius: var(--radius-md);
+      font-size: var(--text-base);
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      &:hover { background: var(--color-bg-alt, #f5f5f5); color: var(--color-text); }
+   }
+
+   [data-wizard-next],
+   [data-wizard-submit] {
+      flex: 1;
+      padding: toRem(12) toRem(20);
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: var(--text-base);
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      box-shadow: 0 toRem(4) toRem(12) color-mix(in srgb, var(--color-primary) 25%, transparent);
+      &:hover    { background: color-mix(in srgb, var(--color-primary) 85%, #000); transform: translateY(toRem(-1)); }
+      &:active   { transform: translateY(0); }
+      &:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+   }
+
+   [data-wizard-submit] { display: none; }
+}
+
+// ── Pulse на активному кружку степпера ────────────────────────────────────────
+.progress-stepper__step--active .progress-stepper__step-circle {
+   animation: stepper-pulse 2.2s ease-in-out infinite;
+}
+@keyframes stepper-pulse {
+   0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 35%, transparent); }
+   50%       { box-shadow: 0 0 0 toRem(8) transparent; }
+}
+
+// ── Shake при помилці ─────────────────────────────────────────────────────────
+.wizard-shake {
+   animation: wizard-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@keyframes wizard-shake {
+   0%, 100% { transform: translateX(0); }
+   15%       { transform: translateX(toRem(-6)); }
+   30%       { transform: translateX(toRem(6)); }
+   45%       { transform: translateX(toRem(-4)); }
+   60%       { transform: translateX(toRem(4)); }
+   75%       { transform: translateX(toRem(-2)); }
+}

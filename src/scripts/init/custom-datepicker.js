@@ -456,7 +456,7 @@ FormData:
 Приклад підписки:
 const hiddenInput = document.querySelector('input[name="birthdate"]');
 hiddenInput.addEventListener('change', (e) => {
-   console.log('Selected date:', e.target.value); // "2024-12-25"
+   // console.log('Selected date:', e.target.value);
 });
 */
 
@@ -726,8 +726,9 @@ class CustomDatePicker {
       this.rangeEnd = null;
       this.isOpen = false;
       this.viewMode = "days"; // 'days', 'months', 'years'
-      this.previousViewMode = null; // Для breadcrumbs
-      this.isTransitioning = false; // Блокування під час анімації
+      this.previousViewMode = null;
+      this.isTransitioning = false;
+      this.navDirection = 1; // 1 = вперед/next, -1 = назад/prev
 
       this.init();
    }
@@ -752,11 +753,13 @@ class CustomDatePicker {
       }
 
       // Закриття при кліку поза календарем
-      document.addEventListener("click", (e) => {
+      // Зберігаємо посилання щоб можна було видалити в destroy()
+      this._docClickHandler = (e) => {
          if (!this.container.contains(e.target) && this.isOpen) {
             this.closeCalendar();
          }
-      });
+      };
+      document.addEventListener("click", this._docClickHandler);
 
       // 🔥 Today button
       const todayBtn = this.dropdown.querySelector(".datepicker-today-btn");
@@ -876,16 +879,31 @@ class CustomDatePicker {
       }
    }
 
-   /**
-    * 🎬 Анімація переходу між view
-    */
    animateTransition(newCalendar) {
       this.isTransitioning = true;
       const oldCalendar = this.calendarContainer.firstChild;
+      const isForward   = this.isForwardTransition();
+      const viewChanged = this.viewMode !== this.previousViewMode;
 
-      // Визначаємо напрямок (вперед чи назад)
-      const isForward = this.isForwardTransition();
+      if (this.settings.transition === "none") {
+         this.calendarContainer.innerHTML = "";
+         this.calendarContainer.appendChild(newCalendar);
+         this.isTransitioning = false;
+         return;
+      }
 
+      // Zoom out — перехід вгору (days→months→years)
+      // Zoom in  — повернення вниз (years→months→days)
+      if (viewChanged) {
+         if (isForward) {
+            this.zoomOutTransition(oldCalendar, newCalendar);
+         } else {
+            this.zoomInTransition(oldCalendar, newCalendar);
+         }
+         return;
+      }
+
+      // Та сама в'юшка — горизонтальний слайд з правильним напрямком
       switch (this.settings.transition) {
          case "slide":
             this.slideTransition(oldCalendar, newCalendar, isForward);
@@ -903,13 +921,15 @@ class CustomDatePicker {
       }
    }
 
-   /**
-    * Визначає чи це перехід вперед (drill down) чи назад
-    */
    isForwardTransition() {
       const viewOrder = { days: 0, months: 1, years: 2 };
       if (!this.previousViewMode) return true;
-      return viewOrder[this.viewMode] > viewOrder[this.previousViewMode];
+      // Якщо змінився рівень view — визначаємо по ієрархії
+      if (this.viewMode !== this.previousViewMode) {
+         return viewOrder[this.viewMode] > viewOrder[this.previousViewMode];
+      }
+      // Та сама в'юшка — визначаємо по навігаційному напрямку
+      return this.navDirection >= 0;
    }
 
    /**
@@ -970,23 +990,17 @@ class CustomDatePicker {
       }, 300);
    }
 
-   /**
-    * 📏 Scale анімація
-    */
    scaleTransition(oldCalendar, newCalendar) {
-      oldCalendar.style.transition = "transform 0.3s ease, opacity 0.3s ease";
-      oldCalendar.style.transform = "scale(0.8)";
+      oldCalendar.style.transition = "transform 0.25s ease, opacity 0.25s ease";
+      oldCalendar.style.transform = "scale(0.82)";
       oldCalendar.style.opacity = "0";
 
       setTimeout(() => {
          this.calendarContainer.innerHTML = "";
          this.calendarContainer.appendChild(newCalendar);
-         newCalendar.style.transform = "scale(0.8)";
+         newCalendar.style.transform = "scale(0.82)";
          newCalendar.style.opacity = "0";
-         newCalendar.style.transition =
-            "transform 0.3s ease, opacity 0.3s ease";
-
-         // Trigger reflow
+         newCalendar.style.transition = "transform 0.25s ease, opacity 0.25s ease";
          newCalendar.offsetHeight;
          newCalendar.style.transform = "scale(1)";
          newCalendar.style.opacity = "1";
@@ -994,8 +1008,56 @@ class CustomDatePicker {
          setTimeout(() => {
             newCalendar.style.transition = "";
             this.isTransitioning = false;
-         }, 300);
-      }, 300);
+         }, 260);
+      }, 220);
+   }
+
+   // Zoom out — "відлітаємо" від днів до місяців/років
+   zoomOutTransition(oldCalendar, newCalendar) {
+      const ease = "cubic-bezier(0.4, 0, 0.2, 1)";
+      oldCalendar.style.transition = `transform 0.28s ${ease}, opacity 0.22s ease`;
+      oldCalendar.style.transform = "scale(0.75)";
+      oldCalendar.style.opacity = "0";
+
+      setTimeout(() => {
+         this.calendarContainer.innerHTML = "";
+         this.calendarContainer.appendChild(newCalendar);
+         newCalendar.style.transform = "scale(1.12)";
+         newCalendar.style.opacity = "0";
+         newCalendar.style.transition = `transform 0.32s ${ease}, opacity 0.28s ease`;
+         newCalendar.offsetHeight;
+         newCalendar.style.transform = "scale(1)";
+         newCalendar.style.opacity = "1";
+
+         setTimeout(() => {
+            newCalendar.style.transition = "";
+            this.isTransitioning = false;
+         }, 340);
+      }, 240);
+   }
+
+   // Zoom in — "наближаємось" від місяців/років до днів
+   zoomInTransition(oldCalendar, newCalendar) {
+      const ease = "cubic-bezier(0.4, 0, 0.2, 1)";
+      oldCalendar.style.transition = `transform 0.28s ${ease}, opacity 0.22s ease`;
+      oldCalendar.style.transform = "scale(1.18)";
+      oldCalendar.style.opacity = "0";
+
+      setTimeout(() => {
+         this.calendarContainer.innerHTML = "";
+         this.calendarContainer.appendChild(newCalendar);
+         newCalendar.style.transform = "scale(0.82)";
+         newCalendar.style.opacity = "0";
+         newCalendar.style.transition = `transform 0.32s ${ease}, opacity 0.28s ease`;
+         newCalendar.offsetHeight;
+         newCalendar.style.transform = "scale(1)";
+         newCalendar.style.opacity = "1";
+
+         setTimeout(() => {
+            newCalendar.style.transition = "";
+            this.isTransitioning = false;
+         }, 340);
+      }, 240);
    }
 
    createCalendar(date) {
@@ -1118,6 +1180,7 @@ class CustomDatePicker {
       );
       prevBtn.addEventListener("click", (e) => {
          e.stopPropagation();
+         this.navDirection = -1;
          if (this.viewMode === "days") {
             this.previousMonth();
          } else if (this.viewMode === "months") {
@@ -1181,6 +1244,7 @@ class CustomDatePicker {
       );
       nextBtn.addEventListener("click", (e) => {
          e.stopPropagation();
+         this.navDirection = 1;
          if (this.viewMode === "days") {
             this.nextMonth();
          } else if (this.viewMode === "months") {
@@ -1532,7 +1596,7 @@ class CustomDatePicker {
       };
 
       let season = null;
-      for (const [key, value] of Object.entries(seasons)) {
+      for (const [, value] of Object.entries(seasons)) {
          if (value.months.includes(month)) {
             season = value;
             break;
@@ -1745,21 +1809,35 @@ class CustomDatePicker {
          .replace("MM", month)
          .replace("DD", day);
    }
+
+   destroy() {
+      if (this._docClickHandler) {
+         document.removeEventListener("click", this._docClickHandler);
+         this._docClickHandler = null;
+      }
+   }
 }
 
-// Автоматична ініціалізація
+const _datepickerInstances = [];
+
 function initDatePickers() {
-   const datepickers = document.querySelectorAll("[data-datepicker]");
-
-   datepickers.forEach((container) => {
-      if (container.dataset.datepickerInitialized) {
-         return;
-      }
-
+   document.querySelectorAll("[data-datepicker]").forEach((container) => {
+      if (container.dataset.datepickerInitialized) return;
       container.dataset.datepickerInitialized = "true";
-      new CustomDatePicker(container);
+      const instance = new CustomDatePicker(container);
+      _datepickerInstances.push(instance);
    });
 }
 
-document.addEventListener("DOMContentLoaded", initDatePickers);
-document.addEventListener("astro:page-load", initDatePickers);
+function destroyDatePickers() {
+   _datepickerInstances.forEach((instance) => instance.destroy());
+   _datepickerInstances.length = 0;
+}
+
+if (document.readyState === "loading") {
+   document.addEventListener("DOMContentLoaded", initDatePickers);
+} else {
+   initDatePickers();
+}
+document.addEventListener("page:ready", initDatePickers);
+document.addEventListener("page:leave", destroyDatePickers);

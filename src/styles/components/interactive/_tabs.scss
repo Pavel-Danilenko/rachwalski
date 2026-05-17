@@ -1,0 +1,189 @@
+@use "@styles/utils" as *;
+
+// ── Wrapper ───────────────────────────────────────────────────────────────────
+.tabs {
+   width: 100%;
+
+   // ── Nav wrapper ───────────────────────────────────────────────────────────
+   &__nav-wrapper {
+      position: relative;
+      margin-bottom: toRem(24);
+      display: flex;
+      align-items: stretch;
+   }
+
+   // ── Nav ───────────────────────────────────────────────────────────────────
+   &__nav {
+      display: flex;
+      gap: toRem(4);
+      border-bottom: 2px solid var(--color-border, #e5e7eb);
+      position: relative;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      flex: 1;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      &::-webkit-scrollbar { display: none; }
+   }
+
+   // ── Button ────────────────────────────────────────────────────────────────
+   &__button {
+      padding: toRem(12) toRem(20);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      font-size: var(--text-base);
+      font-weight: 500;
+      color: var(--color-text-muted, #6b7280);
+      font-family: inherit;
+      transition: color var(--transition-fast), border-color var(--transition-fast);
+      position: relative;
+      white-space: nowrap;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+
+      &:hover { color: var(--color-text); }
+
+      &.active {
+         color: var(--color-primary);
+         border-bottom-color: var(--color-primary);
+      }
+
+      &:focus-visible {
+         outline: 2px solid var(--color-primary);
+         outline-offset: toRem(4);
+         border-radius: var(--radius-sm);
+      }
+   }
+
+   // ── Indicator (рухома лінія) ───────────────────────────────────────────────
+   &__indicator {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: var(--color-primary);
+      border-radius: 2px 2px 0 0;
+      pointer-events: none;
+      will-change: transform, width;
+      z-index: 1;
+      display: none;
+   }
+
+   // Показуємо indicator коли увімкнено
+   &[data-indicator] .tabs__indicator { display: block; }
+   &[data-indicator] .tabs__button.active { border-bottom-color: transparent; }
+
+   // ── Стрілки (scrollable) ──────────────────────────────────────────────────
+   &__arrow {
+      position: relative;
+      width: toRem(40);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: var(--color-bg, #fff);
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+      transition: opacity var(--transition-fast);
+      color: var(--color-text-muted, #6b7280);
+
+      &::before {
+         content: "";
+         position: absolute;
+         top: 0;
+         bottom: 2px;
+         width: toRem(20);
+         pointer-events: none;
+      }
+
+      &:hover:not(:disabled) { color: var(--color-text); }
+
+      &:disabled,
+      &--disabled { cursor: not-allowed; opacity: 0.3; }
+
+      &--left::before {
+         right: 0;
+         background: linear-gradient(to left, transparent, var(--color-bg, #fff));
+      }
+
+      &--right::before {
+         left: 0;
+         background: linear-gradient(to right, transparent, var(--color-bg, #fff));
+      }
+   }
+
+   &--has-arrows .tabs__arrow { display: flex; }
+
+   // ── Content ───────────────────────────────────────────────────────────────
+   &__content { position: relative; }
+
+   &__panel {
+      display: none;
+
+      &.active { display: block; }
+      &[hidden] { display: none; }
+   }
+
+   // ── Mobile ────────────────────────────────────────────────────────────────
+   @media (max-width: 768px) {
+      &__button {
+         padding: toRem(10) toRem(14);
+         font-size: var(--text-sm);
+      }
+
+      &__arrow { width: toRem(32); }
+   }
+}
+
+// ── Анімації ─────────────────────────────────────────────────────────────────
+// Тривалість задається через --animation-duration (JS встановлює на контейнері)
+
+.tabs--animation-fade {
+   .tabs__panel {
+      &.exiting  { animation: tabs-fade-out  var(--animation-duration, 300ms) ease forwards; }
+      &.entering { animation: tabs-fade-in   var(--animation-duration, 300ms) ease forwards; }
+   }
+}
+
+.tabs--animation-slide {
+   .tabs__content { overflow: hidden; }
+
+   .tabs__panel {
+      &.exiting  { animation: tabs-slide-out var(--animation-duration, 300ms) ease forwards; }
+      &.entering { animation: tabs-slide-in  var(--animation-duration, 300ms) ease forwards; }
+   }
+}
+
+.tabs--animation-scale {
+   .tabs__panel {
+      &.exiting  { animation: tabs-scale-out var(--animation-duration, 300ms) ease forwards; }
+      &.entering { animation: tabs-scale-in  var(--animation-duration, 300ms) ease forwards; }
+   }
+}
+
+.tabs--animation-flip {
+   .tabs__content { perspective: 1000px; }
+
+   .tabs__panel {
+      &.exiting  { animation: tabs-flip-out var(--animation-duration, 300ms) ease forwards; }
+      &.entering { animation: tabs-flip-in  var(--animation-duration, 300ms) ease forwards; }
+   }
+}
+
+@keyframes tabs-fade-out  { from { opacity: 1; } to { opacity: 0; } }
+@keyframes tabs-fade-in   { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes tabs-slide-out { from { opacity: 1; transform: translateX(0); }      to { opacity: 0; transform: translateX(toRem(-24)); } }
+@keyframes tabs-slide-in  { from { opacity: 0; transform: translateX(toRem(24)); } to { opacity: 1; transform: translateX(0); } }
+
+@keyframes tabs-scale-out { from { opacity: 1; transform: scale(1); }    to { opacity: 0; transform: scale(0.95); } }
+@keyframes tabs-scale-in  { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+@keyframes tabs-flip-out  { from { opacity: 1; transform: rotateY(0deg);    } to { opacity: 0; transform: rotateY(90deg);  } }
+@keyframes tabs-flip-in   { from { opacity: 0; transform: rotateY(-90deg);  } to { opacity: 1; transform: rotateY(0deg);   } }

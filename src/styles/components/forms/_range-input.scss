@@ -1,0 +1,126 @@
+@use "@styles/utils" as *;
+
+.range-input {
+   display: flex;
+   flex-direction: column;
+   gap: toRem(8);
+
+   // ── Значення ──────────────────────────────────────────────────────────────
+   &__value-wrap {
+      display: flex;
+      justify-content: center;
+   }
+
+   &__value {
+      display: inline-block;
+      min-width: toRem(44);
+      padding: toRem(3) toRem(10);
+      background: var(--color-primary);
+      color: #fff;
+      border-radius: var(--radius-full);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      text-align: center;
+      transition: background var(--transition-fast);
+   }
+
+   // ── Трек з мін/макс ────────────────────────────────────────────────────────
+   &__track-wrap {
+      display: flex;
+      align-items: center;
+      gap: toRem(10);
+   }
+
+   &__min, &__max {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted, #888);
+      white-space: nowrap;
+      flex-shrink: 0;
+   }
+
+   // ── Input range ────────────────────────────────────────────────────────────
+   &__input {
+      flex: 1;
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      height: toRem(6);
+      background: linear-gradient(
+         to right,
+         var(--color-primary) 0%,
+         var(--color-primary) var(--range-fill, 50%),
+         var(--color-border, #ddd) var(--range-fill, 50%),
+         var(--color-border, #ddd) 100%
+      );
+      border-radius: var(--radius-full);
+      outline: none;
+      cursor: pointer;
+      transition: background var(--transition-fast);
+
+      // Webkit thumb
+      &::-webkit-slider-thumb {
+         appearance: none;
+         -webkit-appearance: none;
+         width: toRem(20);
+         height: toRem(20);
+         border-radius: var(--radius-full);
+         background: var(--color-bg, #fff);
+         border: toRem(2) solid var(--color-primary);
+         box-shadow: 0 toRem(2) toRem(6) color-mix(in srgb, var(--color-primary) 25%, transparent);
+         cursor: pointer;
+         transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      }
+
+      // Firefox thumb
+      &::-moz-range-thumb {
+         width: toRem(20);
+         height: toRem(20);
+         border-radius: var(--radius-full);
+         background: var(--color-bg, #fff);
+         border: toRem(2) solid var(--color-primary);
+         box-shadow: 0 toRem(2) toRem(6) color-mix(in srgb, var(--color-primary) 25%, transparent);
+         cursor: pointer;
+         transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      }
+
+      &:hover:not(:disabled) {
+         &::-webkit-slider-thumb {
+            transform: scale(1.15);
+            box-shadow: 0 toRem(2) toRem(10) color-mix(in srgb, var(--color-primary) 35%, transparent);
+         }
+         &::-moz-range-thumb {
+            transform: scale(1.15);
+            box-shadow: 0 toRem(2) toRem(10) color-mix(in srgb, var(--color-primary) 35%, transparent);
+         }
+      }
+
+      &:focus-visible {
+         &::-webkit-slider-thumb {
+            outline: toRem(2) solid var(--color-primary);
+            outline-offset: toRem(2);
+         }
+      }
+
+      &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+      }
+   }
+
+   // Стани валідації
+   .form-group.error & &__input {
+      background: linear-gradient(
+         to right,
+         var(--color-error, #dc3545) 0%,
+         var(--color-error, #dc3545) var(--range-fill, 50%),
+         var(--color-border, #ddd) var(--range-fill, 50%),
+         var(--color-border, #ddd) 100%
+      );
+      &::-webkit-slider-thumb { border-color: var(--color-error, #dc3545); }
+      &::-moz-range-thumb     { border-color: var(--color-error, #dc3545); }
+   }
+
+   .form-group.error & &__value {
+      background: var(--color-error, #dc3545);
+   }
+}

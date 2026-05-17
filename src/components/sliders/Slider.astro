@@ -1,492 +1,109 @@
 ---
-// # Slider Component
-//
-// ## Доступні параметри для sf-slider:
-// ┌──────────────────┬──────────────────────────────────────────────────────┐
-// │ Параметр         │ Що виводить в адмінку                                │
-// ├──────────────────┼──────────────────────────────────────────────────────┤
-// │ slides_per_view  │ Mobile / TabletSM / Tablet / Desktop (1, 1.2)        │
-// │ space_between    │ Mobile / TabletSM / Tablet / Desktop (16, -20)       │
-// │ centered         │ Checkbox × 4 екрани                                  │
-// │ scale            │ Checkbox × 4 екрани + factor                         │
-// │ arrows           │ Checkbox × 4 екрани                                  │
-// │ pagination       │ Checkbox × 4 екрани + тип                            │
-// │ loop             │ Checkbox                                              │
-// │ speed            │ Range (ms)                                            │
-// │ effect           │ Select slide|fade|cards|creative                      │
-// │ autoplay         │ Checkbox + delay                                      │
-// └──────────────────┴──────────────────────────────────────────────────────┘
-
 import "@styles/components/sliders/_slider.scss";
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/effect-cards";
-import "swiper/css/effect-creative";
-import "swiper/css/effect-coverflow";
-import Image from "@assets/img/main-page/image.jpg";
-const _img = Image; // used as fallback src below
 
-// ── Shopify адмінка (опційно) ─────────────────────────────────────────────────
-const sfSlider = [
-   "slides_per_view",
-   "space_between",
-   "centered",
-   "scale",
-   "arrows",
-   "pagination",
-   "speed",
-   "loop",
-   "effect",
-   // "autoplay",
-].join(",");
+interface Props {
+   // Slides per view — per breakpoint
+   slidesMobile?:   number | "auto";
+   slidesTabletSm?: number | "auto";
+   slidesTablet?:   number | "auto";
+   slidesDesktop?:  number | "auto";
+
+   // Space between — per breakpoint (px)
+   spaceMobile?:   number;
+   spaceTabletSm?: number;
+   spaceTablet?:   number;
+   spaceDesktop?:  number;
+
+   // Navigation
+   arrows?:         boolean; // desktop+tablet (default true)
+   arrowsMobile?:   boolean; // mobile arrows (default false)
+   pagination?:     boolean; // desktop+tablet (default true)
+   paginationMobile?: boolean;
+   paginationType?: "bullets" | "fraction" | "progressbar";
+
+   // Behavior
+   loop?:          boolean;
+   speed?:         number;   // ms
+   grabCursor?:    boolean;
+   centered?:      boolean;
+
+   // Autoplay
+   autoplay?:      boolean;
+   autoplayDelay?: number;   // ms
+
+   // Effect
+   effect?: "slide" | "fade" | "cards" | "creative" | "coverflow";
+
+   class?: string;
+}
+
+const {
+   slidesMobile   = 1,
+   slidesTabletSm,
+   slidesTablet,
+   slidesDesktop,
+   spaceMobile    = 16,
+   spaceTabletSm,
+   spaceTablet,
+   spaceDesktop,
+   arrows         = true,
+   arrowsMobile   = false,
+   pagination     = true,
+   paginationMobile = true,
+   paginationType = "bullets",
+   loop           = false,
+   speed          = 500,
+   grabCursor     = true,
+   centered       = false,
+   autoplay       = false,
+   autoplayDelay  = 3000,
+   effect         = "slide",
+   class: className = "",
+} = Astro.props;
 ---
 
-<div sf-slider={sfSlider} sf-slider-block="product_slide" class="product-slider">
+<div
+   class={`slider ${className}`.trim()}
+   data-slider
+   data-slides-mobile={slidesMobile}
+   data-slides-tablet-sm={slidesTabletSm ?? undefined}
+   data-slides-tablet={slidesTablet ?? undefined}
+   data-slides-desktop={slidesDesktop ?? undefined}
+   data-space-mobile={spaceMobile}
+   data-space-tablet-sm={spaceTabletSm ?? undefined}
+   data-space-tablet={spaceTablet ?? undefined}
+   data-space-desktop={spaceDesktop ?? undefined}
+   data-arrows={arrows}
+   data-arrows-mobile={arrowsMobile}
+   data-pagination={pagination}
+   data-pagination-mobile={paginationMobile}
+   data-pagination-type={paginationType}
+   data-loop={loop}
+   data-speed={speed}
+   data-grab-cursor={grabCursor}
+   data-centered={centered}
+   data-effect={effect}
+   data-autoplay={autoplay ? autoplayDelay : undefined}
+>
    <div class="swiper">
-      <div class="swiper-wrapper" sf-source="featured_products">
-         <div sf-block class="swiper-slide">
-            <article class="product-slide" sf-field="slide_img_ratio_style">
-               <a class="product-slide__img-wrap" sf-field="url" href="#">
-                  <img
-                     sf-field="image"
-                     src={_img.src}
-                     alt="Product"
-                     class="product-slide__img"
-                  />
-                  <span sf-field="sale_badge_image"></span>
-                  <div class="product-slide__tags product-slide__tags--image" sf-field="slide_tags_badge_image"></div>
-               </a>
-               <div class="product-slide__info" sf-field="card_order_style">
-                  <div class="product-slide__tags" sf-field="slide_tags_badge_info"></div>
-                  <h3 class="product-slide__title" sf-field="title">iPhone 17 Pro Max</h3>
-                  <p class="product-slide__variant" sf-field="variant_title">1TB / White</p>
-                  <span sf-field="variants_hint"></span>
-                  <p class="product-slide__desc" sf-field="short_description">Short description of the product goes here.</p>
-                  <div class="product-slide__price-wrap">
-                     <span class="product-slide__price" sf-field="price">$999</span>
-                     <span class="product-slide__price-old" sf-field="compare_price"></span>
-                     <span sf-field="sale_badge_price"></span>
-                  </div>
-                  <a class="product-slide__btn btn" sf-field="url" href="#">
-                     <span sf-id="product_btn_text">View Product</span>
-                  </a>
-               </div>
-            </article>
-         </div>
+      <div class="swiper-wrapper">
+         <slot />
       </div>
-      <div class="swiper-pagination"></div>
+      <div class="slider__pagination swiper-pagination"></div>
    </div>
-   <button class="product-slider__prev">&#8592;</button>
-   <button class="product-slider__next">&#8594;</button>
+
+   <button class="slider__arrow slider__arrow--prev" aria-label="Попередній">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+         <polyline points="15 18 9 12 15 6"/>
+      </svg>
+   </button>
+   <button class="slider__arrow slider__arrow--next" aria-label="Наступний">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+         <polyline points="9 18 15 12 9 6"/>
+      </svg>
+   </button>
 </div>
 
 <script>
-   import Swiper from "swiper";
-   import {
-      Navigation,
-      Pagination,
-      Autoplay,
-      EffectFade,
-      EffectCards,
-      EffectCreative,
-      EffectCoverflow,
-   } from "swiper/modules";
-
-   // ── Хелпер: читає boolean з dataset ──────────────────────────────────────
-   // Shopify завжди рендерить атрибут навіть якщо false
-   // тому перевіряємо !== undefined і !== "false"
-   const readBool = (val: string | undefined, fallback: boolean): boolean =>
-      val !== undefined ? val === "true" : fallback;
-
-   // ── Хелпер: поточний брейкпоінт ──────────────────────────────────────────
-   const getBreakpoint = (): "mobile" | "tabletSm" | "tablet" | "desktop" => {
-      const w = window.innerWidth;
-      if (w >= 1200) return "desktop";
-      if (w >= 960) return "tablet";
-      if (w >= 768) return "tabletSm";
-      return "mobile";
-   };
-
-   document.querySelectorAll<HTMLElement>(".product-slider").forEach((el) => {
-      const swiperEl = el.querySelector(".swiper");
-      if (!swiperEl) return;
-
-      const d = el.dataset;
-
-      // ══════════════════════════════════════════════════════════════════════
-      // ХАРДКОДНІ ДЕФОЛТИ
-      // ══════════════════════════════════════════════════════════════════════
-      const DEFAULTS = {
-         slidesMobile: 1,
-         slidesTabletSm: 1,
-         slidesTablet: 2,
-         slidesDesktop: 3,
-         spaceMobile: 16,
-         spaceTabletSm: 20,
-         spaceTablet: 24,
-         spaceDesktop: 30,
-         speed: 500,
-         loop: true,
-         effect: "slide",
-         grabCursor: true,
-         // per-breakpoint
-         centeredMobile: false,
-         centeredTabletSm: false,
-         centeredTablet: false,
-         centeredDesktop: false,
-         scaleMobile: false,
-         scaleTabletSm: false,
-         scaleTablet: false,
-         scaleDesktop: false,
-         scaleFactor: 0.85,
-         arrowsMobile: false,
-         arrowsTabletSm: true,
-         arrowsTablet: true,
-         arrowsDesktop: true,
-         paginationMobile: true,
-         paginationTabletSm: true,
-         paginationTablet: true,
-         paginationDesktop: false,
-         paginationType: "bullets",
-         autoplay: false,
-         autoplayDelay: 3000,
-         // coverflow
-         coverflowDepth: 100,
-         coverflowScale: 0.85,
-         coverflowRotate: 0,
-         coverflowShadows: false,
-      };
-
-      // ══════════════════════════════════════════════════════════════════════
-      // ЧИТАННЯ З DATASET
-      // ══════════════════════════════════════════════════════════════════════
-
-      // ── Numbers ───────────────────────────────────────────────────────────
-      const slidesMobile =
-         d.slidesMobile !== undefined
-            ? parseFloat(d.slidesMobile)
-            : DEFAULTS.slidesMobile;
-      const slidesTabletSm =
-         d.slidesTabletSm !== undefined
-            ? parseFloat(d.slidesTabletSm)
-            : DEFAULTS.slidesTabletSm;
-      const slidesTablet =
-         d.slidesTablet !== undefined
-            ? parseFloat(d.slidesTablet)
-            : DEFAULTS.slidesTablet;
-      const slidesDesktop =
-         d.slidesDesktop !== undefined
-            ? parseFloat(d.slidesDesktop)
-            : DEFAULTS.slidesDesktop;
-      const spaceMobile =
-         d.spaceMobile !== undefined
-            ? parseFloat(d.spaceMobile)
-            : DEFAULTS.spaceMobile;
-      const spaceTabletSm =
-         d.spaceTabletSm !== undefined
-            ? parseFloat(d.spaceTabletSm)
-            : DEFAULTS.spaceTabletSm;
-      const spaceTablet =
-         d.spaceTablet !== undefined
-            ? parseFloat(d.spaceTablet)
-            : DEFAULTS.spaceTablet;
-      const spaceDesktop =
-         d.spaceDesktop !== undefined
-            ? parseFloat(d.spaceDesktop)
-            : DEFAULTS.spaceDesktop;
-      const speed =
-         d.speed !== undefined ? parseFloat(d.speed) : DEFAULTS.speed;
-      const scaleFactor =
-         d.scale !== undefined ? parseFloat(d.scale) : DEFAULTS.scaleFactor;
-      const autoplayDelay =
-         d.autoplay !== undefined
-            ? parseFloat(d.autoplay)
-            : DEFAULTS.autoplayDelay;
-
-      // ── Coverflow ─────────────────────────────────────────────────────────
-      const coverflowDepth =
-         d.coverflowDepth !== undefined
-            ? parseFloat(d.coverflowDepth)
-            : DEFAULTS.coverflowDepth;
-      const coverflowScale =
-         d.coverflowScale !== undefined
-            ? parseFloat(d.coverflowScale)
-            : DEFAULTS.coverflowScale;
-      const coverflowRotate =
-         d.coverflowRotate !== undefined
-            ? parseFloat(d.coverflowRotate)
-            : DEFAULTS.coverflowRotate;
-      const coverflowShadows = readBool(
-         d.coverflowShadows,
-         DEFAULTS.coverflowShadows,
-      );
-
-      // ── Booleans ──────────────────────────────────────────────────────────
-      const loop = readBool(d.loop, DEFAULTS.loop);
-      const autoplayEnabled = readBool(d.autoplay, DEFAULTS.autoplay);
-
-      // ── Per-breakpoint booleans ───────────────────────────────────────────
-      const centeredMobile = readBool(
-         d.centeredMobile,
-         DEFAULTS.centeredMobile,
-      );
-      const centeredTabletSm = readBool(
-         d.centeredTabletSm,
-         DEFAULTS.centeredTabletSm,
-      );
-      const centeredTablet = readBool(
-         d.centeredTablet,
-         DEFAULTS.centeredTablet,
-      );
-      const centeredDesktop = readBool(
-         d.centeredDesktop,
-         DEFAULTS.centeredDesktop,
-      );
-
-      const arrowsMobile = readBool(d.arrowsMobile, DEFAULTS.arrowsMobile);
-      const arrowsTabletSm = readBool(
-         d.arrowsTabletSm,
-         DEFAULTS.arrowsTabletSm,
-      );
-      const arrowsTablet = readBool(d.arrowsTablet, DEFAULTS.arrowsTablet);
-      const arrowsDesktop = readBool(d.arrowsDesktop, DEFAULTS.arrowsDesktop);
-
-      const paginationMobile = readBool(
-         d.paginationMobile,
-         DEFAULTS.paginationMobile,
-      );
-      const paginationTabletSm = readBool(
-         d.paginationTabletSm,
-         DEFAULTS.paginationTabletSm,
-      );
-      const paginationTablet = readBool(
-         d.paginationTablet,
-         DEFAULTS.paginationTablet,
-      );
-      const paginationDesktop = readBool(
-         d.paginationDesktop,
-         DEFAULTS.paginationDesktop,
-      );
-
-      // ── Strings ───────────────────────────────────────────────────────────
-      const effect = d.effect ?? DEFAULTS.effect;
-      const paginationType = d.paginationType ?? DEFAULTS.paginationType;
-
-      // ── Хелпери для поточного брейкпоінту ────────────────────────────────
-      const getCentered = () => {
-         const bp = getBreakpoint();
-         if (bp === "desktop") return centeredDesktop;
-         if (bp === "tablet") return centeredTablet;
-         if (bp === "tabletSm") return centeredTabletSm;
-         return centeredMobile;
-      };
-
-      const getArrows = () => {
-         const bp = getBreakpoint();
-         if (bp === "desktop") return arrowsDesktop;
-         if (bp === "tablet") return arrowsTablet;
-         if (bp === "tabletSm") return arrowsTabletSm;
-         return arrowsMobile;
-      };
-
-      const getPagination = () => {
-         const bp = getBreakpoint();
-         if (bp === "desktop") return paginationDesktop;
-         if (bp === "tablet") return paginationTablet;
-         if (bp === "tabletSm") return paginationTabletSm;
-         return paginationMobile;
-      };
-
-      const prevEl = el.querySelector<HTMLElement>(".product-slider__prev");
-      const nextEl = el.querySelector<HTMLElement>(".product-slider__next");
-      const paginationEl = el.querySelector<HTMLElement>(".swiper-pagination");
-
-      // ── Оновлення видимості стрілок/пагінації ─────────────────────────────
-      const updateVisibility = () => {
-         const showArrows = getArrows();
-         const showPagination = getPagination();
-         if (prevEl) prevEl.style.display = showArrows ? "" : "none";
-         if (nextEl) nextEl.style.display = showArrows ? "" : "none";
-         if (paginationEl)
-            paginationEl.style.display = showPagination ? "" : "none";
-      };
-
-      // ══════════════════════════════════════════════════════════════════════
-      // SWIPER OPTIONS
-      // ══════════════════════════════════════════════════════════════════════
-      const options: any = {
-         modules: [
-            Navigation,
-            Pagination,
-            Autoplay,
-            EffectFade,
-            EffectCards,
-            EffectCreative,
-            EffectCoverflow,
-         ],
-         speed,
-         effect,
-         centeredSlides: getCentered(),
-         grabCursor: DEFAULTS.grabCursor,
-         watchOverflow: true,
-
-         breakpoints: {
-            0: {
-               slidesPerView: slidesMobile,
-               spaceBetween: spaceMobile,
-               centeredSlides: centeredMobile,
-            },
-            768: {
-               slidesPerView: slidesTabletSm,
-               spaceBetween: spaceTabletSm,
-               centeredSlides: centeredTabletSm,
-            },
-            960: {
-               slidesPerView: slidesTablet,
-               spaceBetween: spaceTablet,
-               centeredSlides: centeredTablet,
-            },
-            1200: {
-               slidesPerView: slidesDesktop,
-               spaceBetween: spaceDesktop,
-               centeredSlides: centeredDesktop,
-            },
-         },
-
-         // ── Coverflow ─────────────────────────────────────────────────────
-         coverflowEffect: {
-            depth: coverflowDepth,
-            scale: coverflowScale,
-            rotate: coverflowRotate,
-            stretch: 0,
-            modifier: 1,
-            slideShadows: coverflowShadows,
-         },
-
-         // ── Creative (дефолтний конфіг) ───────────────────────────────────
-         creativeEffect: {
-            prev: { shadow: true, translate: ["-120%", 0, -500] },
-            next: { translate: ["100%", 0, 0] },
-         },
-
-         // ── Додаткові хардкодні параметри ─────────────────────────────────
-         // resistanceRatio: 0.85,
-         // initialSlide:    0,
-      };
-
-      // ── Autoplay ──────────────────────────────────────────────────────────
-      if (autoplayEnabled) {
-         options.autoplay = {
-            delay: autoplayDelay,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-         };
-      }
-
-      // ── Navigation ────────────────────────────────────────────────────────
-      options.navigation = { prevEl, nextEl };
-
-      // ── Pagination ────────────────────────────────────────────────────────
-      options.pagination = {
-         el: paginationEl,
-         clickable: true,
-         type: paginationType,
-      };
-
-      // ── Ефекти — creative потребує creativeEffect config ─────────────────
-      if (effect === "creative") {
-         options.creativeEffect = {
-            prev: { shadow: true, translate: ["-120%", 0, -500] },
-            next: { translate: ["100%", 0, 0] },
-         };
-      }
-
-      // ── Ініціалізація ─────────────────────────────────────────────────────
-      // loop потребує мінімум slidesPerView * 2 слайдів
-      // беремо максимальне slidesPerView щоб перевірити
-      const maxSlidesPerView = Math.max(
-         slidesMobile,
-         slidesTabletSm,
-         slidesTablet,
-         slidesDesktop,
-      );
-      const totalSlides = el.querySelectorAll(".swiper-slide").length;
-      const safeLoop = loop && totalSlides >= Math.ceil(maxSlidesPerView) * 2;
-
-      options.loop = safeLoop;
-
-      const swiper = new Swiper(swiperEl as HTMLElement, options);
-
-      // ── Ховаємо якщо 1 слайд ─────────────────────────────────────────────
-      if (swiper.slides.length <= 1) {
-         if (prevEl) prevEl.style.display = "none";
-         if (nextEl) nextEl.style.display = "none";
-         if (paginationEl) paginationEl.style.display = "none";
-      } else {
-         updateVisibility();
-      }
-
-      // ── Resize: оновлюємо видимість стрілок/пагінації ────────────────────
-      window.addEventListener("resize", () => {
-         updateVisibility();
-      });
-   });
-
-   // ── Variant selector for Shopify customizer (design mode only) ──────────
-   document.addEventListener("click", (e) => {
-      const btn = (e.target as Element).closest<HTMLElement>("[data-sf-variant]");
-      if (!btn) return;
-      const variantTitle = btn.dataset.sfVariant ?? "";
-      if (!variantTitle) return;
-
-      // ── Знайти поточний активний block id через Shopify customizer events ──
-      const blockEl = btn.closest<HTMLElement>("[data-shopify-editor-block]");
-      const sectionEl = btn.closest<HTMLElement>("[data-shopify-editor-section]");
-      const blockId = blockEl?.dataset.shopifyEditorBlock
-         ? JSON.parse(blockEl.dataset.shopifyEditorBlock).id
-         : null;
-      const sectionId = sectionEl?.dataset.shopifyEditorSection
-         ? JSON.parse(sectionEl.dataset.shopifyEditorSection).id
-         : null;
-
-      // ── Спробуємо заповнити поле через Shopify postMessage ────────────────
-      if (blockId && sectionId) {
-         window.parent.postMessage(
-            {
-               type: "shopify:editor:settings:update",
-               sectionId,
-               blockId,
-               settings: { variant_title: variantTitle },
-            },
-            "*",
-         );
-      }
-
-      // ── Fallback: копіюємо в буфер через execCommand (працює в iframe) ────
-      try {
-         const tmp = document.createElement("textarea");
-         tmp.value = variantTitle;
-         tmp.style.cssText = "position:fixed;opacity:0;top:0;left:0";
-         document.body.appendChild(tmp);
-         tmp.focus();
-         tmp.select();
-         document.execCommand("copy");
-         document.body.removeChild(tmp);
-      } catch (_) {}
-
-      // ── Toast ─────────────────────────────────────────────────────────────
-      let toast = document.getElementById("sf-copy-toast");
-      if (!toast) {
-         toast = document.createElement("div");
-         toast.id = "sf-copy-toast";
-         document.body.appendChild(toast);
-      }
-      toast.textContent = `✓ "${variantTitle}" — paste into Variant title field`;
-      toast.classList.add("is-visible");
-      clearTimeout((toast as any)._t);
-      (toast as any)._t = setTimeout(
-         () => toast!.classList.remove("is-visible"),
-         3000,
-      );
-   });
+   import "@scripts/init/slider";
 </script>

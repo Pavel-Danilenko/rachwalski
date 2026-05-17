@@ -1,0 +1,49 @@
+@use "@styles/utils" as *;
+
+// ── Wrapper ───────────────────────────────────────────────────────────────────
+// overflow:hidden обрізає клоновані елементи, що виходять за межі
+[data-marquee] {
+   overflow: hidden;
+   width: 100%;
+}
+
+// ── Inner — JS створює динамічно ──────────────────────────────────────────────
+// JS вставляє <div data-marquee-inner> і керує animation через style
+[data-marquee-inner] {
+   display: flex;
+   flex-wrap: nowrap;
+   will-change: transform;
+}
+
+// ── Item ──────────────────────────────────────────────────────────────────────
+// JS додає data-marquee-item і встановлює margin через style
+[data-marquee-item] {
+   flex-shrink: 0;
+   user-select: none;
+}
+
+// ── Пауза при наведенні ───────────────────────────────────────────────────────
+// JS встановлює animationPlayState через JS (mouseenter/mouseleave)
+// Тут можна додати плавність якщо потрібно:
+// [data-marquee-inner] { transition: animation-play-state 0.3s; }
+
+// ── Кастомізація ─────────────────────────────────────────────────────────────
+// Всі візуальні стилі елементів — через клас на wrapper або slot-контент.
+//
+// Приклад:
+//   <Marquee class="partners-marquee">
+//      <img src="..." />
+//   </Marquee>
+//
+//   .partners-marquee {
+//      padding: toRem(20) 0;
+//      background: var(--color-bg-alt);
+//
+//      img {
+//         height: toRem(40);
+//         opacity: 0.6;
+//         filter: grayscale(1);
+//         transition: opacity var(--transition-fast), filter var(--transition-fast);
+//         &:hover { opacity: 1; filter: none; }
+//      }
+//   }

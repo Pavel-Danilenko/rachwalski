@@ -1,0 +1,137 @@
+@use "@styles/utils" as *;
+
+.contact {
+   position: relative;
+   // .contact__container
+
+   &__container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: toRem(16) toRem(12);
+      position: relative;
+      z-index: 3;
+   }
+
+   // .contact__column-left
+
+   &__column-left {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      @include fluid-space(flex-basis, 300, 420);
+   }
+
+   // .contact__author
+
+   &__author {
+      @include fluid-space(padding, 20, 24);
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+   }
+
+   // .contact__column-right
+
+   &__column-right {
+      flex-basis: toRem(300);
+      flex-grow: 1;
+   }
+
+   // .contact__form
+
+   &__form {
+   }
+}
+
+.contact-author {
+   // .contact-author__title
+
+   &__title {
+      text-wrap: balance;
+      @include fluid-space(padding-right, 16, 30);
+   }
+
+   // .contact-author__text
+
+   &__text {
+      &:not(:last-child) {
+         margin-bottom: toRem(20);
+      }
+   }
+
+   // .contact-author__detail
+
+   &__detail {
+      &:not(:first-child) {
+         margin-top: auto;
+      }
+   }
+}
+
+.contact-detail {
+   // .contact-detail__row
+   display: flex;
+   align-items: center;
+   @include fluid-space(column-gap, 16, 20);
+
+   &__img {
+      aspect-ratio: 1;
+      flex-shrink: 0;
+      overflow: hidden;
+      @include fluid(width, 50, 80);
+   }
+
+   &__row {
+   }
+
+   // .contact-detail__name
+
+   &__name {
+   }
+
+   // .contact-detail__label
+
+   &__label {
+   }
+
+   // .contact-detail__social
+
+   &__social {
+   }
+}
+.contact-social {
+   // .contact-social__row
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: space-between;
+   align-items: center;
+   @include fluid-space(column-gap, 12, 20);
+   row-gap: toRem(18);
+   margin-top: auto;
+
+   &__row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      @include fluid-space(gap, 8, 16);
+   }
+
+   // .contact-social__link
+
+   &__link {
+      font-size: toRem(24);
+      color: var(--color-light-blue);
+      transition: var(--transition-base);
+      cursor: pointer;
+      &:hover {
+         color: var(--color-blue);
+      }
+   }
+
+   // .contact-social__btn
+
+   &__btn {
+   }
+}
+
+// .contact-form styles → src/styles/components/section/_contact-form-section.scss

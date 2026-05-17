@@ -1,0 +1,44 @@
+---
+import "@styles/components/ui/_google-map.scss";
+
+interface Marker {
+   lat: number;
+   lng: number;
+   title?: string;
+   icon?: string; // URL до SVG файлу, напр. "/img/pin-1.svg"
+}
+
+interface Props {
+   markers?: Marker[];
+   center?: { lat: number; lng: number };
+   zoom?: number;
+   id?: string;
+   class?: string;
+   panX?: number; // зміщення по X в пікселях після завантаження (+ вправо, - вліво)
+   panY?: number; // зміщення по Y в пікселях після завантаження (+ вниз, - вгору)
+}
+
+const {
+   markers = [],
+   center,
+   zoom = 13,
+   id = "gmap-" + Math.random().toString(36).slice(2, 8),
+   class: className,
+   panX = 0,
+   panY = 0,
+} = Astro.props;
+
+const mapCenter =
+   center ?? (markers[0] ? { lat: markers[0].lat, lng: markers[0].lng } : { lat: 48.874, lng: 2.296 });
+---
+
+<div
+   id={id}
+   class:list={["google-map", className]}
+   data-google-map
+   data-gm-markers={JSON.stringify(markers)}
+   data-gm-center={JSON.stringify(mapCenter)}
+   data-gm-zoom={String(zoom)}
+   data-gm-pan-x={String(panX)}
+   data-gm-pan-y={String(panY)}
+></div>

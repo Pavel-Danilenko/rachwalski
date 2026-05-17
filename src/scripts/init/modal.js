@@ -1,117 +1,129 @@
-// src/scripts/modal.js
-// Клас для попапів з класом popup-show на <html>
-
 import { bodyLock, bodyUnlock } from "@scripts/global/block-scroll";
+
+const FOCUSABLE = [
+   "a[href]", "button:not([disabled])", "input:not([disabled])",
+   "select:not([disabled])", "textarea:not([disabled])",
+   "[tabindex]:not([tabindex='-1'])",
+].join(", ");
 
 class Modal {
    constructor() {
-      this.modals = document.querySelectorAll("[data-popup]");
-      if (this.modals.length === 0) return;
-
       this.previousFocus = null;
-      this.isOpen = false; // 🔥 Статус відкритого попапа
-      this.bodyLock = false; // 🔥 Чи був body locked до відкриття попапа
+      this.isOpen        = false;
+      this.wasLocked     = false;
 
-      this.bindEvents();
+      this.onFocusTrap = this._focusTrap.bind(this);
+      this._bindEvents();
    }
 
-   bindEvents() {
+   _bindEvents() {
       document.addEventListener("click", (e) => {
-         // Відкриття
          const openBtn = e.target.closest("[data-popup-open]");
          if (openBtn) {
             e.preventDefault();
-            const id = openBtn.getAttribute("data-popup-open");
-            this.open(id);
+            this.open(openBtn.getAttribute("data-popup-open"));
             return;
          }
 
-         // Закриття
-         const closeBtn = e.target.closest("[data-popup-close]");
-         const clickedOutside = !e.target.closest(".popup__content");
-         const activeModal = document.querySelector(".popup--open");
-         if (closeBtn || (clickedOutside && activeModal)) {
+         if (e.target.closest("[data-popup-close]")) {
             e.preventDefault();
+            this.close();
+            return;
+         }
+
+         // Закрити по backdrop
+         const active = document.querySelector(".popup--open");
+         if (active && !e.target.closest(".popup__content") &&
+             active.dataset.backdropClose !== "false") {
             this.close();
          }
       });
 
-      // ESC
       document.addEventListener("keydown", (e) => {
-         if (e.code === "Escape" && this.isOpen) {
-            this.close();
-         }
+         if (e.key === "Escape" && this.isOpen) this.close();
       });
    }
 
+   _focusTrap(e) {
+      if (e.key !== "Tab") return;
+
+      const active    = document.querySelector(".popup--open");
+      if (!active) return;
+
+      const focusable = [...active.querySelectorAll(FOCUSABLE)];
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last  = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+         e.preventDefault();
+         last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+         e.preventDefault();
+         first.focus();
+      }
+   }
+
    open(id) {
-      // 🔥 ВАЖЛИВО: Якщо попап вже відкритий - ігноруємо
       if (this.isOpen) return;
 
       const modal = document.querySelector(`[data-popup="${id}"]`);
       if (!modal) return;
 
-      // 🔥 Перевіряємо чи був body locked до відкриття
-      this.bodyLock = document.documentElement.classList.contains("lock");
-
       this.previousFocus = document.activeElement;
+      this.wasLocked     = document.documentElement.classList.contains("lock");
 
       modal.classList.add("popup--open");
       modal.setAttribute("aria-hidden", "false");
-
-      // Клас на <html>
       document.documentElement.classList.add("popup-show");
 
-      // 🔥 Блокуємо скрол тільки якщо він не був заблокований раніше
-      if (!this.bodyLock) {
-         bodyLock();
-      }
+      if (!this.wasLocked) bodyLock();
 
-      // Фокус на кнопку закриття
-      const closeBtn =
-         modal.querySelector("[data-popup-close]") ||
+      // Focus trap
+      document.addEventListener("keydown", this.onFocusTrap);
+
+      // Фокус на першу кнопку закриття або контент
+      const firstFocus =
+         modal.querySelector("[data-popup-close]") ??
          modal.querySelector(".popup__content");
-      if (closeBtn) {
-         closeBtn.focus();
-      }
+      firstFocus?.focus();
 
-      // 🔥 Встановлюємо статус
       this.isOpen = true;
    }
 
    close() {
-      // 🔥 ВАЖЛИВО: Якщо попап не відкритий - ігноруємо
       if (!this.isOpen) return;
 
-      const activeModal = document.querySelector(".popup--open");
-      if (!activeModal) return;
+      const active = document.querySelector(".popup--open");
+      if (!active) return;
 
-      // Повертаємо фокус
-      if (
-         this.previousFocus &&
-         typeof this.previousFocus.focus === "function"
-      ) {
-         this.previousFocus.focus();
-      }
-
-      activeModal.classList.remove("popup--open");
-      activeModal.setAttribute("aria-hidden", "true");
-
-      // Прибираємо клас з <html>
+      active.classList.remove("popup--open");
+      active.setAttribute("aria-hidden", "true");
       document.documentElement.classList.remove("popup-show");
 
-      // 🔥 Розблокуємо скрол тільки якщо ми його блокували
-      if (!this.bodyLock) {
-         bodyUnlock();
-      }
+      document.removeEventListener("keydown", this.onFocusTrap);
 
+      const prevFocus    = this.previousFocus;
+      const wasLocked    = this.wasLocked;
       this.previousFocus = null;
+      this.isOpen        = false;
+      this.wasLocked     = false;
 
-      // 🔥 Скидаємо статус
-      this.isOpen = false;
-      this.bodyLock = false;
+      if (!wasLocked) bodyUnlock(300);
+
+      // Повертаємо фокус через 50ms — поки overflow:hidden ще активний.
+      // Безпечно бо overflow:hidden не змінює scroll позицію (на відміну від position:fixed).
+      setTimeout(() => prevFocus?.focus(), 50);
    }
 }
 
-// Автоініціалізація
-new Modal();
+// Прив'язуємо події ОДИН раз — Modal.open/close завжди роблять свіжий querySelector
+(function init() {
+   if (window._modal) return;
+   window._modal = new Modal();
+})();
+
+document.addEventListener("page:ready", () => {
+   if (!window._modal) window._modal = new Modal();
+});

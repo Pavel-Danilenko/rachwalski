@@ -267,13 +267,15 @@ class Menu {
       // Ініціалізація стану
       this.isOpen = false;
       this.isAnimating = false;
-      this.animationDuration = 500;
+      // Має збігатись з --transition-base в settings.scss (0.3s = 300ms)
+      this.animationDuration = 300;
       this.closeOthers = this.menu.hasAttribute("data-menu-close-others");
       this.screenHistory = [];
 
       // Зберігаємо bound методи для можливості видалення
       this.boundHandleOutsideClick = this.handleOutsideClickEvent.bind(this);
       this.boundHandleEscape = this.handleEscapeEvent.bind(this);
+      this.boundFocusTrap = this.handleFocusTrap.bind(this);
 
       // Скидаємо стан
       this.resetState();
@@ -374,6 +376,7 @@ class Menu {
       }
       document.removeEventListener("click", this.boundHandleOutsideClick);
       document.removeEventListener("keydown", this.boundHandleEscape);
+      document.removeEventListener("keydown", this.boundFocusTrap);
    }
 
    // ==========================================
@@ -396,10 +399,22 @@ class Menu {
       if (this.isOpen) {
          document.documentElement.classList.add("menu-open");
          bodyLock(this.animationDuration);
+         // Focus trap — тільки на desktop (на mobile focus викликає resize viewport)
+         if (window.innerWidth > 768) {
+            setTimeout(() => {
+               document.addEventListener("keydown", this.boundFocusTrap);
+               this.getFirstFocusable()?.focus();
+            }, this.animationDuration);
+         } else {
+            document.addEventListener("keydown", this.boundFocusTrap);
+         }
       } else {
          document.documentElement.classList.remove("menu-open");
          bodyUnlock(this.animationDuration);
+         document.removeEventListener("keydown", this.boundFocusTrap);
          this.resetSubmenus();
+         // Повертаємо фокус на бургер після закриття
+         this.trigger?.focus();
       }
 
       setTimeout(() => {
@@ -506,23 +521,21 @@ class Menu {
    }
 
    findNextSubmenu(button) {
-      let submenu = button.nextElementSibling;
-      if (submenu?.hasAttribute("data-submenu")) {
-         return submenu;
+      // 1. Явна цільова прив'язка через значення атрибуту (надійно)
+      //    <button data-submenu-open="services"> → <div data-submenu="services">
+      const target = button.dataset.submenuOpen;
+      if (target) {
+         return this.overlay.querySelector(`[data-submenu="${target}"]`);
       }
+
+      // 2. Fallback: DOM-сусід (для простих однорівневих меню без значення)
+      //    <button data-submenu-open> → наступний [data-submenu] поруч
+      let submenu = button.nextElementSibling;
+      if (submenu?.hasAttribute("data-submenu")) return submenu;
 
       const parent = button.parentElement;
-      submenu = parent.nextElementSibling;
-      if (submenu?.hasAttribute("data-submenu")) {
-         return submenu;
-      }
-
-      const allSubmenus = this.overlay.querySelectorAll("[data-submenu]");
-      for (const sub of allSubmenus) {
-         if (sub.getAttribute("data-submenu-active") !== "true") {
-            return sub;
-         }
-      }
+      submenu = parent?.nextElementSibling;
+      if (submenu?.hasAttribute("data-submenu")) return submenu;
 
       return null;
    }
@@ -558,6 +571,44 @@ class Menu {
       const isClickInside = this.menu.contains(e.target);
       if (!isClickInside) {
          this.toggle();
+      }
+   }
+
+   // ==========================================
+   // FOCUS TRAP
+   // ==========================================
+
+   getFocusable() {
+      return [
+         ...this.overlay.querySelectorAll(
+            'a[href], button:not([disabled]), input:not([disabled]), ' +
+            'select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+         ),
+      ].filter((el) => !el.closest("[data-submenu-active='false']"));
+   }
+
+   getFirstFocusable() { return this.getFocusable()[0] ?? null; }
+   getLastFocusable()  { const f = this.getFocusable(); return f[f.length - 1] ?? null; }
+
+   handleFocusTrap(e) {
+      if (e.key !== "Tab") return;
+
+      const focusable = this.getFocusable();
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last  = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+         if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+         }
+      } else {
+         if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+         }
       }
    }
 
@@ -603,6 +654,6 @@ if (document.readyState === "loading") {
 }
 
 // Astro View Transitions
-document.addEventListener("astro:after-swap", initMenu);
+document.addEventListener("page:ready", initMenu);
 
 export default Menu;

@@ -23,7 +23,12 @@ html {
 
 body {
    font-family: var(--font-primary);
-   font-size: var(--font-size-base);
+   // font-size: var(--font-size-base);
+   font-size: var(--text-base); // це адаптивний шрифт
+   font-weight: var(--font-weight-body);
+   line-height: var(--line-height);
+   background-color: var(--color-bg);
+   color: var(--color-text);
 }
 
 ul,
@@ -31,12 +36,21 @@ ol {
    list-style: none;
 }
 
+a,
+button,
+[type="button"],
+[type="submit"],
+label[for] {
+   cursor: pointer;
+}
+
 a {
    text-decoration: none;
    color: inherit;
 }
+
 button {
-   cursor: pointer;
+   display: inline-block;
 }
 button,
 input,

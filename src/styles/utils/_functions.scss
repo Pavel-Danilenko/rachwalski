@@ -15,13 +15,15 @@
    @return math.div($px, $context) * 1em;
 }
 
-/// Повертає fluid clamp() значення як рядок (для CSS vars)
-/// @example fluid-value(32, 64) → clamp(32px, calc(...), 64px)
+/// Повертає fluid clamp() значення в rem
+/// @example fluid-value(32, 64) → clamp(2rem, calc(...), 4rem)
 @function fluid-value($min, $max, $from: $mobile, $to: $pc) {
    $slope: math.div($max - $min, $to - $from);
    $intercept: $min - $slope * $from;
-   $preferred: "#{$slope * 100}vw + #{$intercept}px";
-   @return string.unquote("clamp(#{$min}px, calc(#{$preferred}), #{$max}px)");
+   $preferred: "#{$slope * 100}vw + #{math.div($intercept, 16)}rem";
+   @return string.unquote(
+      "clamp(#{math.div($min, 16)}rem, calc(#{$preferred}), #{math.div($max, 16)}rem)"
+   );
 }
 
 /// Іменований брейкпоінт → число px

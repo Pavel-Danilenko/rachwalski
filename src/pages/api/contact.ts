@@ -43,7 +43,9 @@ export const POST: APIRoute = async ({ request }) => {
       const email = formData.get("email") as string;
 
       // Email налаштування
+      const formKey = formData.get("form_key") as string;
       const recipientEmail =
+         (formKey && import.meta.env[`FORM_${formKey.toUpperCase()}`]) ||
          (formData.get("recipient_email") as string) ||
          import.meta.env.CONTACT_EMAIL;
       const recipientName =

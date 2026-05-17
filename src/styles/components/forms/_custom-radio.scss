@@ -1,0 +1,238 @@
+@use "@styles/utils" as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Локальні змінні для радіо
+// ─────────────────────────────────────────────────────────────────────────────
+$radio-size: 20;
+$radio-border: 2;
+$radio-dot-size: 8;
+$radio-gap: 8;
+$radio-label-font-size: 14;
+
+$radio-focus-outline: 2;
+$radio-focus-offset: 2;
+$radio-focus-shadow-size: 4;
+
+$radio-disabled-opacity: 0.6;
+$radio-error-shadow-size: 3;
+
+// Мобільна версія
+$radio-size-mobile: 22;
+$radio-dot-size-mobile: 9;
+$radio-size-touch: 24;
+$radio-dot-size-touch: 10;
+$radio-label-font-size-mobile: 15;
+$radio-gap-touch: 12;
+
+.custom-radio {
+   display: inline-flex;
+   align-items: flex-start;
+   gap: toRem($radio-gap);
+   cursor: pointer;
+   position: relative;
+   user-select: none;
+
+   // ============================
+   // ПРИХОВАНИЙ СТАНДАРТНИЙ RADIO
+   // ============================
+   &__input {
+      position: absolute !important;
+      width: toRem(1) !important;
+      height: toRem(1) !important;
+      padding: 0 !important;
+      margin: toRem(-1) !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+   }
+
+   // ============================
+   // КАСТОМНИЙ КРУГ
+   // ============================
+   &__circle {
+      flex-shrink: 0;
+      width: toRem($radio-size);
+      height: toRem($radio-size);
+      border: toRem($radio-border) solid var(--color-border);
+      border-radius: 50%;
+      background: var(--color-bg);
+      transition: all 0.2s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      // Крапка всередині (замість галочки)
+      &::after {
+         content: "";
+         position: absolute;
+         display: none;
+         width: toRem($radio-dot-size);
+         height: toRem($radio-dot-size);
+         border-radius: 50%;
+         background: var(--color-bg);
+         transform: scale(0);
+         transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+   }
+
+   // ============================
+   // LABEL ТЕКСТ
+   // ============================
+   &__label {
+      flex: 1;
+      font-size: toRem($radio-label-font-size);
+      line-height: 1.5;
+      color: var(--color-text);
+      transition: color 0.2s ease;
+
+      // Підтримка посилань і HTML в слоті
+      a {
+         color: var(--color-primary);
+         text-decoration: underline;
+         transition: color 0.2s ease;
+
+         &:hover {
+            opacity: 0.8;
+         }
+      }
+
+      strong {
+         font-weight: 600;
+      }
+   }
+
+   // ============================
+   // HOVER СТАН
+   // ============================
+   &:hover &__circle {
+      border-color: var(--color-text-muted);
+   }
+
+   // ============================
+   // FOCUS СТАН (Keyboard Navigation)
+   // ============================
+   &__input:focus-visible ~ &__circle {
+      outline: toRem($radio-focus-outline) solid var(--color-primary);
+      outline-offset: toRem($radio-focus-offset);
+      box-shadow: 0 0 0 toRem($radio-focus-shadow-size) color-mix(in srgb, var(--color-primary) 10%, transparent);
+   }
+
+   // ============================
+   // CHECKED СТАН
+   // ============================
+   &__input:checked ~ &__circle {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+
+      &::after {
+         display: block;
+         transform: scale(1);
+      }
+   }
+
+   // Hover на checked
+   &__input:checked ~ &__circle:hover {
+      opacity: 0.9;
+   }
+
+   // ============================
+   // DISABLED СТАН
+   // ============================
+   &__input:disabled ~ &__circle {
+      background: var(--color-bg-alt);
+      border-color: var(--color-border);
+      cursor: not-allowed;
+      opacity: $radio-disabled-opacity;
+   }
+
+   &__input:disabled:checked ~ &__circle {
+      background: color-mix(in srgb, var(--color-border) 150%, #000);
+      border-color: color-mix(in srgb, var(--color-border) 150%, #000);
+   }
+
+   &__input:disabled ~ &__label {
+      color: var(--color-text-muted);
+      cursor: not-allowed;
+   }
+
+   &__input:disabled ~ * {
+      cursor: not-allowed;
+   }
+
+   // ============================
+   // ІНТЕГРАЦІЯ З ВАЛІДАЦІЄЮ
+   // ============================
+
+   // Error стан
+   .form-group.error & {
+      &__circle {
+         border-color: var(--color-error);
+         box-shadow: 0 0 0 toRem($radio-error-shadow-size)
+            color-mix(in srgb, var(--color-error, #dc3545) 10%, transparent);
+      }
+
+      &__input:checked ~ &__circle {
+         background: var(--color-error);
+         border-color: var(--color-error);
+      }
+
+      &__label {
+         color: color-mix(in srgb, var(--color-error, #dc3545) 60%, #000);
+      }
+   }
+
+   // Success стан
+   .form-group.success & {
+      &__circle {
+         border-color: var(--color-success);
+      }
+
+      &__input:checked ~ &__circle {
+         background: var(--color-success);
+         border-color: var(--color-success);
+      }
+   }
+}
+
+// ============================
+// RESPONSIVE (МОБІЛЬНА ОПТИМІЗАЦІЯ)
+// ============================
+
+@media (max-width: toRem(640)) {
+   .custom-radio {
+      &__circle {
+         width: toRem($radio-size-mobile);
+         height: toRem($radio-size-mobile);
+
+         &::after {
+            width: toRem($radio-dot-size-mobile);
+            height: toRem($radio-dot-size-mobile);
+         }
+      }
+
+      &__label {
+         font-size: toRem($radio-label-font-size-mobile);
+      }
+   }
+}
+
+// Touch devices оптимізація
+@media (hover: none) and (pointer: coarse) {
+   .custom-radio {
+      gap: toRem($radio-gap-touch);
+
+      &__circle {
+         min-width: toRem($radio-size-touch);
+         min-height: toRem($radio-size-touch);
+
+         &::after {
+            width: toRem($radio-dot-size-touch);
+            height: toRem($radio-dot-size-touch);
+         }
+      }
+   }
+}

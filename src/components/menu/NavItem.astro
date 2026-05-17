@@ -1,0 +1,77 @@
+---
+/**
+ * NavItem — пункт навігації що бере url і label з nav.ts конфігу
+ *
+ * @param {NavKey}   nav          - ключ з nav.ts (обов'язковий)
+ * @param {boolean}  wrapLabel    - обгорнути label в <span class="nav-label">
+ * @param {number}   labelOrder   - CSS order для label (автоматично додає span)
+ * @param {string}   as           - примусовий тег: "a" | "button" | "span" | "div"
+ * @param {string}   class        - додаткові CSS класи
+ *
+ * Слоти:
+ * @slot before  - контент перед label
+ * @slot after   - контент після label
+ *
+ * Генерований елемент:
+ *   є url або goto  →  <a href="...">
+ *   немає url/goto  →  <button type="button">
+ *   as="..."        →  примусовий тег
+ *
+ * Активний клас:
+ *   menu-active-links.js автоматично додає is-active на <a> що
+ *   збігається з поточним URL (не потрібно нічого робити вручну)
+ *
+ * Приклади:
+ *   <NavItem nav="about" />
+ *   <NavItem nav="about"><Icon slot="before" /></NavItem>
+ *   <NavItem nav="about" wrapLabel><Icon slot="before" /></NavItem>
+ *   <NavItem nav="about" labelOrder={2}><Icon slot="before" /><p slot="after">Desc</p></NavItem>
+ *   <NavItem nav="services" as="button" />
+ */
+
+import { nav, type NavKey, type NavItem as NavItemType } from "@config/nav";
+
+interface Props {
+   nav: NavKey;
+   wrapLabel?: boolean;
+   labelOrder?: number;
+   as?: "a" | "button" | "span" | "div";
+   class?: string;
+}
+
+const {
+   nav: navKey,
+   wrapLabel = false,
+   labelOrder,
+   as: asTag,
+   class: className,
+   ...rest
+} = Astro.props as Props & Record<string, unknown>;
+
+const item = nav[navKey] as NavItemType;
+
+const Tag  = asTag ?? (item.url || item.goto ? "a" : "button");
+
+const shouldWrap  = wrapLabel || labelOrder !== undefined;
+const labelStyle  = labelOrder !== undefined
+   ? `order: ${labelOrder * 100 - 50}`
+   : undefined;
+
+// Збираємо атрибути залежно від тегу
+const attrs: Record<string, unknown> = { ...rest };
+if (className)        attrs.class          = className;
+if (Tag === "a")      attrs.href           = item.url ?? item.goto;
+if (Tag === "button") attrs.type           = "button";
+if (item.goto)        attrs["data-goto"]         = item.goto;
+if (item.gotoOffset)  attrs["data-goto-offset"]  = item.gotoOffset;
+if (item.target)      attrs.target         = item.target;
+---
+
+<Tag {...attrs}>
+   <slot name="before" />
+   {shouldWrap
+      ? <span class="nav-label" style={labelStyle}>{item.label}</span>
+      : item.label
+   }
+   <slot name="after" />
+</Tag>

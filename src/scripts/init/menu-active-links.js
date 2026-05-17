@@ -2,18 +2,19 @@
 
 class MenuActiveLinks {
    constructor() {
-      this.menu = document.querySelector("[data-menu]");
-      if (!this.menu) return;
+      this.containers = document.querySelectorAll("[data-menu], [data-active-links]");
+      if (!this.containers.length) return;
 
-      console.log("MenuActiveLinks initialized");
       this.setActiveLinks();
    }
 
    setActiveLinks() {
       const currentPath = window.location.pathname;
 
-      // Знаходимо всі посилання в меню
-      const links = this.menu.querySelectorAll("a[href]");
+      const links = [];
+      this.containers.forEach((container) => {
+         container.querySelectorAll("a[href]").forEach((link) => links.push(link));
+      });
 
       links.forEach((link) => {
          const href = link.getAttribute("href");
@@ -33,7 +34,6 @@ class MenuActiveLinks {
             link.classList.add("is-active");
             link.setAttribute("aria-current", "page");
 
-            console.log("Active link:", href);
          } else {
             link.classList.remove("is-active");
             link.removeAttribute("aria-current");
@@ -76,6 +76,6 @@ if (document.readyState === "loading") {
 }
 
 // Оновлюємо після переходів
-document.addEventListener("astro:page-load", initMenuActiveLinks);
+document.addEventListener("page:ready", initMenuActiveLinks);
 
 export default MenuActiveLinks;

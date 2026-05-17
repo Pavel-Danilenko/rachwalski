@@ -1,74 +1,50 @@
-// src/scripts/global/block-scroll.js
+// block-scroll.js
+// Блокування скролу через overflow: hidden на <html>.
+// Компенсує зникнення скролбара padding-right на фіксованих елементах.
 
 const paddingSelectors = "[data-lock]";
-let bodyLockStatus = true;
-let lockCount = 0;
+let isLocked = false;
 
-export function bodyLock(delay = 500) {
-   if (!bodyLockStatus) {
-      console.warn("Body lock is currently processing, skipping");
-      return;
+export function bodyLock() {
+   if (isLocked) return;
+   isLocked = true;
+
+   // Компенсуємо зникнення скролбара (десктоп)
+   const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+   if (scrollbarWidth > 0) {
+      document.documentElement.style.setProperty("--scrollbar-width", scrollbarWidth + "px");
+      document.querySelectorAll(paddingSelectors).forEach((el) => {
+         el.style.paddingRight = scrollbarWidth + "px";
+      });
+      document.body.style.paddingRight = scrollbarWidth + "px";
    }
 
-   lockCount++;
-
-   if (lockCount > 1) {
-      return;
-   }
-
-   const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth + "px";
-
-   document.querySelectorAll(paddingSelectors).forEach((el) => {
-      el.style.paddingRight = scrollbarWidth;
-   });
-
-   document.body.style.paddingRight = scrollbarWidth;
    document.documentElement.classList.add("lock");
+}
 
-   bodyLockStatus = false;
+export function bodyUnlock(delay = 300) {
+   if (!isLocked) return;
+
    setTimeout(() => {
-      bodyLockStatus = true;
+      isLocked = false;
+      document.documentElement.classList.remove("lock");
+      document.documentElement.style.removeProperty("--scrollbar-width");
+      document.querySelectorAll(paddingSelectors).forEach((el) => {
+         el.style.paddingRight = "";
+      });
+      document.body.style.paddingRight = "";
    }, delay);
 }
 
-export function bodyUnlock(delay = 500) {
-   lockCount--;
-
-   if (lockCount > 0) {
-      return;
-   }
-
-   lockCount = Math.max(0, lockCount);
-
-   setTimeout(() => {
-      if (lockCount === 0) {
-         document.querySelectorAll(paddingSelectors).forEach((el) => {
-            el.style.paddingRight = "";
-         });
-
-         document.body.style.paddingRight = "";
-         document.documentElement.classList.remove("lock");
-      }
-   }, delay);
-
-   bodyLockStatus = true;
-}
-
-// Скидання при переходах
 export function resetBodyLock() {
-   bodyLockStatus = true;
-   lockCount = 0;
-
+   isLocked = false;
+   document.documentElement.classList.remove("lock");
+   document.body.style.paddingRight = "";
    document.querySelectorAll(paddingSelectors).forEach((el) => {
       el.style.paddingRight = "";
    });
-
-   document.body.style.paddingRight = "";
-   document.documentElement.classList.remove("lock");
 }
 
-// Автоматичне скидання
 if (typeof document !== "undefined") {
-   document.addEventListener("astro:after-swap", resetBodyLock);
+   document.addEventListener("page:leave", resetBodyLock);
 }

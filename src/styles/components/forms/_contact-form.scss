@@ -1,0 +1,337 @@
+@use "@styles/utils" as *;
+
+// ========================================
+// FORM FIELDS
+// ========================================
+:where(.form-fields) {
+}
+
+// ========================================
+// FORM GROUP — base states for all elements
+// ========================================
+:where(.form-group) {
+   // ── Native inputs ──────────────────────────────────────────
+   input,
+   textarea,
+   select {
+      width: 100%;
+      padding: toRem(12) toRem(16);
+      border: 1px solid var(--color-border, #ddd);
+      font-size: var(--text-base);
+      font-family: inherit;
+      color: var(--color-text);
+      background: var(--color-bg, #fff);
+      transition:
+         border-color var(--transition-base),
+         box-shadow var(--transition-base);
+      outline: none;
+
+      &::placeholder {
+         color: var(--color-text-muted, #aaa);
+      }
+
+      &:focus {
+         border-color: var(--color-primary);
+         box-shadow: 0 0 0 toRem(3)
+            color-mix(in srgb, var(--color-primary) 15%, transparent);
+      }
+   }
+
+   textarea {
+      resize: vertical;
+      min-height: toRem(120);
+   }
+
+   // ── Custom select ──────────────────────────────────────────
+   .custom-select__trigger:focus {
+      outline: none;
+      border-color: var(--color-primary);
+   }
+
+   // ── Phone input (JS adds .is-focused to wrapper) ───────────
+   .phone-input.is-focused {
+      border-color: var(--color-primary);
+   }
+
+   // ── Date picker ────────────────────────────────────────────
+   .datepicker-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+   }
+
+   // ── Checkbox (keyboard focus) ──────────────────────────────
+   .custom-checkbox__input:focus-visible ~ .custom-checkbox__box {
+      outline: toRem(2) solid var(--color-primary);
+      outline-offset: toRem(2);
+      box-shadow: 0 0 0 toRem(4)
+         color-mix(in srgb, var(--color-primary) 10%, transparent);
+   }
+
+   // ── Error ──────────────────────────────────────────────────
+   &.error {
+      input,
+      textarea,
+      select,
+      .custom-select__trigger,
+      .phone-input,
+      .datepicker-input {
+         border-color: var(--color-error, #dc3545);
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+         box-shadow: 0 0 0 toRem(3)
+            color-mix(in srgb, var(--color-error, #dc3545) 15%, transparent);
+      }
+
+      .custom-checkbox__box {
+         border-color: var(--color-error, #dc3545);
+         box-shadow: 0 0 0 toRem(3)
+            color-mix(in srgb, var(--color-error, #dc3545) 10%, transparent);
+      }
+      .custom-checkbox__input:checked ~ .custom-checkbox__box {
+         background: var(--color-error, #dc3545);
+         border-color: var(--color-error, #dc3545);
+      }
+      .custom-checkbox__label {
+         color: color-mix(in srgb, var(--color-error, #dc3545) 60%, #000);
+      }
+   }
+
+   // ── Success ────────────────────────────────────────────────
+   &.success {
+      input,
+      textarea,
+      select,
+      .custom-select__trigger,
+      .phone-input,
+      .datepicker-input {
+         border-color: var(--color-success, #28a745);
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+         box-shadow: 0 0 0 toRem(3)
+            color-mix(in srgb, var(--color-success, #28a745) 15%, transparent);
+      }
+
+      .custom-checkbox__box {
+         border-color: var(--color-success, #28a745);
+      }
+      .custom-checkbox__input:checked ~ .custom-checkbox__box {
+         background: var(--color-success, #28a745);
+         border-color: var(--color-success, #28a745);
+      }
+   }
+}
+
+// ── Текст помилки / підказки ─────────────────────────
+:where(.error-message) {
+   font-size: var(--text-xs);
+   color: var(--color-error, #dc3545);
+   min-height: toRem(18);
+   width: 100%;
+   text-align: left;
+   display: inline-block;
+}
+
+:where(.hint-message) {
+   font-size: var(--text-xs);
+   color: var(--color-info, #17a2b8);
+}
+
+// ========================================
+// INLINE MESSAGE
+// ========================================
+:where(.form-message) {
+   margin-top: toRem(24);
+   padding: toRem(14) toRem(20);
+   border-radius: var(--radius-lg);
+   font-size: var(--text-sm);
+   font-weight: 500;
+   display: none;
+   animation: slideInMessage 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+   &.success {
+      display: block;
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+   }
+
+   &.error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+   }
+}
+
+@keyframes slideInMessage {
+   from {
+      opacity: 0;
+      transform: translateY(toRem(-8));
+   }
+   to {
+      opacity: 1;
+      transform: translateY(0);
+   }
+}
+
+// ========================================
+// MODAL WINDOW
+// ========================================
+:where(.form-modal) {
+   position: fixed;
+   inset: 0;
+   z-index: var(--z-modal);
+   display: none;
+   align-items: center;
+   justify-content: center;
+   opacity: 0;
+   transition: opacity var(--transition-base);
+
+   &.visible {
+      opacity: 1;
+
+      .form-modal__container {
+         transform: scale(1) translateY(0);
+      }
+   }
+
+   &.success .form-modal__icon {
+      color: #10b981;
+      background: #d1fae5;
+      border-color: #6ee7b7;
+   }
+
+   &.error .form-modal__icon {
+      color: #ef4444;
+      background: #fee2e2;
+      border-color: #fca5a5;
+   }
+}
+
+:where(.form-modal__backdrop) {
+   position: absolute;
+   inset: 0;
+   background: rgba(0, 0, 0, 0.6);
+   backdrop-filter: blur(toRem(4));
+}
+
+:where(.form-modal__container) {
+   position: relative;
+   z-index: 1;
+   max-width: toRem(500);
+   width: 90%;
+   padding: toRem(48) toRem(32);
+   background: #fff;
+   border-radius: var(--radius-xl);
+   box-shadow: 0 toRem(20) toRem(40) rgba(0, 0, 0, 0.12);
+   text-align: center;
+   transform: scale(0.9) translateY(toRem(20));
+   transition: transform var(--transition-base);
+}
+
+:where(.form-modal__close) {
+   position: absolute;
+   top: toRem(16);
+   right: toRem(16);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: toRem(40);
+   height: toRem(40);
+   padding: 0;
+   background: #f1f5f9;
+   border: none;
+   border-radius: var(--radius-full);
+   color: #64748b;
+   cursor: pointer;
+   transition: all var(--transition-fast);
+
+   &:hover {
+      background: #e2e8f0;
+      color: #334155;
+      transform: scale(1.1) rotate(90deg);
+   }
+
+   svg {
+      width: toRem(20);
+      height: toRem(20);
+   }
+}
+
+:where(.form-modal__icon) {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: toRem(100);
+   height: toRem(100);
+   margin: 0 auto toRem(24);
+   border-radius: var(--radius-full);
+   border: toRem(3) solid;
+}
+
+:where(.form-modal__message) {
+   font-size: var(--text-lg);
+   font-weight: 600;
+   line-height: 1.6;
+}
+
+:where(.form-modal__default-icon),
+:where(.form-modal__svg-icon) {
+   width: toRem(50);
+   height: toRem(50);
+   stroke: currentColor;
+   fill: none;
+   stroke-width: 2.5;
+   stroke-linecap: round;
+   stroke-linejoin: round;
+}
+
+:where(.form-modal__image) {
+   width: toRem(70);
+   height: toRem(70);
+   object-fit: contain;
+}
+
+// ========================================
+// SUBMIT BUTTON — loading стан
+// ========================================
+:where(button[type="submit"]) {
+   position: relative;
+   transition: all var(--transition-base);
+
+   &.loading {
+      color: transparent;
+      pointer-events: none;
+
+      &::after {
+         content: "";
+         position: absolute;
+         width: toRem(18);
+         height: toRem(18);
+         top: 50%;
+         left: 50%;
+         margin: toRem(-9) 0 0 toRem(-9);
+         border: toRem(3) solid rgba(255, 255, 255, 0.3);
+         border-radius: var(--radius-full);
+         border-top-color: #fff;
+         animation: spinner 0.6s linear infinite;
+      }
+   }
+
+   &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+   }
+}
+
+@keyframes spinner {
+   to {
+      transform: rotate(360deg);
+   }
+}

@@ -1,0 +1,119 @@
+---
+/**
+ * Logo — логотип сайту
+ *
+ * На головній сторінці рендериться як <div> (не посилання).
+ * На інших сторінках — як <a href="/">.
+ * Після Barba-навігації JS автоматично свопає елемент.
+ *
+ * @param {string}  href        - URL куди веде лого (дефолт "/")
+ * @param {string}  text        - текстовий логотип
+ * @param {string}  imageSrc    - URL зображення логотипу
+ * @param {string}  imageAlt    - alt для зображення
+ * @param {boolean} alwaysLink  - завжди рендерити як <a> (для футера)
+ * @param {string}  target      - "_blank" або "_self"
+ * @param {string}  class       - додатковий CSS клас
+ */
+
+interface Props {
+   href?: string;
+   text?: string;
+   imageSrc?: string;
+   imageAlt?: string;
+   alwaysLink?: boolean;
+   target?: "_blank" | "_self";
+   class?: string;
+}
+
+const {
+   href = "/",
+   text,
+   imageSrc,
+   imageAlt = "Logo",
+   alwaysLink = false,
+   target = "_self",
+   class: className,
+} = Astro.props;
+
+const isHomePage = Astro.url.pathname === "/";
+const isLink = alwaysLink || !isHomePage;
+const Tag = isLink ? "a" : "div";
+const linkProps = isLink ? { href, target } : {};
+---
+
+<Tag
+   {...linkProps}
+   class:list={["logo", className]}
+   data-logo-href={href}
+   data-logo-swap={alwaysLink ? undefined : ""}
+>
+   {
+      imageSrc ? (
+         <img src={imageSrc} alt={imageAlt} class="logo__img" />
+      ) : text ? (
+         <span class="logo__text">{text}</span>
+      ) : (
+         <slot />
+      )
+   }
+</Tag>
+
+<style lang="scss">
+   @use "@styles/utils" as *;
+
+   .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: toRem(8);
+      color: inherit;
+
+      &[href] {
+         text-decoration: none;
+         cursor: pointer;
+         transition: opacity var(--transition-fast);
+      }
+   }
+
+   .logo__img {
+      display: block;
+      width: 100%;
+   }
+
+   .logo__text {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      line-height: 1;
+   }
+</style>
+
+<script>
+   function updateLogos() {
+      const isHome = window.location.pathname === "/";
+
+      // Оновлюємо тільки логотипи з data-logo-swap (не alwaysLink)
+      document
+         .querySelectorAll<HTMLElement>("[data-logo-swap]")
+         .forEach((logo) => {
+            const isLink = logo.tagName === "A";
+
+            // Вже правильний елемент
+            if (isHome === !isLink) return;
+
+            const next = document.createElement(
+               isHome ? "div" : "a",
+            ) as HTMLElement;
+            next.className = logo.className;
+            next.innerHTML = logo.innerHTML;
+            next.dataset.logoHref = logo.dataset.logoHref || "/";
+            next.dataset.logoSwap = "";
+
+            if (!isHome) {
+               (next as HTMLAnchorElement).href = logo.dataset.logoHref || "/";
+            }
+
+            logo.replaceWith(next);
+         });
+   }
+
+   document.addEventListener("page:ready", updateLogos);
+</script>

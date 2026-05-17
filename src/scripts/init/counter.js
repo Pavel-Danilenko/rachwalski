@@ -57,6 +57,9 @@ class Counter {
       if (counterElements.length === 0) return;
 
       counterElements.forEach((element) => {
+         if (element.dataset.counterInitialized) return;
+         element.dataset.counterInitialized = "true";
+
          const config = this.getElementConfig(element);
 
          // Якщо є data-watch-once або data-watch - чекаємо на подію
@@ -400,7 +403,7 @@ if (document.readyState === "loading") {
 }
 
 // Підтримка Astro View Transitions
-document.addEventListener("astro:page-load", () => {
+document.addEventListener("page:ready", () => {
    window.counter = new Counter();
 });
 

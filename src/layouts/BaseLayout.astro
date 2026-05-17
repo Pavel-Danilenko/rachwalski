@@ -1,41 +1,118 @@
 ---
-const { title = "Danylenko Template Start", description = "" } = Astro.props;
-import Footer from "@components/footer.astro";
-import "@styles/main.scss";
-import Header from "@components/Header.astro";
+import Header from "@components/layout/Header.astro";
+import Footer from "@components/layout/Footer.astro";
 import Popups from "@components/popups/Popups.astro";
-import IconSprite from "@components/IconSprite.astro";
+import IconSprite from "@components/ui/IconSprite.astro";
+import "@styles/main.scss";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/effect-cards";
+import "swiper/css/effect-creative";
+import "swiper/css/effect-coverflow";
 import { googleFonts, buildGoogleFontsUrl } from "@config/fonts";
 
+interface Props {
+   title?: string;
+   description?: string;
+   ogImage?: string;
+   lang?: string;
+   noindex?: boolean;
+   stickyHeader?: boolean;
+   // Barba namespace — для таргетованих анімацій між конкретними сторінками
+   namespace?: string;
+}
+
+const {
+   // [SEO] Назва сторінки — відображається у вкладці браузера та результатах пошуку (50–60 символів)
+   title = "Назва сайту — Коротке гасло або ключове слово",
+
+   // [SEO] Короткий опис сторінки — відображається під назвою у пошуку (120–155 символів)
+   description = "Тестовий опис сторінки. Замін на реальний текст — він відображається у пошуку та при шерінгу у соцмережах.",
+
+   // [SEO] OG-зображення для шерінгу — рекомендовано 1200×630px, замін /public/og-image.svg на реальний JPG/PNG
+   ogImage = "/og-image.svg",
+
+   lang = "en",
+   noindex = false,
+   stickyHeader = false,
+   namespace = "default",
+} = Astro.props;
+
+const siteOrigin = Astro.site ?? new URL(Astro.url.origin);
+const canonicalUrl = new URL(Astro.url.pathname, siteOrigin).href;
+
+// og:image має бути абсолютним URL — інакше Facebook/Telegram не підхоплять картинку
+const ogImageAbsolute = ogImage.startsWith("http")
+   ? ogImage
+   : new URL(ogImage, siteOrigin).href;
+
 const googleFontsUrl = buildGoogleFontsUrl(googleFonts);
+
+// [SEO] Назва сайту для og:site_name — замін на реальну
+const siteName = "Назва сайту";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
    <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       <meta name="generator" content={Astro.generator} />
+
+      <!-- Primary SEO -->
       <title>{title}</title>
       {description && <meta name="description" content={description} />}
+      <link rel="canonical" href={canonicalUrl} />
+      {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-      {googleFontsUrl && (
-         <>
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-            <link rel="stylesheet" href={googleFontsUrl} />
-         </>
-      )}
+      <!-- Open Graph -->
+      <meta property="og:site_name" content={siteName} />
+      <meta property="og:title" content={title} />
+      {description && <meta property="og:description" content={description} />}
+      <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:type" content="website" />
+      <meta property="og:locale" content={lang === "uk" ? "uk_UA" : lang} />
+      <meta property="og:image" content={ogImageAbsolute} />
+
+      <!-- Twitter Card -->
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      {description && <meta name="twitter:description" content={description} />}
+      <meta name="twitter:image" content={ogImageAbsolute} />
+
+      <!-- Google Fonts -->
+      {
+         googleFontsUrl && (
+            <>
+               <link rel="preconnect" href="https://fonts.googleapis.com" />
+               <link
+                  rel="preconnect"
+                  href="https://fonts.gstatic.com"
+                  crossorigin
+               />
+               <link rel="stylesheet" href={googleFontsUrl} />
+            </>
+         )
+      }
    </head>
    <body>
       <IconSprite />
-      <div class="wrapper">
-         <Header />
-         <slot />
-         <Footer>hello</Footer>
+
+      <!-- data-barba="wrapper" — Barba слідкує за навігацією всередині -->
+      <div class="wrapper" data-barba="wrapper">
+         <Header sticky={stickyHeader} />
+
+         <!-- data-barba="container" — тільки цей блок замінюється при переходах -->
+         <main data-barba="container" data-barba-namespace={namespace}>
+            <slot />
+         </main>
+
+         <Footer />
       </div>
+
       <Popups />
+
       <script>
          import "@scripts/app";
       </script>

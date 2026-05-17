@@ -77,6 +77,8 @@ class DataWatch {
 
    observeElement(element) {
       const config = this.getElementConfig(element);
+      // skip once-elements that already animated (persist outside barba container)
+      if (config.once && element.classList.contains(config.customClass)) return;
       element._watchConfig = config;
       const observer = this.getObserver(config);
       observer.observe(element);
@@ -150,7 +152,6 @@ class DataWatch {
 }
 
 function startDataWatch() {
-   console.log("DataWatch START", Date.now());
    if (window.dataWatch) window.dataWatch.destroy();
    window.dataWatch = new DataWatch();
 }
@@ -200,6 +201,6 @@ if (document.readyState === "loading") {
 // При переході між сторінками — page-loaded видалявся в app.js
 // і додається знову після завершення переходу
 // MutationObserver в waitAndStart побачить це і стартує
-document.addEventListener("astro:page-load", waitAndStart);
+document.addEventListener("page:ready", waitAndStart);
 
 export default DataWatch;

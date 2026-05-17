@@ -1,5 +1,6 @@
 ---
-import "@styles/components/_select.scss";
+import "@styles/components/forms/_select.scss";
+import Icon from "@components/ui/Icon.astro";
 
 interface Option {
    value: string;
@@ -50,6 +51,8 @@ interface Props {
    clearAllButtonText?: string;
    maxDropdownHeight?: string;
    enableGroupSelection?: boolean;
+   class?: string;
+   triggerClass?: string;
 }
 
 const {
@@ -87,6 +90,8 @@ const {
    clearAllButtonText = "Очистити все",
    maxDropdownHeight = "80vh",
    enableGroupSelection = false,
+   class: className = "",
+   triggerClass = "",
 } = Astro.props;
 
 const selectId = `custom-select-${name}-${Math.random().toString(36).substr(2, 9)}`;
@@ -129,7 +134,10 @@ if (sortAlphabetically && !hasGroups) {
 }
 ---
 
-<div class="custom-select-wrapper" data-select-id={selectId}>
+<div
+   class:list={["custom-select-wrapper", className]}
+   data-select-id={selectId}
+>
    <div
       class="custom-select"
       data-multiple={multiple}
@@ -146,7 +154,7 @@ if (sortAlphabetically && !hasGroups) {
    >
       <button
          type="button"
-         class="custom-select__trigger"
+         class:list={["custom-select__trigger", triggerClass]}
          aria-haspopup="listbox"
          disabled={disabled}
       >
@@ -173,18 +181,7 @@ if (sortAlphabetically && !hasGroups) {
                </svg>
             </span>
 
-            <svg
-               class="custom-select__arrow"
-               width="12"
-               height="8"
-               viewBox="0 0 12 8"
-            >
-               <path
-                  d="M1 1L6 6L11 1"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  fill="none"></path>
-            </svg>
+            <Icon name="arrow-select" class="custom-select__arrow" />
          </div>
       </button>
 

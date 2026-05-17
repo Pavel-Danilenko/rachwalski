@@ -1,0 +1,43 @@
+---
+import "@styles/components/forms/_custom-search.scss";
+import Icon from "@components/ui/Icon.astro";
+
+interface Props {
+   placeholder?: string;
+   class?: string;
+   name?: string;
+   id?: string;
+   [key: string]: any;
+}
+
+const {
+   placeholder = "Search...",
+   class: className,
+   name = "search",
+   id,
+   ...rest
+} = Astro.props;
+---
+
+<div class:list={["custom-search glass", className]}>
+   <span class="custom-search__icon">
+      <Icon name="search" />
+   </span>
+   <input
+      type="search"
+      {id}
+      {name}
+      {placeholder}
+      class="custom-search__input"
+      autocomplete="off"
+      {...rest}
+   />
+   <button
+      type="button"
+      class="custom-search__clear"
+      aria-label="Clear search"
+      tabindex="-1"
+   >
+      <Icon name="close" />
+   </button>
+</div>

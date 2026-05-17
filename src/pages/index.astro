@@ -1,351 +1,692 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
-import PageMain from "@components/PageMain.astro";
-import MyImages from "@/components/MyImages.astro";
-import Image from "@assets/img/main-page/image.jpg";
-import Image2 from "@assets/img/main-page/gallery-img-2.png";
-import Gallery from "@/components/gallery.astro";
-import Icon from "@/components/Icon.astro";
-import Marquee from "@/components/Marquee.astro";
-import Tabs from "@/components/Tabs.astro";
-import Counter from "@components/Counter.astro";
-import Slider from "@components/sliders/Slider.astro";
-import Pagination from "@components/pagination/Pagination.astro";
-import Showmore from "@components/pagination/Showmore.astro";
-import Countdown from "@/components/countdown/Countdown.astro";
+import PageMain from "@components/ui/PageMain.astro";
+import ContactForm from "@components/forms/ContactForm.astro";
+import CustomSelect from "@components/forms/CustomSelect.astro";
+import CustomPhoneInput from "@components/forms/CustomPhoneInput.astro";
+import CustomPasswordInput from "@components/forms/CustomPasswordInput.astro";
+import CustomRating from "@components/forms/CustomRating.astro";
+import CustomNumberInput from "@components/forms/CustomNumberInput.astro";
+import CustomDatePicker from "@components/forms/CustomDatePicker.astro";
+import CustomFileInput from "@components/forms/CustomFileInput.astro";
+import CustomCheckbox from "@components/forms/CustomCheckbox.astro";
+import CustomRadio from "@components/forms/CustomRadio.astro";
+import CustomSwitch from "@components/forms/CustomSwitch.astro";
+import CustomRangeInput from "@components/forms/CustomRangeInput.astro";
+import ProgressStepper from "@components/progress-bar/ProgressStepper.astro";
+import Accordion from "@components/interactive/accordion.astro";
+import Tabs from "@components/interactive/Tabs.astro";
+import "@styles/components/forms/_form-wizard.scss";
 ---
 
-<BaseLayout title="Головна сторінка" description="Мій крутий стартер на Astro">
+<!--
+   [SEO] title    — назва у вкладці браузера та результатах пошуку (50–60 символів).
+                     Формат: "Ключова фраза | Назва сайту"
+   [SEO] description — короткий опис під назвою у пошуку та при шерінгу (120–155 символів).
+   [SEO] ogImage  — шлях до картинки 1200×630px у /public/ (або абсолютний URL)
+-->
+<BaseLayout
+   title="Головна | Назва сайту — Замін на реальний заголовок"
+   description="Тестовий опис головної сторінки. Замін на реальний текст — він відображається у Google та при шерінгу у соцмережах. Рекомендовано 120–155 символів."
+   ogImage="/og-image.svg"
+>
    <PageMain>
-      <section sf-section="hero" class="hero">
-         <div class="hero__container">
-            <h1 sf-id="main_title" class="main__title">Hello Shopify</h1>
-            <div sf-id="main_content" class="main__content">
-               Hello Shopify! I'm Danylenko!
-            </div>
-            <a
-               sf-url="hero_btn_urlt"
-               sf-id="hero_btn"
-               class="main__link"
-               href="/product"
-               >Contact
-            </a>
-            <MyImages sf-image="hero_image" src={Image} alt="My image" />
-            <Icon name="close" class="test" color="green" />
-            <Countdown
-               deadline="2026-12-31T23:59:00"
-               variant="tiles"
-               animation="flip"
-               labels={{
-                  days: { short: "Д", long: "Дні" },
-                  hours: { short: "Год", long: "Години" },
-                  minutes: { short: "Хв", long: "Хвилини" },
-                  seconds: { short: "Сек", long: "Секунди" },
-               }}
-               labelFormat="short"
-               separator=":"
+      <section class="contact">
+         <div class="contact__container">
+            <h1 class="contact__title">Dr. Martin Rachwalski</h1>
+
+            <ContactForm
+               backend="api"
+               formKey="contact"
+               successMessage="Дякуємо! Ми зв'яжемося з вами найближчим часом."
+               errorMessage="Помилка відправки. Спробуйте ще раз."
+               modalType="inline"
+            >
+               <div class="form-fields">
+                  <div class="form-group">
+                     <input
+                        type="text"
+                        name="name"
+                        placeholder="Ваше ім'я"
+                        data-error-required="Введіть ваше ім'я"
+                        data-min-length="2"
+                        data-error-min-length="Ім'я занадто коротке"
+                     />
+                  </div>
+
+                  <div class="form-group">
+                     <input
+                        type="email"
+                        name="email"
+                        placeholder="email@example.com"
+                        required
+                        data-error-required="Введіть email"
+                        data-error-email="Невірний формат email"
+                        data-hint-corrected="Виправлено на {domain}"
+                     />
+                  </div>
+
+                  <div class="form-group">
+                     <CustomPhoneInput
+                        name="phone"
+                        defaultCountry="UA"
+                        placeholder="XX XXX XX XX"
+                        required
+                        searchable
+                        searchPlaceholder="Пошук країни..."
+                        noResultsText="Нічого не знайдено"
+                        errorRequired="Введіть номер телефону"
+                        errorPhone="Невірний формат телефону"
+                     />
+                  </div>
+
+                  <div class="form-group">
+                     <CustomSelect
+                        name="service"
+                        placeholder="Оберіть варіант"
+                        required
+                        errorRequired="Оберіть варіант"
+                        options={[
+                           { value: "option1", label: "Варіант 1" },
+                           { value: "option2", label: "Варіант 2" },
+                        ]}
+                     />
+                  </div>
+
+                  <div class="form-group">
+                     <textarea
+                        name="message"
+                        placeholder="Ваше повідомлення"
+                        rows="4"
+                        required
+                        data-error-required="Напишіть повідомлення"
+                        data-min-words="3"
+                        data-error-min-words="Мінімум 3 слова"
+                        data-error-spam="Схоже на спам"></textarea>
+                  </div>
+
+                  <div class="form-group">
+                     <CustomPasswordInput
+                        name="password"
+                        placeholder="Пароль"
+                        required
+                        showStrength
+                        showRequirements
+                        minLength={8}
+                        requireUppercase
+                        requireNumbers
+                        requireSpecial
+                        toggleLabel="Показати/сховати пароль"
+                        capsLockText="Caps Lock увімкнено"
+                        strengthWeak="Слабкий"
+                        strengthMedium="Середній"
+                        strengthStrong="Сильний"
+                        requirementTexts={{
+                           length: "Мінімум 8 символів",
+                           uppercase: "Велика літера (A-Z)",
+                           numbers: "Цифра (0-9)",
+                           special: "Спецсимвол (!@#$...)",
+                        }}
+                        errorRequired="Введіть пароль"
+                        errorMinLength="Пароль занадто короткий"
+                        errorWeak="Пароль занадто слабкий"
+                     />
+                  </div>
+
+                  <div class="form-group">
+                     <CustomRating
+                        name="rating"
+                        max={5}
+                        required
+                        showLabel
+                        labels={[
+                           "Погано",
+                           "Не дуже",
+                           "Нормально",
+                           "Добре",
+                           "Відмінно",
+                        ]}
+                        errorRequired="Поставте оцінку"
+                     />
+                  </div>
+
+                  <div class="form-group">
+                     <CustomNumberInput
+                        name="quantity"
+                        value={1}
+                        min={1}
+                        max={99}
+                        required
+                        errorRequired="Вкажіть кількість"
+                     />
+                  </div>
+
+                  <div class="form-group">
+                     <CustomDatePicker
+                        name="date"
+                        placeholder="Оберіть дату"
+                        format="DD.MM.YYYY"
+                        firstDayOfWeek={1}
+                        monthNames={[
+                           "Січень",
+                           "Лютий",
+                           "Березень",
+                           "Квітень",
+                           "Травень",
+                           "Червень",
+                           "Липень",
+                           "Серпень",
+                           "Вересень",
+                           "Жовтень",
+                           "Листопад",
+                           "Грудень",
+                        ]}
+                        dayNamesMin={["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"]}
+                        todayText="Сьогодні"
+                        clearText="Очистити"
+                        required
+                        data-error-required="Оберіть дату"
+                     />
+                  </div>
+
+                  <div class="form-group">
+                     <CustomFileInput
+                        name="files"
+                        multiple
+                        accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+                        maxSize={5}
+                        maxFiles={5}
+                        buttonText="Додати файл"
+                        dragText="або перетягніть сюди"
+                        dropZoneText="Відпустіть файли"
+                        removeFileText="Видалити"
+                        removeAllText="Видалити всі"
+                        emptyStateText="Файлів немає"
+                        totalSizeText="Загальний розмір: {size}"
+                        fileListButtonText="Файли ({count})"
+                        fileListText="Обрані файли:"
+                        errorRequired="Додайте файл"
+                        errorFileSize="Файл перевищує 5 МБ"
+                        errorFileType="Непідтримуваний формат"
+                     />
+                  </div>
+
+                  <!-- Checkbox -->
+                  <div class="form-group">
+                     <CustomCheckbox
+                        name="agree"
+                        required
+                        data-error-required="Прийміть умови"
+                        label="Погоджуюсь з умовами використання"
+                     />
+                  </div>
+
+                  <!-- Radio group -->
+                  <div class="form-group">
+                     <CustomRadio
+                        name="contact_type"
+                        value="email"
+                        label="Email"
+                        required
+                        data-error-required="Оберіть спосіб зв'язку"
+                     />
+                     <CustomRadio
+                        name="contact_type"
+                        value="phone"
+                        label="Телефон"
+                     />
+                     <CustomRadio
+                        name="contact_type"
+                        value="telegram"
+                        label="Telegram"
+                     />
+                  </div>
+
+                  <!-- Switch -->
+                  <div class="form-group">
+                     <CustomSwitch
+                        name="newsletter"
+                        label="Підписатись на розсилку"
+                     />
+                  </div>
+
+                  <!-- Range -->
+                  <div class="form-group">
+                     <CustomRangeInput
+                        name="budget"
+                        min={100}
+                        max={10000}
+                        step={100}
+                        value={3000}
+                        unit=" грн"
+                        showMinMax
+                     />
+                  </div>
+
+                  <button type="submit">Надіслати</button>
+               </div>
+            </ContactForm>
+         </div>
+      </section>
+
+      <!-- Wizard форма для тесту -->
+      <section class="contact">
+         <div class="contact__container">
+            <h2 class="contact__title">Wizard Form</h2>
+
+            <ProgressStepper
+               id="test-wizard"
+               steps={[
+                  { label: "Ім'я" },
+                  { label: "Email" },
+                  { label: "Підтвердження" },
+               ]}
+               currentStep={1}
             />
-         </div>
-      </section>
 
-      <section class="blog">
-         <div class="blog__container">
-            <h2 class="blog__title">Blog</h2>
-            <Showmore itemSelector=".blog__inner" perPage={1}>
-               <div class="blog__inner">
-                  <MyImages
-                     sf-image="hero_image"
-                     src={Image}
-                     alt="My image"
-                     wrapperClass="collection__item"
-                  />
-               </div>
-               <div class="blog__inner">
-                  <MyImages
-                     sf-image="hero_image"
-                     src={Image}
-                     alt="My image"
-                     wrapperClass="collection__item"
-                  />
-               </div>
-               <div class="blog__inner">
-                  <MyImages
-                     sf-image="hero_image"
-                     src={Image}
-                     alt="My image"
-                     wrapperClass="collection__item"
-                  />
-               </div>
-            </Showmore>
-         </div>
-      </section>
-      <section sf-section="featured-products" class="product">
-         <div class="product__container">
-            <h2 sf-id="product_title" class="product__title">Product</h2>
-            <Slider />
-            <div class="product__footer">
-               <a
-                  sf-id="collection_btn"
-                  sf-url="collection_btn_url"
-                  href="/collection"
-                  class="btn product__collection-btn"
-               >
-                  View all collection
-               </a>
-            </div>
-         </div>
-      </section>
-      <section sf-section="gallery" class="gallery">
-         <div class="gallery__container">
-            <h2 sf-id="gallery_title" class="gallery__title">Gallery</h2>
-            <Gallery sfGallery="gallery" collectionName="gallery" />
-         </div>
-      </section>
-
-      <section sf-section="stats" class="stats">
-         <div class="stats__container">
-            <h2 sf-id="stats_title" class="stats__title">My stats</h2>
-            <div class="stats__row">
-               <Counter sf-block target={1000} suffix="+" once={false} />
-            </div>
-         </div>
-      </section>
-
-      <section sf-section="about" class="about">
-         <div class="about__container">
-            <h2 sf-id="about_title" class="about__shopify">About Shopify</h2>
-            <div sf-id="about_content" class="about__content">
-               Hello Shopify! I'm Danylenko!
-            </div>
-            <a
-               sf-url="about_btn_url"
-               sf-id="about_btn"
-               class="about__link"
-               href="#">Test</a
+            <ContactForm
+               formId="wizard-form"
+               wizardId="test-wizard"
+               backend="api"
+               formKey="contact"
+               successMessage="Дякуємо! Форму надіслано."
+               data-wizard-transition="morph"
+               data-wizard-autofocus
+               data-wizard-enter-key
+               data-wizard-shake
             >
-         </div>
-      </section>
-
-      <section class="collection">
-         <div class="collection__container" style="padding-block: 60px;">
-            <h2 class="collection__title">Collection</h2>
-            <Pagination
-               classContent="pagination__grid"
-               perPage={4}
-               itemSelector=".collection__item"
-               animation="slide"
-               animationDuration={800}
-               animationStagger={140}
-               showProgress={true}
-               navVariant="ghost"
-               scrollTo={true}
-               scrollOffset={80}
-            >
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-               <MyImages
-                  sf-image="hero_image"
-                  src={Image2}
-                  alt="My image"
-                  wrapperClass="collection__item"
-               />
-            </Pagination>
-         </div>
-         <section sf-section="tabs" class="tabs">
-            <div class="tabs__container">
-               <Tabs sfTabs="services">
-                  <Fragment slot="buttons">
-                     <button data-tab="tab1" class="tabs__button">
-                        Перший таб
-                     </button>
-                  </Fragment>
-                  <Fragment slot="panels">
-                     <div data-tab-content="tab1" class="tabs__panel">
-                        <h3 sf-id="title">Заголовок</h3>
-                        <div sf-id="text" sf-type="richtext">Текст...</div>
-                        <Gallery sfGallery="gallery" collectionName="gallery" />
-                        <MyImages
-                           sf-image="hero_image"
-                           src={Image}
-                           alt="My image"
+               <div class="wizard-steps-wrapper">
+                  <div data-wizard-step="1" data-wizard-label="Ім'я">
+                     <div class="form-group">
+                        <input
+                           type="text"
+                           name="wizard_name"
+                           placeholder="Ваше ім'я"
+                           data-wizard-field="Ім'я"
+                           required
+                           data-error-required="Введіть ім'я"
+                           data-min-length="2"
+                           data-error-min-length="Ім'я занадто коротке"
                         />
                      </div>
-                  </Fragment>
-               </Tabs>
-            </div>
-         </section>
+                  </div>
+
+                  <div data-wizard-step="2" data-wizard-label="Email">
+                     <div class="form-group">
+                        <input
+                           type="email"
+                           name="wizard_email"
+                           placeholder="email@example.com"
+                           data-wizard-field="Email"
+                           required
+                           data-error-required="Введіть email"
+                           data-error-email="Невірний формат email"
+                        />
+                     </div>
+                  </div>
+
+                  <div
+                     data-wizard-step="3"
+                     data-wizard-summary
+                     data-wizard-edit-text="Змінити"
+                  >
+                     <h3 class="wizard-summary-title">Перевірте дані</h3>
+                  </div>
+               </div>
+
+               <div class="wizard-buttons">
+                  <button type="button" data-wizard-prev>Назад</button>
+                  <button type="button" data-wizard-next>Далі</button>
+                  <button type="submit" data-wizard-submit>Надіслати</button>
+               </div>
+            </ContactForm>
+         </div>
+      </section>
+      <!-- Reviews Slider для тесту -->
+      <section class="contact">
+         <div class="contact__container">
+            <h2 class="contact__title">Reviews Slider</h2>
+         </div>
+      </section>
+
+      <!-- Tabs для тесту -->
+      <section class="contact">
+         <div class="contact__container">
+            <h2 class="contact__title">Tabs</h2>
+
+            <!-- Базові таби з fade анімацією та indicator -->
+            <h3 style="margin-bottom: 1rem; font-size: 1.1rem">
+               Fade + Indicator
+            </h3>
+            <Tabs animation="fade" indicator={true} defaultTab="tab1">
+               <div
+                  class="info__tab tab-info"
+                  data-tabs
+                  data-menu=".tab-info__nav"
+                  data-item=".tab-info__link"
+                  data-active-class="active"
+                  data-content=".tab-info__content"
+                  data-content-item=".tab-info__content-item"
+                  data-content-active-class="active"
+                  data-animation="true"
+                  data-line=".tab-info__line"
+                  data-devices="pc,tablet,phone"
+                  data-line-orientation-pc="horizontal"
+                  data-line-position-pc="bottom"
+                  data-line-orientation-tablet="vertical"
+                  data-line-position-tablet="left"
+                  data-line-orientation-phone="vertical"
+                  data-line-position-phone="right"
+                  data-line-offset="3"
+                  data-arrows="true"
+                  data-arrow-prev=".tabs__arrow--left"
+                  data-arrow-next=".tabs__arrow--right"
+               >
+                  <div class="tab-info__nav-wrapper">
+                     <button
+                        class="tabs__arrow tabs__arrow--left"
+                        aria-label="Попередній таб">&lt;</button
+                     >
+
+                     <div class="tab-info__nav">
+                        <a
+                           class="tab-info__link"
+                           href="#tab-"
+                           data-default-active></a>
+                        <a class="tab-info__link" href="#tab-"></a>
+                        <span class="tab-info__line"></span>
+                     </div>
+
+                     <button
+                        class="tabs__arrow tabs__arrow--right"
+                        aria-label="Наступний таб">&gt;</button
+                     >
+                  </div>
+
+                  <div class="tab-info__content">
+                     <div class="tab-info__content-item active" data-tab="tab-">
+                        <div class="tab-info__inner"></div>
+                     </div>
+
+                     <div class="tab-info__content-item" data-tab="tab-">
+                        <div class="tab-info__inner"></div>
+                     </div>
+                  </div>
+               </div>
+               <Fragment slot="buttons">
+                  <button class="tabs__button" data-tab="tab1">Про нас</button>
+                  <button class="tabs__button" data-tab="tab2">Послуги</button>
+                  <button class="tabs__button" data-tab="tab3">Контакти</button>
+               </Fragment>
+               <Fragment slot="panels">
+                  <div class="tabs__panel" data-tab-content="tab1">
+                     <p>
+                        Ми — команда розробників з 5-річним досвідом. Створюємо
+                        сучасні веб-продукти від ідеї до запуску. Наш підхід —
+                        якість, швидкість і прозорість на кожному етапі.
+                     </p>
+                  </div>
+                  <div class="tabs__panel" data-tab-content="tab2">
+                     <ul style="padding-left: 1.2em; line-height: 2">
+                        <li>Розробка сайтів і лендінгів</li>
+                        <li>UI/UX дизайн та прототипування</li>
+                        <li>Технічна підтримка і супровід</li>
+                        <li>Оптимізація продуктивності</li>
+                     </ul>
+                  </div>
+                  <div class="tabs__panel" data-tab-content="tab3">
+                     <p>📧 hello@example.com</p>
+                     <p>📞 +38 (050) 123-45-67</p>
+                     <p>📍 Київ, Україна</p>
+                  </div>
+               </Fragment>
+            </Tabs>
+
+            <!-- Slide анімація -->
+            <h3 style="margin: 2rem 0 1rem; font-size: 1.1rem">
+               Slide анімація
+            </h3>
+            <Tabs animation="slide" animationDuration={250}>
+               <Fragment slot="buttons">
+                  <button class="tabs__button" data-tab="s1">Дизайн</button>
+                  <button class="tabs__button" data-tab="s2">Розробка</button>
+                  <button class="tabs__button" data-tab="s3">Маркетинг</button>
+               </Fragment>
+               <Fragment slot="panels">
+                  <div class="tabs__panel" data-tab-content="s1">
+                     Дизайн — це не тільки візуал. Це зручність, логіка і
+                     емоції.
+                  </div>
+                  <div class="tabs__panel" data-tab-content="s2">
+                     Чистий код, швидкодія, підтримка — основа хорошої розробки.
+                  </div>
+                  <div class="tabs__panel" data-tab-content="s3">
+                     SEO, контент, аналітика — щоб сайт не просто існував, а
+                     продавав.
+                  </div>
+               </Fragment>
+            </Tabs>
+
+            <!-- Scrollable — багато табів -->
+            <h3 style="margin: 2rem 0 1rem; font-size: 1.1rem">
+               Scrollable + Indicator
+            </h3>
+            <Tabs scrollable={true} indicator={true} animation="fade">
+               <Fragment slot="buttons">
+                  <button class="tabs__button" data-tab="m1">Понеділок</button>
+                  <button class="tabs__button" data-tab="m2">Вівторок</button>
+                  <button class="tabs__button" data-tab="m3">Середа</button>
+                  <button class="tabs__button" data-tab="m4">Четвер</button>
+                  <button class="tabs__button" data-tab="m5">П'ятниця</button>
+                  <button class="tabs__button" data-tab="m6">Субота</button>
+                  <button class="tabs__button" data-tab="m7">Неділя</button>
+               </Fragment>
+               <Fragment slot="panels">
+                  <div class="tabs__panel" data-tab-content="m1">
+                     Робочий день. Планування тижня, зустрічі з командою.
+                  </div>
+                  <div class="tabs__panel" data-tab-content="m2">
+                     Глибока розробка без нарад.
+                  </div>
+                  <div class="tabs__panel" data-tab-content="m3">
+                     Середина тижня — огляд прогресу.
+                  </div>
+                  <div class="tabs__panel" data-tab-content="m4">
+                     Ревью коду, фідбек від клієнтів.
+                  </div>
+                  <div class="tabs__panel" data-tab-content="m5">
+                     Демо і деплой. Тиждень закрито ✓
+                  </div>
+                  <div class="tabs__panel" data-tab-content="m6">
+                     Відпочинок або особисті проєкти.
+                  </div>
+                  <div class="tabs__panel" data-tab-content="m7">
+                     Повний вихідний 🌿
+                  </div>
+               </Fragment>
+            </Tabs>
+         </div>
+      </section>
+
+      <!-- Accordion для тесту -->
+      <section class="contact">
+         <div class="contact__container">
+            <h2 class="contact__title">Accordion</h2>
+
+            <Accordion defaultOpen={[0]}>
+               <div data-accordion-item>
+                  <button data-accordion-trigger>
+                     Що таке CSS Grid accordion?
+                     <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        class="icon"
+                        ><polyline points="6 9 12 15 18 9"></polyline></svg
+                     >
+                  </button>
+                  <div data-accordion-content>
+                     <div>
+                        <div class="accordion__body">
+                           Анімація розкриття реалізована через <strong
+                              >grid-template-rows: 0fr → 1fr</strong
+                           >. JS тільки перемикає <code>aria-expanded</code> — решту
+                           робить CSS. Не потрібно рахувати <code
+                              >scrollHeight</code
+                           >.
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div data-accordion-item>
+                  <button data-accordion-trigger>
+                     Чи підтримуються вкладені акордеони?
+                     <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        class="icon"
+                        ><polyline points="6 9 12 15 18 9"></polyline></svg
+                     >
+                  </button>
+                  <div data-accordion-content>
+                     <div>
+                        <div class="accordion__body">
+                           <p style="margin-bottom: 12px">
+                              Так — вкладений акордеон нижче:
+                           </p>
+
+                           <Accordion multiple={true}>
+                              <div data-accordion-item>
+                                 <button data-accordion-trigger>
+                                    Вкладений пункт A
+                                    <svg
+                                       width="16"
+                                       height="16"
+                                       viewBox="0 0 24 24"
+                                       fill="none"
+                                       stroke="currentColor"
+                                       stroke-width="2"
+                                       class="icon"
+                                       ><polyline points="6 9 12 15 18 9"
+                                       ></polyline></svg
+                                    >
+                                 </button>
+                                 <div data-accordion-content>
+                                    <div>
+                                       <div class="accordion__body">
+                                          Контент пункту A всередині вкладеного
+                                          акордеону.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div data-accordion-item>
+                                 <button data-accordion-trigger>
+                                    Вкладений пункт B
+                                    <svg
+                                       width="16"
+                                       height="16"
+                                       viewBox="0 0 24 24"
+                                       fill="none"
+                                       stroke="currentColor"
+                                       stroke-width="2"
+                                       class="icon"
+                                       ><polyline points="6 9 12 15 18 9"
+                                       ></polyline></svg
+                                    >
+                                 </button>
+                                 <div data-accordion-content>
+                                    <div>
+                                       <div class="accordion__body">
+                                          Контент пункту B. Зовнішній акордеон
+                                          коректно розширюється бо не залежить
+                                          від <code>scrollHeight</code>.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </Accordion>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div data-accordion-item>
+                  <button data-accordion-trigger>
+                     Як налаштувати швидкість та breakpoints?
+                     <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        class="icon"
+                        ><polyline points="6 9 12 15 18 9"></polyline></svg
+                     >
+                  </button>
+                  <div data-accordion-content>
+                     <div>
+                        <div class="accordion__body">
+                           <ul style="padding-left: 1.2em; line-height: 2">
+                              <li>
+                                 <code>duration={600}</code> — швидкість анімації
+                                 в мс
+                              </li>
+                              <li>
+                                 <code>defaultOpen={[0, 2]}</code> — відкриті за замовчуванням
+                              </li>
+                              <li>
+                                 <code>multiple={true}</code> — відкривати декілька
+                                 одночасно
+                              </li>
+                              <li>
+                                 <code>minWidth={768}</code> — активний від 768px
+                              </li>
+                              <li>
+                                 <code>maxWidth={1024}</code> — активний до 1024px
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div data-accordion-item>
+                  <button data-accordion-trigger>
+                     Чи є підтримка Astro View Transitions?
+                     <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        class="icon"
+                        ><polyline points="6 9 12 15 18 9"></polyline></svg
+                     >
+                  </button>
+                  <div data-accordion-content>
+                     <div>
+                        <div class="accordion__body">
+                           Так. Слухач <code>astro:page-load</code> повторно ініціалізує
+                           нові акордеони після навігації. Вже ініціалізовані пропускаються
+                           через
+                           <code>data-accordion-initialized="true"</code>.
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </Accordion>
+         </div>
       </section>
    </PageMain>
 </BaseLayout>

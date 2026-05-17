@@ -469,13 +469,14 @@ function initShowMore() {
       });
 }
 
-document.addEventListener("astro:before-swap", () => {
+// Cleanup перед переходом — прибираємо прапорці щоб reinit спрацював
+document.addEventListener("page:leave", () => {
    document
       .querySelectorAll("[data-show-more-ready]")
       .forEach((el) => delete el.dataset.showMoreReady);
 });
 
-document.addEventListener("astro:page-load", initShowMore);
+document.addEventListener("page:ready", initShowMore);
 
 if (document.readyState === "loading") {
    document.addEventListener("DOMContentLoaded", initShowMore);

@@ -1,26 +1,26 @@
 ---
-import "@styles/components/_custom-file-input.scss";
+import "@styles/components/forms/_custom-file-input.scss";
+import Icon from "@components/ui/Icon.astro";
+
+type Variant = "default" | "minimal";
 
 interface Props {
    name: string;
    id?: string;
-   
+   variant?: Variant;
+
    // Валідація
    required?: boolean;
    accept?: string;
-   maxSize?: number; // MB
+   maxSize?: number;
    multiple?: boolean;
-   
-   // Мульти-вибір налаштування
+
+   // Відображення — всі false за замовчуванням, підключаються через пропи
    showFileList?: boolean;
    showPreview?: boolean;
    maxFiles?: number;
-   
-   // Accordion налаштування
    showFileListAccordion?: boolean;
    accordionDefaultOpen?: boolean;
-   
-   // Додаткові функції
    showRemoveAll?: boolean;
    showButtonCounter?: boolean;
    showProgress?: boolean;
@@ -32,8 +32,20 @@ interface Props {
    enableSort?: boolean;
    compactList?: boolean;
    compact?: boolean;
-   
-   // Тексти (i18n)
+
+   // Іконки через спрайт (назва файлу з src/icons/*.svg, без розширення)
+   buttonIconPosition?: "left" | "right"; // позиція іконки в кнопці, default: "left"
+   buttonIcon?: string; // іконка в кнопці
+   clearIcon?: string; // іконка в кнопці "очистити"
+   accordionIcon?: string; // іконка стрілки accordion
+   removeIcon?: string; // іконка видалення файлу (JS)
+   removeAllIcon?: string; // іконка "видалити всі"
+   emptyIcon?: string; // іконка empty state
+   iconPdf?: string; // іконка для PDF у списку (JS)
+   iconDoc?: string; // іконка для DOC/DOCX у списку (JS)
+   iconDefault?: string; // іконка для решти файлів у списку (JS)
+
+   // i18n тексти
    buttonText?: string;
    buttonTextWithFiles?: string;
    dragText?: string;
@@ -52,40 +64,55 @@ interface Props {
    sortByNameText?: string;
    sortBySizeText?: string;
    sortByTypeText?: string;
-   
-   // Data-атрибути для валідації
+
+   // Валідаційні помилки
    errorRequired?: string;
    errorFileType?: string;
    errorFileSize?: string;
    errorMaxFiles?: string;
-   
-   // Додаткові класи
+
    class?: string;
 }
 
 const {
    name,
    id = `file-${name}`,
+   variant = "default",
    required = false,
    accept,
    maxSize,
    multiple = false,
-   showFileList = true,
-   showPreview = true,
+
+   // Всі false за замовчуванням — підключаються тільки через пропи
+   showFileList = false,
+   showPreview = false,
    maxFiles,
-   showFileListAccordion = true,
+   showFileListAccordion = false,
    accordionDefaultOpen = false,
-   showRemoveAll = true,
-   showButtonCounter = true,
+   showRemoveAll = false,
+   showButtonCounter = false,
    showProgress = false,
-   showDropZone = true,
+   showDropZone = false,
    showClearButton = false,
-   showMaxFilesHint = true,
-   showTotalSize = true,
-   showFileTypeBadges = true,
+   showMaxFilesHint = false,
+   showTotalSize = false,
+   showFileTypeBadges = false,
    enableSort = false,
    compactList = false,
    compact = false,
+
+   // Іконки — undefined = не рендерити
+   buttonIconPosition = "left",
+   buttonIcon,
+   clearIcon,
+   accordionIcon,
+   removeIcon,
+   removeAllIcon,
+   emptyIcon,
+   iconPdf,
+   iconDoc,
+   iconDefault,
+
    buttonText = "Додати файл",
    buttonTextWithFiles = "Додати ще ({count}/{max})",
    dragText = "Або перетягніть файл сюди",
@@ -108,231 +135,230 @@ const {
    errorFileType,
    errorFileSize,
    errorMaxFiles,
+   class: className = "",
 } = Astro.props;
 ---
 
-   <!-- Видима кнопка -->
-   <div 
-      class={`custom-file-input ${compact ? 'custom-file-input--compact' : ''}`}
-      data-file-input
-      data-button-text={buttonText}
-      data-button-text-with-files={buttonTextWithFiles}
-      data-drag-text={dragText}
-      data-drop-zone-text={dropZoneText}
-      data-show-file-list={showFileList}
-      data-show-preview={showPreview}
-      data-file-list-text={fileListText}
-      data-file-list-button-text={fileListButtonText}
-      data-remove-file-text={removeFileText}
-      data-remove-all-text={removeAllText}
-      data-clear-button-text={clearButtonText}
-      data-file-size-text={fileSizeText}
-      data-empty-state-text={emptyStateText}
-      data-progress-text={progressText}
-      data-total-size-text={totalSizeText}
-      data-sort-by-name-text={sortByNameText}
-      data-sort-by-size-text={sortBySizeText}
-      data-sort-by-type-text={sortByTypeText}
-      data-max-files={maxFiles}
-      data-max-files-text={maxFilesText}
-      data-max-files-hint-text={maxFilesHintText}
-      data-show-accordion={showFileListAccordion}
-      data-accordion-default-open={accordionDefaultOpen}
-      data-show-remove-all={showRemoveAll}
-      data-show-button-counter={showButtonCounter}
-      data-show-progress={showProgress}
-      data-show-drop-zone={showDropZone}
-      data-show-clear-button={showClearButton}
-      data-show-max-files-hint={showMaxFilesHint}
-      data-show-total-size={showTotalSize}
-      data-show-file-type-badges={showFileTypeBadges}
-      data-enable-sort={enableSort}
-      data-compact-list={compactList}
-   >
-      <button type="button" class="custom-file-input__button">
-         <svg class="custom-file-input__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="17 8 12 3 7 8"></polyline>
-            <line x1="12" y1="3" x2="12" y2="15"></line>
-         </svg>
-         <span class="custom-file-input__button-text">{buttonText}</span>
-      </button>
+<!-- Основний блок -->
+<div
+   class:list={[
+      "custom-file-input",
+      `custom-file-input--${variant}`,
+      compact && "custom-file-input--compact",
+      className,
+   ]}
+   data-file-input
+   data-variant={variant}
+   data-button-text={buttonText}
+   data-button-text-with-files={buttonTextWithFiles}
+   data-drag-text={dragText}
+   data-drop-zone-text={dropZoneText}
+   data-show-file-list={showFileList}
+   data-show-preview={showPreview}
+   data-file-list-text={fileListText}
+   data-file-list-button-text={fileListButtonText}
+   data-remove-file-text={removeFileText}
+   data-remove-all-text={removeAllText}
+   data-clear-button-text={clearButtonText}
+   data-file-size-text={fileSizeText}
+   data-empty-state-text={emptyStateText}
+   data-progress-text={progressText}
+   data-total-size-text={totalSizeText}
+   data-sort-by-name-text={sortByNameText}
+   data-sort-by-size-text={sortBySizeText}
+   data-sort-by-type-text={sortByTypeText}
+   data-max-files={maxFiles}
+   data-max-files-text={maxFilesText}
+   data-max-files-hint-text={maxFilesHintText}
+   data-show-accordion={showFileListAccordion}
+   data-accordion-default-open={accordionDefaultOpen}
+   data-show-remove-all={showRemoveAll}
+   data-show-button-counter={showButtonCounter}
+   data-show-progress={showProgress}
+   data-show-drop-zone={showDropZone}
+   data-show-clear-button={showClearButton}
+   data-show-max-files-hint={showMaxFilesHint}
+   data-show-total-size={showTotalSize}
+   data-show-file-type-badges={showFileTypeBadges}
+   data-enable-sort={enableSort}
+   data-compact-list={compactList}
+   data-icon-pdf={iconPdf}
+   data-icon-doc={iconDoc}
+   data-icon-default={iconDefault}
+   data-remove-icon={removeIcon}
+>
+   <!-- Кнопка — єдине що є завжди -->
+   <button type="button" class="custom-file-input__button">
+      {
+         buttonIcon && buttonIconPosition === "left" && (
+            <Icon name={buttonIcon} class="custom-file-input__icon" />
+         )
+      }
+      <span class="custom-file-input__button-text">{buttonText}</span>
+      {
+         buttonIcon && buttonIconPosition === "right" && (
+            <Icon name={buttonIcon} class="custom-file-input__icon" />
+         )
+      }
+   </button>
 
-      <!-- Текст drag & drop -->
-      <p class="custom-file-input__drag-text">{dragText}</p>
+   {showDropZone && <p class="custom-file-input__drag-text">{dragText}</p>}
 
-      <!-- Кнопка очищення (якщо включено) -->
-      {showClearButton && (
-         <button type="button" class="custom-file-input__clear-button" style="display: none;">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-               <path d="M12 4L4 12M4 4l8 8" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+   {
+      showClearButton && (
+         <button
+            type="button"
+            class="custom-file-input__clear-button"
+            style="display:none"
+         >
+            {clearIcon && <Icon name={clearIcon} />}
             <span>{clearButtonText}</span>
          </button>
-      )}
+      )
+   }
 
-      <!-- Підказка про максимум файлів -->
-      {showMaxFilesHint && maxFiles && (
-         <p class="custom-file-input__max-files-hint" data-text={maxFilesHintText}>
-            {maxFilesHintText.replace('{max}', maxFiles.toString())}
+   {
+      showMaxFilesHint && maxFiles && (
+         <p
+            class="custom-file-input__max-files-hint"
+            data-text={maxFilesHintText}
+         >
+            {maxFilesHintText.replace("{max}", maxFiles.toString())}
          </p>
-      )}
+      )
+   }
 
-      <!-- Drop Zone текст (показується при dragover) -->
-      {showDropZone && (
+   {
+      showDropZone && (
          <div class="custom-file-input__drop-zone-overlay">
             <p class="custom-file-input__drop-zone-text">{dropZoneText}</p>
          </div>
-      )}
-   </div>
+      )
+   }
+</div>
 
-   <!-- Прогрес бар (якщо включено) -->
-   {showProgress && (
-      <div class="custom-file-input__progress" style="display: none;">
+<!-- Прогрес — тільки якщо showProgress -->
+{
+   showProgress && (
+      <div class="custom-file-input__progress" style="display:none">
          <div class="custom-file-input__progress-bar">
-            <div class="custom-file-input__progress-fill"></div>
+            <div class="custom-file-input__progress-fill" />
          </div>
          <span class="custom-file-input__progress-text">{progressText}</span>
       </div>
-   )}
+   )
+}
 
-   <!-- Список файлів (генерується JS) -->
-   {showFileList && (
+<!-- Список файлів — тільки якщо showFileList -->
+{
+   showFileList && (
       <div class="custom-file-input__file-list">
-         {showFileListAccordion ? (
-            <>
-               <!-- Accordion header -->
-               <button type="button" class="custom-file-input__accordion-toggle">
-                  <span class="custom-file-input__accordion-title">{fileListButtonText}</span>
-                  <svg class="custom-file-input__accordion-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                     <polyline points="6 8 10 12 14 8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-               </button>
-               
-               <!-- Accordion content -->
-               <div class="custom-file-input__accordion-content">
-                  <div class="custom-file-input__files-header">
-                     <p class="custom-file-input__file-list-title">{fileListText}</p>
-                     <div class="custom-file-input__header-actions">
-                        {enableSort && (
-                           <select class="custom-file-input__sort-select">
-                              <option value="name">{sortByNameText}</option>
-                              <option value="size">{sortBySizeText}</option>
-                              <option value="type">{sortByTypeText}</option>
-                           </select>
-                        )}
-                        {showRemoveAll && (
-                           <button type="button" class="custom-file-input__remove-all-btn" style="display: none;">
-                              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                                 <path d="M2 4h12M5.5 4V2.5A1.5 1.5 0 0 1 7 1h2a1.5 1.5 0 0 1 1.5 1.5V4m2 0v9a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2V4" stroke-width="1.5" stroke-linecap="round"/>
-                              </svg>
-                              <span>{removeAllText}</span>
-                           </button>
-                        )}
-                     </div>
-                  </div>
-                  {showTotalSize && (
-                     <div class="custom-file-input__total-size" style="display: none;">
-                        {totalSizeText}
-                     </div>
-                  )}
-                  <div class={`custom-file-input__files ${compactList ? 'custom-file-input__files--compact' : ''}`}></div>
-                  <div class="custom-file-input__empty-state" style="display: none;">
-                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor">
-                        <path d="M40 16L24 4L8 16v20l16 12 16-12V16z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/>
-                     </svg>
-                     <p>{emptyStateText}</p>
-                  </div>
-               </div>
-            </>
-         ) : (
-            <>
-               <div class="custom-file-input__files-header">
-                  <p class="custom-file-input__file-list-title">{fileListText}</p>
-                  <div class="custom-file-input__header-actions">
-                     {enableSort && (
-                        <select class="custom-file-input__sort-select">
-                           <option value="name">{sortByNameText}</option>
-                           <option value="size">{sortBySizeText}</option>
-                           <option value="type">{sortByTypeText}</option>
-                        </select>
-                     )}
-                     {showRemoveAll && (
-                        <button type="button" class="custom-file-input__remove-all-btn" style="display: none;">
-                           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                              <path d="M2 4h12M5.5 4V2.5A1.5 1.5 0 0 1 7 1h2a1.5 1.5 0 0 1 1.5 1.5V4m2 0v9a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2V4" stroke-width="1.5" stroke-linecap="round"/>
-                           </svg>
-                           <span>{removeAllText}</span>
-                        </button>
-                     )}
-                  </div>
-               </div>
-               {showTotalSize && (
-                  <div class="custom-file-input__total-size" style="display: none;">
-                     {totalSizeText}
-                  </div>
+         {showFileListAccordion && (
+            <button type="button" class="custom-file-input__accordion-toggle">
+               <span class="custom-file-input__accordion-title">
+                  {fileListButtonText}
+               </span>
+               {accordionIcon && (
+                  <Icon
+                     name={accordionIcon}
+                     class="custom-file-input__accordion-icon"
+                  />
                )}
-               <div class={`custom-file-input__files ${compactList ? 'custom-file-input__files--compact' : ''}`}></div>
-               <div class="custom-file-input__empty-state" style="display: none;">
-                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor">
-                     <path d="M40 16L24 4L8 16v20l16 12 16-12V16z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/>
-                  </svg>
-                  <p>{emptyStateText}</p>
-               </div>
-            </>
+            </button>
          )}
+
+         <div
+            class={
+               showFileListAccordion
+                  ? "custom-file-input__accordion-content"
+                  : undefined
+            }
+         >
+            <div class="custom-file-input__files-header">
+               <p class="custom-file-input__file-list-title">{fileListText}</p>
+               <div class="custom-file-input__header-actions">
+                  {enableSort && (
+                     <select class="custom-file-input__sort-select">
+                        <option value="name">{sortByNameText}</option>
+                        <option value="size">{sortBySizeText}</option>
+                        <option value="type">{sortByTypeText}</option>
+                     </select>
+                  )}
+                  {showRemoveAll && (
+                     <button
+                        type="button"
+                        class="custom-file-input__remove-all-btn"
+                        style="display:none"
+                     >
+                        {removeAllIcon && <Icon name={removeAllIcon} />}
+                        <span>{removeAllText}</span>
+                     </button>
+                  )}
+               </div>
+            </div>
+
+            {showTotalSize && (
+               <div class="custom-file-input__total-size" style="display:none">
+                  {totalSizeText}
+               </div>
+            )}
+
+            <div
+               class:list={[
+                  "custom-file-input__files",
+                  compactList && "custom-file-input__files--compact",
+               ]}
+            />
+
+            <div class="custom-file-input__empty-state" style="display:none">
+               {emptyIcon && (
+                  <Icon
+                     name={emptyIcon}
+                     class="custom-file-input__empty-icon"
+                  />
+               )}
+               <p>{emptyStateText}</p>
+            </div>
+         </div>
       </div>
-   )}
+   )
+}
 
-   <!-- Прихований input ПІСЛЯ кастомного інпута -->
-   <input
-      type="file"
-      {id}
-      {name}
-      {accept}
-      {required}
-      {multiple}
-      class="custom-file-input__hidden"
-      data-max-size={maxSize}
-      data-max-files={maxFiles}
-      data-error-required={errorRequired}
-      data-error-file-type={errorFileType}
-      data-error-file-size={errorFileSize}
-      data-error-max-files={errorMaxFiles}
-   />
+<!-- Прихований input -->
+<input
+   type="file"
+   {id}
+   {name}
+   {accept}
+   {required}
+   {multiple}
+   class="custom-file-input__hidden"
+   data-max-size={maxSize}
+   data-max-files={maxFiles}
+   data-error-required={errorRequired}
+   data-error-file-type={errorFileType}
+   data-error-file-size={errorFileSize}
+   data-error-max-files={errorMaxFiles}
+/>
 
-   <!-- Темплейти для іконок -->
-   <template id="file-icon-pdf">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-         <polyline points="14 2 14 8 20 8"></polyline>
-      </svg>
-   </template>
-
-   <template id="file-icon-doc">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-         <polyline points="14 2 14 8 20 8"></polyline>
-         <line x1="16" y1="13" x2="8" y2="13"></line>
-         <line x1="16" y1="17" x2="8" y2="17"></line>
-      </svg>
-   </template>
-
-   <template id="file-icon-default">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-         <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-         <polyline points="13 2 13 9 20 9"></polyline>
-      </svg>
-   </template>
-
-   <template id="file-remove-icon">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-         <path d="M12 4L4 12M4 4l8 8" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-   </template>
-
-
+<!-- Template для file-item — без SVG, іконки вставляє JS через спрайт -->
+{
+   showFileList && (
+      <template id={`file-item-tpl-${name}`} class="file-item-template">
+         <div class="custom-file-input__file-item">
+            <div class="custom-file-input__file-preview" />
+            <div class="custom-file-input__file-info">
+               <div class="custom-file-input__file-top-row">
+                  <span class="custom-file-input__file-name" />
+               </div>
+               <span class="custom-file-input__file-size" />
+            </div>
+            <button type="button" class="custom-file-input__remove-btn" />
+         </div>
+      </template>
+   )
+}
 
 <script>
-    import "@scripts/init/custom-file-input";
+   import "@scripts/init/custom-file-input";
 </script>

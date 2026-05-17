@@ -1,0 +1,136 @@
+---
+import "@styles/components/section/_locations-map.scss";
+import GoogleMap from "@components/ui/GoogleMap.astro";
+import Icon from "@components/ui/Icon.astro";
+
+const markers = [
+   {
+      lat: 48.8752,
+      lng: 2.3122,
+      title: "Cabinet Paris 08 — Rachwalski Facial Surgery",
+      icon: "/img/pin-1.svg",
+   },
+   {
+      lat: 48.8743,
+      lng: 2.2803,
+      title: "Clinique Alphand — Cabinet Paris 16",
+      icon: "/img/pin-2.svg",
+   },
+];
+
+const center = { lat: 48.875, lng: 2.296 };
+---
+
+<div class="locations-map">
+   <div class="locations-map__container">
+      <div class="locations-map__panel br-12">
+         <!-- Cabinet Paris 08 -->
+         <div class="location-card">
+            <div class="location-card__name fw-600 fs-20">Cabinet Paris 08</div>
+
+            <div class="location-card__place">
+               <div class="location-card__place-icon">
+                  <Icon name="location-icon-1" />
+               </div>
+               <div class="location-card__place-info">
+                  <div class="location-card__clinic fs-14">
+                     Rachwalski I Facial Surgery
+                  </div>
+                  <div class="location-card__address fs-14">
+                     101 Rue de Miromesnil,<br />75008 Paris, France
+                  </div>
+               </div>
+            </div>
+
+            <div class="location-card__section">
+               <div class="location-card__label fw-600">Office hours</div>
+               <div class="location-card__hours fs-14">
+                  <span>Mon–Fri</span><span>10:00 – 21:00</span>
+               </div>
+               <div class="location-card__hours fs-14">
+                  <span>Saturday</span><span>9:00 – 20:00</span>
+               </div>
+               <div class="location-card__hours fs-14">
+                  <span>Sunday</span><span>10:00 – 20:00</span>
+               </div>
+            </div>
+
+            <div class="location-card__transport">
+               <div class="location-card__transport-col">
+                  <div class="location-card__label fw-600">Metro</div>
+                  <div class="location-card__metro-item fw-500 fs-14">
+                     <span class="location-card__metro">1</span>
+                     Argentine
+                  </div>
+                  <div class="location-card__metro-item fw-500 fs-14">
+                     <span class="location-card__metro">2</span>
+                     Porte Dauphine
+                  </div>
+                  <div class="location-card__metro-item fw-500 fs-14">
+                     <span class="location-card__metro">6</span>
+                     Kléber
+                  </div>
+               </div>
+               <div class="location-card__transport-col">
+                  <div class="location-card__label fw-600">Bus</div>
+                  <div class="location-card__bus-items fw-500 fs-14">
+                     <span class="location-card__bus">30</span>
+                     <span class="location-card__bus">20</span>
+                     <span class="location-card__bus">93</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Cabinet Paris 16 -->
+         <div class="location-card">
+            <div class="location-card__name fw-600 fs-20">Cabinet Paris 16</div>
+
+            <div class="location-card__place">
+               <div class="location-card__place-icon">
+                  <Icon name="location-icon-2" />
+               </div>
+               <div class="location-card__place-info">
+                  <div class="location-card__clinic fs-14">
+                     Clinique Alphand,
+                  </div>
+                  <div class="location-card__address fs-14">
+                     23 Rue de Pergolèse,<br />75116 Paris, France
+                  </div>
+               </div>
+            </div>
+
+            <div class="location-card__section">
+               <div class="location-card__label fw-600">Office hours</div>
+               <div class="location-card__hours fs-14">
+                  <span>Wednesday</span><span>14:00 – 20:00</span>
+               </div>
+            </div>
+
+            <div class="location-card__transport">
+               <div class="location-card__transport-col">
+                  <div class="location-card__label fw-600">Metro</div>
+                  <div class="location-card__metro-item">
+                     <span
+                        class="location-card__metro"
+                        style="--metro-color: #FFCA00; --metro-text: #000"
+                        >1</span
+                     >
+                     Argentine
+                  </div>
+               </div>
+               <div class="location-card__transport-col">
+                  <div class="location-card__label fw-600">Bus</div>
+                  <div class="location-card__bus-items">
+                     <span class="location-card__bus fw-500 fs-14">82</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <div class="locations-map__map-wrap">
+         <GoogleMap {markers} {center} zoom={13} panX={-150} />
+      </div>
+   </div>
+</div>

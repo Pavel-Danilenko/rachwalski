@@ -645,8 +645,8 @@
  * ----------------
  * Селект автоматично ініціалізується при:
  * - DOMContentLoaded
- * - astro:page-load (View Transitions)
- * - astro:after-swap (View Transitions)
+ * - page:ready (View Transitions)
+ * - page:ready (View Transitions)
  *
  * Кожен селект ініціалізується тільки один раз завдяки перевірці
  * dataset.selectInitialized
@@ -2520,5 +2520,4 @@ if (document.readyState === "loading") {
    initCustomSelects();
 }
 
-document.addEventListener("astro:page-load", initCustomSelects);
-document.addEventListener("astro:after-swap", initCustomSelects);
+document.addEventListener("page:ready", initCustomSelects);

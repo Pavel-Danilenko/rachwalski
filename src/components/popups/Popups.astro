@@ -1,19 +1,91 @@
 ---
-//в цьому файлі створюємо потрібну кількість мадальних віконта наповняємо потрібним контентом
-// а далі просто підлючаємо в глобальному файлі і все мадальні вікна будуть виедені
-// після чого робимо виклик модального вікна через кнопку в
-// якої атрибут data-popup-open="id popup"
-// також треба робити import Popups from "@/components/popups/Popups.astro";
-// та підлючаємо сам <Popups /> в кінці body
+// Підключи один раз у BaseLayout.astro перед </body>
+// Тут створюй всі попапи проєкту через <MyPopup id="...">
 import MyPopup from "@components/popups/MyPopup.astro";
-import Icon from "@components/Icon.astro";
+import ContactFormSection from "@components/section/ContactFormSection.astro";
+import Icon from "@components/ui/Icon.astro";
+import "@styles/components/popups/_book-popup.scss";
+
+const procedureOptions = [
+   { value: "rhinoplasty", label: "Rhinoplasty" },
+   { value: "facelift", label: "Facelift" },
+   { value: "blepharoplasty", label: "Blepharoplasty" },
+   { value: "botox", label: "Botox Injections" },
+];
 ---
 
-<MyPopup sf-section="popups" sf-global id="feedback">
-   <button data-popup-close><Icon name="close" class="" /></button>
-   content...
+<MyPopup id="book" maxWidth="var(--container-max-width)">
+   <div class="book-popup">
+      <!-- Header -->
+      <div class="book-popup__header">
+         <h2 class="book-popup__title fs-24">
+            Book your personal consultation
+         </h2>
+         <button
+            class="book-popup__close"
+            data-popup-close
+            aria-label="Закрити"
+         >
+            <Icon name="close" />
+         </button>
+      </div>
+
+      <!-- 3 опції -->
+      <div class="book-popup__options">
+         <div class="book-popup__option br-12">
+            <div class="book-popup__option-media">
+               <Icon name="doctolib" />
+            </div>
+            <a href="#" class="book-popup__option-btn outline-btn">Book online</a>
+         </div>
+
+         <div class="book-popup__option br-12">
+            <div class="book-popup__option-media">
+               <Icon name="phone-popup" />
+            </div>
+            <div class="book-popup__option-title">+33 1 87 66 47 15</div>
+            <a href="tel:+33187664715" class="book-popup__option-btn outline-btn"
+               >Call</a
+            >
+         </div>
+
+         <div class="book-popup__option br-12">
+            <div class="book-popup__option-media">
+               <Icon name="email-popup" />
+            </div>
+            <div class="book-popup__option-title">Contact Form</div>
+            <button class="book-popup__option-btn outline-btn" data-form-toggle>
+               Send Request
+            </button>
+         </div>
+      </div>
+
+      <!-- Форма — accordion (3 обгортки) -->
+      <div class="book-popup__form" data-form-accordion>
+         <!-- 2: overflow: hidden -->
+         <div class="book-popup__form-clip">
+            <!-- 3: padding + border -->
+            <div class="book-popup__form-body">
+               <h2 class="book-popup__form-label fs-24">Contact Form</h2>
+               <ContactFormSection
+                  procedureOptions={procedureOptions}
+                  formKey="book"
+               />
+            </div>
+         </div>
+      </div>
+   </div>
 </MyPopup>
 
-<script type="module">
-   import "/src/scripts/init/modal.js";
+<script>
+   import "@scripts/init/modal";
+
+   document.querySelectorAll("[data-form-toggle]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+         const accordion = btn
+            .closest(".book-popup")
+            ?.querySelector("[data-form-accordion]");
+         accordion?.classList.toggle("is-open");
+      });
+   });
 </script>

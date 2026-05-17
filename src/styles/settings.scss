@@ -6,12 +6,14 @@
 
 // ─── Сітка ───────────────────────────────────────────────────────────────────
 $min-width: 320;
-$max-width: 1920;
-$max-width-container: 1200;
+$max-width: 1440;
+$max-width-container: 1280;
 $container-padding: 30;
 $container-width: $max-width-container + $container-padding;
 
 // ─── Брейкпоінти ─────────────────────────────────────────────────────────────
+// ⚠️  Змінив значення? → запусти: npm run snippets
+//     Це оновить підказки з px у scss.code-snippets автоматично.
 $pc: $container-width;
 $tablet: 991.98;
 $mobile: 767.98;
@@ -30,13 +32,19 @@ $responsive-type: 1;
 $container-selector-type: "bem";
 
 // ─── Типографіка — base ───────────────────────────────────────────────────────
-$font-primary: "Playfair Display";
-$font-secondary: "Playfair Display";
-$font-size-base: 16;
-$line-height: 1.5;
-$font-weight-regular: 400;
-$font-weight-medium: 500;
-$font-weight-bold: 700;
+// Основні налаштування шрифтів для сторінки
+$font-primary: "DM Sans"; // основний шрифт (для тексту)
+$font-secondary: "DM Sans"; // вторинний шрифт (для заголовків)
+$font-size-base: 18; // базовий розмір (16px = 1rem)
+$line-height: 1.5; // висота рядка для тексту
+
+// ─── Ваги шрифтів ──────────────────────────────────────────────────────────
+// Замін значення якщо твій шрифт має інші ваги
+$font-weight-body: 300; // базова вага для body (текст сторінки)
+$font-weight-light: 300; // light — для мелкого, приглушеного тексту
+$font-weight-regular: 400; // regular — стандартна вага
+$font-weight-medium: 500; // medium — для акцентів, підписів
+$font-weight-bold: 700; // bold — для заголовків, кнопок
 
 // ─── Type Scale ───────────────────────────────────────────────────────────────
 // Єдина шкала розмірів для всього проєкту (fluid: min→max між $mobile та $pc).
@@ -45,8 +53,8 @@ $font-weight-bold: 700;
 // Або через міксін:           @include type-scale("xl")
 $type-scale: (
    "xs": (
-      "min": 12,
-      "max": 14,
+      "min": 10,
+      "max": 12,
    ),
    "sm": (
       "min": 14,
@@ -65,20 +73,20 @@ $type-scale: (
       "max": 28,
    ),
    "2xl": (
-      "min": 28,
-      "max": 36,
+      "min": 16,
+      "max": 18,
    ),
    "3xl": (
-      "min": 32,
-      "max": 48,
+      "min": 18,
+      "max": 30,
    ),
    "4xl": (
-      "min": 40,
-      "max": 64,
+      "min": 20,
+      "max": 36,
    ),
    "hero": (
-      "min": 48,
-      "max": 96,
+      "min": 24,
+      "max": 48,
    ),
 );
 
@@ -99,48 +107,68 @@ $headings-defaults: (
 $headings: (
    "h1": (
       "scale": "hero",
+      "line-height": 1.25,
+      "weight": $font-weight-medium,
    ),
    "h2": (
-      "scale": "3xl",
+      "scale": "4xl",
+      "line-height": 1.22,
+      "weight": $font-weight-light,
    ),
    "h3": (
       "scale": "2xl",
-      "weight": 600,
+      "weight": $font-weight-light,
+      "line-height": 1.3,
    ),
    "h4": (
       "scale": "xl",
-      "weight": 600,
+      "weight": $font-weight-light,
       "family": null,
    ),
    "h5": (
       "scale": "lg",
-      "weight": 500,
+      "weight": $font-weight-light,
       "family": null,
    ),
    "h6": (
       "scale": "base",
-      "weight": 500,
+      "weight": $font-weight-light,
       "family": null,
    ),
 );
 
 // ─── Посилання ────────────────────────────────────────────────────────────────
-$link-color: null;
+$link-color: var(--color-text);
 $link-color-hover: null;
 $link-decoration: none;
 
 // ─── Кнопки ───────────────────────────────────────────────────────────────────
+// Базові стилі для всіх кнопок (null = не задається)
 $btn-font-weight: $font-weight-bold;
-$btn-font-size: null;
+$btn-font-size: null; // число px
+$btn-line-height: null;
+$btn-border-radius: null; // напр: 8px або map.get($radius, "md")
+$btn-padding-y: null; // число px
+$btn-padding-x: null; // число px
+$btn-transition: 0.3s ease;
 
-// Кольори → base/_palette.scss
+// ─── Бордери ─────────────────────────────────────────────────────────────────
+// Генерує: --border-sm, --border-md тощо
+// Колір → var(--color-border) або будь-який з palette
+// Використання: border: var(--border-md) var(--color-border)
+$border-widths: (
+   "sm": 1px,
+   "md": 2px,
+   "lg": 3px,
+   "xl": 4px,
+);
 
 // ─── Радіуси ─────────────────────────────────────────────────────────────────
 $radius: (
    "sm": 4px,
    "md": 8px,
-   "lg": 16px,
-   "xl": 24px,
+   "lg": 20px,
+   "xl": 40px,
    "full": 9999px,
 );
 

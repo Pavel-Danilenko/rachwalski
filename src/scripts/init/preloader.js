@@ -8,7 +8,7 @@
  *
  *   ✨ ПРОСТИЙ СПОСІБ (з дефолтними параметрами):
  *   ────────────────────────────────────────────
- *   import Preloader from "@components/Preloader.astro";
+ *   import Preloader from "@components/interactive/Preloader.astro";
  *
  *   <Preloader />
  *
@@ -374,14 +374,6 @@ initPreloader();
  * ✅ Переход: /home → /about (Astro) → НЕ показувати прелоадер, плавний перехід
  * ✅ Натиск Back: /about → /home → НЕ показувати прелоадер (це back_forward)
  */
-document.addEventListener("astro:after-swap", () => {
-   // При завершенні переходу між сторінками ховаємо прелоадер
-   // (він може залишитися видимим якщо його не приховати)
-   const preloader = document.getElementById("preloader");
-   if (preloader) preloader.style.display = "none";
-
-   // Додаємо клас "preloader-loaded" на <html>
-   // Цей клас говорить що завантаження завершено й можна показати контент
-   // (навіть якщо прелоадер технічно не показувався - це слід для стилів)
-   document.documentElement.classList.add("preloader-loaded");
-});
+// З Barba.js preloader живе поза [data-barba="container"] і не замінюється при переходах.
+// Він прихований після першого завантаження через sessionStorage логіку вище.
+// page:ready додає preloader-loaded клас через app.js.

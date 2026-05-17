@@ -114,6 +114,6 @@ function cleanup() {
    timers.clear();
 }
 
-document.addEventListener("astro:before-swap", cleanup);
-document.addEventListener("astro:page-load", initCountdowns);
+document.addEventListener("page:leave", cleanup);
+document.addEventListener("page:ready", initCountdowns);
 initCountdowns();

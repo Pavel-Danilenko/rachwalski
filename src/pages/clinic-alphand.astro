@@ -1,0 +1,527 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/ui/PageMain.astro";
+import StepBanner from "@/components/section/StepBanner.astro";
+import LocationsMap from "@components/section/LocationsMap.astro";
+import SectionHeader from "@components/section/SectionHeader.astro";
+import Img from "@components/media/Img.astro";
+import Icon from "@components/ui/Icon.astro";
+
+import "@styles/pages/_clinic-alphand.scss";
+import founderImg1 from "@assets/img/about/clinic-alphand/alphand-founder-img-1.jpg";
+import founderImg2 from "@assets/img/about/clinic-alphand/alphand-founder-img-2.jpg";
+import founderImg3 from "@assets/img/about/clinic-alphand/alphand-founder-img-3.jpg";
+import clinicAlphandImg from "@assets/img/about/clinic-alphand/clinic-alphand.jpg";
+import evolutionImg from "@assets/img/about/clinic-alphand/evolution-img.jpg";
+import clinicImg1 from "@assets/img/about/clinic-alphand/alphand-clinic-img-1.jpg";
+import clinicImg2 from "@assets/img/about/clinic-alphand/alphand-clinic-img-2.jpg";
+import clinicImg3 from "@assets/img/about/clinic-alphand/alphand-clinic-img-3.jpg";
+import techImg1 from "@assets/img/about/clinic-alphand/alphand-tech-img-1.jpg";
+import techImg2 from "@assets/img/about/clinic-alphand/alphand-tech-img-2.jpg";
+import techImg3 from "@assets/img/about/clinic-alphand/alphand-tech-img-3.jpg";
+import techImg4 from "@assets/img/about/clinic-alphand/alphand-tech-img-4.jpg";
+---
+
+<BaseLayout title="Clinic Alphand" description="Про нашу команду">
+   <PageMain>
+      <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+      <section class="alphand-hero">
+         <Img
+            src={clinicAlphandImg}
+            alt="Hero"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={88}
+            wrapperClass="alphand-hero__bg hero-gradient__bg hero-gradient__bg--height-100"
+         />
+         <div class="alphand-hero__container pt-180 pb-80">
+            <div class="alphand-hero__logo">
+               <Icon name="alphand-logo" />
+            </div>
+         </div>
+      </section>
+
+      <section class="alphand-history dark-gradient__top">
+         <div class="alphand-history__container pt-80 pb-80">
+            <div class="alphand-history__column-left">
+               <h2 class="alphand-history__title">The history of the clinic</h2>
+            </div>
+            <div class="alphand-history__column-right">
+               <div class="alphand-history__text fs-20">
+                  The pursuit of beauty has existed for centuries, but true
+                  aesthetic medicine was born in the 20th century — when
+                  reconstructive surgery helped restore faces, identities, and
+                  confidence after the World Wars. These medical breakthroughs
+                  laid the foundation for modern aesthetic care focused not only
+                  on appearance, but on dignity and self-esteem.
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="alphand-founder light-gradientp-top bg-white">
+         <div class="alphand-founder__container pt-80 pb-80">
+            <div class="alphand-founder__top mb-60">
+               <div class="alphand-founder__column-left">
+                  <h2 class="alphand-founder__title ct-black">
+                     Dr. Charles Claoué — a visionary pioneer
+                  </h2>
+               </div>
+               <div class="alphand-founder__column-right">
+                  <div class="alphand-founder__text t-style fs-20 ct-black">
+                     <p>
+                        In 1950, Dr. Charles Claoué founded Clinique Alphand
+                        with a revolutionary vision of aesthetic surgery.
+                        Combining surgical precision with artistic sensibility,
+                        he became a pioneer in facial surgery and rhinoplasty.
+                        His use of plaster face models to plan procedures was
+                        decades ahead of its time — an early step toward today’s
+                        3D aesthetic simulations.
+                     </p>
+                     <p>
+                        Under his leadership, Clinique Alphand became one of the
+                        first dedicated aesthetic surgery clinics in France. His
+                        legacy continues through generations of the Claoué
+                        family, united by the same commitment to natural
+                        results, patient safety, and innovation.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div
+               class="alphand-founder__gallery cards-slider mb-60"
+               data-cards-slider
+            >
+               <div class="swiper">
+                  <div class="swiper-wrapper">
+                     <div class="swiper-slide">
+                        <Img
+                           src={founderImg1}
+                           alt="Dr. Charles Claoué"
+                           loading="lazy"
+                           wrapperClass="alphand-founder__img br-12"
+                        />
+                     </div>
+                     <div class="swiper-slide">
+                        <Img
+                           src={founderImg2}
+                           alt="Plaster face models"
+                           loading="lazy"
+                           wrapperClass="alphand-founder__img br-12"
+                        />
+                     </div>
+                     <div class="swiper-slide">
+                        <Img
+                           src={founderImg3}
+                           alt="Dr. Charles Claoué at work"
+                           loading="lazy"
+                           wrapperClass="alphand-founder__img br-12"
+                        />
+                     </div>
+                  </div>
+               </div>
+               <div class="cards-slider__controls">
+                  <button
+                     class="slider__arrow slider__arrow--prev"
+                     aria-label="Попередній"
+                  >
+                     <Icon name="arrow-dark-slider-left" />
+                  </button>
+                  <button
+                     class="slider__arrow slider__arrow--next"
+                     aria-label="Наступний"
+                  >
+                     <Icon name="arrow-dark-slider-right" />
+                  </button>
+               </div>
+            </div>
+            <div class="alphand-founder__bottom alphand-evolution mb-60">
+               <div class="alphand-evolution__column">
+                  <h3
+                     class="alphand-evolution__title fs-32 fw-500 ct-black mb-12"
+                  >
+                     From repair to aesthetic enhancement
+                  </h3>
+                  <div class="alphand-evolution__text ct-black">
+                     Early in his practice, Dr. Charles Claoué recognized that
+                     aesthetic medicine extends beyond correcting physical
+                     imperfections — it plays a vital role in one’s
+                     self-perception and emotional wellness. Clinique Alphand
+                     evolved into a place where both body and spirit are
+                     nurtured through treatments tailored to each patient’s
+                     individual needs.
+                  </div>
+               </div>
+               <div class="alphand-evolution__column">
+                  <Img
+                     src={evolutionImg}
+                     alt="Опис зображення"
+                     loading="lazy"
+                     wrapperClass="alphand-evolution__img br-12"
+                  />
+               </div>
+               <div class="alphand-evolution__column">
+                  <h3
+                     class="alphand-evolution__title fs-32 fw-500 ct-black mb-12"
+                  >
+                     A place of exchange and ongoing innovation
+                  </h3>
+                  <div class="alphand-evolution__text ct-black">
+                     Today, the clinic carries forward a tradition of scientific
+                     exchange and progress. Under the guidance of current
+                     leaders such as Professor Ignacio Garrido-Stöwhas and Dr.
+                     Kahina Betroune, Clinique Alphand hosts professional events
+                     like Les Mardis d’Alphand, dedicated to the latest
+                     advancements in aesthetic medicine and surgery.
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="alphand-clinic bg-white mt-1">
+         <div class="alphand-clinic__container pt-80 pb-80">
+            <h2 class="alphand-clinic__title ct-black mb-40">
+               A renovated clinic in the heart of Paris
+            </h2>
+            <div class="alphand-clinic__row cards-slider" data-cards-slider>
+               <div class="swiper">
+                  <div class="swiper-wrapper">
+                     <div class="swiper-slide">
+                        <div class="alphand-clinic__column">
+                           <Img
+                              src={clinicImg1}
+                              alt="Опис зображення"
+                              loading="lazy"
+                              wrapperClass="alphand-clinic__img br-12"
+                           />
+                           <div
+                              class="alphand-clinic__description border-right"
+                           >
+                              <h3
+                                 class="alphand-clinic__subtitle ct-black fw-600"
+                              >
+                                 A space designed for the well-being and safety
+                                 of the patient in complete confidentiality
+                              </h3>
+                              <div
+                                 class="alphand-clinic__text ct-black fs-16 text-list"
+                              >
+                                 <p>
+                                    Alphand Clinic relies on state-of-the-art
+                                    equipment to ensure safe, effective, and
+                                    personalized care for each patient. Its
+                                    infrastructure includes:
+                                 </p>
+                                 <ul>
+                                    <li>
+                                       <strong
+                                          >Consultation and treatment rooms</strong
+                                       > guaranteeing comfort and safety.
+                                    </li>
+                                    <li>
+                                       <strong
+                                          >A modern aesthetic medicine service</strong
+                                       > with 7 treatment rooms dedicated to injections,
+                                       laser treatments and skin care.
+                                    </li>
+                                    <li>
+                                       <strong>An operating block:</strong> 2 operating
+                                       rooms equipped for cosmetic surgery procedures.
+                                    </li>
+                                    <li>
+                                       <strong
+                                          >An optimal recovery space:</strong
+                                       > 4 private rooms and 4 outpatient cabins,
+                                       guaranteeing rigorous follow-up after each
+                                       procedure.
+                                    </li>
+                                 </ul>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="swiper-slide">
+                        <div class="alphand-clinic__column">
+                           <Img
+                              src={clinicImg2}
+                              alt="Опис зображення"
+                              loading="lazy"
+                              wrapperClass="alphand-clinic__img br-12"
+                           />
+                           <div
+                              class="alphand-clinic__description border-right"
+                           >
+                              <h3
+                                 class="alphand-clinic__subtitle ct-black fw-600"
+                              >
+                                 A medical practice for natural results
+                              </h3>
+                              <div
+                                 class="alphand-clinic__text ct-black fs-16 text-list"
+                              >
+                                 <p>
+                                    Thanks to constant scientific monitoring,
+                                    the clinic offers a wide range of
+                                    treatments:
+                                 </p>
+                                 <ul>
+                                    <li>
+                                       <strong
+                                          >Advanced aesthetic medicine:</strong
+                                       > Botox and hyaluronic acid injections, skinboosters,
+                                       mesotherapy, absorbable lifting threads, etc.
+                                    </li>
+                                    <li>
+                                       <strong
+                                          >Customized cosmetic surgery:</strong
+                                       > cervicofacial lift, lipofilling, high-definition
+                                       liposuction, etc.
+                                    </li>
+                                    <li>
+                                       <strong
+                                          >Non-invasive technological
+                                          treatments:</strong
+                                       > radiofrequency, LED photomodulation, etc.
+                                    </li>
+                                    <li>
+                                       <strong
+                                          >Personalized care protocol:</strong
+                                       > combination of treatments for optimal and
+                                       natural results.
+                                    </li>
+                                 </ul>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="swiper-slide">
+                        <div class="alphand-clinic__column">
+                           <Img
+                              src={clinicImg3}
+                              alt="Опис зображення"
+                              loading="lazy"
+                              wrapperClass="alphand-clinic__img br-12"
+                           />
+                           <div class="alphand-clinic__description">
+                              <h3
+                                 class="alphand-clinic__subtitle ct-black fw-600"
+                              >
+                                 An ethical and responsible approach
+                              </h3>
+                              <div
+                                 class="alphand-clinic__text ct-black fs-16 text-list"
+                              >
+                                 <p>
+                                    At Clinique Alphand, every treatment is
+                                    based on <strong
+                                       >a rigorous evaluation and impeccable
+                                       medical ethics.</strong
+                                    > We are committed to offering tailored solutions,
+                                    avoiding excesses and favoring a natural and balanced
+                                    approach to aesthetics.
+                                 </p>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="cards-slider__controls">
+                  <button
+                     class="slider__arrow slider__arrow--prev"
+                     aria-label="Попередній"
+                  >
+                     <Icon name="arrow-dark-slider-left" />
+                  </button>
+                  <button
+                     class="slider__arrow slider__arrow--next"
+                     aria-label="Наступний"
+                  >
+                     <Icon name="arrow-dark-slider-right" />
+                  </button>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="alphand-tech mt-1 bg-white">
+         <div class="alphand-tech__container pt-80 pb-80">
+            <div class="alphand-tech__top-row mb-40">
+               <div class="alphand-tech__top-left">
+                  <h2 class="alphand-tech__top__title ct-black">
+                     Facilities & technology
+                  </h2>
+               </div>
+               <div class="alphand-tech__top-right">
+                  <div class="alphand-tech__top__text ct-black">
+                     Cutting-edge equipment and advanced medical devices.
+                  </div>
+               </div>
+            </div>
+            <div class="alphand-tech__row cards-slider mb-60" data-cards-slider>
+               <div class="swiper">
+                  <div class="swiper-wrapper">
+                     <div class="swiper-slide">
+                        <div class="alphand-tech__column">
+                           <Img
+                              src={techImg1}
+                              alt="Lasers"
+                              loading="lazy"
+                              wrapperClass="alphand-tech__img br-12"
+                           />
+                           <a
+                              href="#"
+                              class="alphand-tech__link bg-white-medium ct-black"
+                           >
+                              <Icon name="tech-arrow-black" />
+                              Lasers
+                           </a>
+                        </div>
+                     </div>
+                     <div class="swiper-slide">
+                        <div class="alphand-tech__column">
+                           <Img
+                              src={techImg2}
+                              alt="Radiofrequency devices"
+                              loading="lazy"
+                              wrapperClass="alphand-tech__img br-12"
+                           />
+                           <a
+                              href="#"
+                              class="alphand-tech__link bg-white-medium ct-black"
+                           >
+                              <Icon name="tech-arrow-black" />
+                              Radiofrequency devices
+                           </a>
+                        </div>
+                     </div>
+                     <div class="swiper-slide">
+                        <div class="alphand-tech__column">
+                           <Img
+                              src={techImg3}
+                              alt="LED therapy rooms"
+                              loading="lazy"
+                              wrapperClass="alphand-tech__img br-12"
+                           />
+                           <a
+                              href="#"
+                              class="alphand-tech__link bg-white-medium ct-black"
+                           >
+                              <Icon name="tech-arrow-black" />
+                              LED therapy rooms
+                           </a>
+                        </div>
+                     </div>
+                     <div class="swiper-slide">
+                        <div class="alphand-tech__column">
+                           <Img
+                              src={techImg4}
+                              alt="Consultation rooms"
+                              loading="lazy"
+                              wrapperClass="alphand-tech__img br-12"
+                           />
+                           <a
+                              href="#"
+                              class="alphand-tech__link bg-white-medium ct-black"
+                           >
+                              <Icon name="tech-arrow-black" />
+                              Consultation rooms
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="cards-slider__controls">
+                  <button
+                     class="slider__arrow slider__arrow--prev"
+                     aria-label="Попередній"
+                  >
+                     <Icon name="arrow-dark-slider-left" />
+                  </button>
+                  <button
+                     class="slider__arrow slider__arrow--next"
+                     aria-label="Наступний"
+                  >
+                     <Icon name="arrow-dark-slider-right" />
+                  </button>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="tech-info pb-80">
+         <div class="tech-info__content dark-gradient__bottom pt-80 mb-40">
+            <div class="tech-info__container mb-40">
+               <div class="tech-info__row pb-80">
+                  <div class="tech-info__column br-12 glass">
+                     <div class="tech-info__icon glass-icon mb-12">
+                        <Icon name="graduation-hat" />
+                     </div>
+                     <div class="tech-info__title">Expertise</div>
+                     <div class="tech-info__text fs-14">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                     </div>
+                  </div>
+                  <div class="tech-info__column br-12 glass">
+                     <div class="tech-info__icon glass-icon mb-12">
+                        <Icon name="shield-tick" />
+                     </div>
+                     <div class="tech-info__title">
+                        Safety & Modern Technology
+                     </div>
+                     <div class="tech-info__text fs-14">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                     </div>
+                  </div>
+                  <div class="tech-info__column br-12 glass">
+                     <div class="tech-info__icon glass-icon mb-12">
+                        <Icon name="globe" />
+                     </div>
+                     <div class="tech-info__title">
+                        International Patients Welcome
+                     </div>
+                     <div class="tech-info__text fs-14">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                     </div>
+                  </div>
+                  <div class="tech-info__column br-12 glass">
+                     <div class="tech-info__icon glass-icon mb-12">
+                        <Icon name="stars" />
+                     </div>
+                     <div class="tech-info__title">Natural Results</div>
+                     <div class="tech-info__text fs-14">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                     </div>
+                  </div>
+               </div>
+               <SectionHeader class="pt-80">
+                  <h2 slot="left">Your consultation, your convenience</h2>
+                  <div slot="right">
+                     Dr. Martin Rachwalski welcomes patients in multiple
+                     locations to make your visit as comfortable as possible.
+                  </div>
+               </SectionHeader>
+            </div>
+         </div>
+         <LocationsMap />
+      </section>
+
+      <section class="step-banner">
+         <div class="step-banner__container pt-80 pb-80">
+            <StepBanner />
+         </div>
+      </section>
+   </PageMain>
+</BaseLayout>

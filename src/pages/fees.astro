@@ -1,0 +1,2486 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/ui/PageMain.astro";
+import Tabs from "@components/interactive/Tabs.astro";
+import Accordion from "@components/interactive/accordion.astro";
+import Icon from "@components/ui/Icon.astro";
+import "@styles/pages/_fees.scss";
+import Faq from "@components/section/Faq.astro";
+import Img from "@components/media/Img.astro";
+import pricesPlanet from "@assets/img/prices/prices-planet-bottom.png";
+import pricesPlanetTop from "@assets/img/prices/prices-planet-top.png";
+import heroBgGradient from "@assets/img/other/bg.jpg";
+
+const faqItems = [
+   {
+      question: "How long is the recovery time after a facelift?",
+      answer:
+         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+   },
+   {
+      question: "Who is Dr. Martin Rachwalski?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What are his main areas of expertise?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he perform aesthetic surgical procedures?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What non-surgical aesthetic treatments are available?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Where are the consultation locations?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his academic and research background?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he treat complex congenital conditions?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "How can I book a consultation?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his professional affiliation in France?",
+      answer: "Lorem ipsum...",
+   },
+];
+---
+
+<BaseLayout title="Fees" description="Про нашу команду">
+   <PageMain>
+      <section class="prices">
+         <Img
+            src={heroBgGradient}
+            alt="Hero"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--fees"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+            widths={[768, 1280, 1920]}
+         />
+
+         <Img src={pricesPlanet} alt="Опис" wrapperClass="prices__img-bottom" />
+         <Img src={pricesPlanetTop} alt="Опис" wrapperClass="prices__img-top" />
+
+         <div class="prices__container pb-80 pt-180">
+            <div class="prices__inner mb-40">
+               <h1 class="prices__title t-center fs-36 mb-12">
+                  Transparent and personalized fees
+               </h1>
+               <div class="prices__text fs-20 t-center">
+                  Each face is unique. Prices vary depending on individual needs
+                  and treatment plans. Below you will find an overview of
+                  standard fees for aesthetic surgery and non-surgical
+                  procedures.
+               </div>
+            </div>
+
+            <Tabs
+               class="prices__tabs prices-tabs mb-20"
+               animation="none"
+               indicator={true}
+               defaultTab="tab1"
+            >
+               <Fragment slot="buttons">
+                  <button
+                     class="tabs__button prices-tabs__button"
+                     data-tab="tab1"
+                  >
+                     Facial Aesthetic Surgery
+                  </button>
+                  <button
+                     class="tabs__button prices-tabs__button"
+                     data-tab="tab2"
+                  >
+                     Aesthetic Medicine
+                  </button>
+               </Fragment>
+
+               <Fragment slot="panels">
+                  <div
+                     class="tabs__panel prices-tabs__panel"
+                     data-tab-content="tab1"
+                  >
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Consultations
+                           </h3>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€100</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Aesthetic Medicine Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€100</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- 3 -->
+
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Video Consultation via Doctorlib
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€100</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+
+                     <!-- // inner -2 -->
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Facial Aesthetic Surgery
+                           </h3>
+                           <div class="pricess-content__label fs-24">
+                              Starting fee
+                           </div>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€700</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-3 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-4 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-5 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+
+                     <!-- // inner -3 -->
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Facial Aesthetic Surgery
+                           </h3>
+                           <div class="pricess-content__label fs-24">
+                              Starting fee
+                           </div>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€700</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-3 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-4 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-5 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+
+                     <!-- // inner -4 -->
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Facial Aesthetic Surgery
+                           </h3>
+                           <div class="pricess-content__label fs-24">
+                              Starting fee
+                           </div>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€700</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-3 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-4 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-5 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+
+                     <!-- // inner -5 -->
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Facial Aesthetic Surgery
+                           </h3>
+                           <div class="pricess-content__label fs-24">
+                              Starting fee
+                           </div>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€700</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-3 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-4 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-6 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+
+                     <!-- // inner -6 -->
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Facial Aesthetic Surgery
+                           </h3>
+                           <div class="pricess-content__label fs-24">
+                              Starting fee
+                           </div>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€700</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-3 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-4 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-5 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+                  </div>
+                  <div
+                     class="tabs__panel pricess-tabs__panel"
+                     data-tab-content="tab2"
+                  >
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Botox Injections
+                           </h3>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€200</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Aesthetic Medicine Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€100</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- 3 -->
+
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Video Consultation via Doctorlib
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€100</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+
+                     <!-- // inner -2 -->
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Facial Aesthetic Surgery
+                           </h3>
+                           <div class="pricess-content__label fs-24">
+                              Starting fee
+                           </div>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€700</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-3 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-4 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-5 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+
+                     <!-- // inner -3 -->
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Facial Aesthetic Surgery
+                           </h3>
+                           <div class="pricess-content__label fs-24">
+                              Starting fee
+                           </div>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€700</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-3 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-4 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-5 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+
+                     <!-- // inner -4 -->
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Collagen Stimulators & Skin Booster Injections
+                           </h3>
+                           <div class="pricess-content__label fs-24">
+                              Starting fee
+                           </div>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€700</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-3 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-4 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-5 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+
+                     <!-- // inner -5 -->
+                     <div
+                        class="pricess-tabs__inner prices-content glass br-30 mb-20"
+                     >
+                        <div class="pricess-content__row">
+                           <h3 class="pricess-content__title fs-32">
+                              Hyaloronic acid injections
+                           </h3>
+                           <div class="pricess-content__label fs-24">
+                              Starting fee
+                           </div>
+                        </div>
+
+                        <Accordion
+                           class="pricess-content__accordion prices-accordion"
+                           duration={350}
+                        >
+                           <!-- //-1 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€700</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-2 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-3 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-4 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- //-6 -->
+                           <div
+                              class="prices-accordion__item"
+                              data-accordion-item
+                           >
+                              <button
+                                 class="prices-accordion__button"
+                                 data-accordion-trigger
+                              >
+                                 <span class="prices-accordion__label fs-24"
+                                    ><Icon name="arrow-down" />
+                                    Facial Surgery Consultation
+                                 </span>
+                                 <span class="prices-accordion__price fs-24"
+                                    >€600</span
+                                 >
+                              </button>
+                              <div
+                                 class="pricess-content prices-accordion__content"
+                                 data-accordion-content
+                              >
+                                 <div>
+                                    <div
+                                       class="accordion__body prices-accordion__body"
+                                    >
+                                       <div
+                                          class="prices-accordion__description"
+                                       >
+                                          Book your personal consultation with
+                                          Dr. Martin Rachwalski today and start
+                                          your journey towards a refreshed and
+                                          confident look. Book your personal
+                                          consultation with Dr. Martin
+                                          Rachwalski today and start your
+                                          journey towards a refreshed and
+                                          confident look.
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </Accordion>
+                     </div>
+                  </div>
+               </Fragment>
+            </Tabs>
+
+            <div class="prices__banner prices-banner br-30 glass">
+               <div class="prices-banner__icon glass">
+                  <Icon name="info-circle" />
+               </div>
+               <div class="prices-banner__description fs-24">
+                  Prices are indicative and may vary depending on individual
+                  needs, case complexity, and medical requirements. A
+                  personalized treatment plan and exact quotation will be
+                  provided after consultation.
+               </div>
+               <a href="#" class="prices-banner__btn btn white-btn"
+                  >Book consultation</a
+               >
+            </div>
+         </div>
+      </section>
+
+      <Faq items={faqItems} />
+   </PageMain>
+</BaseLayout>

@@ -1,0 +1,234 @@
+@use "@styles/utils" as *;
+
+.contact-form {
+   padding: toRem(32);
+
+   // ── Fields grid ───────────────────────────────────────────
+   &__fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: toRem(12) toRem(20);
+   }
+
+   &__group {
+      display: flex;
+      flex-direction: column;
+      gap: toRem(4);
+
+      &--full {
+         grid-column: 1 / -1;
+      }
+   }
+
+   // ── Label ─────────────────────────────────────────────────
+   &__label {
+      font-size: toRem(14);
+      font-weight: 500;
+      line-height: toRem(20);
+      color: var(--color-text);
+   }
+
+   // ── Input / Textarea ──────────────────────────────────────
+   &__input,
+   &__textarea {
+      width: 100%;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-full);
+      padding: toRem(12) toRem(16);
+      line-height: toRem(20);
+      color: var(--color-text);
+      font-size: toRem(14);
+      font-family: inherit;
+      transition: border-color var(--transition-base);
+
+      &::placeholder {
+         color: var(--color-text);
+      }
+
+      &:focus {
+         border-color: rgba(255, 255, 255, 0.4);
+         outline: none;
+      }
+   }
+
+   &__textarea {
+      border-radius: var(--radius-lg);
+      resize: vertical;
+      min-height: toRem(120);
+   }
+
+   // ── Phone input ───────────────────────────────────────────
+   &__input.phone-input {
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-full);
+      background: transparent;
+      transition: border-color var(--transition-base);
+
+      &.is-focused {
+         border-color: rgba(255, 255, 255, 0.4);
+      }
+
+      .phone-input__trigger {
+         display: flex;
+         align-items: center;
+         gap: toRem(6);
+         border: none;
+         border-radius: 0;
+         background: transparent;
+         padding: toRem(12) 0 toRem(12) toRem(16);
+         color: var(--color-text);
+         font-size: toRem(16);
+         font-weight: 400;
+         height: 100%;
+
+         &:hover {
+            background: transparent;
+         }
+
+         &:focus,
+         &:focus-visible {
+            outline: none;
+         }
+
+         .phone-input__flag  { order: 1; font-size: toRem(16); font-weight: 400; color: var(--color-text); }
+         .phone-input__arrow { order: 2; font-size: toRem(12); font-weight: 400; color: var(--color-text); }
+         .phone-input__dial  { order: 3; font-size: toRem(16); font-weight: 400; color: var(--color-text); }
+      }
+
+      .phone-input__number {
+         border: none;
+         border-radius: 0;
+         background: transparent;
+         padding: toRem(12) toRem(16) toRem(12) 0;
+         line-height: toRem(20);
+         color: var(--color-text);
+         font-size: toRem(14);
+
+         &::placeholder {
+            color: var(--color-text);
+         }
+
+         &:focus {
+            outline: none;
+            border-color: transparent;
+            box-shadow: none;
+         }
+      }
+   }
+
+   // ── Select ────────────────────────────────────────────────
+   &__input.custom-select-wrapper {
+      padding: 0;
+      border: none;
+   }
+
+   &__trigger {
+      width: 100%;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-full);
+      padding: toRem(12) toRem(16);
+      line-height: toRem(20);
+      color: var(--color-text);
+      font-size: toRem(14);
+      display: flex;
+      transition: border-color var(--transition-base);
+
+      .custom-select__value  { color: var(--color-text); font-weight: 400; }
+      .custom-select__arrow  { color: var(--color-text); font-size: toRem(12); }
+
+      &:focus {
+         border-color: rgba(255, 255, 255, 0.4);
+         outline: none;
+      }
+   }
+
+   // ── Footer ────────────────────────────────────────────────
+   &__footer {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: toRem(16);
+   }
+
+   &__right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: toRem(16);
+   }
+
+   &__policy {
+      font-size: var(--text-xs);
+      color: var(--color-text);
+   }
+
+   &__policy-link {
+      color: var(--color-text-muted);
+      text-decoration: underline;
+      text-underline-offset: toRem(2);
+   }
+
+   &__btn {
+      flex-shrink: 0;
+   }
+
+   // ── File input ────────────────────────────────────────────
+   &__file {
+      .custom-file-input__button {
+         border-radius: var(--radius-full);
+         border: 1px solid rgba(255, 255, 255, 0.15);
+         background: transparent;
+         color: var(--color-text);
+         padding: toRem(10) toRem(20);
+         display: flex;
+         align-items: center;
+         column-gap: toRem(8);
+         transition: border-color var(--transition-base);
+
+         .custom-file-input__icon {
+            font-size: toRem(20);
+         }
+
+         &:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+         }
+      }
+
+      &.custom-file-input--success .custom-file-input__button {
+         background: var(--color-text);
+         border-color: var(--color-text);
+         color: var(--color-secondary);
+      }
+   }
+
+   // ── Responsive ────────────────────────────────────────────
+   @include respond-to("md") {
+      padding: toRem(20);
+
+      &__fields {
+         grid-template-columns: 1fr;
+      }
+
+      &__group--full {
+         grid-column: 1;
+      }
+
+      &__footer {
+         grid-template-columns: 1fr;
+      }
+
+      &__right {
+         flex-direction: column;
+         align-items: flex-start;
+         gap: toRem(12);
+      }
+
+      &__btn {
+         width: 100%;
+         text-align: center;
+      }
+   }
+}

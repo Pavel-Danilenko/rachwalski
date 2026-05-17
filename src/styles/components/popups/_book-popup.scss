@@ -1,0 +1,100 @@
+@use "@styles/utils" as *;
+
+.book-popup {
+   // .book-popup__header
+   &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+   }
+
+   // .book-popup__title
+   &__title {
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 18, 30);
+      }
+   }
+
+   // .book-popup__close
+   &__close {
+   }
+
+   // .book-popup__options
+   &__options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      @include fluid-space(gap, 16, 24);
+      @include respond-to("md") {
+         grid-template-columns: repeat(1, 1fr);
+      }
+   }
+
+   // .book-popup__option
+   &__option {
+      border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      justify-content: center;
+      @include fluid-space(padding, 16, 32);
+      background-color: var(--color-surface-glass);
+      flex-direction: column;
+      align-items: center;
+   }
+
+   // .book-popup__option-media
+   &__option-media {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: toRem(44);
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 14, 18);
+      }
+      & .icon {
+         width: 100%;
+         height: 100%;
+      }
+   }
+
+   // .book-popup__option-title
+   &__option-title {
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 16, 30);
+      }
+   }
+
+   // .book-popup__option-btn
+   &__option-btn {
+   }
+
+   // ── Form accordion ────────────────────────────────────────
+   // Wrapper 1: grid-template-rows 0fr → 1fr
+   &__form {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows var(--transition-base);
+
+      &.is-open {
+         grid-template-rows: 1fr;
+      }
+   }
+
+   // Wrapper 2: overflow hidden + min-height: 0 — обов'язково для grid 0fr trick
+   &__form-clip {
+      overflow: hidden;
+      min-height: 0;
+   }
+
+   // Wrapper 3: padding + border (за дизайном)
+   &__form-body {
+      border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-lg);
+      padding: toRem(24);
+      background-color: var(--color-surface-glass);
+      @include fluid-space(margin-top, 20, 30);
+   }
+
+   // Назва секції форми
+   &__form-label {
+      @include fluid-space(margin-bottom, 18, 30);
+   }
+}

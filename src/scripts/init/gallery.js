@@ -168,10 +168,9 @@ export function initFancybox() {
 // DOM READY — ОБОВʼЯЗКОВО
 // =============================================
 
-document.addEventListener("DOMContentLoaded", initFancybox);
-
-// =============================================
-// ASTRO NAVIGATION (якщо буде SPA-поведінка)
-// =============================================
-
-document.addEventListener("astro:page-load", initFancybox);
+if (document.readyState === "loading") {
+   document.addEventListener("DOMContentLoaded", initFancybox);
+} else {
+   initFancybox();
+}
+document.addEventListener("page:ready", initFancybox);

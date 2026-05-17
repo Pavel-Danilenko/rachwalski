@@ -1,16 +1,2 @@
 @use "sass:math";
 @use "@styles/utils/functions" as *;
-
-.hero__container {
-   padding-block: toRem(100) toRem(50);
-}
-.about__container {
-   padding-block: toRem(50) toRem(100);
-}
-.team__container {
-   padding-block: toRem(100) toRem(50);
-}
-
-.tabs__container {
-   padding-block: toRem(100) toRem(50);
-}

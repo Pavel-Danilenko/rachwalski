@@ -1,0 +1,22 @@
+@use "@styles/utils" as *;
+
+.google-map {
+   display: block;
+   width: 100%;
+   height: 100%;
+
+   // Remove default Google Maps outline on focus
+   &:focus {
+      outline: none;
+   }
+
+   // Override Google Maps default font
+   .gm-style {
+      font-family: inherit;
+   }
+
+   // Zoom control styling
+   .gm-bundled-control {
+      margin-right: toRem(16) !important;
+   }
+}

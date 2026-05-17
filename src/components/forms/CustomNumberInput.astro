@@ -1,0 +1,90 @@
+---
+import "@styles/components/forms/_number-input.scss";
+
+interface Props {
+   name: string;
+   value?: number;
+   min?: number;
+   max?: number;
+   step?: number;
+   required?: boolean;
+   disabled?: boolean;
+   placeholder?: string;
+   errorRequired?: string;
+   errorMin?: string;
+   errorMax?: string;
+   class?: string;
+}
+
+const {
+   name,
+   value = 0,
+   min,
+   max,
+   step = 1,
+   required = false,
+   disabled = false,
+   placeholder = "0",
+   errorRequired,
+   errorMin,
+   errorMax,
+   class: className = "",
+} = Astro.props;
+---
+
+<div class:list={["number-input", className]} data-number-input>
+   <button
+      type="button"
+      class="number-input__btn number-input__btn--minus"
+      aria-label="Зменшити"
+      disabled={disabled || (min !== undefined && value <= min)}
+   >
+      <svg
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+      >
+         <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+   </button>
+
+   <input
+      type="number"
+      name={name}
+      class="number-input__field"
+      value={value}
+      min={min}
+      max={max}
+      step={step}
+      required={required}
+      disabled={disabled}
+      placeholder={placeholder}
+      data-error-required={errorRequired}
+      data-error-min={errorMin}
+      data-error-max={errorMax}
+   />
+
+   <button
+      type="button"
+      class="number-input__btn number-input__btn--plus"
+      aria-label="Збільшити"
+      disabled={disabled || (max !== undefined && value >= max)}
+   >
+      <svg
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+      >
+         <line x1="12" y1="5" x2="12" y2="19"></line>
+         <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+   </button>
+</div>
+
+<script>
+   import "@scripts/init/number-input";
+</script>

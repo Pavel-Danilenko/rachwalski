@@ -38,6 +38,9 @@ function initSectionWatch() {
    if (!watchedSections.length) return;
 
    watchedSections.forEach(({ section, link }) => {
+      if (section.dataset.scrollNavWatching) return;
+      section.dataset.scrollNavWatching = "true";
+
       const mo = new MutationObserver(() => {
          const isVisible = section.classList.contains("_watcher-view");
 
@@ -72,6 +75,8 @@ function initSectionWatch() {
    });
 }
 
+let _scrollHandler = null;
+
 function initScrollProgress() {
    const progressEl = document.querySelector("[data-nav-progress]");
    if (!progressEl) return;
@@ -86,14 +91,12 @@ function initScrollProgress() {
       rafId = null;
    }
 
-   window.addEventListener(
-      "scroll",
-      () => {
-         if (rafId) return;
-         rafId = requestAnimationFrame(updateProgress);
-      },
-      { passive: true },
-   );
+   if (_scrollHandler) window.removeEventListener("scroll", _scrollHandler);
+   _scrollHandler = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(updateProgress);
+   };
+   window.addEventListener("scroll", _scrollHandler, { passive: true });
 
    updateProgress();
 }
@@ -104,6 +107,6 @@ function initScrollNav() {
 }
 
 initScrollNav();
-document.addEventListener("astro:page-load", initScrollNav);
+document.addEventListener("page:ready", initScrollNav);
 
 export default initScrollNav;

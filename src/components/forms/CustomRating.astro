@@ -1,0 +1,89 @@
+---
+import "@styles/components/forms/_rating.scss";
+
+interface Props {
+   name: string;
+   max?: number;
+   defaultValue?: number;
+   required?: boolean;
+   disabled?: boolean;
+   size?: "sm" | "md" | "lg";
+   color?: string;
+   icon?: "star" | "heart" | "circle";
+   showLabel?: boolean;
+   labels?: string[];
+   errorRequired?: string;
+}
+
+const {
+   name,
+   max = 5,
+   defaultValue = 0,
+   required = false,
+   disabled = false,
+   size = "md",
+   color,
+   icon = "star",
+   showLabel = false,
+   labels = [],
+   errorRequired,
+} = Astro.props;
+
+const icons = {
+   star:   "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
+   heart:  "M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z",
+   circle: "M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z",
+};
+---
+
+<div
+   class={`rating rating--${size}`}
+   data-rating
+   data-max={max}
+   data-disabled={disabled}
+   style={color ? `--rating-color: ${color}` : undefined}
+>
+   <!-- Зірки (рендеряться в Astro) -->
+   <div class="rating__stars" role="radiogroup" aria-label={name}>
+      {Array.from({ length: max }, (_, i) => i + 1).map((val) => (
+         <label class="rating__item">
+            <input
+               type="radio"
+               name={name}
+               value={val}
+               class="rating__input"
+               checked={val === defaultValue}
+               disabled={disabled}
+               required={required && val === 1}
+               data-error-required={val === 1 ? errorRequired : undefined}
+            />
+            <svg
+               class="rating__icon"
+               viewBox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="1.75"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               aria-hidden="true"
+               data-val={val}
+            >
+               <path d={icons[icon]} />
+            </svg>
+            {showLabel && labels[val - 1] && (
+               <span class="rating__item-label">{labels[val - 1]}</span>
+            )}
+         </label>
+      ))}
+   </div>
+
+   {showLabel && (
+      <span class="rating__label" data-rating-label>
+         {defaultValue > 0 && labels[defaultValue - 1] ? labels[defaultValue - 1] : ""}
+      </span>
+   )}
+</div>
+
+<script>
+   import "@scripts/init/rating";
+</script>

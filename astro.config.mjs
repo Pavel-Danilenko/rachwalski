@@ -11,6 +11,7 @@ dotenv.config();
 const imageMode = process.env.PUBLIC_IMAGE_MODE || "plugin";
 const isStatic = process.env.BUILD_MODE === "static";
 const isWP = process.env.BUILD_MODE === "wp";
+const isDev = process.env.NODE_ENV === "development";
 
 const deleteUnused = process.env.PUBLIC_DELETE_UNUSED_IMAGES !== "true";
 
@@ -34,7 +35,7 @@ export default defineConfig({
 
    vite: {
       plugins: [
-         imageMode === "plugin" &&
+         !isDev && imageMode === "plugin" &&
             ImageOptimize({
                quality: 80,
                logStats: true,
@@ -47,7 +48,12 @@ export default defineConfig({
             scss: {
                charset: false,
                includePaths: ["./src/styles"],
-               additionalData: `@use "@styles/utils" as *;\n`,
+               // Автоматично додає @use utils тільки якщо файл його ще не має.
+               // Захищає нові файли та inline <style lang="scss"> блоки.
+               additionalData: (source) =>
+                  source.includes('@use "@styles/utils"')
+                     ? source
+                     : `@use "@styles/utils" as *;\n${source}`,
             },
          },
       },
@@ -76,10 +82,9 @@ export default defineConfig({
                   entryFileNames: "js/[name].js",
                   chunkFileNames: "js/[name].js",
                   assetFileNames: (assetInfo) => {
-                     if (assetInfo.name?.endsWith(".css")) return "css/[name][extname]";
-                     if (/\.(jpe?g|png|webp|avif|gif|svg)$/i.test(assetInfo.name || "")) {
-                        return "_astro/[name][extname]";
-                     }
+                     const name = assetInfo.names?.[0] ?? "";
+                     if (name.endsWith(".css")) return "css/[name][extname]";
+                     if (/\.(jpe?g|png|webp|avif|gif|svg)$/i.test(name)) return "_astro/[name][extname]";
                      return "assets/[name][extname]";
                   },
                },
@@ -89,8 +94,8 @@ export default defineConfig({
    },
 
    integrations: [
-      deleteUnused && !isStatic && deleteUnusedImages({}),
-      compress({
+      !isDev && deleteUnused && !isStatic && deleteUnusedImages({}),
+      !isDev && compress({
          CSS: false,
          JavaScript: false,
          SVG: false,

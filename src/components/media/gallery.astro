@@ -1,0 +1,128 @@
+---
+import { getCollection } from "astro:content";
+import { Picture, getImage } from "astro:assets";
+import "@styles/components/media/_gallery.scss";
+import Icon from "@components/ui/Icon.astro";
+
+export interface Props {
+   collectionName: string;
+   showHover?: boolean;
+   showTitle?: boolean;
+   showDesc?: boolean;
+   showIcon?: boolean;
+   showCaption?: boolean;
+   className?: string;
+   imageFormats?: ("avif" | "webp" | "jpeg" | "png")[];
+   includeLegacyFallback?: boolean;
+   sfGallery?: string;
+}
+
+const {
+   collectionName,
+   showHover = true,
+   showTitle = true,
+   showDesc = true,
+   showIcon = true,
+   showCaption = true,
+   className = "",
+   imageFormats = ["webp"],
+   includeLegacyFallback = false,
+   sfGallery,
+} = Astro.props;
+
+// @ts-expect-error Dynamic collection name
+const galleryItems = await getCollection(collectionName);
+galleryItems.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+// Обробляємо всі async операції СПОЧАТКУ
+const processedItems = await Promise.all(
+   galleryItems.map(async (item) => {
+      const { title, shortDesc, fullCaption, thumb, full, width, height } =
+         item.data;
+      const fullImg = full ?? thumb;
+
+      const targetWidth = width ?? fullImg.width;
+      const targetHeight = height ?? fullImg.height;
+
+      const optimizedFull = await getImage({
+         src: fullImg,
+         format: "webp",
+         width: targetWidth,
+         height: targetHeight,
+         quality: 80,
+      });
+
+      return {
+         optimizedFull,
+         title,
+         shortDesc,
+         fullCaption,
+         thumb,
+         width,
+         height,
+      };
+   }),
+);
+
+// Формати для <source>
+const finalFormats = includeLegacyFallback
+   ? [...imageFormats, "jpeg"]
+   : imageFormats;
+
+// Fallback для <img>
+const fallbackFormat = includeLegacyFallback ? "jpeg" : "webp";
+---
+
+<div class={`gallery__body ${className}`} sf-gallery={sfGallery}>
+   {
+      processedItems.map((item) => (
+         <a
+            data-fancybox="gallery"
+            data-caption={
+               showCaption ? (item.fullCaption ?? item.title) : undefined
+            }
+            data-width={item.width}
+            data-height={item.height}
+            class="gallery__img"
+            href={item.optimizedFull.src}
+            aria-label={`${item.title}`}
+         >
+            <Picture
+               src={item.thumb}
+               alt={`${item.title}`}
+               class="gallery__picture"
+               loading="lazy"
+               decoding="async"
+               formats={finalFormats}
+               fallbackFormat={fallbackFormat}
+               widths={[400, 800, 1200]}
+               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+               quality={80}
+            />
+
+            {showHover && (
+               <>
+                  <div class="gallery__overlay" />
+                  <div class="gallery__info">
+                     {showTitle && item.title && (
+                        <h3 class="gallery__title">{item.title}</h3>
+                     )}
+                     {showDesc && item.shortDesc && (
+                        <p class="gallery__desc">{item.shortDesc}</p>
+                     )}
+                  </div>
+                  {showIcon && (
+                     <div class="gallery__icon">
+                        <Icon name="zoom-in" />
+                     </div>
+                  )}
+               </>
+            )}
+         </a>
+      ))
+   }
+</div>
+
+<script>
+   import "@scripts/init/gallery.js";
+</script>

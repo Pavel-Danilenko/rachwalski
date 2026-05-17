@@ -3,6 +3,7 @@
    "type": "module",
    "version": "0.0.1",
    "scripts": {
+      "snippets": "node scripts/generate-snippets.js",
       "dev": "astro dev",
       "build": "astro build",
       "build:plugin": "cross-env PUBLIC_IMAGE_MODE=plugin astro build",
@@ -17,9 +18,11 @@
    },
    "dependencies": {
       "@astrojs/node": "^9.5.2",
+      "@barba/core": "^2.10.3",
       "@fancyapps/ui": "^6.1.10",
       "astro": "^5.16.6",
       "astro-delete-unused-images": "^1.0.3",
+      "gsap": "^3.15.0",
       "node-html-parser": "^7.1.0",
       "nodemailer": "^7.0.13",
       "swiper": "^12.1.2"

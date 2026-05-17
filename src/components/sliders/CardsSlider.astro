@@ -1,0 +1,58 @@
+---
+import "@styles/components/sliders/_cards-slider.scss";
+import Icon from "@components/ui/Icon.astro";
+---
+
+<div class="cards-slider" data-cards-slider>
+   <div class="swiper">
+      <div class="swiper-wrapper">
+         <div class="swiper-slide">
+            <div class="cards-slider__card bg-white-medium br-20">
+               <div class="cards-slider__number fs-24 mb-20">/01</div>
+               <div class="cards-slider__title fs-20 mb-12">
+                  3D planning and facial analysis tools
+               </div>
+               <div class="cards-slider__text fs-16">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+               </div>
+            </div>
+         </div>
+
+         <div class="swiper-slide">
+            <div class="cards-slider__card bg-white-medium br-20">
+               <div class="cards-slider__number fs-24 mb-20">/02</div>
+               <div class="cards-slider__title fs-20 mb-12">
+                  Minimally invasive approaches to reduce downtime
+               </div>
+               <div class="cards-slider__text fs-16">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+               </div>
+            </div>
+         </div>
+
+         <div class="swiper-slide">
+            <div class="cards-slider__card bg-white-medium br-20">
+               <div class="cards-slider__number fs-24 mb-20">/03</div>
+               <div class="cards-slider__title fs-20 mb-12">
+                  Modern anesthesia techniques for comfort and safety
+               </div>
+               <div class="cards-slider__text fs-16">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="cards-slider__controls">
+      <button class="slider__arrow slider__arrow--prev" aria-label="Попередній">
+         <Icon name="arrow-dark-slider-left" />
+      </button>
+      <button class="slider__arrow slider__arrow--next" aria-label="Наступний">
+         <Icon name="arrow-dark-slider-right" />
+      </button>
+   </div>
+</div>

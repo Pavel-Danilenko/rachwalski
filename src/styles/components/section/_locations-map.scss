@@ -1,0 +1,181 @@
+@use "@styles/utils" as *;
+
+.locations-map {
+   position: relative;
+   // .locations-map__body
+   &__container {
+      @include respond-from("md") {
+         padding-block: toRem(22);
+      }
+   }
+
+   // .locations-map__panel
+   &__panel {
+      width: 100%;
+      @include fluid-space(max-width, 300, 420);
+      background: var(--color-overlay-dark);
+      backdrop-filter: blur(12px);
+      @include fluid-space(padding, 20, 24);
+      border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      @include respond-to("md") {
+         max-width: 100%;
+         &:not(:last-child) {
+            margin-bottom: toRem(20);
+         }
+      }
+   }
+
+   // .locations-map__map-wrap
+   &__map-wrap {
+      @include respond-from("md") {
+         height: 100%;
+         position: absolute;
+         top: 0;
+         left: 0;
+         z-index: 0;
+      }
+      width: 100%;
+      aspect-ratio: 375/336;
+      @include respond-to("md") {
+         width: calc(100% + toRem(30));
+         margin-left: toRem(-15);
+      }
+   }
+}
+
+// ── Location card ──────────────────────────────────────────────────────────
+
+.location-card {
+   &:not(:last-child) {
+      @include fluid-space(margin-bottom, 12, 20);
+   }
+   // .location-card__name
+   &__name {
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 12, 20);
+      }
+   }
+
+   // .location-card__place
+   &__place {
+      display: flex;
+      align-items: flex-start;
+      gap: toRem(12);
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 12, 20);
+      }
+   }
+
+   // .location-card__place-icon
+   &__place-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: toRem(40);
+      height: toRem(40);
+      background: var(--color-primary);
+      flex-shrink: 0;
+      border-radius: 50%;
+
+      .icon {
+         font-size: toRem(28);
+         color: var(--color-black);
+      }
+   }
+
+   // .location-card__place-info
+   &__place-info {
+      display: flex;
+      flex-direction: column;
+      gap: toRem(2);
+   }
+
+   // .location-card__clinic
+   &__clinic {
+   }
+
+   // .location-card__address
+   &__address {
+   }
+
+   // .location-card__section
+   &__section {
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 12, 20);
+      }
+   }
+
+   // .location-card__label
+   &__label {
+      font-size: toRem(16);
+   }
+
+   // .location-card__hours
+   &__hours {
+   }
+
+   // .location-card__transport — 2 колонки: Metro | Bus
+   &__transport {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: toRem(12);
+      &:not(:last-child) {
+         @include fluid-space(padding-bottom, 12, 20);
+         border-bottom: 1px solid var(--color-border);
+      }
+   }
+
+   // .location-card__transport-col
+   &__transport-col {
+      display: flex;
+      flex-direction: column;
+      gap: toRem(6);
+   }
+
+   // .location-card__metro-item
+   &__metro-item {
+      display: flex;
+      align-items: center;
+      gap: toRem(8);
+      color: var(--color-primary);
+   }
+
+   // .location-card__metro
+   &__metro {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: toRem(20);
+      height: toRem(20);
+      border-radius: 50%;
+      background-color: var(--color-blue);
+      color: var(--color-black);
+      font-size: toRem(14);
+      font-weight: 700;
+      flex-shrink: 0;
+   }
+
+   // .location-card__bus-items
+   &__bus-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: toRem(4);
+   }
+
+   // .location-card__bus
+   &__bus {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding-inline: toRem(6);
+      border-radius: toRem(4);
+      min-width: toRem(31);
+      background-color: var(--color-blue);
+      color: var(--color-black);
+      flex-shrink: 0;
+   }
+}

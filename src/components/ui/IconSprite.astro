@@ -1,0 +1,70 @@
+---
+const icons = import.meta.glob("/src/icons/*.svg", {
+   query: "?raw",
+   import: "default",
+   eager: true,
+});
+
+function processSVG(svgContent: string) {
+   // Витягуємо viewBox з оригінального SVG
+   const viewBoxMatch = svgContent.match(/viewBox=["']([^"']+)["']/);
+   const viewBox = viewBoxMatch ? viewBoxMatch[1] : "0 0 24 24";
+
+   // Видаляємо svg теги
+   let content = svgContent.replace(/<svg[^>]*>|<\/svg>/g, "");
+
+   // Замінюємо всі кольори на currentColor (зберігаємо fill="none")
+   content = content
+      .replace(/fill=["'](?!none)[^"']*["']/g, 'fill="currentColor"')
+      .replace(/stroke=["'](?!none)[^"']*["']/g, 'stroke="currentColor"');
+
+   const hasFill   = /fill=["']currentColor["']/.test(content);
+   const hasStroke = /stroke=["']currentColor["']/.test(content);
+
+   const shapeSelectors = ["path", "circle", "rect", "line", "polyline", "polygon", "ellipse"];
+
+   // Тільки stroke → явно прибираємо fill щоб не перекривав
+   if (hasStroke && !hasFill) {
+      shapeSelectors.forEach((tag) => {
+         // Додаємо fill="none" тільки якщо атрибут ще не заданий
+         content = content.replace(
+            new RegExp(`<${tag}(?![^>]*fill=)`, "g"),
+            `<${tag} fill="none"`,
+         );
+      });
+   }
+
+   // Тільки fill → прибираємо stroke щоб не малював зайвий контур
+   if (hasFill && !hasStroke) {
+      shapeSelectors.forEach((tag) => {
+         content = content.replace(
+            new RegExp(`<${tag}(?![^>]*stroke=)`, "g"),
+            `<${tag} stroke="none"`,
+         );
+      });
+   }
+
+   return { content, viewBox };
+}
+---
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+   <defs>
+      {
+         Object.entries(icons).map(([path, svg]) => {
+            const name = path.split("/").pop()!.replace(".svg", "");
+            const { content, viewBox } = processSVG(svg as string);
+
+            return (
+               <symbol
+                  id={`icon-${name}`}
+                  viewBox={viewBox}
+                  data-viewbox={viewBox}
+               >
+                  <Fragment set:html={content} />
+               </symbol>
+            );
+         })
+      }
+   </defs>
+</svg>

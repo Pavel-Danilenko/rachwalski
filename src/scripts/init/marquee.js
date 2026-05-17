@@ -45,8 +45,8 @@ class MarqueeManager {
    createMarquee(wrapper) {
       const dataMarqueeSpace = this.getResponsiveValue(wrapper, "marqueeSpace");
       const direction = wrapper.dataset.marqueeDirection || "left";
-      // Читаємо pause як значення атрибуту (true/false string), не як наявність
-      const pauseOnHover = wrapper.dataset.marqueePause === "true";
+      // pauseOnHover: перевіряємо і "true" і наявність порожнього атрибуту
+      const pauseOnHover = wrapper.dataset.marqueePause === "true" || wrapper.hasAttribute("data-marquee-pause");
       let startPosition = parseFloat(wrapper.dataset.marqueeStart) || 0;
       const minWidth = parseInt(wrapper.dataset.marqueeMinWidth || "0");
       const maxWidth = parseInt(wrapper.dataset.marqueeMaxWidth || "999999");
@@ -347,9 +347,8 @@ function destroyMarquee() {
 }
 
 if (typeof document !== "undefined") {
-   document.addEventListener("DOMContentLoaded", initMarquee);
-   document.addEventListener("astro:page-load", initMarquee);
-   document.addEventListener("astro:before-swap", destroyMarquee);
+   document.addEventListener("page:ready", initMarquee);
+   document.addEventListener("page:leave", destroyMarquee);
 }
 
 export { initMarquee, destroyMarquee };

@@ -1,62 +1,270 @@
 // base/_palette.scss
-// Палітра кольорів проєкту
-// Генерується в base/_variables.scss → використовуй var(--color-...)
+// ─────────────────────────────────────────────────────────────────────────────
+// ⚠️  Додав/змінив колір? → запусти: npm run snippets
+//     Це оновить підказки cv (var(--color-...)) в scss.code-snippets.
+// СТРУКТУРА КОЛЬОРІВ
+//
+// 1. БРЕНД-КОЛЬОРИ — незмінні, не залежать від теми
+//    primary, secondary, accent
+//    Використовуй для: кнопок CTA, посилань, активних елементів
+//    Приклади:
+//      background: var(--color-primary);
+//      border-color: var(--color-secondary);
+//
+// 2. СЕМАНТИЧНІ КОЛЬОРИ — змінюються з темою (dark / light)
+//    bg, bg-alt, surface, text, text-muted, border
+//    Використовуй для: тексту, фонів, бордерів (автоматично адаптуються до теми)
+//    Приклади:
+//      color: var(--color-text);           ← текст
+//      background-color: var(--color-bg); ← фон
+//      border-color: var(--color-border); ← бордер
+//
+// 3. СПЕЦІАЛЬНІ КОЛЬОРИ — не залежать від теми
+//    overlay-dark, overlay-light, bg-dark, bg-light, surface-dark
+//    Використовуй для: overlay, напівпрозорих фонів, спеціальних ефектів
+//    Приклади:
+//      background: var(--color-overlay-dark);
+//      background: var(--color-bg-light);
+//
+// 4. УТИЛІТАРНІ — завжди однакові
+//    white, black (тільки коли ЗОБОВ'ЯЗАНИЙ конкретний колір)
+//    Використовуй: текст на кольорових кнопках, іконки на фоні
+//    Приклади:
+//      color: var(--color-white);  ← білий текст на темному фоні
+//      color: var(--color-black);  ← чорний текст на світлому фоні
+//
+// 5. СТАНИ — для валідації форм
+//    success, warning, error, info
+//    Приклади:
+//      color: var(--color-error);
+//      border-color: var(--color-success);
+//
+// ─── Як підключити тему ───────────────────────────────────────────────────────
+// Темна (дефолт):  <html>                     або  <html data-theme="dark">
+// Світла:          <html data-theme="light">
+// Перемикання JS:  document.documentElement.dataset.theme = "light"
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ─── Плоскі кольори ──────────────────────────────────────────────────────────
-// Генерує: --color-primary, --color-text тощо
-// Додавай скільки завгодно
-$colors: (
-   // Бренд
-   "primary":    #007bff,
-   "secondary":  #6c757d,
-   "accent":     #ff6b35,
+// ─── 1. Бренд-кольори (незмінні) ─────────────────────────────────────────────
+// Замін на реальні кольори бренду
+// Використовуй для: кнопок CTA, посилань, активних елементів (не залежать від теми)
+//
+// ПРИКЛАДИ ВИКОРИСТАННЯ:
+// ──────────────────────────
+// .btn-primary {
+//    background: var(--color-primary);     ← #eff2f8 (білий)
+//    &:hover { background: var(--color-primary-hover); }  ← #0b111a (чорний)
+// }
+// .link { color: var(--color-primary); }
+// .badge { background: var(--color-accent); }
+$color-primary: #eff2f8; // [ЗАМІН] головний акцент — кнопки CTA, посилання
+$color-primary-hover: #0b111a; // [ЗАМІН] hover стан primary
+$color-secondary: #0b111a; // [ЗАМІН] другорядний бренд-колір
+$color-secondary-hover: #3a5a8a; // [ЗАМІН] hover стан secondary
+$color-accent: #e8d5b0; // [ЗАМІН] акцент — виділення, теги, бейджі
+$color-accent-hover: #d4c49a; // [ЗАМІН] hover стан accent
 
-   // Текст
-   "text":       #1a1a1a,
-   "text-muted": #888888,
-
-   // Фон
-   "bg":         #ffffff,
-   "bg-alt":     #f5f5f5,
-
-   // Лінії
-   "border":     #e5e5e5,
-
-   // Стани
-   "success":    #28a745,
-   "warning":    #ffc107,
-   "error":      #dc3545,
-   "info":       #17a2b8,
+// ─── 2. Семантичні кольори — ТЕМНА тема (дефолт) ─────────────────────────────
+// Змінюються при перемиканні на світлу тему [data-theme="light"]
+//
+// ПРИКЛАДИ ВИКОРИСТАННЯ:
+// ──────────────────────────
+// .card {
+//    background: var(--color-bg-alt);   ← фон карти (темний фон, світла тема буде світлий)
+//    color: var(--color-text);           ← текст автоматично змінить колір
+// }
+// .text-muted { color: var(--color-text-muted); }
+// .divider { border: 1px solid var(--color-border); }
+$dark: (
+   "bg": #0b111a,
+   // фон сторінки
+   "bg-alt": #141c28,
+   // фон карток, секцій, альтернативний
+   "surface": #1e2a3a,
+   // модалки, дропдауни, попапи
+   "text": #eff2f8,
+   // основний текст
+   "text-muted": rgba(239, 242, 248, 0.5),
+   // приглушений текст, підписи
+   "border": rgba(239, 242, 248, 0.1), // лінії розділювачів
 );
 
-// ─── Шкала відтінків ─────────────────────────────────────────────────────────
-// Для складних проєктів з градієнтами/багатьма кольорами
-// Генерує: --color-primary-100, --color-primary-500, --color-gray-900 тощо
-// Розкоментуй або додай свої кольори
+// ─── 2. Семантичні кольори — СВІТЛА тема ─────────────────────────────────────
+$light: (
+   "bg": #ffffff,
+   // фон сторінки
+   "bg-alt": #f4f6fb,
+   // фон карток, секцій, альтернативний
+   "surface": #eaecf2,
+   // модалки, дропдауни, попапи
+   "text": #0b111a,
+   // основний текст
+   "text-muted": rgba(11, 17, 26, 0.5),
+   // приглушений текст, підписи
+   "border": rgba(11, 17, 26, 0.1), // лінії розділювачів
+);
+
+// ─── 3. СПЕЦІАЛЬНІ КОЛЬОРИ (не залежать від теми) ───────────────────────────
+// Для напівпрозорості, overlay, допоміжних фонів, обробок
+//
+// ПРИКЛАДИ ВИКОРИСТАННЯ:
+// ──────────────────────────
+// .hero { background: var(--color-overlay-dark); }        ← напівпрозорий overlay
+// .section { background: var(--color-bg-light); }         ← завжди світлий фон
+// .modal-overlay { background: var(--color-overlay-dark); }
+$colors-special: (
+   "overlay-dark": rgba(11, 17, 26, 0.5),
+   // напівпрозорий темний overlay
+   "overlay-light": rgba(255, 255, 255, 0.02),
+   "overlay-medium": rgba(255, 255, 255, 0.4),
+   // напівпрозорий світлий overlay
+   "bg-dark": #0b111a,
+   // темний фон
+   "bg-light": #e4eaf3,
+   // світлий фон
+   "light-blue-overlay": rgba(205, 220, 243, 0.04),
+   "surface-dark": #1e2a3a,
+   // темна поверхня (карти, модалки)
+   "surface-glass": rgb(255 255 255 / 3%), // скляна поверхня — легкий білий фон
+);
+
+// ─── 4. Утилітарні (завжди однакові) ─────────────────────────────────────────
+// ВИКОРИСТОВУЙ ТІЛЬКИ якщо колір ЗОБОВ'ЯЗАНИЙ бути конкретним!
+//
+// ПРИКЛАДИ ВИКОРИСТАННЯ:
+// ──────────────────────────
+// .btn-dark { color: var(--color-white); }      ← білий текст на темній кнопці
+// .icon-on-primary { color: var(--color-black); } ← чорна іконка на білому фоні
+// .btn-light { color: var(--color-white); }    ← білий текст на білому = НЕВИДИМО ❌
+$colors-static: (
+   "white": #ffffff,
+   // завжди білий — текст на темних кнопках
+   "black": #0b111a,
+   "blue": #b2c6de,
+   "light-blue": #e4efff,
+   // завжди чорний — текст на світлих кнопках
+   "primary": $color-primary,
+   "primary-hover": $color-primary-hover,
+   "secondary": $color-secondary,
+   "secondary-hover": $color-secondary-hover,
+   "accent": $color-accent,
+   "accent-hover": $color-accent-hover,
+);
+
+// ─── 5. Стани (незмінні) ─────────────────────────────────────────────────────
+// Для форм, сповіщень, валідації
+//
+// ПРИКЛАДИ ВИКОРИСТАННЯ:
+// ──────────────────────────
+// .input--error { border-color: var(--color-error); }     ← червоний бордер
+// .message--success { color: var(--color-success); }      ← зелений текст
+// .alert { background: var(--color-warning); }             ← жовтий alert
+$colors-state: (
+   "success": #28a745,
+   "warning": #ffc107,
+   "error": #dc3545,
+   "info": #17a2b8,
+);
+
+// ─── ШПАРГАЛКА: ЯК ВИКОРИСТОВУВАТИ КОЛЬОРИ ────────────────────────────────────
+//
+// ❌ НЕПРАВИЛЬНО:                           ✅ ПРАВИЛЬНО:
+// ──────────────────────────────────────────────────────────────────────────────
+// color: #0b111a;        ← жорсткий колір  color: var(--color-text);
+// color: #eff2f8;                          color: var(--color-primary);
+//                                          background: var(--color-bg);
+//
+// ЯК ОБРАТИ ПРАВИЛЬНИЙ КОЛІР:
+// ────────────────────────────────────────────────────────────────────────────
+// Текст, фон?         → var(--color-text), var(--color-bg)        (змінюється з темою)
+// Кнопка, посилання?  → var(--color-primary), var(--color-accent) (бренд, незмінний)
+// Помилка, успіх?     → var(--color-error), var(--color-success)  (стани)
+// Іконка на кнопці?   → var(--color-white) або var(--color-black) (утилітарні)
+// Overlay?            → var(--color-overlay-dark)                  (спеціальні)
+//
+// ─── Градієнти ───────────────────────────────────────────────────────────────
+// Генерує: --gradient-name
+// Використання: background: var(--gradient-hero)
+$gradients: (
+   prices-bottom-gradient: linear-gradient(
+         to top,
+         #0b111a 0%,
+         rgba(11, 17, 26, 0.9) 20%,
+         rgba(11, 17, 26, 0.6) 50%,
+         rgba(11, 17, 26, 0.2) 75%,
+         transparent 100%
+      ),
+   prices-top-gradient: linear-gradient(
+         80deg,
+         rgba(1, 6, 16, 0.95) 0%,
+         rgba(1, 6, 16, 0.7) 20%,
+         rgba(1, 6, 16, 0.35) 45%,
+         rgba(1, 6, 16, 0.1) 68%,
+         rgba(1, 6, 16, 0) 100%
+      ),
+   header-mask-dark-top: linear-gradient(
+         165deg,
+         rgb(1, 6, 16) 0%,
+         rgba(14, 28, 45, 0) 60%
+      ),
+   footer-gradient-top: linear-gradient(180deg, #0b111a 0%, #0e1c2d00 100%),
+   bg-dark-navy: linear-gradient(
+         to top right,
+         #324259 0%,
+         #1c2840 15%,
+         #0f1a2a 35%,
+         #0b1020 60%,
+         #080d12 100%
+      ),
+   top-gradient: linear-gradient(
+         180deg,
+         rgba(11, 17, 26, 0) 0%,
+         #0b111a 6%,
+         #0e1e30 20%,
+         #12243a 25%,
+         #1a2e4a 35%,
+         #2d4a70 48%,
+         #476895 58%,
+         #7ba3c6 80%,
+         #b0c4dd 100%
+      ),
+   footer-bottom-gradient: linear-gradient(
+         to bottom,
+         transparent 0%,
+         rgba(9, 12, 17, 0.8) 100%
+      ),
+   hero-mask: linear-gradient(180deg, rgba(11, 17, 26, 0) 0%, #0b111a 100%),
+   top-gradient-light: linear-gradient(180deg, #b0c4dd 0%, #e4eaf3 100%),
+   bottom-gradient-dark: linear-gradient(
+         0deg,
+         #0b111a 0%,
+         #0b111a 2%,
+         #0d1a2b 15%,
+         #12243a 23%,
+         #1f3452 32%,
+         #476895 51%,
+         #b2c6de 79%,
+         #e4eaf3 100%
+      ),
+   // "hero":   linear-gradient(180deg, #0b111a 0%, #1e2a3a 100%),
+   // "brand":  linear-gradient(135deg, #c9a96e 0%, #e8d5b0 100%),
+   blog-hero-light: linear-gradient(
+         0deg,
+         #e4eaf3 0%,
+         #b2c6de 23%,
+         #758cac 47%,
+         hsla(214, 42%, 24%, 0) 100%
+      ),
+);
+
+// ─── Шкала відтінків (для складних проєктів) ─────────────────────────────────
+// Генерує: --color-primary-100 ... --color-primary-900
 $color-scale: (
    // "primary": (
-   //    "50":  #eff6ff,
-   //    "100": #dbeafe,
-   //    "200": #bfdbfe,
-   //    "300": #93c5fd,
-   //    "400": #60a5fa,
-   //    "500": #007bff,   // ← базовий
-   //    "600": #2563eb,
-   //    "700": #1d4ed8,
-   //    "800": #1e40af,
-   //    "900": #1e3a8a,
-   // ),
-   // "gray": (
-   //    "50":  #f9fafb,
-   //    "100": #f3f4f6,
-   //    "200": #e5e7eb,
-   //    "300": #d1d5db,
-   //    "400": #9ca3af,
-   //    "500": #6b7280,
-   //    "600": #4b5563,
-   //    "700": #374151,
-   //    "800": #1f2937,
-   //    "900": #111827,
-   // ),
+   //    "100": #f5edde,
+   //    "300": #dfc49a,
+   //    "500": #c9a96e,   // ← базовий
+   //    "700": #a07840,
+   //    "900": #5c4220,
+    // ),
 );

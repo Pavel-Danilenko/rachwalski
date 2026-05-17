@@ -379,6 +379,14 @@ use PHPMailer\PHPMailer\Exception;
 
 require __DIR__ . "/../../vendor/autoload.php";
 
+$configFile = __DIR__ . "/mail.config.php";
+if (!file_exists($configFile)) {
+   http_response_code(500);
+   echo json_encode(["success" => false, "message" => "mail.config.php not found. Copy mail.config.example.php → mail.config.php"]);
+   exit();
+}
+$config = require $configFile;
+
 // CORS Headers
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
@@ -420,15 +428,22 @@ $name = isset($_POST["name"]) ? trim($_POST["name"]) : "";
 $email = isset($_POST["email"]) ? trim($_POST["email"]) : "";
 
 // Email налаштування
-$recipient_email = isset($_POST["recipient_email"])
-   ? $_POST["recipient_email"]
-   : "your-email@example.com";
+$form_key = isset($_POST["form_key"]) ? trim($_POST["form_key"]) : "";
+$form_emails = isset($config["form_emails"]) ? $config["form_emails"] : [];
+
+$recipient_email =
+   ($form_key && isset($form_emails[$form_key])
+      ? $form_emails[$form_key]
+      : null) ?:
+   (isset($_POST["recipient_email"]) ? $_POST["recipient_email"] : null) ?:
+   $config["recipient_email"];
+
 $recipient_name = isset($_POST["recipient_name"])
    ? $_POST["recipient_name"]
-   : "Website Admin";
+   : $config["recipient_name"];
 $sender_name = isset($_POST["sender_name"])
    ? $_POST["sender_name"]
-   : "Contact Form";
+   : $config["from_name"];
 $subject_field = isset($_POST["subject"]) ? trim($_POST["subject"]) : "";
 
 // ========================================
@@ -679,21 +694,23 @@ $fieldsText .= "Date: " . date("d.m.Y H:i:s");
 $mailer = new PHPMailer(true);
 
 try {
-   // SMTP налаштування для Mailhog (локально)
+   // SMTP — читається з mail.config.php
    $mailer->isSMTP();
-   $mailer->Host = "localhost";
-   $mailer->Port = 1025;
-   $mailer->SMTPAuth = false;
+   $mailer->Host    = $config["smtp_host"];
+   $mailer->Port    = $config["smtp_port"];
+   $mailer->CharSet = "UTF-8";
 
-   // 🔥 На продакшні закоментуй вище і використай:
-   // $mailer->Host = 'smtp.yourdomain.com';
-   // $mailer->Port = 587;
-   // $mailer->SMTPAuth = true;
-   // $mailer->Username = 'your-email@yourdomain.com';
-   // $mailer->Password = 'your-password';
+   if (!empty($config["smtp_user"]) && !empty($config["smtp_pass"])) {
+      $mailer->SMTPAuth = true;
+      $mailer->Username = $config["smtp_user"];
+      $mailer->Password = $config["smtp_pass"];
+      $mailer->SMTPSecure = ($config["smtp_port"] == 465)
+         ? PHPMailer::ENCRYPTION_SMTPS
+         : PHPMailer::ENCRYPTION_STARTTLS;
+   }
 
    // Відправник
-   $mailer->setFrom("noreply@example.com", $sender_name);
+   $mailer->setFrom($config["from_email"], $sender_name);
    $mailer->addReplyTo($email, $name);
 
    // Отримувач

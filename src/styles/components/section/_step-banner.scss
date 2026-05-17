@@ -1,0 +1,52 @@
+@use "@styles/utils" as *;
+
+.step-banner {
+   // .step-banner__container
+
+   &__container {
+   }
+
+   // .step-banner__row
+
+   &__row {
+      @include fluid-space(padding-block, 20, 32);
+      @include fluid-space(padding-inline, 20, 24);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      @include fluid-space(gap, 20, 32);
+      @include respond-to("md") {
+         flex-wrap: wrap;
+      }
+   }
+
+   // .step-banner__column-left
+
+   &__column-left {
+      flex-basis: toRem(740);
+   }
+
+   // .step-banner__title
+
+   &__title {
+   }
+
+   // .step-banner__text
+
+   &__text {
+   }
+
+   // .step-banner__column-right
+
+   &__column-right {
+      flex-shrink: 0;
+      @include respond-to("md") {
+         flex-grow: 1;
+      }
+   }
+
+   // .step-banner__btn
+
+   &__btn {
+   }
+}

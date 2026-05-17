@@ -1,0 +1,142 @@
+---
+import { PHONE_COUNTRIES } from "@data/phone-countries";
+import "@styles/components/forms/_phone-input.scss";
+import Icon from "@components/ui/Icon.astro";
+
+interface Props {
+   name: string;
+   defaultCountry?: string;
+   placeholder?: string;
+   required?: boolean;
+   disabled?: boolean;
+   searchable?: boolean;
+   alphabetical?: boolean;
+   showCode?: boolean;
+
+   // i18n тексти — ніяких хардкодів в JS
+   searchPlaceholder?: string;
+   noResultsText?: string;
+
+   // валідація
+   errorRequired?: string;
+   errorPhone?: string;
+   class?: string;
+}
+
+const {
+   name,
+   defaultCountry = "UA",
+   placeholder = "XX XXX XX XX",
+   required = false,
+   disabled = false,
+   searchable = false,
+   alphabetical = false,
+   showCode = false,
+   searchPlaceholder = "Search...",
+   noResultsText = "Nothing found",
+   errorRequired,
+   errorPhone,
+   class: className = "",
+} = Astro.props;
+
+const countries = alphabetical
+   ? [...PHONE_COUNTRIES].sort((a, b) => a[0].localeCompare(b[0]))
+   : PHONE_COUNTRIES;
+
+const selected =
+   countries.find((c) => c[1] === defaultCountry.toUpperCase()) ??
+   countries.find((c) => c[1] === "UA")!;
+
+const inputId = `phone-input-${name}-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div
+   class:list={["phone-input", className]}
+   data-phone-input
+   data-show-code={showCode ? "true" : "false"}
+   data-no-results={noResultsText}
+>
+   <!-- Тригер вибору країни -->
+   <button
+      type="button"
+      class="phone-input__trigger"
+      aria-haspopup="listbox"
+      aria-expanded="false"
+      disabled={disabled}
+   >
+      <span class="phone-input__flag" aria-hidden="true">
+         {showCode ? selected[1] : selected[3]}
+      </span>
+      <span class="phone-input__dial">{selected[2]}</span>
+      <Icon name="arrow-select" class="phone-input__arrow" />
+   </button>
+
+   <!-- Поле вводу номера -->
+   <input
+      type="tel"
+      class="phone-input__number"
+      placeholder={placeholder}
+      autocomplete="tel-national"
+      disabled={disabled}
+      aria-label={name}
+   />
+
+   <!-- Дропдаун зі списком країн (рендериться в Astro) -->
+   <div class="phone-input__dropdown">
+      {
+         searchable && (
+            <div class="phone-input__search-wrap">
+               <input
+                  type="text"
+                  class="phone-input__search"
+                  placeholder={searchPlaceholder}
+                  autocomplete="off"
+               />
+            </div>
+         )
+      }
+
+      <ul class="phone-input__list" role="listbox">
+         {
+            countries.map(([countryName, iso, dial, flag]) => (
+               <li
+                  class={`phone-input__option${iso === selected[1] ? " is-active" : ""}`}
+                  role="option"
+                  data-iso={iso}
+                  data-dial={dial}
+                  data-name={countryName.toLowerCase()}
+               >
+                  <span class="phone-input__option-flag" aria-hidden="true">
+                     {flag}
+                  </span>
+                  <span class="phone-input__option-name">{countryName}</span>
+                  <span class="phone-input__option-dial">{dial}</span>
+               </li>
+            ))
+         }
+      </ul>
+
+      <div class="phone-input__no-results" style="display:none;">
+         {noResultsText}
+      </div>
+   </div>
+
+   <!-- Прихований input — FormValidator читає звідси -->
+   <input
+      type="tel"
+      id={inputId}
+      name={name}
+      class="phone-input__value"
+      required={required}
+      disabled={disabled}
+      data-phone
+      data-error-required={errorRequired}
+      data-error-phone={errorPhone}
+      tabindex="-1"
+      aria-hidden="true"
+   />
+</div>
+
+<script>
+   import "@scripts/init/phone-input";
+</script>

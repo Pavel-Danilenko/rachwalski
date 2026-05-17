@@ -1,0 +1,153 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/ui/PageMain.astro";
+import "@styles/pages/_contact.scss";
+import Faq from "@components/section/Faq.astro";
+import Img from "@components/media/Img.astro";
+import contactAuthor from "@assets/img/services/rhinoplasty/author-small.png";
+import Icon from "@components/ui/Icon.astro";
+import SectionHeader from "@components/section/SectionHeader.astro";
+import LocationsMap from "@components/section/LocationsMap.astro";
+
+import ContactFormSection from "@components/section/ContactFormSection.astro";
+import heroBgGradient from "@assets/img/other/bg.jpg";
+
+const faqItems = [
+   {
+      question: "How long is the recovery time after a facelift?",
+      answer:
+         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+   },
+   {
+      question: "Who is Dr. Martin Rachwalski?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What are his main areas of expertise?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he perform aesthetic surgical procedures?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What non-surgical aesthetic treatments are available?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Where are the consultation locations?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his academic and research background?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he treat complex congenital conditions?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "How can I book a consultation?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his professional affiliation in France?",
+      answer: "Lorem ipsum...",
+   },
+];
+
+const procedureOptions = [
+   { value: "rhinoplasty", label: "Rhinoplasty" },
+   { value: "facelift", label: "Facelift" },
+   { value: "blepharoplasty", label: "Blepharoplasty" },
+   { value: "botox", label: "Botox Injections" },
+];
+---
+
+<BaseLayout title="Contact us" description="Про нашу команду">
+   <PageMain>
+      <section class="contact">
+         <Img
+            src={heroBgGradient}
+            alt="Hero"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+            widths={[768, 1280, 1920]}
+         />
+         <div class="contact__container pt-190 pb-80">
+            <div class="contact__column-left">
+               <div class="contact__author contact-author glass br-12">
+                  <h1 class="contact-author__title mb-12 fs-36">
+                     Get in Touch with Dr. Martin Rachwalski
+                  </h1>
+                  <div class="contact-author__text">
+                     Whether you’re ready to book a consultation or simply have
+                     questions, we’re here to help.
+                  </div>
+                  <div class="contact-author__detail contact-detail mb-20">
+                     <Img
+                        src={contactAuthor}
+                        alt="Hero"
+                        loading="eager"
+                        fetchpriority="high"
+                        decoding="sync"
+                        quality={90}
+                        wrapperClass="contact-detail__img br-12"
+                     />
+                     <div class="contact-detail__row">
+                        <div class="contact-detail__name fs-24 fw-600">
+                           Dr. Martin Rachwalski
+                        </div>
+                        <div class="contact-detail__label">Facial Surgeon</div>
+                     </div>
+                  </div>
+                  <div class="contact-author__social contact-social">
+                     <div class="contact-social__row">
+                        <a href="#" class="contact-social__link instagram">
+                           <Icon name="instagram" />
+                        </a>
+                        <a href="#" class="contact-social__link linkedin">
+                           <Icon name="linkedin" />
+                        </a>
+                        <a href="#" class="contact-social__link facebook">
+                           <Icon name="facebook" />
+                        </a>
+                        <a href="#" class="contact-social__link twitter">
+                           <Icon name="twitter" />
+                        </a>
+                     </div>
+                     <a href="#" class="contact-social__btn btn white-btn">
+                        Contact us
+                     </a>
+                  </div>
+               </div>
+            </div>
+            <div class="contact__column-right">
+               <div class="contact__form contact-form glass br-12">
+                  <ContactFormSection
+                     procedureOptions={procedureOptions}
+                     formKey="contact"
+                  />
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="contact-map">
+         <div class="contact-map__container mb-40">
+            <SectionHeader>
+               <h2 slot="left">Your consultation, your convenience</h2>
+               <div slot="right">
+                  Dr. Martin Rachwalski welcomes patients in multiple locations
+                  to make your visit as comfortable as possible.
+               </div>
+            </SectionHeader>
+         </div>
+         <LocationsMap />
+      </section>
+      <Faq items={faqItems} />
+   </PageMain>
+</BaseLayout>

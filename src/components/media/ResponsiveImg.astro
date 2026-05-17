@@ -1,0 +1,135 @@
+---
+/**
+ * ResponsiveImg — різні зображення для desktop і mobile
+ * Браузер завантажує тільки те що підходить під екран.
+ *
+ * @param {ImageMetadata} srcDesktop     - зображення для desktop (обов'язковий)
+ * @param {ImageMetadata} srcMobile      - зображення для mobile (обов'язковий)
+ * @param {string}        alt            - alt текст (обов'язковий)
+ * @param {number}        breakpoint     - брейкпоінт в px (дефолт 768, mobile = < breakpoint)
+ * @param {string}        wrapperClass   - клас на обгортці <div>
+ * @param {string}        class          - клас на <img>
+ * @param {"lazy"|"eager"} loading       - lazy (дефолт) або eager для hero/LCP
+ * @param {"high"|"low"|"auto"} fetchpriority - пріоритет (high для LCP)
+ * @param {"async"|"sync"|"auto"} decoding    - async (дефолт) або sync для LCP
+ * @param {number}        quality        - якість 1-100 (дефолт 80)
+ * @param {number[]}      widthsDesktop  - розміри srcset для desktop
+ * @param {number[]}      widthsMobile   - розміри srcset для mobile
+ * @param {"cover"|"contain"|"fill"|"none"} objectFit - object-fit (дефолт cover)
+ *
+ * Приклади:
+ *
+ * // Базове використання (міняється на < 768px)
+ * <ResponsiveImg
+ *   srcDesktop={heroDesktop}
+ *   srcMobile={heroMobile}
+ *   alt="Hero"
+ *   loading="eager"
+ *   fetchpriority="high"
+ *   decoding="sync"
+ *   wrapperClass="hero__bg"
+ * />
+ *
+ * // Власний брейкпоінт (міняється на < 1024px)
+ * <ResponsiveImg
+ *   srcDesktop={heroDesktop}
+ *   srcMobile={heroMobile}
+ *   alt="Hero"
+ *   breakpoint={1024}
+ *   wrapperClass="hero__bg"
+ * />
+ *
+ * // З кастомними srcset розмірами
+ * <ResponsiveImg
+ *   srcDesktop={heroDesktop}
+ *   srcMobile={heroMobile}
+ *   alt="Hero"
+ *   widthsDesktop={[1280, 1920, 2560]}
+ *   widthsMobile={[375, 480, 768]}
+ *   quality={85}
+ *   wrapperClass="hero__bg"
+ * />
+ */
+
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import "@styles/components/media/_img.scss";
+
+interface Props {
+   srcDesktop: ImageMetadata;
+   srcMobile: ImageMetadata;
+   alt: string;
+   breakpoint?: number;
+   wrapperClass?: string;
+   class?: string;
+   loading?: "lazy" | "eager";
+   fetchpriority?: "high" | "low" | "auto";
+   decoding?: "async" | "sync" | "auto";
+   quality?: number;
+   widthsDesktop?: number[];
+   widthsMobile?: number[];
+   objectFit?: "cover" | "contain" | "fill" | "none";
+}
+
+const {
+   srcDesktop,
+   srcMobile,
+   alt,
+   breakpoint = 768,
+   wrapperClass = "",
+   class: imgClass = "",
+   loading = "lazy",
+   fetchpriority,
+   decoding = "async",
+   quality = 80,
+   widthsDesktop = [768, 1280, 1920],
+   widthsMobile = [375, 640, 768],
+   objectFit = "cover",
+} = Astro.props as Props;
+
+const desktop = await getImage({
+   src: srcDesktop,
+   format: "webp",
+   quality,
+   widths: widthsDesktop,
+});
+
+const mobile = await getImage({
+   src: srcMobile,
+   format: "webp",
+   quality,
+   widths: widthsMobile,
+});
+
+const fallback = await getImage({
+   src: srcDesktop,
+   format: "jpeg",
+   quality,
+   width: widthsDesktop[Math.floor(widthsDesktop.length / 2)],
+});
+---
+
+<div
+   class:list={["img-wrapper", wrapperClass]}
+   data-object-fit={objectFit !== "cover" ? objectFit : undefined}
+>
+   <picture>
+      <source
+         media={`(max-width: ${breakpoint - 1}px)`}
+         srcset={mobile.srcSet.attribute || mobile.src}
+         type="image/webp"
+      />
+      <source
+         srcset={desktop.srcSet.attribute || desktop.src}
+         type="image/webp"
+      />
+      <img
+         src={fallback.src}
+         alt={alt}
+         loading={loading}
+         decoding={decoding}
+         fetchpriority={fetchpriority}
+         class:list={["img-wrapper__img", imgClass]}
+      />
+   </picture>
+</div>

@@ -168,11 +168,11 @@ class Pagination {
 
       // Рядки
       this.labels = {
-         prev: root.dataset.labelPrev ?? "Previous page",
-         next: root.dataset.labelNext ?? "Next page",
-         first: root.dataset.labelFirst ?? "First page",
-         last: root.dataset.labelLast ?? "Last page",
-         page: root.dataset.labelPage ?? "Page {page} of {pages}",
+         prev:  root.dataset.labelPrev  ?? "Попередня сторінка",
+         next:  root.dataset.labelNext  ?? "Наступна сторінка",
+         first: root.dataset.labelFirst ?? "Перша сторінка",
+         last:  root.dataset.labelLast  ?? "Остання сторінка",
+         page:  root.dataset.labelPage  ?? "Сторінка {page} з {pages}",
          info: root.dataset.labelInfo ?? "{current} / {pages}",
       };
 
@@ -201,12 +201,19 @@ class Pagination {
 
       this.#init();
       Pagination.#instances.set(root, this);
+
+      // Зовнішній фільтр (пошук) сигналізує що треба перерахувати items
+      this.root.addEventListener("pagination:filter", () => this.refresh());
    }
 
    // ─── Getters ──────────────────────────────────────────────────────────────
 
    get items() {
-      return [...this.root.querySelectorAll(this.selector)];
+      return [...this.root.querySelectorAll(this.selector)]
+         .filter((el) =>
+            !el.hasAttribute("data-search-excluded") &&
+            !el.hasAttribute("data-filter-excluded"),
+         );
    }
 
    get total() {
@@ -245,6 +252,16 @@ class Pagination {
    }
 
    // ─── Public API ───────────────────────────────────────────────────────────
+
+   /** Перераховує items (враховуючи фільтри) і рендерить з 1-ї сторінки */
+   refresh() {
+      // Ховаємо всі excluded елементи (search + filter)
+      [...this.root.querySelectorAll(
+         `${this.selector}[data-search-excluded], ${this.selector}[data-filter-excluded]`,
+      )].forEach((el) => { el.style.display = "none"; });
+      this.current = 1;
+      this.#init();
+   }
 
    /** @param {number} page */
    goTo(page) {
@@ -693,13 +710,13 @@ function initPagination() {
       });
 }
 
-document.addEventListener("astro:before-swap", () => {
+document.addEventListener("page:leave", () => {
    document
       .querySelectorAll("[data-pagination-ready]")
       .forEach((el) => delete el.dataset.paginationReady);
 });
 
-document.addEventListener("astro:page-load", initPagination);
+document.addEventListener("page:ready", initPagination);
 
 if (document.readyState === "loading") {
    document.addEventListener("DOMContentLoaded", initPagination);

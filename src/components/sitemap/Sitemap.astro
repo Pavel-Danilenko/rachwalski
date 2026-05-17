@@ -1,0 +1,23 @@
+---
+import "@styles/components/sitemap/_sitemap.scss";
+
+interface Props {
+   breakpoint?: number;
+   class?: string;
+}
+
+const { breakpoint = 768, class: className } = Astro.props;
+---
+
+<div
+   class:list={["sitemap", className]}
+   data-sitemap
+   data-sitemap-breakpoint={breakpoint}
+   data-active-links
+>
+   <slot />
+</div>
+
+<script>
+   import "@scripts/init/sitemap";
+</script>

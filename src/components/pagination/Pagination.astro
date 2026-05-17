@@ -56,8 +56,6 @@ interface Props {
    classInfo?: string;
    classProgress?: string;
 
-   // ─── Shopify: параметри для section schema ────────────────────────────────
-   sfPagination?: string; // "per_page,animation" — трансформується в index.ts
 }
 
 const {
@@ -81,11 +79,11 @@ const {
    iconFirst,
    iconLast,
 
-   labelPrev = "Previous page",
-   labelNext = "Next page",
-   labelFirst = "First page",
-   labelLast = "Last page",
-   labelPage = "Page {page} of {pages}",
+   labelPrev = "Попередня сторінка",
+   labelNext = "Наступна сторінка",
+   labelFirst = "Перша сторінка",
+   labelLast = "Остання сторінка",
+   labelPage = "Сторінка {page} з {pages}",
    labelInfo = "{current} / {pages}",
 
    scrollTo = false,
@@ -104,14 +102,13 @@ const {
    classEllipsis,
    classInfo,
    classProgress,
-   sfPagination,
 } = Astro.props;
 ---
 
 <div
    class:list={["pagination-wrapper", className]}
    data-pagination-root
-   sf-pagination={sfPagination}
+
    data-per-page={perPage}
    data-item-selector={itemSelector}
    data-siblings={siblings}

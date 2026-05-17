@@ -1,0 +1,93 @@
+---
+/**
+ * Img — оптимізоване зображення через astro:assets
+ *
+ * @param {ImageMetadata} src        - імпортоване зображення (обов'язковий)
+ * @param {string}        alt        - alt текст (обов'язковий)
+ * @param {number}        width      - ширина (задає aspect-ratio якщо є height)
+ * @param {number}        height     - висота (задає aspect-ratio якщо є width)
+ * @param {string}        class      - клас на <img>
+ * @param {string}        wrapperClass - клас на обгортці <div>
+ * @param {"lazy"|"eager"} loading   - lazy (дефолт) або eager для hero/LCP
+ * @param {"high"|"low"|"auto"} fetchpriority - пріоритет завантаження (high для LCP)
+ * @param {"async"|"sync"|"auto"} decoding - async (дефолт) або sync для LCP
+ * @param {string}        sizes      - responsive sizes атрибут
+ * @param {number}        quality    - якість 1-100 (дефолт 80)
+ * @param {("webp"|"avif"|"jpeg"|"png")[]} formats - формати (дефолт ["webp"])
+ * @param {number[]}      widths     - брейкпоінти для srcset
+ * @param {"cover"|"contain"|"fill"|"none"} objectFit - object-fit (дефолт cover)
+ * @param {boolean}       includeLegacyFallback - додати jpeg fallback
+ *
+ * Приклади:
+ * <Img src={heroImg} alt="Hero" width={1920} height={1080} loading="eager" fetchpriority="high" />
+ * <Img src={cardImg} alt="Card" width={800} height={600} />
+ * <Img src={logoImg} alt="Logo" objectFit="contain" />
+ */
+
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import "@styles/components/media/_img.scss";
+
+interface Props {
+   src: ImageMetadata;
+   alt: string;
+   width?: number;
+   height?: number;
+   class?: string;
+   wrapperClass?: string;
+   loading?: "lazy" | "eager";
+   fetchpriority?: "high" | "low" | "auto";
+   decoding?: "async" | "sync" | "auto";
+   sizes?: string;
+   quality?: number;
+   formats?: ("avif" | "webp" | "jpeg" | "png")[];
+   widths?: number[];
+   objectFit?: "cover" | "contain" | "fill" | "none";
+   includeLegacyFallback?: boolean;
+   [key: string]: unknown;
+}
+
+const {
+   src,
+   alt,
+   width,
+   height,
+   class: imgClass = "",
+   wrapperClass = "",
+   loading = "lazy",
+   fetchpriority,
+   decoding = "async",
+   sizes = "(max-width: 768px) 100vw, 800px",
+   quality = 80,
+   formats = ["webp"],
+   widths = [400, 800, 1200],
+   objectFit = "cover",
+   includeLegacyFallback = false,
+   ...restProps
+} = Astro.props;
+
+const finalFormats = includeLegacyFallback ? [...formats, "jpeg"] : formats;
+const fallbackFormat = includeLegacyFallback ? "jpeg" : "webp";
+const aspectRatio = width && height ? `${width}/${height}` : undefined;
+---
+
+<div
+   class:list={["img-wrapper", wrapperClass]}
+   style={aspectRatio ? `--aspect-ratio: ${aspectRatio}` : undefined}
+   data-object-fit={objectFit !== "cover" ? objectFit : undefined}
+>
+   <Picture
+      src={src}
+      alt={alt}
+      formats={finalFormats}
+      fallbackFormat={fallbackFormat}
+      widths={widths}
+      sizes={sizes}
+      quality={quality}
+      loading={loading}
+      decoding={decoding}
+      fetchpriority={fetchpriority}
+      class:list={["img-wrapper__img", imgClass]}
+      {...restProps}
+   />
+</div>

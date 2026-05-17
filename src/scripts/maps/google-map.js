@@ -1,0 +1,168 @@
+const API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_KEY ?? "";
+const selector = "[data-google-map]";
+const instances = new WeakMap();
+
+const MAP_STYLES = [
+   // Base: майже чорний фон
+   { elementType: "geometry", stylers: [{ color: "#0b111a" }] },
+   { elementType: "labels.text.fill", stylers: [{ color: "#d0d4dc" }] },
+   { elementType: "labels.text.stroke", stylers: [{ color: "#0b111a" }] },
+   { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+
+   // Дороги → білі
+   {
+      featureType: "road",
+      elementType: "geometry",
+      stylers: [{ color: "#c8cdd8" }],
+   },
+   {
+      featureType: "road",
+      elementType: "geometry.stroke",
+      stylers: [{ color: "#0b111a" }, { weight: 0.5 }],
+   },
+   {
+      featureType: "road",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#d0d4dc" }],
+   },
+   {
+      featureType: "road.highway",
+      elementType: "geometry",
+      stylers: [{ color: "#ffffff" }],
+   },
+   {
+      featureType: "road.highway",
+      elementType: "geometry.stroke",
+      stylers: [{ color: "#0b111a" }, { weight: 0.8 }],
+   },
+   {
+      featureType: "road.highway",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#ffffff" }],
+   },
+
+   // Адміністративні межі
+   {
+      featureType: "administrative",
+      elementType: "geometry",
+      stylers: [{ color: "#141820" }],
+   },
+   {
+      featureType: "administrative.locality",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#d0d4dc" }],
+   },
+
+   // Транзит
+   {
+      featureType: "transit",
+      elementType: "geometry",
+      stylers: [{ color: "#0e1218" }],
+   },
+   {
+      featureType: "transit.station",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#9aa5b3" }],
+   },
+
+   // POI — приховані
+   { featureType: "poi", stylers: [{ visibility: "off" }] },
+
+   // Вода
+   {
+      featureType: "water",
+      elementType: "geometry",
+      stylers: [{ color: "#05080e" }],
+   },
+   {
+      featureType: "water",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#3a4d5c" }],
+   },
+
+   // Природа / парки
+   {
+      featureType: "landscape.natural",
+      elementType: "geometry",
+      stylers: [{ color: "#090c12" }],
+   },
+];
+
+// Пін за замовчуванням якщо маркер не має свого icon URL
+const DEFAULT_PIN = "/img/pin-1.svg";
+
+function loadApi() {
+   if (window.__gmapsLoaded) return Promise.resolve();
+   if (window.__gmapsPromise) return window.__gmapsPromise;
+
+   window.__gmapsPromise = new Promise((resolve) => {
+      window.__gmapsReady = () => {
+         window.__gmapsLoaded = true;
+         resolve();
+      };
+      const s = document.createElement("script");
+      s.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=__gmapsReady`;
+      s.async = true;
+      s.defer = true;
+      document.head.appendChild(s);
+   });
+
+   return window.__gmapsPromise;
+}
+
+function initMap(el) {
+   if (el.dataset.googleMapInitialized) return;
+   el.dataset.googleMapInitialized = "true";
+
+   const markers = JSON.parse(el.dataset.gmMarkers || "[]");
+   const center  = JSON.parse(el.dataset.gmCenter  || "null") || { lat: 48.874, lng: 2.296 };
+   const zoom    = parseInt(el.dataset.gmZoom  || "13", 10);
+   const panX    = parseInt(el.dataset.gmPanX ?? "0", 10);
+   const panY    = parseInt(el.dataset.gmPanY ?? "0", 10);
+
+   loadApi().then(() => {
+      if (!document.contains(el)) return;
+
+      const map = new google.maps.Map(el, {
+         center,
+         zoom,
+         styles: MAP_STYLES,
+         disableDefaultUI: true,
+         zoomControl: true,
+         zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_CENTER,
+         },
+      });
+
+      if (panX !== 0 || panY !== 0) {
+         google.maps.event.addListenerOnce(map, "idle", () => map.panBy(panX, panY));
+      }
+
+      markers.forEach((m) => {
+         new google.maps.Marker({
+            position: { lat: m.lat, lng: m.lng },
+            map,
+            title: m.title ?? "",
+            icon: {
+               url: m.icon ?? DEFAULT_PIN,
+               scaledSize: new google.maps.Size(44, 56),
+               anchor: new google.maps.Point(22, 56),
+            },
+         });
+      });
+
+      instances.set(el, map);
+   });
+}
+
+function initAllMaps() {
+   document.querySelectorAll(selector).forEach(initMap);
+}
+
+if (document.readyState === "loading") {
+   document.addEventListener("DOMContentLoaded", initAllMaps);
+} else {
+   initAllMaps();
+}
+
+document.addEventListener("page:ready", initAllMaps);

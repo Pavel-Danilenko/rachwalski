@@ -1,0 +1,26 @@
+@use "@styles/utils" as *;
+
+.section-header {
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+   @include fluid-space(gap, 12, 40);
+
+   // .section-header__left
+
+   &__left {
+      flex-shrink: 0;
+      @include fluid-space(flex-basis, 280, 420);
+
+      @include respond-to("md") {
+         flex-basis: 100%;
+      }
+   }
+
+   // .section-header__right
+
+   &__right {
+      flex-basis: toRem(280);
+      flex-grow: 1;
+   }
+}
