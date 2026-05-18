@@ -88,7 +88,7 @@
    &__form-body {
       border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
       border-radius: var(--radius-lg);
-      padding: toRem(24);
+      @include fluid-space(padding, 12, 24);
       background-color: var(--color-surface-glass);
       @include fluid-space(margin-top, 20, 30);
    }

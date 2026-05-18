@@ -19,6 +19,9 @@
       display: flex;
       flex-direction: column;
       @include fluid-space(flex-basis, 300, 420);
+      @include respond-to("md") {
+         flex-basis: 100%;
+      }
    }
 
    // .contact__author
@@ -80,24 +83,6 @@
       overflow: hidden;
       @include fluid(width, 50, 80);
    }
-
-   &__row {
-   }
-
-   // .contact-detail__name
-
-   &__name {
-   }
-
-   // .contact-detail__label
-
-   &__label {
-   }
-
-   // .contact-detail__social
-
-   &__social {
-   }
 }
 .contact-social {
    // .contact-social__row
@@ -126,11 +111,6 @@
       &:hover {
          color: var(--color-blue);
       }
-   }
-
-   // .contact-social__btn
-
-   &__btn {
    }
 }
 

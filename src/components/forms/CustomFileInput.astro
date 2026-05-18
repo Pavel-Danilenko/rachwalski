@@ -65,6 +65,9 @@ interface Props {
    sortBySizeText?: string;
    sortByTypeText?: string;
 
+   // Повідомлення після успішного додавання файлу
+   successText?: string;
+
    // Валідаційні помилки
    errorRequired?: string;
    errorFileType?: string;
@@ -135,6 +138,7 @@ const {
    errorFileType,
    errorFileSize,
    errorMaxFiles,
+   successText,
    class: className = "",
 } = Astro.props;
 ---
@@ -188,7 +192,7 @@ const {
    data-remove-icon={removeIcon}
 >
    <!-- Кнопка — єдине що є завжди -->
-   <button type="button" class="custom-file-input__button">
+   <button type="button" class="custom-file-input__button btn white-btn">
       {
          buttonIcon && buttonIconPosition === "left" && (
             <Icon name={buttonIcon} class="custom-file-input__icon" />
@@ -201,6 +205,10 @@ const {
          )
       }
    </button>
+
+   {successText && (
+      <span class="custom-file-input__success-text">{successText}</span>
+   )}
 
    {showDropZone && <p class="custom-file-input__drag-text">{dragText}</p>}
 

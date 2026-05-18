@@ -18,6 +18,20 @@
       pointer-events: none !important;
    }
 
+   // ── Кнопка ───────────────────────────────────────────────────────────────
+   // & &__button = .custom-file-input .custom-file-input__button (0,2,0) → перебиває .btn (0,1,0)
+   & &__button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      column-gap: toRem(8);
+   }
+
+   &__icon {
+      font-size: toRem(20);
+      flex-shrink: 0;
+   }
+
    // ── Drag text ─────────────────────────────────────────────────────────────
    &__drag-text {
       margin-top: toRem(8);
@@ -186,4 +200,19 @@
    100% {
       background-position: -200% 0;
    }
+}
+
+
+// ── Success message ───────────────────────────────────────────────────────────
+.custom-file-input__success-text {
+   display: none;
+   position: absolute;
+   top: 100%;
+   left: 0;
+   font-size: toRem(12);
+   color: var(--color-text);
+}
+
+.custom-file-input--success .custom-file-input__success-text {
+   display: inline;
 }

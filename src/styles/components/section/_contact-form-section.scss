@@ -92,9 +92,9 @@
             outline: none;
          }
 
-         .phone-input__flag  { order: 1; font-size: toRem(16); font-weight: 400; color: var(--color-text); }
+         .phone-input__flag  { order: 1; font-size: toRem(14); font-weight: 400; color: var(--color-text); }
          .phone-input__arrow { order: 2; font-size: toRem(12); font-weight: 400; color: var(--color-text); }
-         .phone-input__dial  { order: 3; font-size: toRem(16); font-weight: 400; color: var(--color-text); }
+         .phone-input__dial  { order: 3; font-size: toRem(14); font-weight: 400; color: var(--color-text); }
       }
 
       .phone-input__number {
@@ -149,13 +149,12 @@
    &__footer {
       display: grid;
       grid-template-columns: auto 1fr;
-      align-items: center;
       gap: toRem(16);
    }
 
    &__right {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       justify-content: flex-end;
       gap: toRem(16);
    }
@@ -177,26 +176,6 @@
 
    // ── File input ────────────────────────────────────────────
    &__file {
-      .custom-file-input__button {
-         border-radius: var(--radius-full);
-         border: 1px solid rgba(255, 255, 255, 0.15);
-         background: transparent;
-         color: var(--color-text);
-         padding: toRem(10) toRem(20);
-         display: flex;
-         align-items: center;
-         column-gap: toRem(8);
-         transition: border-color var(--transition-base);
-
-         .custom-file-input__icon {
-            font-size: toRem(20);
-         }
-
-         &:hover {
-            border-color: rgba(255, 255, 255, 0.4);
-         }
-      }
-
       &.custom-file-input--success .custom-file-input__button {
          background: var(--color-text);
          border-color: var(--color-text);
@@ -210,6 +189,7 @@
 
       &__fields {
          grid-template-columns: 1fr;
+         gap: 0.4rem 1.25rem;
       }
 
       &__group--full {
@@ -218,6 +198,7 @@
 
       &__footer {
          grid-template-columns: 1fr;
+         gap: 0.4rem 1.25rem;
       }
 
       &__right {
@@ -229,6 +210,11 @@
       &__btn {
          width: 100%;
          text-align: center;
+         order: -1;
+      }
+
+      &__policy {
+         order: 0;
       }
    }
 }
