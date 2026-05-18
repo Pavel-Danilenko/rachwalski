@@ -1,0 +1,74 @@
+---
+/**
+ * ShowMoreText — розкривний текст з кнопкою "Show more / Show less"
+ *
+ * @param {number}  lines      - кількість видимих рядків (дефолт: 4)
+ * @param {string}  labelMore  - текст кнопки у згорнутому стані (дефолт: "Show more")
+ * @param {string}  labelLess  - текст кнопки у розгорнутому стані (дефолт: "Show less")
+ * @param {boolean} gradient   - градієнт-fade знизу коли згорнуто (дефолт: true)
+ * @param {boolean} animation  - плавна анімація розкриття (дефолт: true)
+ * @param {number}  duration   - тривалість анімації в мс (дефолт: 400)
+ * @param {boolean} scrollTo   - скролити до початку при згортанні (дефолт: false)
+ * @param {string}  class      - додатковий клас на обгортці
+ *
+ * Приклад:
+ * <ShowMoreText lines={4} labelMore="Show more" labelLess="Show less">
+ *    Long text here...
+ * </ShowMoreText>
+ *
+ * З кастомними налаштуваннями:
+ * <ShowMoreText lines={6} gradient={false} scrollTo={true}>
+ *    Very long text...
+ * </ShowMoreText>
+ */
+
+import Icon from "@components/ui/Icon.astro";
+import "@styles/components/ui/_show-more-text.scss";
+
+interface Props {
+   lines?: number;
+   labelMore?: string;
+   labelLess?: string;
+   gradient?: boolean;
+   animation?: boolean;
+   duration?: number;
+   scrollTo?: boolean;
+   class?: string;
+}
+
+const {
+   lines = 4,
+   labelMore = "Show more",
+   labelLess = "Show less",
+   gradient = true,
+   animation = true,
+   duration = 400,
+   scrollTo = false,
+   class: className = "",
+} = Astro.props;
+---
+
+<div
+   class:list={["show-more-text", className, { "show-more-text--gradient": gradient }]}
+   data-text-toggle
+   data-lines={lines}
+   data-animation={animation || undefined}
+   data-duration={animation ? duration : undefined}
+   data-scroll-to={scrollTo || undefined}
+>
+   <div class="show-more-text__content" data-text-toggle-content>
+      <slot />
+   </div>
+
+   <button
+      class="show-more-text__btn"
+      data-text-toggle-btn
+      data-label-more={labelMore}
+      data-label-less={labelLess}
+      type="button"
+      aria-expanded="false"
+   >
+      <span data-text-toggle-label>{labelMore}</span>
+      <Icon name="arrow-bottom" />
+   </button>
+</div>

@@ -1,0 +1,270 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/ui/PageMain.astro";
+import Icon from "@components/ui/Icon.astro";
+import FilterTabs from "@components/ui/FilterTabs.astro";
+import ShowMoreText from "@components/ui/ShowMoreText.astro";
+import CustomSelect from "@components/forms/CustomSelect.astro";
+import "@styles/pages/_testimonials.scss";
+import Img from "@components/media/Img.astro";
+import heroBgGradient from "@assets/img/other/bg.jpg";
+import StepBanner from "@components/section/StepBanner.astro";
+import Faq from "@components/section/Faq.astro";
+import reviewsImg from "@assets/img/reviews/reviews-bg.png";
+
+const testimonials = [
+   {
+      type: "surgical",
+      category: "rhinoplasty",
+      procedure: "Rhinoplasty",
+      rating: 5,
+      text: "I couldn't be happier with my results. Dr. Martin Rachwalski made me feel comfortable and truly understood what I wanted. The outcome is natural and has given me new confidence. My breathing has also improved significantly.",
+      author: "Sofia",
+      source: "estheticon",
+   },
+   {
+      type: "surgical",
+      category: "rhinoplasty",
+      procedure: "Rhinoplasty",
+      rating: 4,
+      text: "I couldn't be happier with my results. Dr. Martin Rachwalski made me feel comfortable and truly understood what I wanted. The outcome is natural and has given me new confidence. My breathing has also improved significantly.",
+      author: "Sofia",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "botox",
+      procedure: "Botox",
+      rating: 5,
+      text: "The results were absolutely natural. I was nervous at first but Dr. Rachwalski explained everything clearly. My friends didn't even notice I had anything done — just said I looked refreshed and rested.",
+      author: "Marie",
+      source: "estheticon",
+   },
+   {
+      type: "surgical",
+      category: "facelift",
+      procedure: "Facelift",
+      rating: 5,
+      text: "After years of considering a facelift, I finally went ahead with Dr. Rachwalski. The results exceeded my expectations. I look naturally younger without that 'pulled' look I was afraid of. Recovery was smoother than I anticipated.",
+      author: "Claire",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "fillers",
+      procedure: "Fillers",
+      rating: 5,
+      text: "I had lip and cheek fillers done and the results are stunning. Very subtle and natural-looking. Dr. Rachwalski has an incredible eye for proportion and symmetry. I'll definitely be back for touch-ups.",
+      author: "Emma",
+      source: "estheticon",
+   },
+   {
+      type: "surgical",
+      category: "blepharoplasty",
+      procedure: "Blepharoplasty",
+      rating: 5,
+      text: "The eyelid surgery completely transformed my appearance. I look more awake and refreshed. Dr. Rachwalski was very attentive to my concerns and the scarring is barely visible. Would recommend to anyone.",
+      author: "Anne",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "botox",
+      procedure: "Botox",
+      rating: 5,
+      text: "Second visit for botox and once again the results are perfect. The team is professional and welcoming. Dr. Rachwalski always takes time to discuss what I want and delivers exactly that. Very happy patient!",
+      author: "Thomas",
+      source: "estheticon",
+   },
+];
+
+const filterTabs = [
+   { key: "all", label: "View all" },
+   { key: "surgical", label: "Surgical" },
+   { key: "non-surgical", label: "Non-surgical" },
+];
+
+const categories: Record<string, { value: string; label: string }[]> = {
+   all: [
+      { value: "", label: "All categories" },
+      { value: "rhinoplasty", label: "Rhinoplasty" },
+      { value: "facelift", label: "Facelift" },
+      { value: "blepharoplasty", label: "Blepharoplasty" },
+      { value: "botox", label: "Botox" },
+      { value: "fillers", label: "Fillers" },
+   ],
+   surgical: [
+      { value: "", label: "All categories" },
+      { value: "rhinoplasty", label: "Rhinoplasty" },
+      { value: "facelift", label: "Facelift" },
+      { value: "blepharoplasty", label: "Blepharoplasty" },
+   ],
+   "non-surgical": [
+      { value: "", label: "All categories" },
+      { value: "botox", label: "Botox" },
+      { value: "fillers", label: "Fillers" },
+   ],
+};
+
+const faqItems = [
+   {
+      question: "How long is the recovery time after a facelift?",
+      answer:
+         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+   },
+   {
+      question: "Who is Dr. Martin Rachwalski?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What are his main areas of expertise?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he perform aesthetic surgical procedures?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What non-surgical aesthetic treatments are available?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Where are the consultation locations?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his academic and research background?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he treat complex congenital conditions?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "How can I book a consultation?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his professional affiliation in France?",
+      answer: "Lorem ipsum...",
+   },
+];
+---
+
+<BaseLayout
+   title="Testimonials | Dr. Martin Rachwalski"
+   description="Real patient stories and results from Dr. Martin Rachwalski — facial surgery and aesthetic medicine specialist."
+>
+   <PageMain>
+      <section class="reviews">
+         <Img
+            src={heroBgGradient}
+            alt="Hero"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+         />
+         <Img
+            src={reviewsImg}
+            alt="Hero"
+            wrapperClass="reviews__img"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={80}
+         />
+         <div class="reviews__container pt-180 pb-80">
+            <div class="reviews__top-inner reviews-banner mb-40">
+               <div class="reviews-banner__rate reviews-rate mb-20 glass">
+                  <div class="reviews-rate__stars">
+                     <Icon name="star" />
+                     <Icon name="star" />
+                     <Icon name="star" />
+                     <Icon name="star" />
+                     <Icon name="star" />
+                  </div>
+                  <div class="reviews-rate__text">
+                     5.0 rating from 200 reviews
+                  </div>
+               </div>
+               <h1 class="reviews-banner__title fs-36 mb-12 t-center">
+                  Real Stories. Real Results.
+               </h1>
+               <div class="reviews-banner__text fs-20 mb-12 t-center">
+                  Explore experiences from patients across all our treatments —
+                  surgical and non-surgical.
+               </div>
+            </div>
+
+            <!-- ── Filter bar ─────────────────────────────────────────────── -->
+            <div class="reviews-filters mb-40" data-reviews-filters>
+               <FilterTabs tabs={filterTabs} defaultTab="all" />
+
+               <div class="reviews-filters__selects">
+                  {
+                     Object.entries(categories).map(([tab, opts]) => (
+                        <div
+                           class="reviews-category"
+                           data-reviews-select-wrapper={tab}
+                           hidden={tab !== "all"}
+                        >
+                           <CustomSelect
+                              options={opts}
+                              placeholder="All categories"
+                              name={`reviews-category-${tab}`}
+                           />
+                        </div>
+                     ))
+                  }
+               </div>
+            </div>
+
+            <!-- ── Grid ──────────────────────────────────────────────────── -->
+            <div class="reviews-grid" data-reviews-grid>
+               {
+                  testimonials.map((t) => (
+                     <article
+                        class="review-card glass br-12"
+                        data-reviews-type={t.type}
+                        data-reviews-category={t.category}
+                     >
+                        <div class="review-card__stars">
+                           {Array.from({ length: t.rating }).map(() => (
+                              <Icon name="star" />
+                           ))}
+                        </div>
+                        <span class="review-card__procedure">
+                           {t.procedure}
+                        </span>
+                        <ShowMoreText
+                           lines={2}
+                           labelMore="Show more"
+                           labelLess="Show less"
+                        >
+                           {t.text}
+                        </ShowMoreText>
+                        <div class="review-card__footer">
+                           <span class="review-card__author">{t.author}</span>
+                           <div class="review-card__source">
+                              <Icon name="reviews-label" />
+                              <span>{t.source}</span>
+                           </div>
+                        </div>
+                     </article>
+                  ))
+               }
+            </div>
+         </div>
+      </section>
+
+      <section class="step-banner">
+         <div class="step-banner__container pt-80 pb-80">
+            <StepBanner />
+         </div>
+      </section>
+
+      <Faq items={faqItems} />
+   </PageMain>
+</BaseLayout>

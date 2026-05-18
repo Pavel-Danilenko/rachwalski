@@ -260,6 +260,9 @@ function cleanupPage() {
       ["[data-custom-search-init]",         "customSearchInit"],
       ["[data-blog-search-init]",          "blogSearchInit"],
       ["[data-blog-filter-init]",          "blogFilterInit"],
+      ["[data-text-toggle-init]",          "textToggleInit"],
+      ["[data-filter-tabs][data-filter-tabs-init]",  "filterTabsInit"],
+      ["[data-reviews-grid][data-testimonials-filter-init]", "testimonialsFilterInit"],
    ].forEach(([sel, key]) =>
       document.querySelectorAll(sel).forEach((el) => delete el.dataset[key]),
    );

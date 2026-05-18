@@ -1952,4 +1952,54 @@
          "$0",
       ],
    },
+
+   // ─── ShowMoreText — базовий ───────────────────────────────────────────────
+   "ShowMoreText base": {
+      "prefix": "fsmt",
+      "scope": "astro,html",
+      "description": "ShowMoreText — розкривний текст з кнопкою Show more / Show less",
+      "body": [
+         "<ShowMoreText",
+         "\tlines={${1:4}}",
+         "\tlabelMore=\"${2:Show more}\"",
+         "\tlabelLess=\"${3:Show less}\"",
+         ">",
+         "\t$0",
+         "</ShowMoreText>",
+      ],
+   },
+
+   // ─── ShowMoreText — з анімацією та кастомними лейблами ───────────────────
+   "ShowMoreText animated": {
+      "prefix": "fsmt:anim",
+      "scope": "astro,html",
+      "description": "ShowMoreText з кастомною тривалістю анімації",
+      "body": [
+         "<ShowMoreText",
+         "\tlines={${1:4}}",
+         "\tlabelMore=\"${2:Show more}\"",
+         "\tlabelLess=\"${3:Show less}\"",
+         "\tduration={${4:400}}",
+         ">",
+         "\t$0",
+         "</ShowMoreText>",
+      ],
+   },
+
+   // ─── ShowMoreText — з scrollTo ────────────────────────────────────────────
+   "ShowMoreText scrollTo": {
+      "prefix": "fsmt:scroll",
+      "scope": "astro,html",
+      "description": "ShowMoreText зі скролом до початку при згортанні",
+      "body": [
+         "<ShowMoreText",
+         "\tlines={${1:5}}",
+         "\tlabelMore=\"${2:Show more}\"",
+         "\tlabelLess=\"${3:Show less}\"",
+         "\tscrollTo={true}",
+         ">",
+         "\t$0",
+         "</ShowMoreText>",
+      ],
+   },
 }

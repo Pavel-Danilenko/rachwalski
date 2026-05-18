@@ -39,6 +39,7 @@
 
    &__value {
       flex: 1;
+      font-weight: 500;
       color: var(--color-text-muted, #aaa);
       transition: color var(--transition-fast);
       display: flex;
@@ -77,8 +78,9 @@
 
    &__arrow {
       margin-left: toRem(6);
+      font-size: toRem(14);
       transition: transform var(--transition-base);
-      color: var(--color-text-muted, #888);
+      color: var(--color-text);
       flex-shrink: 0;
    }
 

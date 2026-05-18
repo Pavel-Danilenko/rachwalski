@@ -60,13 +60,11 @@ const siteName = "Назва сайту";
       <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       <meta name="generator" content={Astro.generator} />
 
-      <!-- Primary SEO -->
       <title>{title}</title>
       {description && <meta name="description" content={description} />}
       <link rel="canonical" href={canonicalUrl} />
       {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-      <!-- Open Graph -->
       <meta property="og:site_name" content={siteName} />
       <meta property="og:title" content={title} />
       {description && <meta property="og:description" content={description} />}
@@ -75,13 +73,11 @@ const siteName = "Назва сайту";
       <meta property="og:locale" content={lang === "uk" ? "uk_UA" : lang} />
       <meta property="og:image" content={ogImageAbsolute} />
 
-      <!-- Twitter Card -->
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       {description && <meta name="twitter:description" content={description} />}
       <meta name="twitter:image" content={ogImageAbsolute} />
 
-      <!-- Google Fonts -->
       {
          googleFontsUrl && (
             <>
@@ -99,11 +95,8 @@ const siteName = "Назва сайту";
    <body>
       <IconSprite />
 
-      <!-- data-barba="wrapper" — Barba слідкує за навігацією всередині -->
       <div class="wrapper" data-barba="wrapper">
          <Header sticky={stickyHeader} />
-
-         <!-- data-barba="container" — тільки цей блок замінюється при переходах -->
          <main data-barba="container" data-barba-namespace={namespace}>
             <slot />
          </main>

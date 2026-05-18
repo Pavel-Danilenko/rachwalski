@@ -1,0 +1,42 @@
+@use "@styles/utils" as *;
+
+.filter-tabs {
+   &__nav {
+      display: inline-flex;
+      position: relative;
+      border-radius: toRem(30);
+      border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+   }
+
+   &__btn {
+      position: relative;
+      z-index: 2;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 500;
+      color: var(--color-text);
+      transition: color var(--transition-base);
+      @include fluid-space(padding, 10, 12);
+      @include fluid-space(font-size, 12, 16);
+
+      &[aria-pressed="true"] {
+         color: var(--color-black);
+      }
+   }
+
+   &__indicator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: var(--color-blue);
+      border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
+      border-radius: toRem(30);
+      pointer-events: none;
+      will-change: transform, width;
+      z-index: 1;
+   }
+}

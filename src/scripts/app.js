@@ -133,6 +133,15 @@ async function loadModules() {
    if (document.querySelector("[data-show-more-root]"))
       tasks.push(import("@scripts/init/show-more"));
 
+   if (document.querySelector("[data-text-toggle]"))
+      tasks.push(import("@scripts/init/text-toggle"));
+
+   if (document.querySelector("[data-filter-tabs]"))
+      tasks.push(import("@scripts/init/filter-tabs"));
+
+   if (document.querySelector("[data-reviews-grid]"))
+      tasks.push(import("@scripts/init/testimonials-filter"));
+
    await Promise.all(tasks);
 }
 

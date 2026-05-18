@@ -54,6 +54,8 @@ const {
          {indicator && <div class="tabs__indicator" aria-hidden="true" />}
       </div>
 
+      <slot name="aside" />
+
       {scrollable && (
          <button class="tabs__arrow tabs__arrow--right" aria-label="Scroll right" type="button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

@@ -40,6 +40,11 @@ export const nav = {
       url: "/consultation-locations",
    },
 
+   testimonials: {
+      label: "Testimonials",
+      url: "/testimonials",
+   },
+
    blog: {
       label: "Blog",
       url: "/blog",

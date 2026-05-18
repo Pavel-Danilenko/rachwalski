@@ -1,0 +1,63 @@
+@use "@styles/utils" as *;
+
+.show-more-text {
+   position: relative;
+
+   // .show-more-text__content
+   &__content {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+   }
+
+   // Gradient fade знизу коли згорнуто
+   &--gradient &__content::after {
+      content: "";
+      position: absolute;
+      bottom: toRem(32); // висота кнопки
+      left: 0;
+      width: 100%;
+      height: toRem(40);
+      background: linear-gradient(to top, var(--show-more-fade-color, transparent) 0%, transparent 100%);
+      pointer-events: none;
+      transition: opacity var(--transition-base);
+   }
+
+   &--gradient.is-expanded &__content::after {
+      opacity: 0;
+   }
+
+   // .show-more-text__btn
+   &__btn[hidden] {
+      display: none;
+   }
+
+   &__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: toRem(5);
+      margin-top: toRem(6);
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-size: toRem(13);
+      font-weight: 600;
+      color: var(--color-text);
+      transition: opacity var(--transition-base);
+      font-family: inherit;
+
+      @media (any-hover: hover) {
+         &:hover { opacity: 0.7; }
+      }
+
+      .icon {
+         font-size: toRem(10);
+         transition: transform var(--transition-base);
+      }
+
+      &.is-expanded .icon {
+         transform: rotate(180deg);
+      }
+   }
+}
