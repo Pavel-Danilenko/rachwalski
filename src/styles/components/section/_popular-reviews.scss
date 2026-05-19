@@ -1,0 +1,61 @@
+@use "@styles/utils" as *;
+@use "@styles/components/section/review-card";
+
+.popular-reviews {
+   &__container {
+      position: relative;
+      z-index: 3;
+   }
+
+   &__title {
+      @include fluid-space(max-width, 300, 532);
+   }
+
+   &__slider {
+      position: relative;
+   }
+
+   &__controls {
+      display: flex;
+      align-items: center;
+      gap: toRem(12);
+      position: absolute;
+      right: 0;
+      z-index: 2;
+      @include fluid-space(top, -60, -80);
+
+      @include respond-to("md") {
+         position: relative;
+         top: initial;
+         justify-content: center;
+         &:not(:first-child) {
+            margin-top: toRem(24);
+         }
+      }
+   }
+
+   &__arrow {
+      @include fluid-space(width, 38, 48);
+      @include fluid-space(height, 38, 48);
+      border-radius: 50%;
+      border: solid toRem(1) var(--color-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-black);
+      transition: opacity var(--transition-fast);
+
+      &.swiper-button-disabled {
+         opacity: 0.3;
+      }
+
+      @include respond-to("md") {
+         color: var(--color-text);
+         border: solid toRem(1) var(--color-text);
+      }
+   }
+
+   &__footer {
+      text-align: center;
+   }
+}

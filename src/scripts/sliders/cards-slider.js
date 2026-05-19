@@ -53,7 +53,7 @@ function destroyCardsSlider() {
    document.querySelectorAll(`${selector}[data-cards-slider-initialized]`).forEach((el) => {
       const inst = instances.get(el);
       if (inst) {
-         disable(el);
+         // Тільки прибираємо mq listener — Swiper не руйнуємо (уникаємо flash при page:leave)
          inst.mq?.removeEventListener("change", inst.mqHandler);
          instances.delete(el);
       }

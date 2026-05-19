@@ -1,16 +1,14 @@
 import Swiper from "swiper";
 import { Navigation } from "swiper/modules";
 
-export const selector = "[data-topics-slider]";
+export const selector = "[data-reviews-slider]";
 
 const BREAKPOINTS = [
-   { minWidth: 0,    slidesPerView: 1.1, spaceBetween: 16, cardsPerSlide: 1, cardGap: 16 },
-   { minWidth: 768,  slidesPerView: 2,   spaceBetween: 20, cardsPerSlide: 2, cardGap: 16 },
-   { minWidth: 1024, slidesPerView: 2,   spaceBetween: 20, cardsPerSlide: 3, cardGap: 20 },
-   { minWidth: 1440, slidesPerView: 2,   spaceBetween: 24, cardsPerSlide: 3, cardGap: 24 },
+   { minWidth: 0,   slidesPerView: 1.1, spaceBetween: 16, cardsPerSlide: 1, cardGap: 16 },
+   { minWidth: 768, slidesPerView: 2,   spaceBetween: 20, cardsPerSlide: 2, cardGap: 16 },
+   { minWidth: 1440, slidesPerView: 2,  spaceBetween: 24, cardsPerSlide: 2, cardGap: 24 },
 ];
 
-// Per-element state
 const instances = new WeakMap();
 
 function getConfig() {
@@ -74,10 +72,10 @@ function build(el) {
    });
 }
 
-function initTopicsSlider() {
+function initReviewsSlider() {
    document.querySelectorAll(selector).forEach((el) => {
-      if (el.dataset.topicsSliderInitialized) return;
-      el.dataset.topicsSliderInitialized = "true";
+      if (el.dataset.reviewsSliderInitialized) return;
+      el.dataset.reviewsSliderInitialized = "true";
 
       const wrapper = el.querySelector(".swiper-wrapper");
       if (!wrapper) return;
@@ -105,25 +103,26 @@ function initTopicsSlider() {
    });
 }
 
-function destroyTopicsSlider() {
-   document.querySelectorAll(`${selector}[data-topics-slider-initialized]`).forEach((el) => {
+function destroyReviewsSlider() {
+   document.querySelectorAll(`${selector}[data-reviews-slider-initialized]`).forEach((el) => {
       const inst = instances.get(el);
       if (inst) {
+         // Тільки прибираємо resize listener — Swiper не руйнуємо,
+         // щоб уникнути flash при page:leave (Barba.js сам прибере DOM)
          window.removeEventListener("resize", inst.resizeHandler);
          instances.delete(el);
       }
-      delete el.dataset.topicsSliderInitialized;
+      delete el.dataset.reviewsSliderInitialized;
    });
 }
 
-// Same pattern as tabs.js
 if (document.readyState === "loading") {
-   document.addEventListener("DOMContentLoaded", initTopicsSlider);
+   document.addEventListener("DOMContentLoaded", initReviewsSlider);
 } else {
-   initTopicsSlider();
+   initReviewsSlider();
 }
 
-document.addEventListener("page:ready", initTopicsSlider);
-document.addEventListener("page:leave", destroyTopicsSlider);
+document.addEventListener("page:ready", initReviewsSlider);
+document.addEventListener("page:leave", destroyReviewsSlider);
 
-export { initTopicsSlider, destroyTopicsSlider };
+export { initReviewsSlider, destroyReviewsSlider };

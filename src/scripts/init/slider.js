@@ -109,8 +109,7 @@ function initSliders() {
 
 function destroySliders() {
    document.querySelectorAll("[data-slider-initialized]").forEach((el) => {
-      const swiperEl = el.querySelector(".swiper");
-      if (swiperEl?.swiper) swiperEl.swiper.destroy(true, true);
+      // Не руйнуємо Swiper — уникаємо flash при page:leave (Barba.js сам прибере DOM)
       delete el.dataset.sliderInitialized;
    });
 }

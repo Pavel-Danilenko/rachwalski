@@ -9,10 +9,68 @@ import CustomSearch from "@components/forms/CustomSearch.astro";
 import CustomSelect from "@components/forms/CustomSelect.astro";
 import Img from "@components/media/Img.astro";
 import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import PopularReviews from "@components/section/PopularReviews.astro";
 import heroBgGradient from "@assets/img/other/bg.jpg";
 import heroImgRight from "@assets/img/blog/hero-img-right.png";
 import heroImgRightMobile from "@assets/img/blog/hero-img-right-mobile.png";
 import heroImgleft from "@assets/img/blog/hero-img-left.png";
+
+const reviews = [
+   {
+      type: "surgical",
+      category: "rhinoplasty",
+      procedure: "Rhinoplasty",
+      rating: 5,
+      text: "I couldn't be happier with my results. Dr. Martin Rachwalski made me feel comfortable and truly understood what I wanted. The outcome is natural and has given me new confidence.",
+      author: "Sofia",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "botox",
+      procedure: "Botox",
+      rating: 5,
+      text: "The results were absolutely natural. I was nervous at first but Dr. Rachwalski explained everything clearly. My friends didn't even notice I had anything done — just said I looked refreshed and rested.",
+      author: "Marie",
+      source: "estheticon",
+   },
+   {
+      type: "surgical",
+      category: "facelift",
+      procedure: "Facelift",
+      rating: 5,
+      text: "After years of considering a facelift, I finally went ahead with Dr. Rachwalski. The results exceeded my expectations. I look naturally younger without that 'pulled' look I was afraid of.",
+      author: "Claire",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "fillers",
+      procedure: "Fillers",
+      rating: 5,
+      text: "I had lip and cheek fillers done and the results are stunning. Very subtle and natural-looking. Dr. Rachwalski has an incredible eye for proportion and symmetry. I'll definitely be back.",
+      author: "Emma",
+      source: "estheticon",
+   },
+   {
+      type: "surgical",
+      category: "blepharoplasty",
+      procedure: "Blepharoplasty",
+      rating: 5,
+      text: "The eyelid surgery completely transformed my appearance. I look more awake and refreshed. Dr. Rachwalski was very attentive to my concerns and the scarring is barely visible.",
+      author: "Anne",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "botox",
+      procedure: "Botox",
+      rating: 5,
+      text: "Second visit for botox and once again the results are perfect. The team is professional and welcoming. Dr. Rachwalski always takes time to discuss what I want and delivers exactly that.",
+      author: "Thomas",
+      source: "estheticon",
+   },
+];
 
 const posts = (await getCollection("blog")).sort(
    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -123,5 +181,11 @@ const categoryOptions = [
             </Pagination>
          </div>
       </section>
+
+      <PopularReviews
+         reviews={reviews}
+         viewAllHref="/testimonials"
+         class="dark-gradient__bottom mt-1"
+      />
    </PageMain>
 </BaseLayout>

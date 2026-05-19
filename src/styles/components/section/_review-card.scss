@@ -1,0 +1,92 @@
+@use "@styles/utils" as *;
+
+// ── Grid ──────────────────────────────────────────────────────────────────────
+
+.reviews-grid {
+   display: flex;
+   align-items: flex-start;
+   @include fluid-space(gap, 12, 16);
+
+   @include respond-to("md") {
+      flex-direction: column;
+   }
+
+   &__col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      @include fluid-space(gap, 12, 16);
+
+      @include respond-to("md") {
+         width: 100%;
+      }
+   }
+}
+
+// ── Card ──────────────────────────────────────────────────────────────────────
+
+.review-card[hidden] {
+   display: none;
+}
+
+.review-card {
+   @include fluid-space(padding, 20, 24);
+   display: flex;
+   flex-direction: column;
+
+   &__stars {
+      display: flex;
+      gap: toRem(3);
+      color: var(--color-text);
+      &:not(:last-child) {
+         margin-bottom: toRem(8);
+      }
+
+      .icon {
+         font-size: toRem(16);
+      }
+   }
+
+   &__procedure {
+      &:not(:last-child) {
+         margin-bottom: toRem(8);
+      }
+   }
+
+   &__footer {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: toRem(12);
+      margin-top: auto;
+   }
+
+   &__author {
+      font-size: toRem(16);
+   }
+
+   &__source {
+      display: flex;
+      align-items: center;
+      gap: toRem(10);
+      color: var(--color-text);
+
+      .icon {
+         font-size: toRem(32);
+      }
+      span {
+         font-size: toRem(18);
+      }
+   }
+
+   .show-more-text {
+      &:not(:last-child) {
+         margin-bottom: toRem(20);
+      }
+      & span {
+         font-size: toRem(16);
+         font-weight: 500;
+      }
+   }
+}

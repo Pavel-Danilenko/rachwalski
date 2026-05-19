@@ -675,11 +675,17 @@ class Pagination {
    // ─── ScrollTo ─────────────────────────────────────────────────────────────
 
    #scrollTo() {
-      const top =
-         this.root.getBoundingClientRect().top +
-         window.scrollY -
-         this.scrollOffset;
-      window.scrollTo({ top, behavior: "smooth" });
+      // Подвійний rAF — чекаємо поки DOM після зміни пагінації перемалюється
+      // (критично для iOS Safari де getBoundingClientRect повертає стару позицію)
+      requestAnimationFrame(() => {
+         requestAnimationFrame(() => {
+            const top =
+               this.root.getBoundingClientRect().top +
+               window.scrollY -
+               this.scrollOffset;
+            window.scrollTo({ top, behavior: "smooth" });
+         });
+      });
    }
 
    // ─── Helpers ──────────────────────────────────────────────────────────────

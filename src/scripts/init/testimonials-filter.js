@@ -7,21 +7,25 @@ function getColCount() {
 function redistributeCards(grid, activeTab, activeCategory) {
    const colCount = getColCount();
 
-   // Sync column count in DOM
+   // Спершу збираємо всі картки — до будь-яких змін DOM
+   const allCards = [...grid.querySelectorAll("[data-reviews-type]")];
+
+   // Виносимо картки з колонок у корінь grid перед тим як видаляти колонки
    let cols = [...grid.querySelectorAll(":scope > .reviews-grid__col")];
-   while (cols.length > colCount) grid.removeChild(cols.pop());
+   allCards.forEach((card) => grid.insertBefore(card, cols[0] ?? null));
+
+   // Sync column count in DOM (картки вже витягнуті — видалення колонок безпечне)
+   cols = [...grid.querySelectorAll(":scope > .reviews-grid__col")];
+   while (cols.length > colCount) {
+      grid.removeChild(cols.pop());
+      cols = [...grid.querySelectorAll(":scope > .reviews-grid__col")];
+   }
    while (cols.length < colCount) {
       const col = document.createElement("div");
       col.className = "reviews-grid__col";
       grid.appendChild(col);
       cols = [...grid.querySelectorAll(":scope > .reviews-grid__col")];
    }
-
-   // Collect ALL cards (from anywhere in the grid)
-   const allCards = [...grid.querySelectorAll("[data-reviews-type]")];
-
-   // Move all cards out of columns into grid root temporarily
-   allCards.forEach((card) => grid.insertBefore(card, cols[0]));
 
    // Clear columns
    cols.forEach((col) => (col.innerHTML = ""));

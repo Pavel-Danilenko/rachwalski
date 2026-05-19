@@ -104,6 +104,9 @@ async function loadModules() {
    if (document.querySelector("[data-topics-slider]"))
       tasks.push(import("@scripts/sliders/topics-slider"));
 
+   if (document.querySelector("[data-reviews-slider]"))
+      tasks.push(import("@scripts/sliders/reviews-slider"));
+
    if (document.querySelector("[data-google-map]"))
       tasks.push(import("@scripts/maps/google-map"));
 

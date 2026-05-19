@@ -1,0 +1,105 @@
+---
+import "@styles/components/section/_popular-reviews.scss";
+import Icon from "@components/ui/Icon.astro";
+import ShowMoreText from "@components/ui/ShowMoreText.astro";
+
+interface Review {
+   type: string;
+   category: string;
+   procedure: string;
+   rating: number;
+   text: string;
+   author: string;
+   source: string;
+}
+
+interface Props {
+   reviews: Review[];
+   title?: string;
+   viewAllHref?: string;
+   viewAllText?: string;
+   labelMore?: string;
+   labelLess?: string;
+   class?: string;
+}
+
+const {
+   reviews,
+   title = "Many perform procedures, but only a few truly change lives.",
+   viewAllHref,
+   viewAllText = "View all",
+   labelMore = "Show more",
+   labelLess = "Show less",
+   class: className = "",
+} = Astro.props;
+---
+
+<section class:list={["popular-reviews", className]}>
+   <div class="popular-reviews__container pt-80 pb-80">
+      <h2 class="popular-reviews__title mb-40 ct-black">{title}</h2>
+
+      <div class="popular-reviews__slider mb-40" data-reviews-slider>
+         <div class="swiper">
+            <div class="swiper-wrapper">
+               {
+                  reviews.map((r) => (
+                     <div class="swiper-slide">
+                        <article class="review-card glass br-12">
+                           <div class="review-card__stars">
+                              {Array.from({ length: r.rating }).map(() => (
+                                 <Icon name="star" />
+                              ))}
+                           </div>
+                           <span class="review-card__procedure">
+                              {r.procedure}
+                           </span>
+                           <ShowMoreText
+                              lines={2}
+                              labelMore={labelMore}
+                              labelLess={labelLess}
+                           >
+                              {r.text}
+                           </ShowMoreText>
+                           <div class="review-card__footer">
+                              <span class="review-card__author">
+                                 {r.author}
+                              </span>
+                              <div class="review-card__source">
+                                 <Icon name="reviews-label" />
+                                 <span>{r.source}</span>
+                              </div>
+                           </div>
+                        </article>
+                     </div>
+                  ))
+               }
+            </div>
+         </div>
+
+         <div class="popular-reviews__controls">
+            <button
+               class="popular-reviews__arrow slider__arrow--prev"
+               aria-label="Previous"
+            >
+               <Icon name="arrow-dark-slider-left" />
+            </button>
+            <button
+               class="popular-reviews__arrow slider__arrow--next"
+               aria-label="Next"
+            >
+               <Icon name="arrow-dark-slider-right" />
+            </button>
+         </div>
+      </div>
+
+      {
+         viewAllHref && (
+            <div class="popular-reviews__footer mt-40">
+               <a href={viewAllHref} class="btn white-btn">
+                  {viewAllText}
+               </a>
+            </div>
+         )
+      }
+   </div>
+</section>

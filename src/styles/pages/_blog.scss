@@ -87,10 +87,13 @@
    }
 
    &__filters {
+      @include fluid-space(margin-top, -40, -80);
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
       @include fluid-space(gap, 12, 20);
    }
 
@@ -186,7 +189,7 @@
    // "Нічого не знайдено"
    .blog-search-empty {
       text-align: center;
-      color: var(--color-text-muted);
+      color: var(--color-black);
       @include fluid-space(padding-block, 40, 80);
       font-size: toRem(16);
    }
@@ -217,13 +220,13 @@
       --pg-gap: #{toRem(4)};
 
       .pg__btn {
-         --pg-size:             #{toRem(40)};
-         --pg-radius:           var(--radius-full);
-         --pg-border:           rgba(11, 17, 26, 0.2);
-         --pg-hover-bg:         rgba(11, 17, 26, 0.06);
-         --pg-hover-border:     rgba(11, 17, 26, 0.4);
-         --pg-active-bg:        var(--color-black);
-         --pg-active-color:     var(--color-white);
+         --pg-size: #{toRem(40)};
+         --pg-radius: var(--radius-full);
+         --pg-border: rgba(11, 17, 26, 0.2);
+         --pg-hover-bg: rgba(11, 17, 26, 0.06);
+         --pg-hover-border: rgba(11, 17, 26, 0.4);
+         --pg-active-bg: var(--color-black);
+         --pg-active-color: var(--color-white);
          --pg-disabled-opacity: 0.3;
          width: var(--pg-size);
          padding: 0;
