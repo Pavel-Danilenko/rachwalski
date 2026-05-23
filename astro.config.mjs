@@ -35,7 +35,7 @@ export default defineConfig({
 
    vite: {
       plugins: [
-         !isDev && imageMode === "plugin" &&
+         !isDev && imageMode === "plugin" && !isStatic &&
             ImageOptimize({
                quality: 80,
                logStats: true,
