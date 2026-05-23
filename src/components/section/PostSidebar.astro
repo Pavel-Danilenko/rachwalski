@@ -1,5 +1,6 @@
 ---
 import "@styles/components/section/_post-sidebar.scss";
+import Newsletter from "@components/section/Newsletter.astro";
 
 interface TocItem {
    id: string;
@@ -22,48 +23,22 @@ const { toc = [], author } = Astro.props;
 
 <aside class="post-sidebar">
    {toc.length > 0 && (
-      <div class="post-sidebar__toc glass br-20" data-toc>
-         <div class="post-sidebar__toc-title fs-16 fw-600">Table of contents</div>
-         <div class="post-sidebar__toc-list" data-slide-nav>
+      <div class="services-table glass br-20" data-toc>
+         <div class="services-table__title fs-24 mb-20">Table of contents</div>
+         <div class="services-table__list" data-slide-nav>
             {toc.map((item) => (
                <a
                   href={`#${item.id}`}
                   data-goto={`#${item.id}`}
-                  class="post-sidebar__toc-link"
+                  class="services-table__link"
                >
                   {item.title}
                </a>
             ))}
-            <span class="post-sidebar__toc-indicator" data-slide-indicator></span>
+            <span class="services-table__indicator" data-slide-indicator></span>
          </div>
       </div>
    )}
 
-   <div class="post-sidebar__subscribe glass br-20">
-      <div class="post-sidebar__subscribe-author">
-         <div class="post-sidebar__subscribe-avatar">
-            <img src={author.avatar} alt={author.name} width={48} height={48} loading="lazy" />
-         </div>
-         <div class="post-sidebar__subscribe-info">
-            <div class="post-sidebar__subscribe-label fs-14">Stay Connected with</div>
-            <div class="post-sidebar__subscribe-name fw-600">{author.name}</div>
-         </div>
-      </div>
-      <p class="post-sidebar__subscribe-text fs-14">
-         Subscribe to be the first who know about new treatments, expert insights from {author.name}.
-      </p>
-      <form class="post-sidebar__subscribe-form">
-         <input
-            type="email"
-            class="post-sidebar__subscribe-input"
-            placeholder="Enter your email"
-         />
-         <button type="submit" class="post-sidebar__subscribe-btn btn white-btn">
-            Subscribe
-         </button>
-      </form>
-      <p class="post-sidebar__subscribe-policy fs-14">
-         We care about your data in our <a href="/privacy-policy">privacy policy</a>.
-      </p>
-   </div>
+   <Newsletter name={author.name} avatar={author.avatar} />
 </aside>

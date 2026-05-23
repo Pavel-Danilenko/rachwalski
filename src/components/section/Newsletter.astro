@@ -1,0 +1,71 @@
+---
+import "@styles/components/section/_newsletter.scss";
+import ContactForm from "@components/forms/ContactForm.astro";
+
+interface Props {
+   name?: string;
+   avatar?: string;
+   labelText?: string;
+   descriptionText?: string;
+   placeholder?: string;
+   buttonText?: string;
+   policyText?: string;
+   policyLink?: string;
+   class?: string;
+}
+
+const {
+   name = "Dr. Martin Rachwalski",
+   avatar = "/img/author-rachwalski.png",
+   labelText = "Stay Connected with",
+   descriptionText = `Subscribe to be the first who know about new treatments, expert insights from ${name}.`,
+   placeholder = "Enter your email",
+   buttonText = "Subscribe",
+   policyText = "We care about your data in our",
+   policyLink = "/privacy-policy",
+   class: className = "",
+} = Astro.props;
+---
+
+<div class:list={["newsletter", className]}>
+   <div class="newsletter__author">
+      <div class="newsletter__avatar">
+         <img src={avatar} alt={name} width={56} height={56} loading="lazy" />
+      </div>
+      <div>
+         <div class="newsletter__author-label">{labelText}</div>
+         <div class="newsletter__author-name">{name}</div>
+      </div>
+   </div>
+
+   <p class="newsletter__text">{descriptionText}</p>
+
+   <ContactForm
+      class="newsletter__form"
+      formKey="newsletter"
+      backend="php"
+      formId="newsletter-form"
+      successMessage="Thank you! You've been subscribed."
+      errorMessage="Something went wrong. Please try again."
+      modalType="inline"
+   >
+      <div class="form-group">
+         <input
+            type="email"
+            name="email"
+            class="newsletter__input"
+            placeholder={placeholder}
+            required
+            data-error-required="Please enter your email"
+            data-error-email="Please enter a valid email"
+         />
+      </div>
+      <button type="submit" class="newsletter__btn btn btn--sm white-btn">
+         {buttonText}
+      </button>
+   </ContactForm>
+
+   <p class="newsletter__policy">
+      {policyText} <a href={policyLink}>privacy policy.</a>
+   </p>
+</div>

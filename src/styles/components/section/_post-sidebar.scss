@@ -1,56 +1,18 @@
 @use "@styles/utils" as *;
 
 .post-sidebar {
+   @include respond-from(735) {
+      position: sticky;
+      top: toRem(20);
+   }
    display: flex;
    flex-direction: column;
    gap: toRem(20);
-   position: sticky;
-   top: toRem(100);
+   @include fluid-space(flex-basis, 320, 384);
+   flex-shrink: 0;
    align-self: start;
-
-   // .post-sidebar__toc
-   &__toc {
-      @include fluid-space(padding, 16, 24);
-   }
-
-   // .post-sidebar__toc-title
-   &__toc-title {
-      margin-bottom: toRem(16);
-   }
-
-   // .post-sidebar__toc-list
-   &__toc-list {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-   }
-
-   // .post-sidebar__toc-link
-   &__toc-link {
-      display: block;
-      padding: toRem(8) toRem(12);
-      font-size: toRem(14);
-      color: var(--color-text-muted);
-      border-radius: var(--radius-md);
-      transition: color var(--transition-base), background var(--transition-base);
-      position: relative;
-      z-index: 1;
-
-      &.is-active {
-         color: var(--color-text);
-         font-weight: 600;
-      }
-   }
-
-   // .post-sidebar__toc-indicator
-   &__toc-indicator {
-      position: absolute;
-      left: 0;
-      width: 100%;
-      border-radius: var(--radius-md);
-      background: var(--color-overlay-light);
-      transition: top var(--transition-base), height var(--transition-base);
-      z-index: 0;
+   @include respond-to(734) {
+      flex-basis: 100%;
    }
 
    // .post-sidebar__subscribe
@@ -141,5 +103,37 @@
          color: var(--color-text);
          text-decoration: underline;
       }
+   }
+}
+
+.services-table {
+   padding: toRem(16);
+   color: var(--color-black);
+
+   &__list {
+      display: flex;
+      flex-direction: column;
+      row-gap: toRem(4);
+      position: relative;
+   }
+
+   &__link {
+      font-size: toRem(16);
+      color: var(--color-black);
+      @include fluid-space(padding-block, 8, 10);
+      @include fluid-space(padding-inline, 10, 14);
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+   }
+
+   &__indicator {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      left: 0;
+      border-radius: var(--radius-xl);
+      transition: var(--transition-slow);
+      background-color: var(--color-overlay-medium);
    }
 }

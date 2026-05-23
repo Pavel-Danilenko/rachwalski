@@ -6,9 +6,70 @@ import PageMain from "@components/ui/PageMain.astro";
 import PostCard from "@components/section/PostCard.astro";
 import PostSidebar from "@components/section/PostSidebar.astro";
 import Img from "@components/media/Img.astro";
+import Icon from "@components/ui/Icon.astro";
 import StepBanner from "@components/section/StepBanner.astro";
 import "@styles/pages/_post.scss";
 import { getCollection } from "astro:content";
+import heroPostImg from "@assets/img/blog/post/post-hero-img.png";
+import heroBgGradient from "@assets/img/other/bg.jpg";
+import PopularReviews from "@components/section/PopularReviews.astro";
+
+const reviews = [
+   {
+      type: "surgical",
+      category: "rhinoplasty",
+      procedure: "Rhinoplasty",
+      rating: 5,
+      text: "I couldn't be happier with my results. Dr. Martin Rachwalski made me feel comfortable and truly understood what I wanted. The outcome is natural and has given me new confidence.",
+      author: "Sofia",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "botox",
+      procedure: "Botox",
+      rating: 5,
+      text: "The results were absolutely natural. I was nervous at first but Dr. Rachwalski explained everything clearly. My friends didn't even notice I had anything done — just said I looked refreshed and rested.",
+      author: "Marie",
+      source: "estheticon",
+   },
+   {
+      type: "surgical",
+      category: "facelift",
+      procedure: "Facelift",
+      rating: 5,
+      text: "After years of considering a facelift, I finally went ahead with Dr. Rachwalski. The results exceeded my expectations. I look naturally younger without that 'pulled' look I was afraid of.",
+      author: "Claire",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "fillers",
+      procedure: "Fillers",
+      rating: 5,
+      text: "I had lip and cheek fillers done and the results are stunning. Very subtle and natural-looking. Dr. Rachwalski has an incredible eye for proportion and symmetry. I'll definitely be back.",
+      author: "Emma",
+      source: "estheticon",
+   },
+   {
+      type: "surgical",
+      category: "blepharoplasty",
+      procedure: "Blepharoplasty",
+      rating: 5,
+      text: "The eyelid surgery completely transformed my appearance. I look more awake and refreshed. Dr. Rachwalski was very attentive to my concerns and the scarring is barely visible.",
+      author: "Anne",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "botox",
+      procedure: "Botox",
+      rating: 5,
+      text: "Second visit for botox and once again the results are perfect. The team is professional and welcoming. Dr. Rachwalski always takes time to discuss what I want and delivers exactly that.",
+      author: "Thomas",
+      source: "estheticon",
+   },
+];
 
 export async function getStaticPaths() {
    const posts = await getCollection("blog");
@@ -20,8 +81,9 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
-const { title, excerpt, date, readTime, category, image, author, toc } =
-   post.data;
+const { title, excerpt, date, category, image, author, toc } = post.data;
+
+const readTime = Math.ceil(post.body.split(/\s+/).length / 200);
 
 const allPosts = await getCollection("blog");
 const related = allPosts
@@ -33,16 +95,25 @@ const formattedDate = date.toLocaleDateString("en-GB", {
    month: "short",
    year: "numeric",
 });
+
+const breadcrumbTitle = title.length > 32 ? title.slice(0, 32) + "…" : title;
 ---
 
-<BaseLayout title={title} description={excerpt}>
+<BaseLayout title={title} description={excerpt} ogImage={image?.src}>
    <PageMain>
-      <section class="post-hero">
+      <section class="post-hero blog-hero-light">
          <Img
-            src={image}
-            alt={title}
-            width={1920}
-            height={600}
+            src={heroBgGradient}
+            alt="Hero"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+         />
+         <Img
+            src={heroPostImg}
+            alt="Hero"
             loading="eager"
             fetchpriority="high"
             decoding="sync"
@@ -50,42 +121,42 @@ const formattedDate = date.toLocaleDateString("en-GB", {
             wrapperClass="post-hero__img"
          />
          <div class="post-hero__container pt-180 pb-80">
-            <div class="post-hero__meta">
-               <span class="post-hero__category">{category}</span>
-               <span class="post-hero__dot"></span>
-               <span class="post-hero__date">{formattedDate}</span>
-               <span class="post-hero__dot"></span>
-               <span class="post-hero__read-time">{readTime} min read</span>
+            <nav class="post-hero__breadcrumb mb-24">
+               <a href="/blog" class="post-hero__breadcrumb-link">Blog</a>
+               <span class="post-hero__breadcrumb-sep">›</span>
+               <span class="post-hero__breadcrumb-current"
+                  >{breadcrumbTitle}</span
+               >
+            </nav>
+
+            <div class="post-hero__inner">
+               {
+                  category && (
+                     <div class="post-hero__tags mb-20">
+                        <span class="post-hero__tag">{category}</span>
+                     </div>
+                  )
+               }
+
+               <h1 class="post-hero__title mb-20">{title}</h1>
+
+               <div class="post-hero__meta">
+                  <span class="post-hero__date">{formattedDate}</span>
+                  <span class="post-hero__read-time">
+                     <Icon name="clock-post" class="post-hero__clock" />
+                     {readTime} min read
+                  </span>
+               </div>
             </div>
-            <h1 class="post-hero__title">{title}</h1>
          </div>
       </section>
 
-      <section class="post-content">
+      <section class="post-content bg-white">
          <div class="post-content__container pt-80 pb-80">
             <div class="post-content__layout">
                <article class="post-content__main">
                   <div class="post-body t-style">
                      <Content />
-                  </div>
-                  <div class="post-author mt-40 glass br-20">
-                     <div class="post-author__avatar">
-                        <img
-                           src={author.avatar}
-                           alt={author.name}
-                           width={56}
-                           height={56}
-                           loading="lazy"
-                        />
-                     </div>
-                     <div class="post-author__info">
-                        <div class="post-author__name fw-600">
-                           {author.name}
-                        </div>
-                        <div class="post-author__specialty fs-14">
-                           {author.specialty}
-                        </div>
-                     </div>
                   </div>
                </article>
 
@@ -96,23 +167,46 @@ const formattedDate = date.toLocaleDateString("en-GB", {
 
       {
          related.length > 0 && (
-            <section class="post-related">
-               <div class="post-related__container pb-80">
-                  <h2 class="post-related__title mb-40">Related blog posts</h2>
-                  <div class="post-related__grid">
-                     {related.map((p) => (
-                        <PostCard post={p} />
-                     ))}
+            <section class="post-related bg-white mt-1">
+               <div class="post-related__container pt-80 pb-80 ">
+                  <div class="post-related__inner mb-40">
+                     <div class="post-related__label">Blog</div>
+                     <h2 class="post-related__title ct-black">
+                        Related blog posts
+                     </h2>
+                     <div class="post-related__text ct-black">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                     </div>
+                  </div>
+
+                  <div class="post-related__grid cards-slider" data-cards-slider>
+                     <div class="swiper">
+                        <div class="swiper-wrapper">
+                           {related.map((p) => (
+                              <div class="swiper-slide">
+                                 <PostCard post={p} />
+                              </div>
+                           ))}
+                        </div>
+                     </div>
+                     <div class="cards-slider__controls">
+                        <button class="slider__arrow slider__arrow--prev" aria-label="Previous">
+                           <Icon name="arrow-dark-slider-left" />
+                        </button>
+                        <button class="slider__arrow slider__arrow--next" aria-label="Next">
+                           <Icon name="arrow-dark-slider-right" />
+                        </button>
+                     </div>
                   </div>
                </div>
             </section>
          )
       }
 
-      <section class="step-banner">
-         <div class="step-banner__container pt-80 pb-80">
-            <StepBanner />
-         </div>
-      </section>
+      <PopularReviews
+         reviews={reviews}
+         viewAllHref="/testimonials"
+         class="dark-gradient__bottom mt-1"
+      />
    </PageMain>
 </BaseLayout>

@@ -73,10 +73,10 @@
 
    // .post-card__title
    &__title {
-      @include fluid(font-size, 14, 17);
-      font-weight: 400;
-      line-height: 1.4;
-      color: var(--color-black);
+      @include fluid(font-size, 16, 18);
+      font-weight: 300;
+      line-height: toRem(28);
+      color: var(--color-secondary);
       transition: opacity var(--transition-base);
 
       .post-card:hover & {
@@ -94,12 +94,13 @@
 
    // .post-card__tag
    &__tag {
-      font-size: toRem(12);
-      padding: toRem(4) toRem(14);
+      font-size: toRem(14);
+      font-weight: 500;
+      padding: toRem(2) toRem(12);
       border-radius: var(--radius-full);
-      border: 1px solid rgba(11, 17, 26, 0.2);
+      border: 1px solid var(--color-black);
       color: var(--color-black);
       white-space: nowrap;
-      line-height: 1.6;
+      line-height: toRem(20);
    }
 }

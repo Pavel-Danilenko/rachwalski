@@ -11,7 +11,9 @@
    }
 }
 .cards-slider .swiper {
-   margin-right: toRem(-15);
+   @include respond-to("md") {
+      margin-right: toRem(-15);
+   }
 }
 .cards-slider .swiper-wrapper {
    @include respond-from("md") {

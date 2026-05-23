@@ -1,4 +1,8 @@
 {
    "cSpell.language": "en,uk",
-   "cSpell.enabled": false
+   "cSpell.enabled": false,
+   "editor.snippetSuggestions": "top",
+   "editor.suggest.snippetsPreventQuickSuggestions": false,
+   "editor.tabCompletion": "onlySnippets",
+   "emmet.excludeLanguages": ["scss", "css"]
 }

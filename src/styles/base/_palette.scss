@@ -63,6 +63,7 @@ $color-secondary: #0b111a; // [ЗАМІН] другорядний бренд-к�
 $color-secondary-hover: #3a5a8a; // [ЗАМІН] hover стан secondary
 $color-accent: #e8d5b0; // [ЗАМІН] акцент — виділення, теги, бейджі
 $color-accent-hover: #d4c49a; // [ЗАМІН] hover стан accent
+$color-gray-blue: #7f8da3; // сіро-синій — бордери цитат, допоміжні елементи
 
 // ─── 2. Семантичні кольори — ТЕМНА тема (дефолт) ─────────────────────────────
 // Змінюються при перемиканні на світлу тему [data-theme="light"]
@@ -149,6 +150,7 @@ $colors-static: (
    "secondary-hover": $color-secondary-hover,
    "accent": $color-accent,
    "accent-hover": $color-accent-hover,
+   "gray-blue": $color-gray-blue,
 );
 
 // ─── 5. Стани (незмінні) ─────────────────────────────────────────────────────
@@ -226,7 +228,7 @@ $gradients: (
          #2d4a70 48%,
          #476895 58%,
          #7ba3c6 80%,
-         #b0c4dd 100%
+         #b2c6de 99%
       ),
    footer-bottom-gradient: linear-gradient(
          to bottom,
@@ -234,7 +236,24 @@ $gradients: (
          rgba(9, 12, 17, 0.8) 100%
       ),
    hero-mask: linear-gradient(180deg, rgba(11, 17, 26, 0) 0%, #0b111a 100%),
-   top-gradient-light: linear-gradient(180deg, #b0c4dd 0%, #e4eaf3 100%),
+   top-gradient-light: linear-gradient(
+         180deg,
+         #b2c6de 3%,
+         #e4eaf3 60%,
+         #e4eaf3 100%
+      ),
+   newsletter: linear-gradient(
+         45deg,
+         #0b111a 0%,
+         #0b111a 2%,
+         #0d1a2b 15%,
+         #12243a 23%,
+         #1f3452 32%,
+         #476895 51%,
+         #b2c6de 99%,
+         #e4eaf3 100%,
+         #e4eaf3 100%
+      ),
    bottom-gradient-dark: linear-gradient(
          0deg,
          #0b111a 0%,

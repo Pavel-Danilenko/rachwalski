@@ -10,6 +10,9 @@
 // FORM GROUP — base states for all elements
 // ========================================
 :where(.form-group) {
+   display: flex;
+   flex-direction: column;
+
    // ── Native inputs ──────────────────────────────────────────
    input,
    textarea,

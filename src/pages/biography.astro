@@ -1,12 +1,279 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
+import Icon from "@components/ui/Icon.astro";
+import Counter from "@components/ui/Counter.astro";
+import ShowMoreText from "@components/ui/ShowMoreText.astro";
 import "@styles/pages/_biography.scss";
+import Img from "@components/media/Img.astro";
+import heroBgGradient from "@assets/img/other/bg.jpg";
+import booHeroImg from "@assets/img/biography/martin.png";
 ---
 
 <BaseLayout
-   title="Biography"
-   description="Find Dr. Martin Rachwalski's consultation locations in Paris"
+   title="Biography | Dr. Martin Rachwalski"
+   description="Dr. Martin Rachwalski — triple certified Facial Surgeon in Paris"
 >
-   <PageMain />
-</BaseLayout>
+   <PageMain>
+      <section class="bio-hero">
+         <Img
+            src={heroBgGradient}
+            alt="Hero"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+         />
+         <div class="bio-hero__container pt-180 pb-80">
+            <div class="bio-hero__column-left glass br-12">
+               <Img
+                  src={booHeroImg}
+                  alt="Hero"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="sync"
+                  quality={90}
+                  wrapperClass="bio-hero__img"
+               />
+            </div>
+            <div class="bio-hero__column-right">
+               <div class="bio-hero__card br-12 glass">
+                  <h1 class="bio-hero__name">Dr. Martin Rachwalski</h1>
+                  <div class="bio-hero__desc fs-24">
+                     Dr. Martin Rachwalski is a triple certified Facial Surgeon
+                     (Maxillofacial Surgery, Head Neck Surgery, Facial Plastic
+                     Surgery) with a special clinical and research interest in
+                     Facial Plastic Surgery, Cleft Lip and Palate and
+                     Craniofacial Anomalies.
+                  </div>
+
+                  <div class="bio-hero__body">
+                     <div
+                        class="bio-hero__stat bio-hero__stat--experience br-12"
+                     >
+                        <Counter
+                           class="bio-hero__stat-value"
+                           target={13}
+                           suffix="+"
+                           duration={1800}
+                        />
+                        <span class="bio-hero__stat-label fs-16"
+                           >Years Experience</span
+                        >
+                     </div>
+                     <div
+                        class="bio-hero__stat bio-hero__stat--publications br-12"
+                     >
+                        <Counter
+                           class="bio-hero__stat-value"
+                           target={100}
+                           suffix="+"
+                           duration={2000}
+                        />
+                        <span class="bio-hero__stat-label fs-16"
+                           >Publications</span
+                        >
+                     </div>
+                     <div
+                        class="bio-hero__stat bio-hero__stat--satisfaction br-12"
+                     >
+                        <Counter
+                           class="bio-hero__stat-value"
+                           target={95}
+                           suffix="%"
+                           duration={2200}
+                        />
+                        <span class="bio-hero__stat-label fs-16">Text</span>
+                     </div>
+                     <div
+                        class="bio-hero__location bio-hero__location--main br-12"
+                     >
+                        <span class="bio-hero__location-label fs-14"
+                           >Main consultation location:</span
+                        >
+                        <div class="bio-hero__location-item">
+                           <div class="bio-hero__location-icon">
+                              <Icon name="location-icon-1" />
+                           </div>
+                           <div class="fs-14">
+                              Rachwalski | Facial Surgery 101 Rue de Miromesnil,
+                              75008 Paris, France
+                           </div>
+                        </div>
+                     </div>
+                     <div
+                        class="bio-hero__location bio-hero__location--alphand br-12"
+                     >
+                        <span class="bio-hero__location-label fs-14"
+                           >Second consultation location:</span
+                        >
+                        <div class="bio-hero__location-item">
+                           <div class="bio-hero__location-icon">
+                              <Icon name="location-icon-2" />
+                           </div>
+                           <div class="fs-14">
+                              Clinique Alphand 23 Rue de Pergolèse, 75116 Paris,
+                              France
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="bio-hero__footer">
+                     <div class="bio-hero__socials">
+                        <a
+                           href="#"
+                           class="bio-hero__social"
+                           aria-label="Instagram"
+                        >
+                           <Icon name="instagram" />
+                        </a>
+                        <a
+                           href="#"
+                           class="bio-hero__social"
+                           aria-label="LinkedIn"
+                        >
+                           <Icon name="linkedin" />
+                        </a>
+                        <a
+                           href="#"
+                           class="bio-hero__social"
+                           aria-label="Facebook"
+                        >
+                           <Icon name="facebook" />
+                        </a>
+                        <a href="#" class="bio-hero__social" aria-label="X">
+                           <Icon name="twitter" />
+                        </a>
+                     </div>
+                     <a href="/contact" class="btn btn--sm white-btn"
+                        >Book consultation</a
+                     >
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="bio-biography dark-gradient__top">
+         <div class="bio-biography__container pt-80 pb-80">
+            <div class="bio-biography__column-left">
+               <h2 class="bio-biography__title">Biography</h2>
+            </div>
+            <div class="bio-biography__column-right">
+               <div class="bio-biography__content fs-20">
+                  <ShowMoreText
+                     lines={4}
+                     labelMore="Show more"
+                     labelLess="Show less"
+                  >
+                     Dr. Martin Rachwalski, MD, DDS, FEBOMFS, is a distinguished
+                     facial surgeon at Hôpital Armand-Trousseau (AP-HP) in
+                     Paris, France.He received his training at the University of
+                     Cologne (Germany), University College London (UK), Cornell
+                     University, and Johns Hopkins University (USA).From 2008 to
+                     2013, he was a research fellow at the Cologne Center for
+                     Molecular Medicine (CMMC), and since April 2017, he has
+                     been affiliated with the Imagine Institute of Genetic
+                     Diseases, Université Paris Descartes–Sorbonne Paris Cité.
+                  </ShowMoreText>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="bio-skills bg-white mt-1 light-gradientp-top">
+         <div class="bio-skills__container pt-80 pb-80">
+            <div class="bio-skills__column-left">
+               <h2 class="bio-skills__title ct-black">Skills expertise</h2>
+            </div>
+            <div class="bio-skills__column-right">
+               <div class="bio-skills__content">
+                  <ul class="bio-skills__tags ct-black">
+                     <li class="bio-skills__tag bg-white-medium">
+                        Facial Plastic Surgery
+                     </li>
+                     <li class="bio-skills__tag bg-white-medium">
+                        Aesthetic Surgery
+                     </li>
+                     <li class="bio-skills__tag bg-white-medium">Otoplasty</li>
+                     <li class="bio-skills__tag bg-white-medium">
+                        Blepharoplasty
+                     </li>
+                     <li class="bio-skills__tag bg-white-medium">
+                        Rhinoplasty
+                     </li>
+                     <li class="bio-skills__tag bg-white-medium">Botox</li>
+                     <li class="bio-skills__tag bg-white-medium">
+                        Dermal Fillers
+                     </li>
+                     <li class="bio-skills__tag bg-white-medium">
+                        Reconstructive facial procedures
+                     </li>
+                     <li class="bio-skills__tag bg-white-medium">
+                        Cleft Surgery
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="bio-memberships bg-white mt-1">
+         <div class="bio-memberships__container pt-80 pb-80">
+            <div class="bio-memberships__column-left">
+               <h2 class="bio-memberships__title ct-black">
+                  Professional memberships
+               </h2>
+            </div>
+            <div class="bio-memberships__column-right">
+               <div class="bio-memberships__grid">
+                  <div class="bio-memberships__item bg-white-medium br-12">
+                     <img
+                        src="/public/img/memberships/memberships-img-1.png"
+                        alt="European Association for Cranio Maxillo Facial Surgery"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-memberships__item bg-white-medium br-12">
+                     <img
+                        src="/public/img/memberships/memberships-img-2.png"
+                        alt="EAFPS — The European Academy of Facial Plastic Surgery"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-memberships__item bg-white-medium br-12">
+                     <img
+                        src="/public/img/memberships/memberships-img-3.png"
+                        alt="The Rhinoplasty Society of Europe"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-memberships__item bg-white-medium br-12">
+                     <img
+                        src="/public/img/memberships/memberships-img-4.png"
+                        alt="Aesthetic Multispecialty Society"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-memberships__item bg-white-medium br-12">
+                     <img
+                        src="/public/img/memberships/memberships-img-5.png"
+                        alt="Société Française de Chirurgie Plastique et Esthétique de la Face"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-memberships__item bg-white-medium br-12">
+                     <img
+                        src="/public/img/memberships/memberships-img-6.svg"
+                        alt="Association Française des Chirurgiens de la Face"
+                        loading="lazy"
+                     />
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+   </PageMain></BaseLayout
+>
