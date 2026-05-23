@@ -132,8 +132,9 @@
    // .bio-hero__location-label
 
    &__location-label {
+      display: block;
       &:not(:last-child) {
-         margin-bottom: toRem(12);
+         margin-bottom: toRem(8);
       }
    }
 
@@ -157,7 +158,7 @@
       align-items: center;
       justify-content: center;
       color: var(--color-black);
-      padding: toRem(5);
+      padding: toRem(7);
       & .icon {
          width: 100%;
          height: 100%;
@@ -181,7 +182,7 @@
 
    &__socials {
       display: flex;
-      gap: toRem(12);
+      gap: toRem(16);
       flex-wrap: wrap;
    }
 
