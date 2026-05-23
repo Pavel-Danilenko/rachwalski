@@ -2,6 +2,8 @@
 
 .section-header {
    display: flex;
+   position: relative;
+   z-index: 1;
    flex-wrap: wrap;
    align-items: center;
    @include fluid-space(gap, 12, 40);

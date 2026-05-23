@@ -80,6 +80,7 @@
       border: var(--border-sm) solid rgba(255, 255, 255, 0.1);
       background-color: var(--color-surface-glass);
       display: flex;
+      justify-content: space-between;
       gap: toRem(8) toRem(12);
       @include respond-from(630) {
          flex-direction: column;

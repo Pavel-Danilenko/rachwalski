@@ -127,54 +127,38 @@ class Counter {
    }
 
    /**
-    * Ініціалізація з data-watch
+    * Ініціалізація через власний IntersectionObserver (без залежності від data-watch)
     */
    initWithWatch(element, config) {
-      // Слухаємо клас _watcher-view або кастомний клас
-      const watchClass = element.dataset.watchClass || "_watcher-view";
-
-      // Перевіряємо чи це data-watch-once
       const isOnce = element.hasAttribute("data-watch-once");
+      const threshold = parseFloat(element.dataset.watchThreshold) || 0;
+      const rootMargin = element.dataset.watchMargin || "0px";
+      const delay = parseInt(element.dataset.watchDelay) || 0;
 
-      // Використовуємо MutationObserver для відстеження додавання/видалення класу
-      const observer = new MutationObserver((mutations) => {
-         mutations.forEach((mutation) => {
-            if (
-               mutation.type === "attributes" &&
-               mutation.attributeName === "class"
-            ) {
-               if (element.classList.contains(watchClass)) {
-                  // Клас додано - запускаємо counter
-                  this.startCounter(element, config);
+      let delayTimer = null;
 
-                  // Якщо data-watch-once - відключаємо observer після запуску
-                  if (isOnce) {
-                     observer.disconnect();
+      const observer = new IntersectionObserver(
+         (entries) => {
+            entries.forEach((entry) => {
+               if (entry.isIntersecting) {
+                  if (delay > 0) {
+                     delayTimer = setTimeout(() => this.startCounter(element, config), delay);
+                  } else {
+                     this.startCounter(element, config);
                   }
-               } else {
-                  // Клас видалено - скидаємо counter (тільки для data-watch, не once)
-                  if (!isOnce && element.dataset.counterActive === "true") {
+                  if (isOnce) observer.disconnect();
+               } else if (!isOnce) {
+                  if (delayTimer) { clearTimeout(delayTimer); delayTimer = null; }
+                  if (element.dataset.counterActive === "true") {
                      this.resetCounter(element, config);
                   }
                }
-            }
-         });
-      });
+            });
+         },
+         { rootMargin, threshold },
+      );
 
-      observer.observe(element, {
-         attributes: true,
-         attributeFilter: ["class"],
-      });
-
-      // Перевіряємо чи клас вже є (якщо елемент вже у viewport)
-      if (element.classList.contains(watchClass)) {
-         this.startCounter(element, config);
-
-         // Якщо data-watch-once - відключаємо observer
-         if (isOnce) {
-            observer.disconnect();
-         }
-      }
+      observer.observe(element);
    }
 
    /**
