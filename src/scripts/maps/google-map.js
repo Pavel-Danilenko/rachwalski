@@ -9,31 +9,25 @@ const MAP_STYLES = [
    { elementType: "labels.text.stroke", stylers: [{ color: "#0b111a" }] },
    { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
 
-   // Дороги → білі
+   // Дрібні дороги — приховані
+   { featureType: "road.local", stylers: [{ visibility: "off" }] },
+   { featureType: "road.arterial", stylers: [{ visibility: "off" }] },
+
+   // Тільки головні дороги
    {
       featureType: "road",
       elementType: "geometry",
-      stylers: [{ color: "#c8cdd8" }],
+      stylers: [{ color: "#1e2530" }],
    },
    {
-      featureType: "road",
+      featureType: "road.highway",
+      elementType: "geometry",
+      stylers: [{ color: "#ffffff" }, { weight: 0.8 }],
+   },
+   {
+      featureType: "road.highway",
       elementType: "geometry.stroke",
       stylers: [{ color: "#0b111a" }, { weight: 0.5 }],
-   },
-   {
-      featureType: "road",
-      elementType: "labels.text.fill",
-      stylers: [{ color: "#d0d4dc" }],
-   },
-   {
-      featureType: "road.highway",
-      elementType: "geometry",
-      stylers: [{ color: "#ffffff" }],
-   },
-   {
-      featureType: "road.highway",
-      elementType: "geometry.stroke",
-      stylers: [{ color: "#0b111a" }, { weight: 0.8 }],
    },
    {
       featureType: "road.highway",
