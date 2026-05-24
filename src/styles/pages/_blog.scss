@@ -175,7 +175,8 @@
          }
       }
 
-      .custom-select__value {
+      .custom-select__value,
+      .custom-select.has-value .custom-select__value {
          font-size: toRem(14);
          color: var(--color-black);
          white-space: nowrap;

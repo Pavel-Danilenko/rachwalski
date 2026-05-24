@@ -26,7 +26,7 @@ function initBlogFilter() {
          }
 
          const cardCategory = card
-            .querySelector(".post-card__category")
+            .querySelector(".post-card__tag")
             ?.textContent?.trim()
             .toLowerCase();
 
