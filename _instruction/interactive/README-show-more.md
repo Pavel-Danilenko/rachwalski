@@ -43,8 +43,13 @@ import Showmore from "@components/pagination/Showmore.astro";
 | Prop | Тип | Default | Опис |
 |---|---|---|---|
 | `itemSelector` | `string` | — | **Обов'язковий.** CSS-селектор елементів |
-| `perPage` | `number` | `6` | Кількість елементів за один клік |
+| `perPage` | `number` | `6` | Кількість елементів (всі екрани / fallback) |
+| `perPageSm` | `number` | — | Перевизначає `perPage` на ≤ 480px |
+| `perPageMd` | `number` | — | Перевизначає `perPage` на ≤ 767px (mobile) |
+| `perPageLg` | `number` | — | Перевизначає `perPage` на ≤ 991px (tablet) |
 | `mode` | `"batch" \| "toggle"` | `"batch"` | Режим роботи |
+
+> При переході через брейкпоінт компонент автоматично переініціалізується з новим `perPage`.
 
 ### Batch режим
 
@@ -147,6 +152,23 @@ import Showmore from "@components/pagination/Showmore.astro";
 </Showmore>
 ```
 
+### Responsive perPage — різна кількість по брейкпоінтах
+```astro
+<Showmore
+   itemSelector=".bio-media__item"
+   perPage={6}
+   perPageMd={2}
+   mode="toggle"
+   labelToggleOpen="Show more"
+   labelToggleClose="Show less"
+   classContent="bio-media__grid"
+>
+   <!-- 9 карток -->
+</Showmore>
+```
+
+> Десктоп: показує 6, mobile (≤ 767px): показує 2. При resize між брейкпоінтами компонент автоматично reinit.
+
 ### З іконками зі спрайту
 ```astro
 <Showmore
@@ -212,3 +234,12 @@ instance.destroy(); // скинути стан, прибрати з Map
 | `blur` | Розфокус → фокус + opacity |
 
 Всі анімації мають stagger — елементи з'являються по черзі з затримкою `animationStagger` мс.
+
+### Анімація висоти контейнера
+
+При будь-якій анімації (крім `none`) висота `.show-more-content` також анімується плавно:
+
+- **Відкриття** — нові елементи потрапляють в DOM з `opacity: 0`, вимірюється кінцева висота, потім контейнер плавно розширюється одночасно з появою карток.
+- **Закриття** — висота анімується вниз одночасно з fade out елементів.
+
+Тривалість висотної анімації відповідає `animationDuration`. При `animation="none"` висота змінюється без анімації.

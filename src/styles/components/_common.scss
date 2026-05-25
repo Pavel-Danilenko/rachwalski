@@ -133,8 +133,15 @@
 
 .btn-dark {
    background-color: var(--color-black);
-   border-color: var(--color-black);
+   border: var(--border-sm) solid var(--color-black);
    color: var(--color-white);
+
+   @media (any-hover: hover) {
+      &:hover {
+         background-color: transparent;
+         color: var(--color-black);
+      }
+   }
 }
 
 .black-btn {

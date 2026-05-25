@@ -2,7 +2,9 @@
 
 .header {
    position: absolute;
-   top: 0;
+   @include respond-from("md") {
+      top: toRem(20);
+   }
    left: 0;
    right: 0;
    z-index: var(--z-modal, 400);

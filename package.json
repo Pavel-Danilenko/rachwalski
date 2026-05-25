@@ -4,6 +4,7 @@
    "version": "0.0.1",
    "scripts": {
       "snippets": "node scripts/generate-snippets.js",
+      "predev": "node scripts/generate-snippets.js",
       "dev": "astro dev",
       "build": "astro build",
       "build:plugin": "cross-env PUBLIC_IMAGE_MODE=plugin astro build",

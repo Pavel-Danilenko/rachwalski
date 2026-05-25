@@ -22,9 +22,27 @@
    @include respond-to("md") {
       display: flex;
       flex-direction: column;
+      &::before {
+         content: "";
+         width: 100%;
+         height: toRem(0);
+         position: fixed;
+         top: 0;
+         left: 0;
+         z-index: 3;
+         background: var(--color-overlay-light);
+         backdrop-filter: blur(10px);
+         transition: height var(--transition-base);
+      }
+      &[data-menu-open="true"]::before {
+         height: toRem(64);
+      }
    }
 
    &__body {
+      @include respond-from("md") {
+         height: 100%;
+      }
       flex-grow: 1;
    }
    &__container {
@@ -177,13 +195,13 @@
       height: 100%;
    }
 
-   .nav-sub:has(:hover) > .nav-sub__row {
+   .nav-overlay[data-menu-open="true"] .nav-sub:has(:hover) > .nav-sub__row {
       opacity: 1;
       pointer-events: auto;
       transform: translateX(0);
    }
 
-   .nav-sub:has(:hover) > .nav-sub__trigger {
+   .nav-overlay[data-menu-open="true"] .nav-sub:has(:hover) > .nav-sub__trigger {
       background: var(--color-blue);
       color: var(--color-black);
    }
@@ -198,7 +216,15 @@
       column-gap: toRem(8);
       .icon {
          font-size: toRem(12);
-         transition: color var(--transition-base);
+         transition:
+            color var(--transition-base),
+            transform var(--transition-base);
+      }
+
+      @include respond-to("md") {
+         &[data-expanded="true"] .icon {
+            transform: rotate(90deg);
+         }
       }
    }
    &:has(.is-active) .nav-sub__trigger {
@@ -234,16 +260,22 @@
    @include respond-from(1200) {
       align-items: stretch;
    }
+   @include respond-to("md") {
+      row-gap: toRem(12);
+      padding-top: toRem(12);
+   }
 }
 
 .nav-sub__col {
    display: flex;
    flex-direction: column;
-   gap: toRem(12);
-   padding: toRem(0) toRem(24);
+   @include fluid-space(padding-inline, 15, 24);
+   @include respond-from("md") {
+      gap: toRem(12);
+   }
 
    @include respond-from("md") {
-      border-left: toRem(1) solid var(--color-overlay-light);
+      border-left: toRem(1) solid var(--color-overlay-border);
    }
 
    @include respond-between("md", 1199) {
@@ -265,6 +297,30 @@
 
    @include respond-from("md") {
       pointer-events: none;
+   }
+
+   @include respond-to("md") {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      cursor: pointer;
+
+      &::after {
+         content: "";
+         display: block;
+         width: toRem(8);
+         height: toRem(8);
+         border-right: toRem(2) solid currentColor;
+         border-top: toRem(2) solid currentColor;
+         transform: rotate(45deg);
+         flex-shrink: 0;
+         transition: transform var(--transition-base);
+      }
+
+      &[data-expanded="true"]::after {
+         transform: rotate(135deg);
+      }
    }
 }
 
@@ -293,11 +349,15 @@
          }
       }
    }
+}
 
-   > div {
-      display: flex;
-      flex-direction: column;
-      row-gap: toRem(4);
+.nav-sub__col-links__inner {
+   display: flex;
+   flex-direction: column;
+   row-gap: toRem(4);
+
+   @include respond-to("md") {
+      padding-top: toRem(8);
    }
 }
 
@@ -321,6 +381,9 @@
       color: #fff;
       font-weight: 500;
       text-decoration: underline;
+   }
+   @include respond-to("md") {
+      padding-block: toRem(0);
    }
 }
 
@@ -418,5 +481,8 @@
       display: inline-flex;
       flex-direction: column;
       gap: toRem(12);
+      @include respond-to("md") {
+         width: 100%;
+      }
    }
 }

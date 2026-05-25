@@ -117,6 +117,8 @@ $colors-special: (
    "overlay-dark": rgba(11, 17, 26, 0.5),
    // напівпрозорий темний overlay
    "overlay-light": rgba(255, 255, 255, 0.02),
+   "overlay-border": rgba(255, 255, 255, 0.1),
+   // тонкий бордер — трохи помітніший за overlay-light
    "overlay-medium": rgba(255, 255, 255, 0.4),
    // напівпрозорий світлий overlay
    "bg-dark": #0b111a,

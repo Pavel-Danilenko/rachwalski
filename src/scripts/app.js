@@ -101,6 +101,9 @@ async function loadModules() {
    if (document.querySelector("[data-cards-slider]"))
       tasks.push(import("@scripts/sliders/cards-slider"));
 
+   if (document.querySelector("[data-lecture-slider]"))
+      tasks.push(import("@scripts/sliders/lecture-slider"));
+
    if (document.querySelector("[data-topics-slider]"))
       tasks.push(import("@scripts/sliders/topics-slider"));
 

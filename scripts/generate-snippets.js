@@ -2,7 +2,7 @@
  * generate-snippets.js
  * Читає breakpoints з settings.scss і кольори з _palette.scss
  * і оновлює scss.code-snippets автоматично.
- * Запуск: npm run snippets
+ * Запуск: npm run snippets  або автоматично перед npm run dev
  */
 
 import { readFileSync, writeFileSync } from "fs";
@@ -39,17 +39,39 @@ const BPS = {
 // ── Парсимо _palette.scss ────────────────────────────────────────────────────
 const palette = readFileSync(resolve(root, "src/styles/base/_palette.scss"), "utf8");
 
+// Видаляємо закоментовані рядки щоб не підхопити ghost-ключі
+function stripComments(src) {
+   return src.replace(/\/\/[^\n]*/g, "");
+}
+
+function extractMapBodies(src) {
+   const bodies = [];
+   const mapStartRe = /\$[\w-]+:\s*\(/g;
+   let match;
+   while ((match = mapStartRe.exec(src)) !== null) {
+      const startIdx = match.index + match[0].length;
+      let depth = 1;
+      let i = startIdx;
+      while (i < src.length && depth > 0) {
+         if (src[i] === "(") depth++;
+         else if (src[i] === ")") depth--;
+         i++;
+      }
+      if (depth === 0) {
+         bodies.push(src.slice(startIdx, i - 1));
+         mapStartRe.lastIndex = i;
+      }
+   }
+   return bodies;
+}
+
 function parseMapKeys(src) {
+   const clean = stripComments(src);
    const keys = [];
-   // Знаходимо всі мапи $xxx: ( ... )
-   const mapRe = /\$\w+:\s*\(([^)]+)\)/g;
-   let mapMatch;
-   while ((mapMatch = mapRe.exec(src)) !== null) {
-      const mapBody = mapMatch[1];
-      // Витягуємо ключі "key":
+   for (const body of extractMapBodies(clean)) {
       const keyRe = /"([^"]+)":/g;
       let keyMatch;
-      while ((keyMatch = keyRe.exec(mapBody)) !== null) {
+      while ((keyMatch = keyRe.exec(body)) !== null) {
          const key = keyMatch[1];
          if (!keys.includes(key)) keys.push(key);
       }
@@ -74,22 +96,24 @@ function buildColorSnippet(keys) {
 // ── Генеруємо сніпети для брейкпоінтів ───────────────────────────────────────
 function buildBreakpointSnippets() {
    const entries = Object.entries(BPS);
-   const toList   = entries.map(([k, v]) => `${k}≤${v}`).join(" · ");
-   const fromList  = entries.map(([k, v]) => `${k}≥${v}`).join(" · ");
+   const toList  = entries.map(([k, v]) => `${k}≤${v}`).join(" · ");
+   const fromList = entries.map(([k, v]) => `${k}≥${v}`).join(" · ");
 
-   const toItems = entries.map(([k, v]) => `
+   const toItems = `   },` + entries.map(([k, v]) => `
    "respond-to ${k.padEnd(3)} ≤${v}px": {
       "prefix": "rp",
+      "scope": "scss,css",
       "body": "@include respond-to(\\"${k}\\") {\\n\\t$0\\n}",
       "description": "max-width ${v}px"
-   },`).join("");
+   },`).join("") + "\n";
 
-   const fromItems = entries.map(([k, v]) => `
+   const fromItems = `   },` + entries.map(([k, v]) => `
    "respond-from ${k.padEnd(3)} ≥${v}px": {
       "prefix": "rpf",
+      "scope": "scss,css",
       "body": "@include respond-from(\\"${k}\\") {\\n\\t$0\\n}",
       "description": "min-width ${v}px"
-   },`).join("");
+   },`).join("") + "\n";
 
    return { toList, fromList, toItems, fromItems };
 }
@@ -98,10 +122,10 @@ function buildBreakpointSnippets() {
 const snippetsPath = resolve(root, ".vscode/scss.code-snippets");
 let content = readFileSync(snippetsPath, "utf8");
 
-// 1. Кольори
+// 1. Кольори — ловимо і пробіли перед ключем щоб не накопичувались
 content = content.replace(
-   /("color variable"[\s\S]*?\},)/,
-   buildColorSnippet(paletteKeys)
+   /\s*"color variable"[\s\S]*?\},/,
+   "\n   " + buildColorSnippet(paletteKeys).trimStart()
 );
 
 // 2. respond-to
@@ -111,7 +135,7 @@ content = content.replace(
    /("respond-to breakpoint"[\s\S]*?"description": "max-width[^"]+",\s*\n)([\s\S]*?)(\s*"respond-to custom")/,
    (_, head, _old, tail) => {
       const newHead = head.replace(/max-width[^"]+/, `max-width  ${toList}`);
-      return `${newHead}${toItems}\n${tail}`;
+      return `${newHead}${toItems}${tail}`;
    }
 );
 
@@ -120,7 +144,7 @@ content = content.replace(
    /("respond-from breakpoint"[\s\S]*?"description": "min-width[^"]+",\s*\n)([\s\S]*?)(\s*"respond-from custom")/,
    (_, head, _old, tail) => {
       const newHead = head.replace(/min-width[^"]+/, `min-width  ${fromList}`);
-      return `${newHead}${fromItems}\n${tail}`;
+      return `${newHead}${fromItems}${tail}`;
    }
 );
 

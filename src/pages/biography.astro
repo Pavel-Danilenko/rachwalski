@@ -5,13 +5,17 @@ import Icon from "@components/ui/Icon.astro";
 import Counter from "@components/ui/Counter.astro";
 import ShowMoreText from "@components/ui/ShowMoreText.astro";
 import Showmore from "@components/pagination/Showmore.astro";
+import LectureSlider from "@components/sliders/LectureSlider.astro";
 import "@styles/pages/_biography.scss";
 import Img from "@components/media/Img.astro";
 import heroBgGradient from "@assets/img/other/bg.jpg";
 import booHeroImg from "@assets/img/biography/martin.png";
 import bioJournal1 from "@assets/img/biography/bio-journal-img-1.png";
 import bioJournal2 from "@assets/img/biography/bio-journal-img-2.jpg";
+import bookImg1 from "@assets/img/biography/book-img-1.jpg";
+import bookImg2 from "@assets/img/biography/book-img-2.jpg";
 import footerBg from "@assets/img/footer/footer-bg-3.png";
+import StepBanner from "@/components/section/StepBanner.astro";
 ---
 
 <BaseLayout
@@ -666,6 +670,150 @@ import footerBg from "@assets/img/footer/footer-bg-3.png";
          </div>
       </section>
 
-      <section></section>
+      <section class="bio-book bg-white">
+         <div class="bio-book__container">
+            <h2 class="bio-book__title ct-black">
+               Research articles and book chapters
+            </h2>
+            <Showmore
+               perPage={2}
+               itemSelector=".bio-book__item"
+               mode="toggle"
+               labelToggleOpen="Show more"
+               labelToggleClose="Show less"
+               icon="arrow-bottom"
+               classContent="bio-book__grid"
+               classBtn="btn btn--medium btn-show-more black-btn"
+               classBtnClose="is-open"
+            >
+               <div class="bio-book__item br-12 bg-white-medium">
+                  <div class="bio-book__cover">
+                     <Img
+                        src={bookImg1}
+                        alt="Fundamental Concepts in Regenerative Medicine"
+                     />
+                  </div>
+                  <div class="bio-book__body">
+                     <div class="bio-book__name ct-black">
+                        Fundamental Concepts in Regenerative Medicine:
+                        Structural Fat Grafting (SFG) and Platelet-Rich Plasma
+                        (PRP)
+                     </div>
+                     <div class="bio-book__meta ct-black">
+                        Published in: Innovations and New Developments in
+                        Craniomaxillofacial Reconstruction
+                     </div>
+                     <div class="bio-book__meta ct-black">
+                        Authors: Dr. Martin Rachwalski
+                     </div>
+                     <a href="#" class="bio-book__link ct-black">
+                        View publication
+                        <Icon name="arrow-up" />
+                     </a>
+                  </div>
+               </div>
+               <div class="bio-book__item br-12 bg-white-medium">
+                  <div class="bio-book__cover">
+                     <Img
+                        src={bookImg2}
+                        alt="Experimental Animal Models in Cranial Suture Biology"
+                     />
+                  </div>
+                  <div class="bio-book__body">
+                     <div class="bio-book__name ct-black">
+                        Experimental Animal Models in Cranial Suture Biology:
+                        Molecular and Pharmacological Treatment Strategies
+                     </div>
+                     <div class="bio-book__meta ct-black">
+                        Published in: The Sutures of the Skull, 2021
+                     </div>
+                     <div class="bio-book__meta ct-black">
+                        Authors: Dr. Martin Rachwalski
+                     </div>
+                     <a href="#" class="bio-book__link ct-black">
+                        View publication
+                        <Icon name="arrow-up" />
+                     </a>
+                  </div>
+               </div>
+               <div class="bio-book__item br-12 bg-white-medium">
+                  <div class="bio-book__cover">
+                     <Img
+                        src={bookImg1}
+                        alt="Fundamental Concepts in Regenerative Medicine"
+                     />
+                  </div>
+                  <div class="bio-book__body">
+                     <div class="bio-book__name ct-black">
+                        Fundamental Concepts in Regenerative Medicine:
+                        Structural Fat Grafting (SFG) and Platelet-Rich Plasma
+                        (PRP)
+                     </div>
+                     <div class="bio-book__meta ct-black">
+                        Published in: Innovations and New Developments in
+                        Craniomaxillofacial Reconstruction
+                     </div>
+                     <div class="bio-book__meta ct-black">
+                        Authors: Dr. Martin Rachwalski
+                     </div>
+                     <a href="#" class="bio-book__link ct-black">
+                        View publication
+                        <Icon name="arrow-up" />
+                     </a>
+                  </div>
+               </div>
+            </Showmore>
+         </div>
+
+         <section class="bio-lectures dark-gradient__bottom mt-1">
+            <div class="bio-lectures__container">
+               <LectureSlider
+                  title="Lectures and presentations at international conferences"
+                  subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+               >
+                  <div class="swiper-slide">
+                     <div class="bio-lectures__card br-12 bg-white-medium">
+                        <span class="bio-lectures__date">18 Jan 2026</span>
+                        <div class="bio-lectures__name">
+                           Rhinoplasty: What to Expect Before and After Surgery
+                        </div>
+                        <Icon name="arrow-up" class="bio-lectures__arrow" />
+                     </div>
+                  </div>
+                  <div class="swiper-slide">
+                     <div class="bio-lectures__card br-12 bg-white-medium">
+                        <span class="bio-lectures__date">18 Jan 2026</span>
+                        <div class="bio-lectures__name">
+                           Rmagna aliqua. Ut enim ad minim veniam, quis nostrud
+                           exercitation ulla...
+                        </div>
+                        <Icon name="arrow-up" class="bio-lectures__arrow" />
+                     </div>
+                  </div>
+                  <div class="swiper-slide">
+                     <div class="bio-lectures__card br-12 bg-white-medium">
+                        <span class="bio-lectures__date">18 Jan 2026</span>
+                        <div class="bio-lectures__name">
+                           Bolor sit amet, consectetur adipiscing elit, sed do
+                           eiusmod tempor incididun...
+                        </div>
+                        <Icon name="arrow-up" class="bio-lectures__arrow" />
+                     </div>
+                  </div>
+                  <div class="swiper-slide">
+                     <div class="bio-lectures__card br-12 bg-white-medium">
+                        <span class="bio-lectures__date">18 Jan 2026</span>
+                        <div class="bio-lectures__name">
+                           Advanced techniques in facial reconstruction and
+                           surgical planning
+                        </div>
+                        <Icon name="arrow-up" class="bio-lectures__arrow" />
+                     </div>
+                  </div>
+               </LectureSlider>
+               <StepBanner />
+            </div>
+         </section>
+      </section>
    </PageMain>
 </BaseLayout>

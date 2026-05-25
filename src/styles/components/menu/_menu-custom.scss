@@ -7,7 +7,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: toRem(5);
+      gap: toRem(4);
       background: transparent;
       cursor: pointer;
       position: relative;
@@ -17,25 +17,35 @@
       height: toRem(40);
       border-radius: 50%;
       border: toRem(1) solid var(--color-black);
-      transition: color var(--transition-base), border-color var(--transition-base);
+      transition:
+         color var(--transition-base),
+         border-color var(--transition-base);
       // iOS: прибирає затримку 300ms і синій flash при тапі
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
 
       span {
          display: block;
-         width: toRem(24);
-         height: 2px;
+         width: toRem(20);
+         height: toRem(2);
          background: currentColor;
          border-radius: 2px;
-         transition: transform var(--transition-base), opacity var(--transition-base);
+         transition:
+            transform var(--transition-base),
+            opacity var(--transition-base);
       }
 
       // Бургер → хрестик
       &[aria-expanded="true"] {
-         span:nth-child(1) { transform: translateY(#{toRem(7)}) rotate(45deg); }
-         span:nth-child(2) { opacity: 0; }
-         span:nth-child(3) { transform: translateY(#{toRem(-7)}) rotate(-45deg); }
+         span:nth-child(1) {
+            transform: translateY(#{toRem(6)}) rotate(45deg);
+         }
+         span:nth-child(2) {
+            opacity: 0;
+         }
+         span:nth-child(3) {
+            transform: translateY(#{toRem(-6)}) rotate(-45deg);
+         }
       }
    }
 }
@@ -53,7 +63,9 @@
    grid-template-rows: 0fr;
    transition: grid-template-rows var(--transition-base);
 
-   > * { overflow: hidden; }
+   > * {
+      overflow: hidden;
+   }
 
    &[data-menu-open="true"] {
       grid-template-rows: 1fr;

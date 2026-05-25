@@ -281,7 +281,7 @@ class ShowMore {
       this.content.style.height = this.content.offsetHeight + "px";
    }
 
-   #animateHeightTo(targetH) {
+   #animateHeightTo(targetH, onComplete) {
       if (!this.content) return;
       requestAnimationFrame(() => {
          if (!this.content) return;
@@ -289,6 +289,9 @@ class ShowMore {
          this.content.style.height = targetH + "px";
          const cleanup = () => {
             if (!this.content) return;
+            // onComplete (напр. display:none на прихованих елементах) запускається
+            // поки height ще зафіксована — інакше auto-height скаче перед ремувом
+            onComplete?.();
             this.content.style.height = "";
             this.content.style.transition = "";
             // overflow stays hidden — set permanently at init, cleared only in destroy()
@@ -373,15 +376,13 @@ class ShowMore {
          // opacity:0, and the style-recalc can flash -webkit-line-clamp on kept items.
          requestAnimationFrame(() => {
             this.#lockHeight();
-            this.#animateHeightTo(endH);
-
-            const fadeDur = this.duration * 0.5;
-            toHide.forEach((item) => {
-               const el = item;
-               setTimeout(() => {
+            // display:none передаємо як callback в animateHeightTo —
+            // він спрацює до того як height знімається, щоб не було стрибка
+            this.#animateHeightTo(endH, () => {
+               toHide.forEach((el) => {
                   el.style.display = "none";
                   this.#clearStyles(el);
-               }, fadeDur);
+               });
             });
          });
       } else {
@@ -461,7 +462,13 @@ class ShowMore {
             }
          }
       } else {
-         // Закрито — кнопка "відкрити"
+         // Закрито — якщо всі елементи вже видно, кнопка не потрібна
+         if (this.isDone) {
+            this.#hideBtn();
+            return;
+         }
+
+         // Кнопка "відкрити"
          this.#showBtn();
          this.btn.disabled = false;
          this.#removeModifier(this.cls.done);

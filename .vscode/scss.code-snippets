@@ -3,7 +3,7 @@
    "color variable": {
       "prefix": "cv",
       "scope": "scss,css",
-      "body": "var(--color-${1|text,text-muted,bg,bg-alt,surface,border,primary,primary-hover,secondary,secondary-hover,accent,accent-hover,white,black,blue,light-blue,overlay-dark,overlay-light,overlay-medium,bg-dark,bg-light,surface-dark,surface-glass,success,warning,error,info|})",
+      "body": "var(--color-${1|bg,bg-alt,surface,text,text-muted,border,overlay-dark,overlay-light,overlay-border,overlay-medium,bg-dark,bg-light,light-blue-overlay,surface-dark,surface-glass,white,black,blue,light-blue,primary,primary-hover,secondary,secondary-hover,accent,accent-hover,gray-blue,success,warning,error,info|})",
       "description": "CSS color variable — всі кольори з palette.scss"
    },
 
@@ -24,34 +24,46 @@
    },
    "respond-to xs  ≤320px": {
       "prefix": "rp",
+      "scope": "scss,css",
       "body": "@include respond-to(\"xs\") {\n\t$0\n}",
-      "description": "max-width 320px",
+      "description": "max-width 320px"
    },
    "respond-to sm  ≤480px": {
       "prefix": "rp",
+      "scope": "scss,css",
       "body": "@include respond-to(\"sm\") {\n\t$0\n}",
-      "description": "max-width 480px",
+      "description": "max-width 480px"
    },
    "respond-to md  ≤768px": {
       "prefix": "rp",
+      "scope": "scss,css",
       "body": "@include respond-to(\"md\") {\n\t$0\n}",
-      "description": "max-width 768px",
+      "description": "max-width 768px"
    },
    "respond-to lg  ≤992px": {
       "prefix": "rp",
+      "scope": "scss,css",
       "body": "@include respond-to(\"lg\") {\n\t$0\n}",
-      "description": "max-width 992px",
+      "description": "max-width 992px"
    },
    "respond-to xl  ≤1310px": {
       "prefix": "rp",
+      "scope": "scss,css",
       "body": "@include respond-to(\"xl\") {\n\t$0\n}",
-      "description": "max-width 1310px",
+      "description": "max-width 1310px"
    },
    "respond-to xxl ≤1440px": {
       "prefix": "rp",
+      "scope": "scss,css",
       "body": "@include respond-to(\"xxl\") {\n\t$0\n}",
-      "description": "max-width 1440px",
+      "description": "max-width 1440px"
    },
+
+
+
+
+
+
    "respond-to custom": {
       "prefix": "rpc",
       "body": "@include respond-to(${1:900}) {\n\t$2\n}",
@@ -64,34 +76,46 @@
    },
    "respond-from xs  ≥320px": {
       "prefix": "rpf",
+      "scope": "scss,css",
       "body": "@include respond-from(\"xs\") {\n\t$0\n}",
-      "description": "min-width 320px",
+      "description": "min-width 320px"
    },
    "respond-from sm  ≥480px": {
       "prefix": "rpf",
+      "scope": "scss,css",
       "body": "@include respond-from(\"sm\") {\n\t$0\n}",
-      "description": "min-width 480px",
+      "description": "min-width 480px"
    },
    "respond-from md  ≥768px": {
       "prefix": "rpf",
+      "scope": "scss,css",
       "body": "@include respond-from(\"md\") {\n\t$0\n}",
-      "description": "min-width 768px",
+      "description": "min-width 768px"
    },
    "respond-from lg  ≥992px": {
       "prefix": "rpf",
+      "scope": "scss,css",
       "body": "@include respond-from(\"lg\") {\n\t$0\n}",
-      "description": "min-width 992px",
+      "description": "min-width 992px"
    },
    "respond-from xl  ≥1310px": {
       "prefix": "rpf",
+      "scope": "scss,css",
       "body": "@include respond-from(\"xl\") {\n\t$0\n}",
-      "description": "min-width 1310px",
+      "description": "min-width 1310px"
    },
    "respond-from xxl ≥1440px": {
       "prefix": "rpf",
+      "scope": "scss,css",
       "body": "@include respond-from(\"xxl\") {\n\t$0\n}",
-      "description": "min-width 1440px",
+      "description": "min-width 1440px"
    },
+
+
+
+
+
+
    "respond-from custom": {
       "prefix": "rpfc",
       "body": "@include respond-from(${1:900}) {\n\t$2\n}",
