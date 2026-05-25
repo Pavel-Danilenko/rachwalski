@@ -8,6 +8,7 @@ import heroBgGradient from "@assets/img/other/bg.jpg";
 import SectionHeader from "@components/section/SectionHeader.astro";
 import LocationsMap from "@components/section/LocationsMap.astro";
 import Faq from "@components/section/Faq.astro";
+import footerBg from "@assets/img/footer/footer-bg-5.png";
 
 const faqItems = [
    {
@@ -56,6 +57,7 @@ const faqItems = [
 
 <BaseLayout
    title="Consultation Locations"
+   footerBg={footerBg}
    description="Find Dr. Martin Rachwalski's consultation locations in Paris"
 >
    <PageMain>
@@ -98,7 +100,7 @@ const faqItems = [
                   </div>
 
                   <div class="cl-card__actions">
-                     <a href="#" class="btn btn--medium black-btn"
+                     <a href="#" class="btn btn--medium white-solid-btn"
                         >Book consultation</a
                      >
                   </div>
@@ -128,7 +130,7 @@ const faqItems = [
                   </div>
 
                   <div class="cl-card__actions">
-                     <a href="#" class="btn btn--medium black-btn"
+                     <a href="#" class="btn btn--medium white-solid-btn"
                         >Book consultation</a
                      >
                      <a href="#" class="btn btn--medium white-btn"

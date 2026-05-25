@@ -1,0 +1,422 @@
+@use "@styles/utils" as *;
+
+// ── Overlay wrapper ───────────────────────────────────────────────────────────
+.nav-overlay {
+   scrollbar-gutter: stable;
+   position: fixed;
+   inset: 0;
+   height: 100vh;
+   height: 100svh;
+   z-index: var(--z-dropdown, 100);
+   overflow-y: auto;
+   overscroll-behavior: none;
+   -webkit-overflow-scrolling: touch;
+   opacity: 0;
+   pointer-events: none;
+   transition: opacity var(--transition-base);
+
+   &[data-menu-open="true"] {
+      opacity: 1;
+      pointer-events: all;
+   }
+   @include respond-to("md") {
+      display: flex;
+      flex-direction: column;
+   }
+
+   &__body {
+      flex-grow: 1;
+   }
+   &__container {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      row-gap: toRem(20);
+      flex-direction: column;
+      justify-content: space-between;
+      @include fluid-space(padding-top, 80, 128);
+      @include fluid-space(padding-bottom, 40, 60);
+   }
+   &__bg-img {
+      pointer-events: none;
+      position: absolute;
+      left: -25%;
+      top: 50%;
+      translate: 0 -50%;
+      z-index: 2;
+      height: 140%;
+      max-width: 100%;
+      & img {
+         width: 100%;
+         height: 100%;
+         object-fit: contain;
+         object-position: left center;
+      }
+      @include respond-to("md") {
+         left: -52%;
+         translate: 0 -50%;
+         max-width: 155%;
+      }
+   }
+}
+
+// ── Background ────────────────────────────────────────────────────────────────
+.nav-overlay__bg {
+   position: fixed;
+   inset: 0;
+   z-index: 0;
+   background: var(--color-bg);
+
+   &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+         to right,
+         var(--color-bg) 0%,
+         var(--color-bg) 25%,
+         transparent 65%
+      );
+      z-index: 1;
+   }
+}
+
+// ── Accordion breakpoint control ─────────────────────────────────────────────
+// data-show-from="md"  → accordion only below md, always open above
+// data-show-from="lg"  → accordion only below lg, always open above
+// no attribute         → accordion always (default JS behavior)
+
+[data-show-from="md"][data-menu-dropdown] {
+   @include respond-from("md") {
+      display: block;
+      grid-template-rows: unset;
+   }
+}
+
+[data-show-from="lg"][data-menu-dropdown] {
+   @include respond-from("lg") {
+      display: block;
+      grid-template-rows: unset;
+   }
+}
+
+// ── Planet ────────────────────────────────────────────────────────────────────
+.nav-overlay__planet {
+   position: absolute;
+   right: -5%;
+   top: 50%;
+   transform: translateY(-50%);
+   width: 65%;
+   pointer-events: none;
+
+   & img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+   }
+
+   @include respond-to("md") {
+      width: 100%;
+      right: 0;
+      opacity: 0.25;
+   }
+}
+
+// ── Shared placeholders ───────────────────────────────────────────────────────
+%nav-item-base {
+   display: flex;
+   width: 100%;
+   font-size: toRem(18);
+   align-items: center;
+   padding: toRem(6) toRem(14);
+   color: var(--color-text);
+   text-transform: uppercase;
+   border-radius: toRem(8);
+   font-weight: 500;
+   transition: color var(--transition-base);
+}
+
+%nav-item-active {
+   background: var(--color-blue);
+   color: var(--color-black);
+}
+
+// ── Transition: accordion on mobile, fade+slide on desktop ───────────────────
+.nav-sub > .nav-sub__row {
+   transition: grid-template-rows var(--transition-base);
+
+   @include respond-from("md") {
+      transition:
+         opacity var(--transition-base),
+         transform var(--transition-base);
+   }
+}
+
+// ── Desktop layout: primary + absolute submenu panel ─────────────────────────
+@include respond-from("md") {
+   .nav-overlay__body {
+      position: relative;
+      flex-grow: 1;
+      display: flex;
+   }
+
+   .nav-sub__row {
+      position: absolute;
+      left: var(--nav-primary-w, #{toRem(280)});
+      top: 0;
+      height: 100%;
+      right: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(toRem(-10));
+   }
+
+   .nav-sub__row > div {
+      height: 100%;
+   }
+
+   .nav-sub:has(:hover) > .nav-sub__row {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+   }
+
+   .nav-sub:has(:hover) > .nav-sub__trigger {
+      background: var(--color-blue);
+      color: var(--color-black);
+   }
+}
+
+// ── nav-sub (items with submenu) ──────────────────────────────────────────────
+.nav-sub {
+   width: 100%;
+   &__trigger {
+      @extend %nav-item-base;
+      justify-content: space-between;
+      column-gap: toRem(8);
+      .icon {
+         font-size: toRem(12);
+         transition: color var(--transition-base);
+      }
+   }
+   &:has(.is-active) .nav-sub__trigger {
+      @extend %nav-item-active;
+   }
+}
+
+// ── nav-sub right panel content ───────────────────────────────────────────────
+
+// Flat list (Dr. Rachwalski, Resources)
+.nav-sub__inner {
+   display: flex;
+   flex-direction: column;
+   gap: toRem(4);
+   padding: toRem(16) toRem(8);
+}
+
+// Columns layout (Facial Assessment, Facial Surgery, etc.)
+.nav-sub__cols {
+   display: flex;
+   flex-direction: column;
+
+   @include respond-from("md") {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      align-content: flex-start;
+      height: 100%;
+      @include fluid-space(padding-block, 16, 32);
+      @include fluid-space(padding-inline, 18, 24);
+   }
+
+   @include respond-from(1200) {
+      align-items: stretch;
+   }
+}
+
+.nav-sub__col {
+   display: flex;
+   flex-direction: column;
+   gap: toRem(12);
+   padding: toRem(0) toRem(24);
+
+   @include respond-from("md") {
+      border-left: toRem(1) solid var(--color-overlay-light);
+   }
+
+   @include respond-between("md", 1199) {
+      flex: 0 0 50%;
+   }
+
+   @include respond-from(1200) {
+      flex: 0 0 25%;
+   }
+}
+
+.nav-sub__col-title {
+   font-size: toRem(16);
+   font-weight: 500;
+   text-transform: uppercase;
+   text-align: left;
+   color: var(--color-text);
+   cursor: default;
+
+   @include respond-from("md") {
+      pointer-events: none;
+   }
+}
+
+.nav-sub__col-links {
+   display: flex;
+   flex-direction: column;
+   gap: toRem(12);
+
+   @include respond-from("md") {
+      height: 100%;
+      overflow: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+
+      &::-webkit-scrollbar {
+         width: toRem(4);
+      }
+      &::-webkit-scrollbar-track {
+         background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+         background: rgba(255, 255, 255, 0.15);
+         border-radius: toRem(4);
+         &:hover {
+            background: rgba(255, 255, 255, 0.3);
+         }
+      }
+   }
+
+   > div {
+      display: flex;
+      flex-direction: column;
+      row-gap: toRem(4);
+   }
+}
+
+// Individual link (in both flat and column layouts)
+.nav-sub__link {
+   font-size: toRem(16);
+   color: var(--color-text);
+   text-decoration: none;
+   transition: color var(--transition-base);
+   white-space: nowrap;
+   padding-block: toRem(6);
+
+   @media (any-hover: hover) {
+      &:hover {
+         color: #fff;
+         text-decoration: underline;
+      }
+   }
+
+   &.is-active {
+      color: #fff;
+      font-weight: 500;
+      text-decoration: underline;
+   }
+}
+
+// ── Footer bar ────────────────────────────────────────────────────────────────
+.nav-overlay__footer {
+   display: flex;
+   flex-direction: column;
+   gap: toRem(16);
+   @include fluid-space(padding, 16, 32);
+   border-radius: toRem(12);
+   background: var(--color-overlay-light);
+   border: toRem(1) solid rgba(255, 255, 255, 0.08);
+
+   @include respond-from("md") {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: toRem(24);
+   }
+}
+.nav-overlay__doctor-img {
+   width: toRem(62);
+   height: toRem(62);
+   border-radius: toRem(12);
+   flex-shrink: 0;
+   overflow: hidden;
+}
+.nav-overlay__doctor {
+   display: flex;
+   align-items: center;
+   gap: toRem(14);
+}
+
+.nav-overlay__doctor-info {
+   display: flex;
+   flex-direction: column;
+   gap: toRem(2);
+}
+
+.nav-overlay__doctor-name {
+   font-size: toRem(16);
+   font-weight: 500;
+   color: var(--color-text);
+}
+
+.nav-overlay__doctor-title {
+   font-size: toRem(13);
+   color: var(--color-white);
+}
+
+.nav-overlay__footer-actions {
+   display: flex;
+   flex-direction: column;
+   gap: toRem(12);
+
+   @include respond-from("md") {
+      flex-direction: row;
+      align-items: center;
+      gap: toRem(16);
+      flex-shrink: 0;
+   }
+}
+
+.nav-overlay__phone {
+   font-size: toRem(15);
+   color: var(--color-text);
+   text-decoration: none;
+   transition: color var(--transition-base);
+   white-space: nowrap;
+   cursor: pointer;
+
+   &:hover {
+      color: #fff;
+   }
+}
+
+// ── nav-overlay__link (simple items like Fees) ────────────────────────────────
+.nav-overlay__link {
+   @extend %nav-item-base;
+   text-decoration: none;
+
+   &:hover {
+      @extend %nav-item-active;
+   }
+
+   &.is-active {
+      @extend %nav-item-active;
+   }
+}
+.nav-overlay__primary {
+   @include fluid-space(padding, 16, 32);
+   width: 100%;
+
+   .nav-overlay__list {
+      display: inline-flex;
+      flex-direction: column;
+      gap: toRem(12);
+   }
+}

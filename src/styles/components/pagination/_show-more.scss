@@ -14,58 +14,10 @@
 }
 
 // ── Кнопка ───────────────────────────────────────────────────────────────────
-// Якщо не передано classBtn — використовуються ці базові стилі.
-// Кастомізація через CSS-змінні або classBtn з власної системи кнопок.
+// Стилі задаються через classBtn — класи з системи кнопок проекту.
 .show-more-btn {
-   --sm-btn-height:        toRem(42);
-   --sm-btn-padding:       0 #{toRem(28)};
-   --sm-btn-radius:        var(--radius-md);
-   --sm-btn-font-size:     var(--text-sm);
-   --sm-btn-border:        var(--color-border, #e0e0e0);
-   --sm-btn-hover-bg:      color-mix(in srgb, var(--color-text) 5%, transparent);
-   --sm-btn-hover-border:  var(--color-text-muted, #888);
-   --sm-btn-done-opacity:  0.35;
-
-   display: inline-flex;
-   align-items: center;
-   justify-content: center;
-   gap: toRem(8);
-   height: var(--sm-btn-height);
-   padding: var(--sm-btn-padding);
-   border: 1px solid var(--sm-btn-border);
-   border-radius: var(--sm-btn-radius);
-   background: transparent;
-   color: var(--color-text);
-   font-size: var(--sm-btn-font-size);
-   font-family: inherit;
-   font-weight: 500;
    cursor: pointer;
-   user-select: none;
-   transition:
-      background var(--transition-fast),
-      border-color var(--transition-fast),
-      opacity var(--transition-fast),
-      transform 0.12s ease;
-
-   .icon, svg {
-      display: block;
-      width: toRem(16);
-      height: toRem(16);
-      flex-shrink: 0;
-   }
-
-   &:hover:not(:disabled) {
-      background: var(--sm-btn-hover-bg);
-      border-color: var(--sm-btn-hover-border);
-   }
-
-   &:active:not(:disabled) { transform: scale(0.97); }
-
-   &--done {
-      opacity: var(--sm-btn-done-opacity);
-      cursor: default;
-      pointer-events: none;
-   }
+   font-family: inherit;
 
    &:disabled { cursor: default; }
 }

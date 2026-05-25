@@ -9,7 +9,6 @@ export function bodyLock() {
    if (isLocked) return;
    isLocked = true;
 
-   // Компенсуємо зникнення скролбара (десктоп)
    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
    if (scrollbarWidth > 0) {
       document.documentElement.style.setProperty("--scrollbar-width", scrollbarWidth + "px");

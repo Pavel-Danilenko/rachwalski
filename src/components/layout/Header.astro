@@ -2,51 +2,542 @@
 import MenuCustom from "@components/menu/MenuCustom.astro";
 import NavItem from "@components/menu/NavItem.astro";
 import Logo from "@components/ui/Logo.astro";
+import Icon from "@components/ui/Icon.astro";
+import Img from "@components/media/Img.astro";
 import "@styles/components/layout/_header.scss";
+import "@styles/components/menu/_nav-overlay.scss";
+import doctorImg from "@assets/img/services/rhinoplasty/author-small.png";
+import navBG from "@assets/img/nav/nav-bg.png";
 
 interface Props {
    class?: string;
-   sticky?: boolean;
 }
 
-const { class: className = "", sticky = false } = Astro.props;
+const { class: className = "" } = Astro.props;
 ---
 
-<header class:list={["header", className, { "header--sticky": sticky }]}>
+<header class:list={["header", className]}>
    <div class="header__container">
-      <Logo href="/" text="My Logo" />
+      <Logo href="/" imageSrc="/img/logo.svg" imageAlt="Rachwalski" />
 
       <div class="header__column-right">
          <a
             href="#"
             data-popup-open="book"
-            class="header__btn btn btn--medium white-btn">Book consultation</a
+            class="header__btn btn btn--medium btn-dark">Book consultation</a
          >
+
          <MenuCustom>
-            <div data-menu-overlay class="header__nav">
-               <ul class="header__nav-list">
-                  <li>
-                     <NavItem nav="biography" class="header__nav-link" />
-                  </li>
-                  <li>
-                     <NavItem nav="testimonials" class="header__nav-link" />
-                  </li>
-                  <li>
-                     <NavItem nav="rhinoplasty" class="header__nav-link" />
-                  </li>
-                  <li><NavItem nav="fees" class="header__nav-link" /></li>
-                  <li>
-                     <NavItem nav="clinicAlphand" class="header__nav-link" />
-                  </li>
-                  <li>
-                     <NavItem
-                        nav="consultationLocations"
-                        class="header__nav-link"
-                     />
-                  </li>
-                  <li><NavItem nav="blog" class="header__nav-link" /></li>
-                  <li><NavItem nav="contact" class="header__nav-link" /></li>
-               </ul>
+            <div data-menu-overlay class="nav-overlay">
+               <div class="nav-overlay__bg">
+                  <Img
+                     src={navBG}
+                     alt="Hero"
+                     loading="eager"
+                     fetchpriority="high"
+                     decoding="sync"
+                     quality={90}
+                     wrapperClass="nav-overlay__bg-img"
+                  />
+               </div>
+               <div class="nav-overlay__body">
+                  <!-- Content -->
+                  <div class="nav-overlay__container">
+                     <div class="nav-overlay__body">
+                        <!-- Left: primary nav -->
+                        <nav
+                           class="nav-overlay__primary glass br-12"
+                           aria-label="Main navigation"
+                        >
+                           <ul class="nav-overlay__list">
+                              <!-- Dr. Rachwalski -->
+                              <li class="nav-overlay__item nav-sub">
+                                 <button
+                                    class="nav-sub__trigger"
+                                    data-menu-dropdown-toggle
+                                 >
+                                    Dr. Rachwalski
+                                    <Icon name="nav-arrow" />
+                                 </button>
+
+                                 <div
+                                    class="nav-sub__row"
+                                    data-menu-dropdown
+                                    data-show-from="md"
+                                 >
+                                    <div>
+                                       <div class="nav-sub__cols">
+                                          <div class="nav-sub__col">
+                                             <div class="nav-sub__col-links">
+                                                <NavItem
+                                                   nav="alphabet"
+                                                   class="nav-sub__link"
+                                                />
+                                                <NavItem
+                                                   nav="biography"
+                                                   class="nav-sub__link"
+                                                />
+                                                <NavItem
+                                                   nav="consultationLocations"
+                                                   class="nav-sub__link"
+                                                />
+                                                <NavItem
+                                                   nav="clinicAlphand"
+                                                   class="nav-sub__link"
+                                                />
+                                                <NavItem
+                                                   nav="testimonials"
+                                                   class="nav-sub__link"
+                                                />
+                                                <NavItem
+                                                   nav="blog"
+                                                   class="nav-sub__link"
+                                                />
+                                                <NavItem
+                                                   nav="contact"
+                                                   class="nav-sub__link"
+                                                />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </li>
+
+                              <!-- Facial Assessment -->
+                              <li class="nav-overlay__item nav-sub">
+                                 <button
+                                    class="nav-sub__trigger"
+                                    data-menu-dropdown-toggle
+                                 >
+                                    Facial Assessment
+                                    <Icon name="nav-arrow" />
+                                 </button>
+                                 <div
+                                    class="nav-sub__row"
+                                    data-menu-dropdown
+                                    data-show-from="md"
+                                 >
+                                    <div>
+                                       <div class="nav-sub__cols">
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Upper Face</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Mid-Face</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Lower Face</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Other Areas</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </li>
+
+                              <!-- Facial Surgery -->
+                              <li class="nav-overlay__item nav-sub">
+                                 <button
+                                    class="nav-sub__trigger"
+                                    data-menu-dropdown-toggle
+                                 >
+                                    Facial Surgery
+                                    <Icon name="nav-arrow" />
+                                 </button>
+                                 <div
+                                    class="nav-sub__row"
+                                    data-menu-dropdown
+                                    data-show-from="md"
+                                 >
+                                    <div>
+                                       <div class="nav-sub__cols">
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Nose</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Ears</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Eyelids</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Face &amp; Neck</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </li>
+
+                              <!-- Aesthetic Medicine -->
+                              <li class="nav-overlay__item nav-sub">
+                                 <button
+                                    class="nav-sub__trigger"
+                                    data-menu-dropdown-toggle
+                                 >
+                                    Aesthetic Medicine
+                                    <Icon name="nav-arrow" />
+                                 </button>
+                                 <div
+                                    class="nav-sub__row"
+                                    data-menu-dropdown
+                                    data-show-from="md"
+                                 >
+                                    <div>
+                                       <div class="nav-sub__cols">
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Injectables</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Skin Treatments</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="nav-sub__col">
+                                             <button
+                                                class="nav-sub__col-title"
+                                                data-menu-dropdown-toggle
+                                                >Body</button
+                                             >
+                                             <div
+                                                class="nav-sub__col-links"
+                                                data-menu-dropdown
+                                                data-show-from="md"
+                                             >
+                                                <div>
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                   <NavItem
+                                                      nav="rhinoplasty"
+                                                      class="nav-sub__link"
+                                                   />
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </li>
+
+                              <!-- Fees -->
+                              <li class="nav-overlay__item">
+                                 <NavItem
+                                    nav="fees"
+                                    class="nav-overlay__link"
+                                 />
+                              </li>
+
+                              <!-- Resources -->
+                              <li class="nav-overlay__item nav-sub">
+                                 <button
+                                    class="nav-sub__trigger"
+                                    data-menu-dropdown-toggle
+                                 >
+                                    Resources
+                                    <Icon name="nav-arrow" />
+                                 </button>
+                                 <div
+                                    class="nav-sub__row"
+                                    data-menu-dropdown
+                                    data-show-from="md"
+                                 >
+                                    <div>
+                                       <div class="nav-sub__cols">
+                                          <div class="nav-sub__col">
+                                             <div class="nav-sub__col-links">
+                                                <NavItem
+                                                   nav="blog"
+                                                   class="nav-sub__link"
+                                                />
+                                                <NavItem
+                                                   nav="testimonials"
+                                                   class="nav-sub__link"
+                                                />
+                                                <NavItem
+                                                   nav="contact"
+                                                   class="nav-sub__link"
+                                                />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </li>
+                           </ul>
+                        </nav>
+                     </div>
+
+                     <!-- Footer bar -->
+                     <div class="nav-overlay__footer glass">
+                        <div class="nav-overlay__doctor">
+                           <Img
+                              src={doctorImg}
+                              alt="Dr. Martin Rachwalski"
+                              wrapperClass="nav-overlay__doctor-img"
+                           />
+                           <div class="nav-overlay__doctor-info">
+                              <span class="nav-overlay__doctor-name"
+                                 >Dr. Martin Rachwalski</span
+                              >
+                              <span class="nav-overlay__doctor-title"
+                                 >Facial Surgeon</span
+                              >
+                           </div>
+                        </div>
+                        <div class="nav-overlay__footer-actions">
+                           <a href="tel:+33187664715" class="nav-overlay__phone"
+                              >+33 1 87 66 47 15</a
+                           >
+                           <NavItem
+                              nav="contact"
+                              class="btn btn--medium white-btn"
+                           />
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <!-- Background -->
             </div>
          </MenuCustom>
       </div>

@@ -3,16 +3,21 @@
 // ── Бургер ────────────────────────────────────────────────────────────────────
 .menu-custom {
    &__burger {
-      display: none; // показується тільки на mobile через _header.scss
+      display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
       gap: toRem(5);
       background: transparent;
-      border: none;
       cursor: pointer;
-      padding: toRem(4);
       position: relative;
       z-index: var(--z-modal, 400);
-      color: var(--color-text);
+      color: var(--color-black);
+      width: toRem(40);
+      height: toRem(40);
+      border-radius: 50%;
+      border: toRem(1) solid var(--color-black);
+      transition: color var(--transition-base), border-color var(--transition-base);
       // iOS: прибирає затримку 300ms і синій flash при тапі
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
@@ -35,11 +40,9 @@
    }
 }
 
-// Показуємо бургер на mobile
-@media (max-width: 768px) {
-   .menu-custom__burger {
-      display: flex;
-   }
+.menu-open .menu-custom__burger {
+   color: var(--color-white);
+   border-color: rgba(255, 255, 255, 0.3);
 }
 
 // ── Dropdown (accordion в меню) ───────────────────────────────────────────────

@@ -349,6 +349,16 @@ barba.init({
          async beforeEnter({ next }) {
             await syncMeta(next.html);
 
+            const footerBgSrc = next.container.dataset.footerBg;
+            if (footerBgSrc) {
+               const picture = document.querySelector(".footer__bg picture");
+               if (picture) {
+                  picture.querySelectorAll("source").forEach(s => s.setAttribute("srcset", footerBgSrc));
+                  const img = picture.querySelector("img");
+                  if (img) img.setAttribute("src", footerBgSrc);
+               }
+            }
+
             const footer = document.querySelector(".footer");
             if (footer) gsap.set(footer, { clearProps: "opacity,y" });
          },

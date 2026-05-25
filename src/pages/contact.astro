@@ -8,6 +8,7 @@ import contactAuthor from "@assets/img/services/rhinoplasty/author-small.png";
 import Icon from "@components/ui/Icon.astro";
 import SectionHeader from "@components/section/SectionHeader.astro";
 import LocationsMap from "@components/section/LocationsMap.astro";
+import footerBg from "@assets/img/footer/footer-bg-6.png";
 
 import ContactFormSection from "@components/section/ContactFormSection.astro";
 import heroBgGradient from "@assets/img/other/bg.jpg";
@@ -64,7 +65,7 @@ const procedureOptions = [
 ];
 ---
 
-<BaseLayout title="Contact us" description="Про нашу команду">
+<BaseLayout title="Contact us" description="Про нашу команду" footerBg={footerBg}>
    <PageMain>
       <section class="contact">
          <Img

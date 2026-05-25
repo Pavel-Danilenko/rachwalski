@@ -4,15 +4,20 @@ import PageMain from "@components/ui/PageMain.astro";
 import Icon from "@components/ui/Icon.astro";
 import Counter from "@components/ui/Counter.astro";
 import ShowMoreText from "@components/ui/ShowMoreText.astro";
+import Showmore from "@components/pagination/Showmore.astro";
 import "@styles/pages/_biography.scss";
 import Img from "@components/media/Img.astro";
 import heroBgGradient from "@assets/img/other/bg.jpg";
 import booHeroImg from "@assets/img/biography/martin.png";
+import bioJournal1 from "@assets/img/biography/bio-journal-img-1.png";
+import bioJournal2 from "@assets/img/biography/bio-journal-img-2.jpg";
+import footerBg from "@assets/img/footer/footer-bg-3.png";
 ---
 
 <BaseLayout
    title="Biography | Dr. Martin Rachwalski"
    description="Dr. Martin Rachwalski — triple certified Facial Surgeon in Paris"
+   footerBg={footerBg}
 >
    <PageMain>
       <section class="bio-hero">
@@ -228,45 +233,60 @@ import booHeroImg from "@assets/img/biography/martin.png";
                </h2>
             </div>
             <div class="bio-memberships__column-right">
-               <div class="bio-memberships__grid cards-slider" data-cards-slider>
+               <div
+                  class="bio-memberships__grid cards-slider"
+                  data-cards-slider
+               >
                   <div class="swiper">
                      <div class="swiper-wrapper">
-                        <div class="swiper-slide bio-memberships__item bg-white-medium br-12">
+                        <div
+                           class="swiper-slide bio-memberships__item bg-white-medium br-12"
+                        >
                            <img
                               src="/img/memberships/memberships-img-1.png"
                               alt="European Association for Cranio Maxillo Facial Surgery"
                               loading="lazy"
                            />
                         </div>
-                        <div class="swiper-slide bio-memberships__item bg-white-medium br-12">
+                        <div
+                           class="swiper-slide bio-memberships__item bg-white-medium br-12"
+                        >
                            <img
                               src="/img/memberships/memberships-img-2.png"
                               alt="EAFPS — The European Academy of Facial Plastic Surgery"
                               loading="lazy"
                            />
                         </div>
-                        <div class="swiper-slide bio-memberships__item bg-white-medium br-12">
+                        <div
+                           class="swiper-slide bio-memberships__item bg-white-medium br-12"
+                        >
                            <img
                               src="/img/memberships/memberships-img-3.png"
                               alt="The Rhinoplasty Society of Europe"
                               loading="lazy"
                            />
                         </div>
-                        <div class="swiper-slide bio-memberships__item bg-white-medium br-12">
+                        <div
+                           class="swiper-slide bio-memberships__item bg-white-medium br-12"
+                        >
                            <img
                               src="/img/memberships/memberships-img-4.png"
                               alt="Aesthetic Multispecialty Society"
                               loading="lazy"
                            />
                         </div>
-                        <div class="swiper-slide bio-memberships__item bg-white-medium br-12">
+                        <div
+                           class="swiper-slide bio-memberships__item bg-white-medium br-12"
+                        >
                            <img
-                              src="/img/memberships/memberships-img-5.png"
+                              src="/img/memberships/memberships-img-2.png"
                               alt="Société Française de Chirurgie Plastique et Esthétique de la Face"
                               loading="lazy"
                            />
                         </div>
-                        <div class="swiper-slide bio-memberships__item bg-white-medium br-12">
+                        <div
+                           class="swiper-slide bio-memberships__item bg-white-medium br-12"
+                        >
                            <img
                               src="/img/memberships/memberships-img-6.svg"
                               alt="Association Française des Chirurgiens de la Face"
@@ -293,5 +313,359 @@ import booHeroImg from "@assets/img/biography/martin.png";
             </div>
          </div>
       </section>
-   </PageMain></BaseLayout
->
+
+      <section class="bio-awards bg-white mt-1">
+         <div class="bio-awards__container pt-80 pb-80">
+            <h2 class="bio-awards__title ct-black mb-40">Honors and awards</h2>
+            <div class="bio-awards__row cards-slider" data-cards-slider>
+               <div class="swiper">
+                  <div class="swiper-wrapper">
+                     <div
+                        class="swiper-slide bio-awards__item br-12 bg-white-medium"
+                     >
+                        <div class="bio-awards__img">
+                           <img
+                              src="/img/memberships/memberships-img-1.png"
+                              alt=""
+                           />
+                        </div>
+                        <h3 class="bio-awards__subtitle ct-black">
+                           Leibinger Award
+                        </h3>
+                     </div>
+                     <div
+                        class="swiper-slide bio-awards__item br-12 bg-white-medium"
+                     >
+                        <div class="bio-awards__img">
+                           <img
+                              src="/img/memberships/memberships-img-2.png"
+                              alt=""
+                           />
+                        </div>
+                        <h3 class="bio-awards__subtitle ct-black">
+                           Hugo Obwegeser Scholarship
+                        </h3>
+                     </div>
+                     <div
+                        class="swiper-slide bio-awards__item br-12 bg-white-medium"
+                     >
+                        <div class="bio-awards__img">
+                           <img
+                              src="/img/memberships/memberships-img-1.png"
+                              alt=""
+                           />
+                        </div>
+                        <h3 class="bio-awards__subtitle ct-black">
+                           Professor John Lowry Scholarship
+                        </h3>
+                     </div>
+                     <div
+                        class="swiper-slide bio-awards__item br-12 bg-white-medium"
+                     >
+                        <div class="bio-awards__img">
+                           <img
+                              src="/img/memberships/memberships-img-6.svg"
+                              alt=""
+                           />
+                        </div>
+                        <h3 class="bio-awards__subtitle ct-black">
+                           European Rhinoplasty Society Fellowship Award
+                        </h3>
+                     </div>
+                     <div
+                        class="swiper-slide bio-awards__item br-12 bg-white-medium"
+                     >
+                        <div class="bio-awards__img">
+                           <img
+                              src="/img/memberships/memberships-img-7.svg"
+                              alt=""
+                           />
+                        </div>
+                        <h3 class="bio-awards__subtitle ct-black">
+                           Excellence Scholarship - German Academic Exchange
+                           Service
+                        </h3>
+                     </div>
+                     <div
+                        class="swiper-slide bio-awards__item br-12 bg-white-medium"
+                     >
+                        <div class="bio-awards__img">
+                           <img
+                              src="/img/memberships/memberships-img-8.svg"
+                              alt=""
+                           />
+                        </div>
+                        <h3 class="bio-awards__subtitle ct-black">
+                           Regan Fellowship Award
+                        </h3>
+                     </div>
+                     <div
+                        class="swiper-slide bio-awards__item br-12 bg-white-medium"
+                     >
+                        <div class="bio-awards__img">
+                           <img
+                              src="/img/memberships/memberships-img-9.png"
+                              alt=""
+                           />
+                        </div>
+                        <h3 class="bio-awards__subtitle ct-black">
+                           ERN Craniofacial Fellowship Award EU Commission
+                        </h3>
+                     </div>
+                     <div
+                        class="swiper-slide bio-awards__item br-12 bg-white-medium"
+                     >
+                        <div class="bio-awards__img">
+                           <img
+                              src="/img/memberships/memberships-img-10.svg"
+                              alt=""
+                           />
+                        </div>
+                        <h3 class="bio-awards__subtitle ct-black">
+                           International Bone Research Association Scholarship
+                        </h3>
+                     </div>
+                  </div>
+               </div>
+               <div class="cards-slider__controls">
+                  <button
+                     class="slider__arrow slider__arrow--prev"
+                     aria-label="Previous"
+                  >
+                     <Icon name="arrow-dark-slider-left" />
+                  </button>
+                  <button
+                     class="slider__arrow slider__arrow--next"
+                     aria-label="Next"
+                  >
+                     <Icon name="arrow-dark-slider-right" />
+                  </button>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="bio-board bg-white mt-1">
+         <div class="bio-board__container pt-80 pb-80">
+            <div class="bio-board__column-left">
+               <h2 class="bio-board__title ct-black">Board of Directors</h2>
+            </div>
+            <div class="bio-board__column-right">
+               <div class="bio-board__inner br-12">
+                  <Img
+                     src={bioJournal1}
+                     alt="Опис зображення"
+                     loading="lazy"
+                     quality={90}
+                     wrapperClass="bio-board__img"
+                  />
+                  <div class="bio-board__description">
+                     <h3 class="bio-board__subtitle ct-black">
+                        Journal of Cranio-Maxillo-Facial Surgery
+                     </h3>
+                     <a href="#" class="bio-board__link ct-black">
+                        View journal
+                        <Icon name="arrow-up" />
+                     </a>
+                  </div>
+               </div>
+               <div class="bio-board__inner br-12">
+                  <Img
+                     src={bioJournal2}
+                     alt="Опис зображення"
+                     loading="lazy"
+                     quality={90}
+                     wrapperClass="bio-board__img"
+                  />
+                  <div class="bio-board__description">
+                     <h3 class="bio-board__subtitle ct-black">
+                        Journal of Craniofacial Surgery
+                     </h3>
+                     <a href="#" class="bio-board__link ct-black">
+                        View journal
+                        <Icon name="arrow-up" />
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="bio-media bg-white mt-1">
+         <div class="bio-media__container pt-80 pb-80">
+            <h2 class="bio-media__title ct-black">
+               Dr. Rachwalski in the media
+            </h2>
+            <Showmore
+               perPage={6}
+               perPageMd={2}
+               itemSelector=".bio-media__item"
+               mode="toggle"
+               labelToggleOpen="Show more"
+               labelToggleClose="Show less"
+               icon="arrow-bottom"
+               classContent="bio-media__grid"
+               classBtn="btn btn--medium btn-show-more black-btn"
+               classBtnClose="is-open"
+            >
+               <div class="bio-media__item br-12 bg-white-medium">
+                  <div class="bio-media__logo">
+                     <img
+                        src="/public/img/media/media-1.svg"
+                        alt="L'Officiel"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-media__text ct-black fs-16">
+                     Nanofat : la solution régénérative contre les cernes
+                     colorés
+                  </div>
+                  <a href="#" class="bio-media__link ct-black">
+                     View publication
+                     <Icon name="arrow-up" />
+                  </a>
+               </div>
+               <div class="bio-media__item br-12 bg-white-medium">
+                  <div class="bio-media__logo">
+                     <img
+                        src="/public/img/media/media-2.svg"
+                        alt="Cosmopolitan"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-media__text ct-black fs-16">
+                     Comment prolonger les effets du botox pour pouvoir espacer
+                     les séances ? Un expert répond
+                  </div>
+                  <a href="#" class="bio-media__link ct-black">
+                     View publication
+                     <Icon name="arrow-up" />
+                  </a>
+               </div>
+               <div class="bio-media__item br-12 bg-white-medium">
+                  <div class="bio-media__logo">
+                     <img
+                        src="/public/img/media//media-3.svg"
+                        alt="Voici"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-media__text ct-black fs-16">
+                     Rides du lapin : comment les faire disparaître, selon un
+                     chirurgien esthétique
+                  </div>
+                  <a href="#" class="bio-media__link ct-black">
+                     View publication
+                     <Icon name="arrow-up" />
+                  </a>
+               </div>
+               <div class="bio-media__item br-12 bg-white-medium">
+                  <div class="bio-media__logo">
+                     <img
+                        src="/public/img/media/media-4.svg"
+                        alt="Marie France"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-media__text ct-black fs-16">
+                     Facial harmony and balance: Dr. Rachwalski's philosophy
+                     behind every surgical intervention.
+                  </div>
+                  <a href="#" class="bio-media__link ct-black">
+                     View publication
+                     <Icon name="arrow-up" />
+                  </a>
+               </div>
+               <div class="bio-media__item br-12 bg-white-medium">
+                  <div class="bio-media__logo">
+                     <img
+                        src="/public/img/media/media-5.svg"
+                        alt="Grazia"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-media__text ct-black fs-16">
+                     Adieu la peau relâchée : la technique ‘Nefertiti Neck Lift’
+                     sculpte la mâchoire et raffermit le cou sans chirurgie
+                  </div>
+                  <a href="#" class="bio-media__link ct-black">
+                     View publication
+                     <Icon name="arrow-up" />
+                  </a>
+               </div>
+               <div class="bio-media__item br-12 bg-white-medium">
+                  <div class="bio-media__logo">
+                     <img
+                        src="/public/img/media//media-6.svg"
+                        alt="Madame Figaro"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-media__text ct-black fs-16">
+                     Tendance beauté coréenne : le "90 degree shoulder", le
+                     nouveau standard physique hallucinant
+                  </div>
+                  <a href="#" class="bio-media__link ct-black">
+                     View publication
+                     <Icon name="arrow-up" />
+                  </a>
+               </div>
+               <div class="bio-media__item br-12 bg-white-medium">
+                  <div class="bio-media__logo">
+                     <img
+                        src="/public/img/media/media-1.svg"
+                        alt="Marie Claire"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-media__text ct-black fs-16">
+                     Adieu la peau relâchée : la technique ‘Nefertiti Neck Lift’
+                     sculpte la mâchoire et raffermit le cou sans chirurgie
+                  </div>
+                  <a href="#" class="bio-media__link ct-black">
+                     View publication
+                     <Icon name="arrow-up" />
+                  </a>
+               </div>
+               <div class="bio-media__item br-12 bg-white-medium">
+                  <div class="bio-media__logo">
+                     <img
+                        src="/public/img/media/media-2.svg"
+                        alt="Parole de Mamans"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-media__text ct-black fs-16">
+                     Anti-transpirant, traitement contre le bruxisme,
+                     migraines...Les différents effets du botox que vous ne
+                     soupçonniez pas
+                  </div>
+                  <a href="#" class="bio-media__link ct-black">
+                     View publication
+                     <Icon name="arrow-up" />
+                  </a>
+               </div>
+               <div class="bio-media__item br-12 bg-white-medium">
+                  <div class="bio-media__logo">
+                     <img
+                        src="/public/img/media/media-3.svg"
+                        alt="Point de Vue"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="bio-media__text ct-black fs-16">
+                     Comment prolonger les effets du botox pour pouvoir espacer
+                     les séances ? Un expert répond
+                  </div>
+                  <a href="#" class="bio-media__link ct-black">
+                     View publication
+                     <Icon name="arrow-up" />
+                  </a>
+               </div>
+            </Showmore>
+         </div>
+      </section>
+
+      <section></section>
+   </PageMain>
+</BaseLayout>

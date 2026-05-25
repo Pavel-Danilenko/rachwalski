@@ -1,5 +1,6 @@
 ---
 import "@styles/components/pagination/_show-more.scss";
+import Icon from "@components/ui/Icon.astro";
 
 type AnimationVariant = "none" | "fade" | "slide-up" | "scale" | "blur";
 type ModeVariant = "batch" | "toggle";
@@ -8,6 +9,9 @@ type DoneVariant = "hide" | "disabled";
 interface Props {
    // ─── логіка ───────────────────────────────────────────────────────────────
    perPage?: number;
+   perPageSm?: number;  // ≤ 480px
+   perPageMd?: number;  // ≤ 767.98px
+   perPageLg?: number;  // ≤ 991.98px
    itemSelector: string;
    mode?: ModeVariant;
 
@@ -49,6 +53,9 @@ interface Props {
 
 const {
    perPage = 6,
+   perPageSm,
+   perPageMd,
+   perPageLg,
    itemSelector,
    mode = "batch",
 
@@ -85,6 +92,9 @@ const {
    class:list={["show-more-wrapper", className]}
    data-show-more-root
    data-per-page={perPage}
+   data-per-page-sm={perPageSm}
+   data-per-page-md={perPageMd}
+   data-per-page-lg={perPageLg}
    data-item-selector={itemSelector}
    data-mode={mode}
    data-done-variant={doneVariant}
@@ -112,7 +122,8 @@ const {
 
    <div class:list={["show-more-footer", classFooter]}>
       <button type="button" class:list={["show-more-btn", classBtn]}>
-         {label}{showCount ? " …" : ""}
+         <span>{label}{showCount ? " …" : ""}</span>
+         {icon && <Icon name={icon} />}
       </button>
       <span class:list={["show-more-info", classInfo]}></span>
    </div>

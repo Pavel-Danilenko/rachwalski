@@ -116,23 +116,23 @@
       }
 
       .custom-search__icon {
-         color: rgba(11, 17, 26, 0.5);
+         color: var(--color-black);
       }
 
       .custom-search__input {
          color: var(--color-black);
 
          &::placeholder {
-            color: rgba(11, 17, 26, 0.45);
+            color: var(--color-black);
          }
       }
 
       .custom-search__clear {
-         background: rgba(11, 17, 26, 0.15);
-         color: var(--color-black);
+         background: var(--color-black);
+         color: var(--color-primary);
 
          &:hover {
-            background: rgba(11, 17, 26, 0.3);
+            opacity: 0.8;
          }
       }
    }

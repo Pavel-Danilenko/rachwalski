@@ -145,6 +145,9 @@ async function loadModules() {
    if (document.querySelector("[data-reviews-grid]"))
       tasks.push(import("@scripts/init/testimonials-filter"));
 
+   if (document.querySelector("[data-menu-overlay]"))
+      tasks.push(import("@scripts/init/nav-primary-width"));
+
    await Promise.all(tasks);
 }
 

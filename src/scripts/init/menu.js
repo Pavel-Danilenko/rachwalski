@@ -656,4 +656,16 @@ if (document.readyState === "loading") {
 // Astro View Transitions
 document.addEventListener("page:ready", initMenu);
 
+// При переході між сторінками — повністю скидаємо меню
+// щоб pointer-events та bodyLock не блокували нову сторінку
+document.addEventListener("page:leave", () => {
+   if (window.menu && typeof window.menu.destroy === "function") {
+      window.menu.destroy();
+   }
+   // Гарантований fallback — прямо по DOM
+   const overlay = document.querySelector("[data-menu-overlay]");
+   if (overlay) overlay.setAttribute("data-menu-open", "false");
+   document.documentElement.classList.remove("menu-open", "lock");
+});
+
 export default Menu;

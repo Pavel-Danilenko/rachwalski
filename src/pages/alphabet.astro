@@ -1,16 +1,18 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
+import "@styles/pages/_alphabet.scss";
 import clinicAlphandImg from "@assets/img/about/clinic-alphand/clinic-alphand.jpg";
 import Icon from "@components/ui/Icon.astro";
 import Img from "@components/media/Img.astro";
 import "@styles/pages/_clinic-alphand.scss";
+import footerBg from "@assets/img/footer/footer-bg-1.png";
 ---
 
 <BaseLayout
-   title="Головна | Назва сайту — Замін на реальний заголовок"
-   description="Тестовий опис головної сторінки. Замін на реальний текст — він відображається у Google та при шерінгу у соцмережах. Рекомендовано 120–155 символів."
-   ogImage="/og-image.svg"
+   title="Alphabet | Dr. Martin Rachwalski"
+   description="Alphabet — Dr. Martin Rachwalski Facial Surgeon"
+   footerBg={footerBg}
 >
    <PageMain>
       <section class="alphand-hero">

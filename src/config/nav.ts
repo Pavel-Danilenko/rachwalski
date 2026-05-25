@@ -16,6 +16,11 @@ export type NavItem = {
 
 export const nav = {
    // ── Основні сторінки ──────────────────────────────────────────────────
+
+   main: {
+      label: "Main page",
+      url: "/",
+   },
    biography: {
       label: "Biography",
       url: "/biography",
@@ -23,7 +28,7 @@ export const nav = {
 
    rhinoplasty: {
       label: "Rhinoplasty",
-      url: "/services/rhinoplasty",
+      url: "/rhinoplasty",
    },
    fees: {
       label: "Fees",
@@ -43,6 +48,11 @@ export const nav = {
    testimonials: {
       label: "Testimonials",
       url: "/testimonials",
+   },
+
+   alphabet: {
+      label: "Alphabet",
+      url: "/alphabet",
    },
 
    blog: {

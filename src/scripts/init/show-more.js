@@ -74,7 +74,10 @@ const ANIMATIONS = {
 
 function renderIcon(iconName) {
    if (!iconName) return "";
-   return `<svg class="icon" aria-hidden="true"><use href="#icon-${iconName}"></use></svg>`;
+   const symbol = document.getElementById(`icon-${iconName}`);
+   const viewBox = symbol?.getAttribute("viewBox") ?? "";
+   const vbAttr = viewBox ? ` viewBox="${viewBox}"` : "";
+   return `<svg class="icon" aria-hidden="true" focusable="false" data-icon="${iconName}"${vbAttr}><use href="#icon-${iconName}"></use></svg>`;
 }
 
 // ─── Class ────────────────────────────────────────────────────────────────────
@@ -93,9 +96,13 @@ class ShowMore {
       this.root = root;
       this.btn = root.querySelector(".show-more-btn");
       this.info = root.querySelector(".show-more-info");
+      this.content = root.querySelector(".show-more-content");
 
       // Параметри
       this.perPage = parseInt(root.dataset.perPage ?? "6", 10);
+      this.perPageSm = root.dataset.perPageSm ? parseInt(root.dataset.perPageSm, 10) : null;
+      this.perPageMd = root.dataset.perPageMd ? parseInt(root.dataset.perPageMd, 10) : null;
+      this.perPageLg = root.dataset.perPageLg ? parseInt(root.dataset.perPageLg, 10) : null;
       this.selector = root.dataset.itemSelector;
       this.mode = root.dataset.mode ?? "batch";
 
@@ -132,8 +139,17 @@ class ShowMore {
       // Стан
       this.shown = 0;
       this.isOpen = false;
+      this._mqCleanup = null;
+
+      // Set overflow:hidden once at init so it is never toggled during animations.
+      // Toggling overflow triggers a style-recalc that makes -webkit-line-clamp
+      // on kept items flash unclamped for one paint frame.
+      if (this.content && this.animation !== "none") {
+         this.content.style.overflow = "hidden";
+      }
 
       this.#init();
+      this.#initResponsive();
       ShowMore.#instances.set(root, this);
    }
 
@@ -155,6 +171,48 @@ class ShowMore {
       return ANIMATIONS[this.animation] ?? ANIMATIONS.fade;
    }
 
+   // ─── Responsive perPage ───────────────────────────────────────────────────
+
+   #getActivePerPage() {
+      if (this.perPageSm != null && window.matchMedia("(max-width: 480px)").matches) {
+         return this.perPageSm;
+      }
+      if (this.perPageMd != null && window.matchMedia("(max-width: 767.98px)").matches) {
+         return this.perPageMd;
+      }
+      if (this.perPageLg != null && window.matchMedia("(max-width: 991.98px)").matches) {
+         return this.perPageLg;
+      }
+      return this.perPage;
+   }
+
+   #initResponsive() {
+      if (this.perPageSm == null && this.perPageMd == null && this.perPageLg == null) return;
+
+      const breakpoints = [
+         this.perPageSm != null ? "(max-width: 480px)" : null,
+         this.perPageMd != null ? "(max-width: 767.98px)" : null,
+         this.perPageLg != null ? "(max-width: 991.98px)" : null,
+      ].filter(Boolean);
+
+      const mqs = breakpoints.map((bp) => window.matchMedia(bp));
+      const handler = () => this.#reinit();
+      mqs.forEach((mq) => mq.addEventListener("change", handler));
+      this._mqCleanup = () => mqs.forEach((mq) => mq.removeEventListener("change", handler));
+   }
+
+   #reinit() {
+      this.items.forEach((item) => {
+         item.style.display = "none";
+         this.#clearStyles(item);
+      });
+      this.shown = 0;
+      this.isOpen = false;
+      this.#reveal(this.#getActivePerPage(), false);
+      this.#updateBtn();
+      this.#updateInfo();
+   }
+
    // ─── Init ─────────────────────────────────────────────────────────────────
 
    #init() {
@@ -166,7 +224,7 @@ class ShowMore {
       this.shown = 0;
       this.isOpen = false;
 
-      this.#reveal(this.perPage, false);
+      this.#reveal(this.#getActivePerPage(), false);
       this.#updateBtn();
       this.#updateInfo();
 
@@ -188,7 +246,7 @@ class ShowMore {
    #nextBatch() {
       if (this.isDone) return;
       const from = this.shown;
-      this.#reveal(this.perPage, true);
+      this.#reveal(this.#getActivePerPage(), true);
       this.#updateBtn();
       this.#updateInfo();
       this.#dispatch();
@@ -207,12 +265,45 @@ class ShowMore {
          this.#dispatch();
          if (this.scrollToNew) this.#scrollToItem(from);
       } else {
-         this.#hideAfter(this.perPage);
+         this.#hideAfter(this.#getActivePerPage());
          this.isOpen = false;
          this.#updateBtn();
          this.#updateInfo();
          this.#dispatch();
       }
+   }
+
+   // ─── Height animation helpers ─────────────────────────────────────────────
+
+   #lockHeight() {
+      if (!this.content) return;
+      this.content.style.transition = "";
+      this.content.style.height = this.content.offsetHeight + "px";
+   }
+
+   #animateHeightTo(targetH) {
+      if (!this.content) return;
+      requestAnimationFrame(() => {
+         if (!this.content) return;
+         this.content.style.transition = `height ${this.duration}ms ease`;
+         this.content.style.height = targetH + "px";
+         const cleanup = () => {
+            if (!this.content) return;
+            this.content.style.height = "";
+            this.content.style.transition = "";
+            // overflow stays hidden — set permanently at init, cleared only in destroy()
+         };
+         const t = setTimeout(cleanup, this.duration + 60);
+         this.content.addEventListener(
+            "transitionend",
+            (e) => {
+               if (e.target !== this.content) return;
+               clearTimeout(t);
+               cleanup();
+            },
+            { once: true },
+         );
+      });
    }
 
    // ─── Reveal / Hide ────────────────────────────────────────────────────────
@@ -221,6 +312,11 @@ class ShowMore {
       const items = this.items;
       const from = this.shown;
       const to = Math.min(from + count, this.total);
+
+      const useHeightAnim = animate && this.animation !== "none" && this.content;
+
+      // Capture start height before items enter the DOM
+      const startH = useHeightAnim ? this.content.offsetHeight : 0;
 
       for (let i = from; i < to; i++) {
          const item = items[i];
@@ -233,22 +329,64 @@ class ShowMore {
       }
 
       this.shown = to;
+
+      if (useHeightAnim) {
+         // Items are now in DOM at opacity 0 — measure their natural height,
+         // then lock back to startH so the CSS transition has a proper from-value.
+         this.content.style.transition = "";
+         this.content.style.height = "auto";
+         const endH = this.content.offsetHeight;
+         this.content.style.height = startH + "px";
+         // Force reflow so the browser registers startH before we animate
+         void this.content.offsetHeight;
+         this.#animateHeightTo(endH);
+      }
    }
 
    #hideAfter(keepCount) {
       const items = this.items;
 
-      for (let i = keepCount; i < items.length; i++) {
-         const item = items[i];
-         if (this.animation !== "none") {
-            item.style.transition = `opacity ${this.duration * 0.4}ms ease`;
-            item.style.opacity = "0";
-            const el = item;
-            setTimeout(() => {
-               el.style.display = "none";
-               this.#clearStyles(el);
-            }, this.duration * 0.4);
+      if (this.animation !== "none" && this.content) {
+         const toHide = items.slice(keepCount);
+         const toKeep = items.slice(0, keepCount);
+
+         // Derive target height from kept items' bounding rects — no display toggle.
+         // Toggling display:none → "" forces a grid reflow on kept items and causes
+         // -webkit-line-clamp text to flash unclamped for one paint frame.
+         let endH;
+         if (toKeep.length === 0) {
+            endH = 0;
          } else {
+            const contentTop = this.content.getBoundingClientRect().top;
+            const lastKeptBottom = toKeep[toKeep.length - 1].getBoundingClientRect().bottom;
+            endH = Math.round(lastKeptBottom - contentTop);
+         }
+
+         // Instantly zero-out hidden items without touching display
+         toHide.forEach((el) => {
+            el.style.opacity = "0";
+            el.style.transition = "none";
+         });
+
+         // One rAF lets the browser commit opacity:0 before we lock the height.
+         // Without this, the height/overflow change lands in the same paint as
+         // opacity:0, and the style-recalc can flash -webkit-line-clamp on kept items.
+         requestAnimationFrame(() => {
+            this.#lockHeight();
+            this.#animateHeightTo(endH);
+
+            const fadeDur = this.duration * 0.5;
+            toHide.forEach((item) => {
+               const el = item;
+               setTimeout(() => {
+                  el.style.display = "none";
+                  this.#clearStyles(el);
+               }, fadeDur);
+            });
+         });
+      } else {
+         for (let i = keepCount; i < items.length; i++) {
+            const item = items[i];
             item.style.display = "none";
             this.#clearStyles(item);
          }
@@ -294,7 +432,7 @@ class ShowMore {
       this.#removeModifier(this.cls.close);
 
       const remaining = this.total - this.shown;
-      const next = Math.min(remaining, this.perPage);
+      const next = Math.min(remaining, this.#getActivePerPage());
       const count = this.showCount ? ` ${next}` : "";
       this.#setBtnContent(renderIcon(this.icon), `${this.label}${count}`);
    }
@@ -347,10 +485,15 @@ class ShowMore {
     */
    #setBtnContent(iconHtml, text) {
       if (!this.btn) return;
-      // Зберігаємо класи перед зміною
       const savedClass = this.btn.className;
-      this.btn.innerHTML = `${iconHtml}<span>${text}</span>`;
-      // Відновлюємо класи якщо innerHTML їх зачепив (не чіпає, але для безпеки)
+      const span = this.btn.querySelector("span");
+      if (span) {
+         // Іконка вже рендерена через <Icon> в Astro — оновлюємо тільки текст
+         span.textContent = text;
+      } else {
+         // Fallback: кнопка без Astro-іконки
+         this.btn.innerHTML = `${iconHtml}<span>${text}</span>`;
+      }
       this.btn.className = savedClass;
    }
 
@@ -449,6 +592,13 @@ class ShowMore {
    // ─── Public API ───────────────────────────────────────────────────────────
 
    destroy() {
+      this._mqCleanup?.();
+      this._mqCleanup = null;
+      if (this.content) {
+         this.content.style.overflow = "";
+         this.content.style.height = "";
+         this.content.style.transition = "";
+      }
       this.items.forEach((item) => {
          item.style.display = "";
          this.#clearStyles(item);

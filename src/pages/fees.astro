@@ -10,6 +10,7 @@ import Img from "@components/media/Img.astro";
 import pricesPlanet from "@assets/img/prices/prices-planet-bottom.png";
 import pricesPlanetTop from "@assets/img/prices/prices-planet-top.png";
 import heroBgGradient from "@assets/img/other/bg.jpg";
+import footerBg from "@assets/img/footer/footer-bg-7.png";
 
 const faqItems = [
    {
@@ -56,7 +57,7 @@ const faqItems = [
 ];
 ---
 
-<BaseLayout title="Fees" description="Про нашу команду">
+<BaseLayout title="Fees" description="Про нашу команду" footerBg={footerBg}>
    <PageMain>
       <section class="prices">
          <Img

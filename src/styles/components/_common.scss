@@ -51,8 +51,21 @@
    padding: toRem(12) toRem(24);
 }
 // btns
+.btn-show-more {
+   gap: toRem(8);
+   .icon {
+      font-size: toRem(12);
+      transition: transform var(--transition-base);
+   }
+
+   &.is-open .icon {
+      transform: rotate(180deg);
+   }
+}
 .btn {
-   display: inline-block;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
    font-weight: 600;
    transition: var(--transition-base);
    cursor: pointer;
@@ -101,17 +114,33 @@
    }
 }
 
-.black-btn {
-   border: var(--border-sm) solid var(--color-primary);
-   color: var(--color-primary-hover);
-   background-color: var(--color-primary);
+.white-solid-btn {
+   background-color: var(--color-white);
+   border: var(--border-sm) solid var(--color-white);
+   color: var(--color-black);
 
    @media (any-hover: hover) {
       &:hover {
          background-color: transparent;
-         color: var(--color-primary);
+         color: var(--color-white);
       }
    }
+
+   @include respond-to("md") {
+      width: 100%;
+   }
+}
+
+.btn-dark {
+   background-color: var(--color-black);
+   border-color: var(--color-black);
+   color: var(--color-white);
+}
+
+.black-btn {
+   border: var(--border-sm) solid var(--color-black);
+   color: var(--color-primary-hover);
+
    @include respond-to("md") {
       width: 100%;
    }
@@ -146,7 +175,6 @@
 
 .glass {
    will-change: transform;
-   transform: translateZ(0);
    background: var(--color-overlay-light);
    backdrop-filter: blur(12px);
    border: var(--border-sm) solid rgba(255, 255, 255, 0.15);
@@ -368,7 +396,12 @@
 
 .hero-gradient__bg--height-100 {
    height: auto;
+   @include respond-to("md") {
+      height: 100vh;
+      height: 70svh;
+   }
 }
+
 .hero-gradient__bg--fees {
    height: 100svh;
 }
