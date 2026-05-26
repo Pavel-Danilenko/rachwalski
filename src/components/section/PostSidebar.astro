@@ -23,19 +23,19 @@ const { toc = [], author } = Astro.props;
 
 <aside class="post-sidebar">
    {toc.length > 0 && (
-      <div class="services-table glass br-20" data-toc>
-         <div class="services-table__title fs-24 mb-20">Table of contents</div>
-         <div class="services-table__list" data-slide-nav>
+      <div class="post-toc glass br-20" data-toc>
+         <div class="post-toc__title fs-24 mb-20">Table of contents</div>
+         <div class="post-toc__list" data-slide-nav>
             {toc.map((item) => (
                <a
                   href={`#${item.id}`}
                   data-goto={`#${item.id}`}
-                  class="services-table__link"
+                  class="post-toc__link"
                >
                   {item.title}
                </a>
             ))}
-            <span class="services-table__indicator" data-slide-indicator></span>
+            <span class="post-toc__indicator" data-slide-indicator></span>
          </div>
       </div>
    )}
