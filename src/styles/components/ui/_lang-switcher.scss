@@ -1,0 +1,118 @@
+@use "@styles/utils" as *;
+
+.lang-switcher {
+   position: relative;
+   display: inline-flex;
+
+   // ── Тригер ────────────────────────────────────────────────────────────────
+   &__trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: toRem(6);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      padding: toRem(6) toRem(10);
+      color: var(--lang-trigger-color, currentColor);
+      font-size: toRem(14);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition:
+         background-color var(--transition-fast),
+         border-color var(--transition-fast),
+         color var(--transition-fast);
+      white-space: nowrap;
+
+      @media (any-hover: hover) {
+         &:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.12);
+         }
+      }
+   }
+
+   &.is-open &__trigger {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
+   }
+
+   &__code {
+      text-transform: uppercase;
+      @include respond-from("md") {
+         display: none;
+      }
+   }
+
+   &__label {
+      display: none;
+      @include respond-from("md") {
+         display: inline;
+      }
+   }
+
+   &__arrow {
+      width: toRem(11);
+      height: toRem(11);
+      opacity: 0.7;
+      transition: transform var(--transition-fast);
+      flex-shrink: 0;
+   }
+
+   &.is-open &__arrow {
+      transform: rotate(180deg);
+   }
+
+   // ── Дропдаун ──────────────────────────────────────────────────────────────
+   &__dropdown {
+      position: absolute;
+      top: calc(100% + toRem(10));
+      left: 50%;
+      min-width: unset;
+      list-style: none;
+      padding: toRem(3);
+      z-index: 10;
+
+      background: rgba(18, 28, 44, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-md);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+
+      // Анімація
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(-50%) translateY(-6px) scale(0.96);
+      transition:
+         opacity var(--transition-fast),
+         transform var(--transition-fast);
+      transform-origin: top center;
+   }
+
+   &.is-open &__dropdown {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0) scale(1);
+   }
+
+   // ── Пункт мови ────────────────────────────────────────────────────────────
+   &__option {
+      display: block;
+      padding: toRem(7) toRem(12);
+      font-size: toRem(14);
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      white-space: nowrap;
+      border-radius: calc(var(--radius-md) - 4px);
+      transition: background-color var(--transition-fast), color var(--transition-fast);
+
+      @media (any-hover: hover) {
+         &:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: var(--color-white);
+         }
+      }
+   }
+}

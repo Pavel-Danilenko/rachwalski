@@ -1,0 +1,106 @@
+---
+/**
+ * LanguageSwitcher — перемикач мов
+ *
+ * Використання:
+ * <LanguageSwitcher
+ *   languages={[
+ *     { code: "EN", label: "English", href: "#", active: true },
+ *     { code: "FR", label: "Français", href: "/fr/" },
+ *   ]}
+ * />
+ */
+
+import Icon from "@components/ui/Icon.astro";
+import "@styles/components/ui/_lang-switcher.scss";
+
+interface Language {
+   code: string;   // Короткий код — відображається у тригері: "EN", "FR"
+   label: string;  // Повна назва у дропдауні: "English", "Français"
+   href: string;   // URL мовної версії або "#" як заглушка
+   active?: boolean;
+}
+
+interface Props {
+   languages: Language[];
+   class?: string;
+}
+
+const { languages, class: className = "" } = Astro.props;
+const active = languages.find((l) => l.active) ?? languages[0];
+---
+
+<div class:list={["lang-switcher", className]} data-lang-switcher>
+   <button
+      class="lang-switcher__trigger"
+      data-lang-trigger
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      type="button"
+   >
+      <span class="lang-switcher__code">{active.code}</span>
+      <span class="lang-switcher__label">{active.label}</span>
+      <Icon name="arrow-select" class="lang-switcher__arrow" />
+   </button>
+
+   <ul class="lang-switcher__dropdown" role="listbox" data-lang-dropdown aria-hidden="true">
+      {
+         languages
+            .filter((lang) => !lang.active)
+            .map((lang) => (
+               <li role="option">
+                  <a href={lang.href} class="lang-switcher__option">
+                     <span class="lang-switcher__code">{lang.code}</span>
+                     <span class="lang-switcher__label">{lang.label}</span>
+                  </a>
+               </li>
+            ))
+      }
+   </ul>
+</div>
+
+<script>
+   function initLangSwitcher() {
+      document.querySelectorAll<HTMLElement>("[data-lang-switcher]").forEach((switcher) => {
+         if (switcher.dataset.langInit) return;
+         switcher.dataset.langInit = "true";
+
+         const trigger = switcher.querySelector<HTMLElement>("[data-lang-trigger]");
+         const dropdown = switcher.querySelector<HTMLElement>("[data-lang-dropdown]");
+
+         if (!trigger || !dropdown) return;
+
+         function open() {
+            trigger!.setAttribute("aria-expanded", "true");
+            dropdown!.setAttribute("aria-hidden", "false");
+            switcher.classList.add("is-open");
+         }
+
+         function close() {
+            trigger!.setAttribute("aria-expanded", "false");
+            dropdown!.setAttribute("aria-hidden", "true");
+            switcher.classList.remove("is-open");
+         }
+
+         function toggle() {
+            switcher.classList.contains("is-open") ? close() : open();
+         }
+
+         trigger.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggle();
+         });
+
+         document.addEventListener("click", (e) => {
+            if (!switcher.contains(e.target as Node)) close();
+         });
+
+         document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") close();
+         });
+      });
+   }
+
+   initLangSwitcher();
+   document.addEventListener("page:ready", initLangSwitcher);
+</script>

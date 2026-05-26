@@ -665,7 +665,7 @@ document.addEventListener("page:leave", () => {
    // Гарантований fallback — прямо по DOM
    const overlay = document.querySelector("[data-menu-overlay]");
    if (overlay) overlay.setAttribute("data-menu-open", "false");
-   document.documentElement.classList.remove("menu-open", "lock");
+   document.documentElement.classList.remove("menu-open");
 });
 
 export default Menu;

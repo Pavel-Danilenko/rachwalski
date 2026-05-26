@@ -45,6 +45,10 @@
    }
 }
 
+.header .lang-switcher {
+   --lang-trigger-color: var(--color-white);
+}
+
 .menu-open .header__btn {
    background-color: var(--color-white);
    color: var(--color-black);

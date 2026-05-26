@@ -55,5 +55,11 @@ export function resetBodyLock() {
 }
 
 if (typeof document !== "undefined") {
-   document.addEventListener("page:leave", resetBodyLock);
+   document.addEventListener("page:leave", () => {
+      if (unlockTimer) {
+         clearTimeout(unlockTimer);
+         unlockTimer = null;
+      }
+      isLocked = false;
+   });
 }

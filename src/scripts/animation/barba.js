@@ -267,7 +267,6 @@ function cleanupPage() {
       document.querySelectorAll(sel).forEach((el) => delete el.dataset[key]),
    );
 
-   resetBodyLock();
    dispatchPageLeave();
 }
 
@@ -347,6 +346,7 @@ barba.init({
          },
 
          async beforeEnter({ next }) {
+            resetBodyLock();
             await syncMeta(next.html);
 
             const footerBgSrc = next.container.dataset.footerBg;
