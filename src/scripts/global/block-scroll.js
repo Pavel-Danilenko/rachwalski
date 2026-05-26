@@ -4,8 +4,13 @@
 
 const paddingSelectors = "[data-lock]";
 let isLocked = false;
+let unlockTimer = null;
 
 export function bodyLock() {
+   if (unlockTimer) {
+      clearTimeout(unlockTimer);
+      unlockTimer = null;
+   }
    if (isLocked) return;
    isLocked = true;
 
@@ -24,7 +29,8 @@ export function bodyLock() {
 export function bodyUnlock(delay = 300) {
    if (!isLocked) return;
 
-   setTimeout(() => {
+   unlockTimer = setTimeout(() => {
+      unlockTimer = null;
       isLocked = false;
       document.documentElement.classList.remove("lock");
       document.documentElement.style.removeProperty("--scrollbar-width");
@@ -36,6 +42,10 @@ export function bodyUnlock(delay = 300) {
 }
 
 export function resetBodyLock() {
+   if (unlockTimer) {
+      clearTimeout(unlockTimer);
+      unlockTimer = null;
+   }
    isLocked = false;
    document.documentElement.classList.remove("lock");
    document.body.style.paddingRight = "";
