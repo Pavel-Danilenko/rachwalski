@@ -587,12 +587,6 @@
       @include fluid-space(padding-block, 60, 100);
    }
 
-   // .bio-book__title
-
-   &__title {
-      @include fluid-space(margin-bottom, 24, 40);
-   }
-
    // .bio-book__grid
 
    &__grid {
@@ -600,7 +594,7 @@
       grid-template-columns: repeat(2, 1fr);
       gap: toRem(12);
 
-      @include respond-to("md") {
+      @include respond-to(1000) {
          grid-template-columns: 1fr;
       }
    }
@@ -614,27 +608,17 @@
 
       @include respond-to("md") {
          flex-direction: column;
+         align-items: center;
       }
    }
 
    // .bio-book__cover
 
-   &__cover {
+   &__img {
       flex-shrink: 0;
-      width: toRem(100);
-      border-radius: toRem(8);
+      aspect-ratio: 140/200;
+      @include fluid-space(width, 120, 140);
       overflow: hidden;
-      align-self: flex-start;
-
-      @include respond-to("md") {
-         width: toRem(120);
-      }
-
-      & img {
-         width: 100%;
-         height: 100%;
-         object-fit: cover;
-      }
    }
 
    // .bio-book__body
@@ -642,22 +626,14 @@
    &__body {
       display: flex;
       flex-direction: column;
-      gap: toRem(8);
-      flex-grow: 1;
+      justify-content: center;
    }
 
    // .bio-book__name
 
    &__name {
-      font-size: toRem(16);
-      font-weight: 500;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-
-      @include respond-to("md") {
-         -webkit-line-clamp: unset;
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 8, 12);
       }
    }
 
@@ -665,15 +641,6 @@
 
    &__meta {
       font-size: toRem(14);
-      opacity: 0.6;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-
-      @include respond-to("md") {
-         -webkit-line-clamp: unset;
-      }
    }
 
    // .bio-book__link
@@ -684,7 +651,7 @@
       align-items: center;
       gap: toRem(6);
       text-decoration: underline;
-      margin-top: auto;
+      margin-top: toRem(12);
       & .icon {
          font-size: toRem(10);
          transition: color var(--transition-base);
@@ -704,57 +671,39 @@
 }
 
 .lecture-slider {
-   &__header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: toRem(16);
-      @include fluid-space(margin-bottom, 24, 40);
-   }
-
-   &__header-left {
-      display: flex;
-      flex-direction: column;
-      gap: toRem(8);
-      flex: 1;
-   }
-
-   &__title {
-      @include fluid-type(20, 28);
-   }
-
-   &__subtitle {
-      opacity: 0.6;
-   }
+   position: relative;
 
    &__controls {
       display: flex;
-      gap: toRem(8);
-      flex-shrink: 0;
-      align-self: center;
+      align-items: center;
+      gap: toRem(12);
+      position: absolute;
+      right: 0;
+      top: toRem(-96);
+      z-index: 2;
+
+      @include respond-to("md") {
+         position: relative;
+         top: initial;
+         justify-content: center;
+         &:not(:first-child) {
+            margin-top: toRem(24);
+         }
+      }
    }
 
    &__arrow {
-      width: toRem(40);
-      height: toRem(40);
+      position: static;
+      @include fluid-space(width, 38, 48);
+      @include fluid-space(height, 38, 48);
       border-radius: 50%;
-      border: toRem(1) solid var(--color-overlay-border);
+      border: solid toRem(1) var(--color-white);
+      color: var(--color-white);
       background: transparent;
-      color: var(--color-secondary);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: toRem(12);
-      transition:
-         background var(--transition-base),
-         border-color var(--transition-base);
-
-      &:hover {
-         background: var(--color-secondary);
-         border-color: var(--color-secondary);
-         color: var(--color-white);
-      }
 
       &.swiper-button-disabled {
          opacity: 0.3;
@@ -763,38 +712,10 @@
    }
 }
 
-.bio-lectures__card {
-   position: relative;
-   display: flex;
-   flex-direction: column;
-   gap: toRem(12);
-   @include fluid-space(padding, 16, 20);
-   height: 100%;
-}
-
-.bio-lectures__date {
-   font-size: toRem(13);
-   opacity: 0.5;
-   color: var(--color-secondary);
-}
-
-.bio-lectures__name {
-   font-size: toRem(16);
-   color: var(--color-secondary);
-   display: -webkit-box;
-   -webkit-box-orient: vertical;
-   -webkit-line-clamp: 3;
-   overflow: hidden;
-   flex-grow: 1;
-}
-
-.bio-lectures__arrow {
-   font-size: toRem(10);
-   color: var(--color-secondary);
-   opacity: 0.5;
-   align-self: flex-end;
-}
-
 .lecture-slider .swiper-slide {
    height: auto;
+}
+
+.lecture-slider .topics-card {
+   height: 100%;
 }

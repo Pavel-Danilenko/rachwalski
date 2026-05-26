@@ -231,34 +231,3 @@
    }
 }
 
-.post-related {
-   &__container {
-   }
-
-   &__title {
-      @include fluid(font-size, 22, 32);
-      font-weight: 600;
-   }
-
-   &__label {
-      color: var(--color-gray-blue);
-      font-weight: 600;
-   }
-   &__grid {
-      .swiper-wrapper {
-         @include respond-from("md") {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            @include fluid-space(gap, 16, 24);
-         }
-      }
-
-      .swiper-slide {
-         height: auto;
-      }
-
-      @include respond-to("sm") {
-         grid-template-columns: 1fr;
-      }
-   }
-}

@@ -3,7 +3,7 @@ export const prerender = true;
 
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
-import PostCard from "@components/section/PostCard.astro";
+import PostsSection from "@components/section/PostsSection.astro";
 import PostSidebar from "@components/section/PostSidebar.astro";
 import Img from "@components/media/Img.astro";
 import Icon from "@components/ui/Icon.astro";
@@ -167,39 +167,13 @@ const breadcrumbTitle = title.length > 32 ? title.slice(0, 32) + "…" : title;
 
       {
          related.length > 0 && (
-            <section class="post-related bg-white mt-1">
-               <div class="post-related__container pt-80 pb-80 ">
-                  <div class="post-related__inner mb-40">
-                     <div class="post-related__label">Blog</div>
-                     <h2 class="post-related__title ct-black">
-                        Related blog posts
-                     </h2>
-                     <div class="post-related__text ct-black">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                     </div>
-                  </div>
-
-                  <div class="post-related__grid cards-slider" data-cards-slider>
-                     <div class="swiper">
-                        <div class="swiper-wrapper">
-                           {related.map((p) => (
-                              <div class="swiper-slide">
-                                 <PostCard post={p} />
-                              </div>
-                           ))}
-                        </div>
-                     </div>
-                     <div class="cards-slider__controls">
-                        <button class="slider__arrow slider__arrow--prev" aria-label="Previous">
-                           <Icon name="arrow-dark-slider-left" />
-                        </button>
-                        <button class="slider__arrow slider__arrow--next" aria-label="Next">
-                           <Icon name="arrow-dark-slider-right" />
-                        </button>
-                     </div>
-                  </div>
-               </div>
-            </section>
+            <PostsSection
+               posts={related}
+               label="Blog"
+               title="Related blog posts"
+               description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+               class="bg-white mt-1"
+            />
          )
       }
 

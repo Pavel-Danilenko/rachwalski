@@ -2,36 +2,31 @@
 import Icon from "@components/ui/Icon.astro";
 
 interface Props {
-   title?: string;
-   subtitle?: string;
+   class?: string;
 }
 
-const {
-   title = "Lectures and presentations at international conferences",
-   subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-} = Astro.props;
+const { class: className } = Astro.props;
 ---
 
-<div class="lecture-slider" data-lecture-slider>
-   <div class="lecture-slider__header">
-      <div class="lecture-slider__header-left">
-         <h2 class="lecture-slider__title ct-black">{title}</h2>
-         <p class="lecture-slider__subtitle ct-black fs-16">{subtitle}</p>
-      </div>
-      <div class="lecture-slider__controls">
-         <button class="lecture-slider__arrow lecture-slider__arrow--prev" aria-label="Попередній">
-            <Icon name="arrow-dark-slider-left" />
-         </button>
-         <button class="lecture-slider__arrow lecture-slider__arrow--next" aria-label="Наступний">
-            <Icon name="arrow-dark-slider-right" />
-         </button>
-      </div>
-   </div>
-
+<div class:list={["lecture-slider", className]} data-lecture-slider>
    <div class="swiper">
       <div class="swiper-wrapper">
          <slot />
       </div>
+   </div>
+   <div class="lecture-slider__controls">
+      <button
+         class="lecture-slider__arrow lecture-slider__arrow--prev"
+         aria-label="Попередній"
+      >
+         <Icon name="arrow-dark-slider-left" />
+      </button>
+      <button
+         class="lecture-slider__arrow lecture-slider__arrow--next"
+         aria-label="Наступний"
+      >
+         <Icon name="arrow-dark-slider-right" />
+      </button>
    </div>
 </div>
 

@@ -7,6 +7,7 @@ import ShowMoreText from "@components/ui/ShowMoreText.astro";
 import Showmore from "@components/pagination/Showmore.astro";
 import LectureSlider from "@components/sliders/LectureSlider.astro";
 import "@styles/pages/_biography.scss";
+import "@styles/components/sliders/_topics-slider.scss";
 import Img from "@components/media/Img.astro";
 import heroBgGradient from "@assets/img/other/bg.jpg";
 import booHeroImg from "@assets/img/biography/martin.png";
@@ -670,9 +671,9 @@ import StepBanner from "@/components/section/StepBanner.astro";
          </div>
       </section>
 
-      <section class="bio-book bg-white">
+      <section class="bio-book bg-white mt-1">
          <div class="bio-book__container">
-            <h2 class="bio-book__title ct-black">
+            <h2 class="bio-book__title ct-black mb-40">
                Research articles and book chapters
             </h2>
             <Showmore
@@ -687,14 +688,13 @@ import StepBanner from "@/components/section/StepBanner.astro";
                classBtnClose="is-open"
             >
                <div class="bio-book__item br-12 bg-white-medium">
-                  <div class="bio-book__cover">
-                     <Img
-                        src={bookImg1}
-                        alt="Fundamental Concepts in Regenerative Medicine"
-                     />
-                  </div>
+                  <Img
+                     src={bookImg1}
+                     alt="Fundamental Concepts in Regenerative Medicine"
+                     wrapperClass="bio-book__img br-12"
+                  />
                   <div class="bio-book__body">
-                     <div class="bio-book__name ct-black">
+                     <div class="bio-book__name fw-600 ct-black">
                         Fundamental Concepts in Regenerative Medicine:
                         Structural Fat Grafting (SFG) and Platelet-Rich Plasma
                         (PRP)
@@ -713,14 +713,13 @@ import StepBanner from "@/components/section/StepBanner.astro";
                   </div>
                </div>
                <div class="bio-book__item br-12 bg-white-medium">
-                  <div class="bio-book__cover">
-                     <Img
-                        src={bookImg2}
-                        alt="Experimental Animal Models in Cranial Suture Biology"
-                     />
-                  </div>
+                  <Img
+                     src={bookImg2}
+                     alt="Experimental Animal Models in Cranial Suture Biology"
+                     wrapperClass="bio-book__img br-12"
+                  />
                   <div class="bio-book__body">
-                     <div class="bio-book__name ct-black">
+                     <div class="bio-book__name fw-600 ct-black">
                         Experimental Animal Models in Cranial Suture Biology:
                         Molecular and Pharmacological Treatment Strategies
                      </div>
@@ -737,14 +736,13 @@ import StepBanner from "@/components/section/StepBanner.astro";
                   </div>
                </div>
                <div class="bio-book__item br-12 bg-white-medium">
-                  <div class="bio-book__cover">
-                     <Img
-                        src={bookImg1}
-                        alt="Fundamental Concepts in Regenerative Medicine"
-                     />
-                  </div>
+                  <Img
+                     src={bookImg1}
+                     alt="Fundamental Concepts in Regenerative Medicine"
+                     wrapperClass="bio-book__img br-12"
+                  />
                   <div class="bio-book__body">
-                     <div class="bio-book__name ct-black">
+                     <div class="bio-book__name fw-600 ct-black">
                         Fundamental Concepts in Regenerative Medicine:
                         Structural Fat Grafting (SFG) and Platelet-Rich Plasma
                         (PRP)
@@ -764,56 +762,76 @@ import StepBanner from "@/components/section/StepBanner.astro";
                </div>
             </Showmore>
          </div>
-
-         <section class="bio-lectures dark-gradient__bottom mt-1">
-            <div class="bio-lectures__container">
-               <LectureSlider
-                  title="Lectures and presentations at international conferences"
-                  subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-               >
-                  <div class="swiper-slide">
-                     <div class="bio-lectures__card br-12 bg-white-medium">
-                        <span class="bio-lectures__date">18 Jan 2026</span>
-                        <div class="bio-lectures__name">
-                           Rhinoplasty: What to Expect Before and After Surgery
-                        </div>
-                        <Icon name="arrow-up" class="bio-lectures__arrow" />
-                     </div>
-                  </div>
-                  <div class="swiper-slide">
-                     <div class="bio-lectures__card br-12 bg-white-medium">
-                        <span class="bio-lectures__date">18 Jan 2026</span>
-                        <div class="bio-lectures__name">
-                           Rmagna aliqua. Ut enim ad minim veniam, quis nostrud
-                           exercitation ulla...
-                        </div>
-                        <Icon name="arrow-up" class="bio-lectures__arrow" />
-                     </div>
-                  </div>
-                  <div class="swiper-slide">
-                     <div class="bio-lectures__card br-12 bg-white-medium">
-                        <span class="bio-lectures__date">18 Jan 2026</span>
-                        <div class="bio-lectures__name">
-                           Bolor sit amet, consectetur adipiscing elit, sed do
-                           eiusmod tempor incididun...
-                        </div>
-                        <Icon name="arrow-up" class="bio-lectures__arrow" />
-                     </div>
-                  </div>
-                  <div class="swiper-slide">
-                     <div class="bio-lectures__card br-12 bg-white-medium">
-                        <span class="bio-lectures__date">18 Jan 2026</span>
-                        <div class="bio-lectures__name">
-                           Advanced techniques in facial reconstruction and
-                           surgical planning
-                        </div>
-                        <Icon name="arrow-up" class="bio-lectures__arrow" />
-                     </div>
-                  </div>
-               </LectureSlider>
-               <StepBanner />
+      </section>
+      <section class="bio-lectures dark-gradient__bottom mt-1">
+         <div class="bio-lectures__container">
+            <div class="topics__inner mb-40">
+               <h2 class="topics__title mb-12">
+                  Lectures and presentations at international conferences
+               </h2>
+               <div class="topics__text fs-20">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+               </div>
             </div>
-         </section>
+            <LectureSlider class="mb-40">
+               <div class="swiper-slide">
+                  <a href="#" class="topics-card br-20 glass">
+                     <span class="topics-card__date fs-14">18 Jan 2026</span>
+                     <div class="topics-card__content">
+                        <span class="topics-card__title"
+                           >Rhinoplasty: What to Expect Before and After Surgery</span
+                        >
+                        <span class="topics-card__icon"
+                           ><Icon name="arrow-link-top" /></span
+                        >
+                     </div>
+                  </a>
+               </div>
+               <div class="swiper-slide">
+                  <a href="#" class="topics-card br-20 glass">
+                     <span class="topics-card__date fs-14">18 Jan 2026</span>
+                     <div class="topics-card__content">
+                        <span class="topics-card__title"
+                           >Magna aliqua. Ut enim ad minim veniam, quis nostrud
+                           exercitation ulla...</span
+                        >
+                        <span class="topics-card__icon"
+                           ><Icon name="arrow-link-top" /></span
+                        >
+                     </div>
+                  </a>
+               </div>
+               <div class="swiper-slide">
+                  <a href="#" class="topics-card br-20 glass">
+                     <span class="topics-card__date fs-14">18 Jan 2026</span>
+                     <div class="topics-card__content">
+                        <span class="topics-card__title"
+                           >Lorem sit amet, consectetur adipiscing elit, sed do
+                           eiusmod tempor incididun...</span
+                        >
+                        <span class="topics-card__icon"
+                           ><Icon name="arrow-link-top" /></span
+                        >
+                     </div>
+                  </a>
+               </div>
+               <div class="swiper-slide">
+                  <a href="#" class="topics-card br-20 glass">
+                     <span class="topics-card__date fs-14">18 Jan 2026</span>
+                     <div class="topics-card__content">
+                        <span class="topics-card__title"
+                           >Advanced techniques in facial reconstruction and
+                           surgical planning</span
+                        >
+                        <span class="topics-card__icon"
+                           ><Icon name="arrow-link-top" /></span
+                        >
+                     </div>
+                  </a>
+               </div>
+            </LectureSlider>
+            <StepBanner />
+         </div>
       </section>
    </PageMain>
 </BaseLayout>

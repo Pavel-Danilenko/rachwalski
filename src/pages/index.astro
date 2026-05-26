@@ -3,8 +3,74 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
 import clinicAlphandImg from "@assets/img/about/clinic-alphand/clinic-alphand.jpg";
 import Icon from "@components/ui/Icon.astro";
-import Img from "@components/media/Img.astro";
 import "@styles/pages/_clinic-alphand.scss";
+import "@styles/pages/_main-page.scss";
+import Img from "@components/media/Img.astro";
+import aboutImg from "@assets/img/biography/martin.png";
+import PostsSection from "@components/section/PostsSection.astro";
+import PopularReviews from "@components/section/PopularReviews.astro";
+import { getCollection } from "astro:content";
+
+const latestPosts = (await getCollection("blog"))
+   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+   .slice(0, 3);
+
+const reviews = [
+   {
+      type: "surgical",
+      category: "rhinoplasty",
+      procedure: "Rhinoplasty",
+      rating: 5,
+      text: "I couldn't be happier with my results. Dr. Martin Rachwalski made me feel comfortable and truly understood what I wanted. The outcome is natural and has given me new confidence.",
+      author: "Sofia",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "botox",
+      procedure: "Botox",
+      rating: 5,
+      text: "The results were absolutely natural. I was nervous at first but Dr. Rachwalski explained everything clearly. My friends didn't even notice I had anything done — just said I looked refreshed and rested.",
+      author: "Marie",
+      source: "estheticon",
+   },
+   {
+      type: "surgical",
+      category: "facelift",
+      procedure: "Facelift",
+      rating: 5,
+      text: "After years of considering a facelift, I finally went ahead with Dr. Rachwalski. The results exceeded my expectations. I look naturally younger without that 'pulled' look I was afraid of.",
+      author: "Claire",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "fillers",
+      procedure: "Fillers",
+      rating: 5,
+      text: "I had lip and cheek fillers done and the results are stunning. Very subtle and natural-looking. Dr. Rachwalski has an incredible eye for proportion and symmetry. I'll definitely be back.",
+      author: "Emma",
+      source: "estheticon",
+   },
+   {
+      type: "surgical",
+      category: "blepharoplasty",
+      procedure: "Blepharoplasty",
+      rating: 5,
+      text: "The eyelid surgery completely transformed my appearance. I look more awake and refreshed. Dr. Rachwalski was very attentive to my concerns and the scarring is barely visible.",
+      author: "Anne",
+      source: "estheticon",
+   },
+   {
+      type: "non-surgical",
+      category: "botox",
+      procedure: "Botox",
+      rating: 5,
+      text: "Second visit for botox and once again the results are perfect. The team is professional and welcoming. Dr. Rachwalski always takes time to discuss what I want and delivers exactly that.",
+      author: "Thomas",
+      source: "estheticon",
+   },
+];
 ---
 
 <BaseLayout
@@ -29,5 +95,59 @@ import "@styles/pages/_clinic-alphand.scss";
             </div>
          </div>
       </section>
+      <section class="main-about bg-white">
+         <div class="main-about__container pt-80 pb-80">
+            <div class="main-about__column-left bg-white-medium br-12">
+               <Img
+                  src={aboutImg}
+                  alt=""
+                  loading="lazy"
+                  quality={88}
+                  wrapperClass="main-about__img"
+               />
+            </div>
+            <div class="main-about__column-right">
+               <div class="main-about__icon">
+                  <Icon name="quote" />
+               </div>
+               <div class="main-about__text ct-black">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+               </div>
+               <div class="main-about__label ct-black fs-20 fw-600">
+                  Dr. Martin Rachwalski , Facial Surgeon
+               </div>
+               <div class="main-about__signature">
+                  <img
+                     src="/img/about-img.png"
+                     alt="Dr. Martin Rachwalski signature"
+                  />
+               </div>
+               <div class="main-about__btns">
+                  <a href="" class="btn btn-dark btn--medium">
+                     Book consultation
+                  </a>
+                  <a href="" class="btn btn--medium btn-dark-outline">
+                     See biography
+                  </a>
+               </div>
+            </div>
+         </div>
+      </section>
+      <PostsSection
+         posts={latestPosts}
+         label="Blog"
+         title="Latest insights"
+         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+         viewAllHref="/blog"
+         class="bg-white mt-1"
+      />
+      <PopularReviews
+         reviews={reviews}
+         viewAllHref="/testimonials"
+         class="dark-gradient__bottom mt-1"
+      />
    </PageMain>
 </BaseLayout>

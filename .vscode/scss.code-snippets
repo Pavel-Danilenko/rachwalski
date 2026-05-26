@@ -266,8 +266,15 @@
       "description": "текст праворуч по сітці",
    },
 
-   "bleed full width": {
+   "font-weight value": {
       "prefix": "fw",
+      "scope": "scss,css",
+      "body": "font-weight: ${1|300,400,500,600,700,800,900|};",
+      "description": "font-weight з вибором значення"
+   },
+
+   "bleed full width": {
+      "prefix": "fullw",
       "scope": "scss,css",
       "body": ["@include full-width;"],
       "description": "на весь екран (grid-column: full)",

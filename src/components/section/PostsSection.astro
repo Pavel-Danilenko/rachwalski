@@ -1,0 +1,80 @@
+---
+import "@styles/components/section/_posts-section.scss";
+import PostCard from "@components/section/PostCard.astro";
+import Icon from "@components/ui/Icon.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+   posts: CollectionEntry<"blog">[];
+   label?: string;
+   title?: string;
+   description?: string;
+   viewAllHref?: string;
+   viewAllText?: string;
+   class?: string;
+}
+
+const {
+   posts,
+   label,
+   title,
+   description,
+   viewAllHref,
+   viewAllText = "View all",
+   class: className = "",
+} = Astro.props;
+---
+
+<section class:list={["posts-section", className]}>
+   <div class="posts-section__container pt-80 pb-80">
+      {
+         (label || title || description) && (
+            <div class="posts-section__inner">
+               {label && <div class="posts-section__label">{label}</div>}
+               {title && <h2 class="posts-section__title ct-black">{title}</h2>}
+               {description && (
+                  <div class="posts-section__desc ct-black">{description}</div>
+               )}
+            </div>
+         )
+      }
+
+      <div class="posts-section__grid cards-slider" data-cards-slider>
+         <div class="swiper">
+            <div class="swiper-wrapper">
+               {
+                  posts.map((post) => (
+                     <div class="swiper-slide">
+                        <PostCard post={post} />
+                     </div>
+                  ))
+               }
+            </div>
+         </div>
+         <div class="cards-slider__controls">
+            <button
+               class="slider__arrow slider__arrow--prev"
+               aria-label="Previous"
+            >
+               <Icon name="arrow-dark-slider-left" />
+            </button>
+            <button
+               class="slider__arrow slider__arrow--next"
+               aria-label="Next"
+            >
+               <Icon name="arrow-dark-slider-right" />
+            </button>
+         </div>
+      </div>
+
+      {
+         viewAllHref && (
+            <div class="posts-section__footer">
+               <a href={viewAllHref} class="btn btn--medium btn-dark-outline">
+                  {viewAllText}
+               </a>
+            </div>
+         )
+      }
+   </div>
+</section>

@@ -1,17 +1,88 @@
 @use "@styles/utils" as *;
 
-.contact {
-   padding: toRem(80) 0;
+.main-about {
+   // .main-about__container
 
    &__container {
-      max-width: toRem(560);
-      margin: 0 auto;
-      padding: 0 toRem(20);
+      display: grid;
+      @include respond-from(940) {
+         grid-template-columns: repeat(2, 1fr);
+         @include fluid-space(column-gap, 40, 100);
+      }
+      row-gap: toRem(32);
    }
 
-   &__title {
-      margin-bottom: toRem(40);
-      text-align: center;
+   // .main-about__column-left
+
+   &__column-left {
+      overflow: hidden;
    }
 
+   // .main-about__column-right
+
+   &__column-right {
+      align-content: center;
+   }
+
+   &__img {
+      width: 100%;
+      aspect-ratio: 530/676;
+      & img {
+         object-position: bottom;
+         height: auto;
+      }
+   }
+
+   // .main-about__icon
+
+   &__icon {
+      @include fluid(font-size, 36, 50);
+      color: var(--color-black);
+      opacity: 0.1;
+      &:not(:last-child) {
+         margin-bottom: toRem(12);
+      }
+   }
+
+   // .main-about__text
+
+   &__text {
+      @include fluid(font-size, 20, 30);
+      &:not(:last-child) {
+         margin-bottom: toRem(12);
+      }
+   }
+
+   // .main-about__label
+
+   &__label {
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 20, 32);
+      }
+   }
+
+   // .main-about__signature
+
+   &__signature {
+      width: 100%;
+      & img {
+         width: 100%;
+         height: 100%;
+      }
+      @include fluid(max-width, 150, 248);
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 32, 60);
+      }
+      @include respond-to("md") {
+         margin-inline: auto;
+      }
+   }
+
+   // .main-about__btns
+
+   &__btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: toRem(16) toRem(30);
+   }
 }

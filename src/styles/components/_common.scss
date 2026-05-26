@@ -72,6 +72,9 @@
    text-align: center;
    border-radius: var(--radius-xl);
    line-height: 1.4;
+   @include respond-to("md") {
+      width: 100%;
+   }
 }
 
 .btn--sm {
@@ -140,6 +143,19 @@
       &:hover {
          background-color: transparent;
          color: var(--color-black);
+      }
+   }
+}
+
+.btn-dark-outline {
+   background-color: transparent;
+   border: var(--border-sm) solid var(--color-black);
+   color: var(--color-black);
+
+   @media (any-hover: hover) {
+      &:hover {
+         background-color: var(--color-black);
+         color: var(--color-white);
       }
    }
 }
@@ -449,5 +465,10 @@
       @include fluid-space(height, 124, 210);
       background: var(--gradient-blog-hero-light);
       @include fluid-space(bottom, -1, -60);
+   }
+}
+.topics__inner {
+   @include respond-from("md") {
+      padding-right: toRem(120);
    }
 }

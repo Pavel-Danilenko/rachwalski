@@ -1,0 +1,44 @@
+@use "@styles/utils" as *;
+
+.posts-section {
+   &__inner {
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 24, 40);
+      }
+   }
+
+   &__label {
+      color: var(--color-gray-blue);
+      font-weight: 600;
+      &:not(:last-child) {
+         margin-bottom: toRem(8);
+      }
+   }
+
+   &__title {
+      @include fluid(font-size, 22, 32);
+      font-weight: 600;
+   }
+
+   &__grid {
+      .swiper-wrapper {
+         @include respond-from("md") {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            @include fluid-space(gap, 16, 24);
+         }
+      }
+
+      .swiper-slide {
+         height: auto;
+      }
+   }
+
+   &__footer {
+      display: flex;
+      justify-content: center;
+      &:not(:first-child) {
+         @include fluid-space(margin-top, 24, 40);
+      }
+   }
+}
