@@ -281,15 +281,36 @@ async function syncMeta(nextHtml) {
       currDesc.setAttribute("content", nextDesc.getAttribute("content") ?? "");
 
    // Dev mode (Vite): CSS is inlined as <style data-vite-dev-id="...">
+   const nextViteIds = new Set(
+      [...doc.querySelectorAll("style[data-vite-dev-id]")].map(s => s.getAttribute("data-vite-dev-id")),
+   );
+   // Видаляємо стилі попередньої сторінки яких немає на новій
+   document.querySelectorAll("style[data-vite-dev-id][data-barba-css]").forEach(style => {
+      if (!nextViteIds.has(style.getAttribute("data-vite-dev-id")))
+         style.remove();
+   });
+   // Додаємо нові стилі
    const currViteIds = new Set(
       [...document.querySelectorAll("style[data-vite-dev-id]")].map(s => s.getAttribute("data-vite-dev-id")),
    );
    doc.querySelectorAll("style[data-vite-dev-id]").forEach(style => {
-      if (!currViteIds.has(style.getAttribute("data-vite-dev-id")))
-         document.head.appendChild(style.cloneNode(true));
+      if (!currViteIds.has(style.getAttribute("data-vite-dev-id"))) {
+         const el = style.cloneNode(true);
+         el.setAttribute("data-barba-css", "true");
+         document.head.appendChild(el);
+      }
    });
 
    // Prod mode: CSS is served as <link rel="stylesheet">
+   const nextHrefs = new Set(
+      [...doc.querySelectorAll('link[rel="stylesheet"]')].map(l => l.getAttribute("href")),
+   );
+   // Видаляємо link-и попередньої сторінки яких немає на новій
+   document.querySelectorAll('link[rel="stylesheet"][data-barba-css]').forEach(link => {
+      if (!nextHrefs.has(link.getAttribute("href")))
+         link.remove();
+   });
+   // Додаємо нові link-и
    const currHrefs = new Set(
       [...document.querySelectorAll('link[rel="stylesheet"]')].map(l => l.getAttribute("href")),
    );
@@ -301,7 +322,8 @@ async function syncMeta(nextHtml) {
    await Promise.all(newLinks.map(link => new Promise(resolve => {
       const el = document.createElement("link");
       el.rel  = "stylesheet";
-      el.href = link.getAttribute("href");
+      el.href = link.getAttribute("href") ?? "";
+      el.setAttribute("data-barba-css", "true");
       el.onload  = resolve;
       el.onerror = resolve;
       document.head.appendChild(el);
