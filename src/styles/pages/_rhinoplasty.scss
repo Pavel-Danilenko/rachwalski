@@ -15,23 +15,14 @@
    &__container {
       position: relative;
       @include fluid-space(padding-top, 90, 128);
-      @include fluid-space(padding-bottom, 100, 168);
-      min-height: 110vh;
-      min-height: 110svh;
+      @include fluid-space(padding-bottom, 20, 168);
       display: flex;
       flex-direction: column;
       justify-content: end;
       z-index: 3;
-      @include respond-to("md") {
-         min-height: 100vh;
-         min-height: 100svh;
-      }
    }
 
    // .rhinoplasty-hero__title
-
-   &__title {
-   }
 }
 
 //------
@@ -45,13 +36,18 @@
       z-index: 3;
       display: flex;
       flex-direction: column;
+      @include respond-to("md") {
+         padding-top: toRem(40);
+      }
    }
 
    // .services-info__item
 
    &__item {
       position: relative;
-      margin-top: toRem(-80);
+      @include respond-from("md") {
+         margin-top: toRem(-80);
+      }
       @include fluid-space(padding, 20, 32);
    }
 

@@ -59,24 +59,26 @@ const faqItems = [
 ];
 ---
 
-<BaseLayout title="Rhinoplasty" description="Про нашу команду" footerBg={footerBg}>
+<BaseLayout
+   title="Rhinoplasty"
+   description="Про нашу команду"
+   footerBg={footerBg}
+>
    <PageMain>
-      <section class="rhinoplasty-hero hero-mask hero-mask-top">
+      <section class="rhinoplasty-hero hero-circle">
          <Img
             src={heroImg}
             alt="Hero"
             width={1920}
             height={1080}
             loading="eager"
-            wrapperClass="rhinoplasty-hero__img"
+            wrapperClass="rhinoplasty-hero__img hero-mask hero-mask-top"
             fetchpriority="high"
             decoding="sync"
             quality={90}
-            sizes="100vw"
-            widths={[768, 1280, 1920]}
          />
 
-         <div class="rhinoplasty-hero__container">
+         <div class="rhinoplasty-hero__container hero-full-vh">
             <h1 class="rhinoplasty-hero__title t-center">
                Primary Rhinoplasty
             </h1>
@@ -108,7 +110,8 @@ const faqItems = [
                   <div class="services-info__column-right">
                      <a
                         class="services-info__btn white-btn btn--medium btn"
-                        href="#" data-popup-open="book">Book consultation</a
+                        href="#"
+                        data-popup-open="book">Book consultation</a
                      >
                   </div>
                </div>

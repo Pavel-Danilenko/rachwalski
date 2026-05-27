@@ -493,12 +493,14 @@
          content: "";
          position: absolute;
          z-index: 1;
-         right: -50%;
-         top: -40%;
+         right: 0;
+         top: 0;
+         translate: (50% -50%);
          width: 100%;
+         height: auto;
          aspect-ratio: 1;
          border-radius: 50%;
-         filter: blur(80px);
+         filter: blur(55px);
          pointer-events: none;
 
          background: var(--color-bg-light-blue);
@@ -515,6 +517,7 @@
          right: -40%;
          top: -5%;
          width: 100%;
+
          aspect-ratio: 1;
          border-radius: 50%;
          filter: blur(80px);
