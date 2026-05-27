@@ -130,8 +130,9 @@ $colors-special: (
    "light-blue-overlay": rgba(205, 220, 243, 0.04),
    "surface-dark": #1e2a3a,
    // темна поверхня (карти, модалки)
-   "surface-glass": rgb(255 255 255 / 3%), // скляна поверхня — легкий білий фон
-   "backdrop": rgba(11, 17, 26, 0.3),      // backdrop для попапів та floating UI
+   "surface-glass": rgb(255 255 255 / 3%),
+   // скляна поверхня — легкий білий фон
+   "backdrop": rgba(11, 17, 26, 0.3), // backdrop для попапів та floating UI
 );
 
 // ─── 4. Утилітарні (завжди однакові) ─────────────────────────────────────────
@@ -230,7 +231,7 @@ $gradients: (
          rgb(1, 6, 16) 0%,
          rgba(14, 28, 45, 0) 60%
       ),
-   footer-gradient-top: linear-gradient(180deg, #0b111a 0%, #0e1c2d00 100%),
+   footer-gradient-top: linear-gradient(180deg, #0b111a 55%, #0e1c2d00 100%),
    bg-dark-navy: linear-gradient(
          to top right,
          #324259 0%,

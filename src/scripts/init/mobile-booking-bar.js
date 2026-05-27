@@ -1,4 +1,4 @@
-const THRESHOLD = window.innerHeight;
+const THRESHOLD = window.innerHeight * 0.3;
 
 function initMobileBookingBar() {
    const bar = document.querySelector("[data-mobile-booking-bar]");
