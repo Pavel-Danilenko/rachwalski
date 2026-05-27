@@ -5,18 +5,18 @@ date: 2024-12-28
 readTime: 6
 category: "Facelift"
 tags: ["facial harmony", "aesthetics", "surgery"]
-image: ../../assets/img/services/rhinoplasty/services-img-2.png
+image: ../../assets/img/blog/post-img-3.jpg
 author:
-  name: "Dr. Martin Rachwalski"
-  avatar: /img/author-rachwalski.png
-  specialty: "Specialist in facial rejuvenation"
+   name: "Dr. Martin Rachwalski"
+   avatar: /img/author-rachwalski.png
+   specialty: "Specialist in facial rejuvenation"
 toc:
-  - id: "what-is-harmony"
-    title: "What Is Facial Harmony"
-  - id: "golden-ratio"
-    title: "The Golden Ratio"
-  - id: "surgical-approach"
-    title: "Surgical Approach"
+   - id: "what-is-facial-harmony"
+     title: "What Is Facial Harmony"
+   - id: "the-golden-ratio"
+     title: "The Golden Ratio"
+   - id: "surgical-approach"
+     title: "Surgical Approach"
 featured: false
 ---
 
@@ -41,15 +41,14 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
 
-![Facial harmony surgery](../../assets/img/services/rhinoplasty/services-img-2.png)
 
 ## Surgical Approach
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 <div class="post-images-grid">
-  <img src="/img/services-img-2.png" alt="Before surgery" />
-  <img src="/img/services-img-2.png" alt="After surgery" />
+  <img src="/img/blog/post/post-img.jpg" alt="Before" />
+  <img src="/img/blog/post/post-img.jpg" alt="After" />
 </div>
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.

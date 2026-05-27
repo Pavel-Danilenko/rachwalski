@@ -5,18 +5,18 @@ date: 2024-11-28
 readTime: 5
 category: "Blepharoplasty"
 tags: ["dark circles", "tear trough", "surgery"]
-image: ../../assets/img/services/rhinoplasty/rhinoplasty-bg.png
+image: ../../assets/img/blog/post-img-1.jpg
 author:
-  name: "Dr. Martin Rachwalski"
-  avatar: /img/author-rachwalski.png
-  specialty: "Specialist in blepharoplasty and eyelid surgery"
+   name: "Dr. Martin Rachwalski"
+   avatar: /img/author-rachwalski.png
+   specialty: "Specialist in blepharoplasty and eyelid surgery"
 toc:
-  - id: "causes"
-    title: "Causes"
-  - id: "surgical-approach"
-    title: "Surgical Approach"
-  - id: "recovery"
-    title: "Recovery"
+   - id: "causes"
+     title: "Causes"
+   - id: "surgical-approach"
+     title: "Surgical Approach"
+   - id: "recovery"
+     title: "Recovery"
 featured: false
 ---
 
@@ -28,7 +28,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-![Post image](../../assets/img/services/rhinoplasty/rhinoplasty-bg.png)
 
 ## Surgical Approach
 
@@ -58,8 +57,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 <div class="post-images-grid">
-  <img src="/img/services-img-1.png" alt="Before" />
-  <img src="/img/services-img-2.png" alt="After" />
+  <img src="/img/blog/post/post-img.jpg" alt="Before" />
+  <img src="/img/blog/post/post-img.jpg" alt="After" />
 </div>
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

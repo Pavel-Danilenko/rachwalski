@@ -5,20 +5,20 @@ date: 2024-12-20
 readTime: 6
 category: "Facelift"
 tags: ["facelift", "recovery", "tips", "healing"]
-image: ../../assets/img/services/rhinoplasty/services-img-2.png
+image: ../../assets/img/blog/post-img-3.jpg
 author:
-  name: "Dr. Martin Rachwalski"
-  avatar: /img/author-rachwalski.png
-  specialty: "Specialist in facial rejuvenation"
+   name: "Dr. Martin Rachwalski"
+   avatar: /img/author-rachwalski.png
+   specialty: "Specialist in facial rejuvenation"
 toc:
-  - id: "week-one"
-    title: "Week One"
-  - id: "week-two"
-    title: "Week Two"
-  - id: "first-month"
-    title: "First Month"
-  - id: "long-term-care"
-    title: "Long-Term Care"
+   - id: "week-one"
+     title: "Week One"
+   - id: "week-two"
+     title: "Week Two"
+   - id: "first-month"
+     title: "First Month"
+   - id: "long-term-care"
+     title: "Long-Term Care"
 featured: false
 ---
 
@@ -30,7 +30,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-![Post image](../../assets/img/services/rhinoplasty/services-img-2.png)
 
 ## Week Two
 
@@ -60,8 +59,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 <div class="post-images-grid">
-  <img src="/img/services-img-1.png" alt="Before" />
-  <img src="/img/services-img-2.png" alt="After" />
+  <img src="/img/blog/post/post-img.jpg" alt="Before" />
+  <img src="/img/blog/post/post-img.jpg" alt="After" />
 </div>
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+## Long-Term Care
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.

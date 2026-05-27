@@ -7,7 +7,6 @@ import PostsSection from "@components/section/PostsSection.astro";
 import PostSidebar from "@components/section/PostSidebar.astro";
 import Img from "@components/media/Img.astro";
 import Icon from "@components/ui/Icon.astro";
-import StepBanner from "@components/section/StepBanner.astro";
 import "@styles/pages/_post.scss";
 import { getCollection } from "astro:content";
 import heroPostImg from "@assets/img/blog/post/post-hero-img.png";
@@ -120,7 +119,7 @@ const breadcrumbTitle = title.length > 32 ? title.slice(0, 32) + "…" : title;
             quality={88}
             wrapperClass="post-hero__img"
          />
-         <div class="post-hero__container pt-180 pb-80">
+         <div class="post-hero__container hero-full-vh pt-180 pb-80">
             <nav class="post-hero__breadcrumb mb-24">
                <a href="/blog" class="post-hero__breadcrumb-link">Blog</a>
                <span class="post-hero__breadcrumb-sep">›</span>
@@ -156,6 +155,13 @@ const breadcrumbTitle = title.length > 32 ? title.slice(0, 32) + "…" : title;
             <div class="post-content__layout">
                <article class="post-content__main">
                   <div class="post-body t-style">
+                     {image && (
+                        <Img
+                           src={image}
+                           alt={title}
+                           wrapperClass="post-body__cover"
+                        />
+                     )}
                      <Content />
                   </div>
                </article>
@@ -184,3 +190,26 @@ const breadcrumbTitle = title.length > 32 ? title.slice(0, 32) + "…" : title;
       />
    </PageMain>
 </BaseLayout>
+
+<script>
+   function placeCover() {
+      const cover = document.querySelector<HTMLElement>(".post-body__cover");
+      if (!cover) return;
+
+      const body = cover.closest(".post-body");
+      if (!body) return;
+
+      const h2s = [...body.querySelectorAll("h2")];
+
+      if (h2s.length >= 2) {
+         h2s[1].before(cover);
+      } else {
+         body.appendChild(cover);
+      }
+
+      cover.classList.add("is-placed");
+   }
+
+   placeCover();
+   document.addEventListener("page:ready", placeCover);
+</script>

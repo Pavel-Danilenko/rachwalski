@@ -5,18 +5,18 @@ date: 2025-01-18
 readTime: 6
 category: "Rhinoplasty"
 tags: ["rhinoplasty", "revision", "secondary"]
-image: ../../assets/img/services/rhinoplasty/services-img-2.png
+image: ../../assets/img/blog/post-img-3.jpg
 author:
-  name: "Dr. Martin Rachwalski"
-  avatar: /img/author-rachwalski.png
-  specialty: "Specialist in facial plastic surgery"
+   name: "Dr. Martin Rachwalski"
+   avatar: /img/author-rachwalski.png
+   specialty: "Specialist in facial plastic surgery"
 toc:
-  - id: "why-revision"
-    title: "Why Revision Surgery"
-  - id: "challenges"
-    title: "Challenges"
-  - id: "timeline"
-    title: "Timeline"
+   - id: "why-revision-surgery"
+     title: "Why Revision Surgery"
+   - id: "challenges"
+     title: "Challenges"
+   - id: "timeline"
+     title: "Timeline"
 featured: false
 ---
 
@@ -28,7 +28,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-![Post image](../../assets/img/services/rhinoplasty/services-img-2.png)
 
 ## Challenges
 
@@ -58,8 +57,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 <div class="post-images-grid">
-  <img src="/img/services-img-1.png" alt="Before" />
-  <img src="/img/services-img-2.png" alt="After" />
+  <img src="/img/blog/post/post-img.jpg" alt="Before" />
+  <img src="/img/blog/post/post-img.jpg" alt="After" />
 </div>
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

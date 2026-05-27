@@ -47,7 +47,7 @@ body::after {
 // ── Content (картка попапу) ───────────────────────────────────────────────────
 .popup__content {
    position: relative;
-   background: transparent;
+   background: var(--color-backdrop);
    backdrop-filter: blur(toRem(12));
    border-radius: var(--radius-lg);
    padding: toRem(32) toRem(28);

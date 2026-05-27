@@ -151,6 +151,9 @@ async function loadModules() {
    if (document.querySelector("[data-menu-overlay]"))
       tasks.push(import("@scripts/init/nav-primary-width"));
 
+   if (document.querySelector("[data-mobile-booking-bar]"))
+      tasks.push(import("@scripts/init/mobile-booking-bar"));
+
    await Promise.all(tasks);
 }
 

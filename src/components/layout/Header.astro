@@ -12,9 +12,10 @@ import navBG from "@assets/img/nav/nav-bg.png";
 
 interface Props {
    class?: string;
+   sticky?: boolean;
 }
 
-const { class: className = "" } = Astro.props;
+const { class: className = "", sticky = false } = Astro.props;
 ---
 
 <header class:list={["header", className]}>

@@ -2,6 +2,7 @@
 import Header from "@components/layout/Header.astro";
 import Footer from "@components/layout/Footer.astro";
 import Popups from "@components/popups/Popups.astro";
+import MobileBookingBar from "@components/ui/MobileBookingBar.astro";
 import IconSprite from "@components/ui/IconSprite.astro";
 import "@styles/main.scss";
 import "swiper/css";
@@ -113,6 +114,7 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
       </div>
 
       <Popups />
+      <MobileBookingBar />
 
       <script>
          import "@scripts/app";

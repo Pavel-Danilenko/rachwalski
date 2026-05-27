@@ -125,10 +125,13 @@ $colors-special: (
    // темний фон
    "bg-light": #e4eaf3,
    // світлий фон
+   "bg-light-blue": #e1ebf4,
+   // світло-блакитний фон
    "light-blue-overlay": rgba(205, 220, 243, 0.04),
    "surface-dark": #1e2a3a,
    // темна поверхня (карти, модалки)
    "surface-glass": rgb(255 255 255 / 3%), // скляна поверхня — легкий білий фон
+   "backdrop": rgba(11, 17, 26, 0.3),      // backdrop для попапів та floating UI
 );
 
 // ─── 4. Утилітарні (завжди однакові) ─────────────────────────────────────────
@@ -190,6 +193,22 @@ $colors-state: (
 // Генерує: --gradient-name
 // Використання: background: var(--gradient-hero)
 $gradients: (
+   mobile-left-gradient: linear-gradient(
+         80deg,
+         rgba(1, 6, 16, 0.95) 30%,
+         rgba(1, 6, 16, 0.7) 52%,
+         rgba(1, 6, 16, 0.35) 68%,
+         rgba(1, 6, 16, 0.1) 82%,
+         rgba(1, 6, 16, 0) 100%
+      ),
+   mobile-bottom-gradient: linear-gradient(
+         to top,
+         #0b111a 33%,
+         rgba(11, 17, 26, 0.9) 40%,
+         rgba(11, 17, 26, 0.6) 50%,
+         rgba(11, 17, 26, 0.2) 75%,
+         transparent 100%
+      ),
    prices-bottom-gradient: linear-gradient(
          to top,
          #0b111a 0%,

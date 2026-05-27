@@ -5,6 +5,7 @@ import StepBanner from "@/components/section/StepBanner.astro";
 import LocationsMap from "@components/section/LocationsMap.astro";
 import SectionHeader from "@components/section/SectionHeader.astro";
 import Img from "@components/media/Img.astro";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
 import Icon from "@components/ui/Icon.astro";
 
 import "@styles/pages/_clinic-alphand.scss";
@@ -12,6 +13,7 @@ import founderImg1 from "@assets/img/about/clinic-alphand/alphand-founder-img-1.
 import founderImg2 from "@assets/img/about/clinic-alphand/alphand-founder-img-2.jpg";
 import founderImg3 from "@assets/img/about/clinic-alphand/alphand-founder-img-3.jpg";
 import clinicAlphandImg from "@assets/img/about/clinic-alphand/clinic-alphand.jpg";
+import clinicAlphandImgMobile from "@assets/img/about/clinic-alphand/clinic-alphand-hero-mobile.jpg";
 import evolutionImg from "@assets/img/about/clinic-alphand/evolution-img.jpg";
 import clinicImg1 from "@assets/img/about/clinic-alphand/alphand-clinic-img-1.jpg";
 import clinicImg2 from "@assets/img/about/clinic-alphand/alphand-clinic-img-2.jpg";
@@ -23,12 +25,17 @@ import techImg4 from "@assets/img/about/clinic-alphand/alphand-tech-img-4.jpg";
 import footerBg from "@assets/img/footer/footer-bg-4.png";
 ---
 
-<BaseLayout title="Clinic Alphand" description="Про нашу команду" footerBg={footerBg}>
+<BaseLayout
+   title="Clinic Alphand"
+   description="Про нашу команду"
+   footerBg={footerBg}
+>
    <PageMain>
       <!-- ── Hero ──────────────────────────────────────────────────────────── -->
-      <section class="alphand-hero">
-         <Img
-            src={clinicAlphandImg}
+      <section class="alphand-hero hero-circle">
+         <ResponsiveImg
+            srcDesktop={clinicAlphandImg}
+            srcMobile={clinicAlphandImgMobile}
             alt="Hero"
             loading="eager"
             fetchpriority="high"
@@ -36,7 +43,7 @@ import footerBg from "@assets/img/footer/footer-bg-4.png";
             quality={88}
             wrapperClass="alphand-hero__bg hero-gradient__bg hero-gradient__bg--height-100"
          />
-         <div class="alphand-hero__container pt-180 pb-80">
+         <div class="alphand-hero__container hero-full-vh pt-180 pb-80">
             <div class="alphand-hero__logo">
                <Icon name="alphand-logo" />
             </div>

@@ -11,14 +11,27 @@ const MAP_STYLES = [
 
    // Дрібні дороги — приховані
    { featureType: "road.local", stylers: [{ visibility: "off" }] },
-   { featureType: "road.arterial", stylers: [{ visibility: "off" }] },
 
-   // Тільки головні дороги
+   // Базовий колір усіх доріг
    {
       featureType: "road",
       elementType: "geometry",
       stylers: [{ color: "#1e2530" }],
    },
+
+   // Arterial — другорядні після магістралей, приглушені
+   {
+      featureType: "road.arterial",
+      elementType: "geometry",
+      stylers: [{ color: "#2a3344" }, { weight: 0.6 }],
+   },
+   {
+      featureType: "road.arterial",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#7a8a99" }],
+   },
+
+   // Магістралі — яскраві
    {
       featureType: "road.highway",
       elementType: "geometry",

@@ -1,0 +1,58 @@
+@use "@styles/utils" as *;
+
+.mobile-booking-bar {
+   display: none;
+
+   @include respond-to("md") {
+      display: flex;
+      align-items: center;
+      width: 94%;
+
+      position: fixed;
+      bottom: toRem(16);
+      left: 50%;
+      transform: translateX(-50%) translateY(calc(100% + toRem(24)));
+      z-index: 100;
+
+      background: rgba(11, 17, 26, 0.3);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius-full);
+      height: toRem(40);
+      gap: toRem(28);
+
+      opacity: 0;
+      pointer-events: none;
+      transition:
+         opacity 0.4s ease,
+         transform 0.4s ease;
+
+      &.is-visible {
+         opacity: 1;
+         pointer-events: auto;
+         transform: translateX(-50%) translateY(0);
+      }
+   }
+
+   // .mobile-booking-bar__btn
+   &__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      white-space: nowrap;
+      font-weight: 600;
+      font-size: toRem(14);
+      padding: toRem(12) toRem(16);
+      cursor: pointer;
+      border: none;
+      background: none;
+      text-decoration: none;
+      color: var(--color-white);
+
+      &--primary {
+         border-right: 1px solid rgba(255, 255, 255, 0.25);
+      }
+   }
+}

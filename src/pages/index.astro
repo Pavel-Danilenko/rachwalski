@@ -2,6 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
 import clinicAlphandImg from "@assets/img/about/clinic-alphand/clinic-alphand.jpg";
+import clinicAlphandImgMobile from "@assets/img/about/clinic-alphand/clinic-alphand-hero-mobile.jpg";
 import Icon from "@components/ui/Icon.astro";
 import "@styles/pages/_clinic-alphand.scss";
 import "@styles/pages/_main-page.scss";
@@ -10,6 +11,8 @@ import aboutImg from "@assets/img/biography/martin.png";
 import PostsSection from "@components/section/PostsSection.astro";
 import PopularReviews from "@components/section/PopularReviews.astro";
 import { getCollection } from "astro:content";
+import footerBg from "@assets/img/footer/footer-bg-8.png";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
 
 const latestPosts = (await getCollection("blog"))
    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
@@ -77,19 +80,20 @@ const reviews = [
    title="Головна | Назва сайту — Замін на реальний заголовок"
    description="Тестовий опис головної сторінки. Замін на реальний текст — він відображається у Google та при шерінгу у соцмережах. Рекомендовано 120–155 символів."
    ogImage="/og-image.svg"
+   footerBg={footerBg}
 >
    <PageMain>
-      <section class="alphand-hero">
-         <Img
-            src={clinicAlphandImg}
+      <section class="alphand-hero hero-circle">
+         <ResponsiveImg
+            srcDesktop={clinicAlphandImg}
+            srcMobile={clinicAlphandImgMobile}
             alt="Hero"
-            loading="eager"
-            fetchpriority="high"
-            decoding="sync"
             quality={88}
+            breakpoint={768}
             wrapperClass="alphand-hero__bg hero-gradient__bg hero-gradient__bg--height-100"
          />
-         <div class="alphand-hero__container pt-180 pb-80">
+
+         <div class="alphand-hero__container hero-full-vh pt-180 pb-80">
             <div class="alphand-hero__logo">
                <Icon name="alphand-logo" />
             </div>

@@ -5,18 +5,18 @@ date: 2024-12-05
 readTime: 4
 category: "Rhinoplasty"
 tags: ["rhinoplasty", "tip", "precision"]
-image: ../../assets/img/services/rhinoplasty/services-img-2.png
+image: ../../assets/img/blog/post-img-2.jpg
 author:
-  name: "Dr. Martin Rachwalski"
-  avatar: /img/author-rachwalski.png
-  specialty: "Specialist in facial plastic surgery"
+   name: "Dr. Martin Rachwalski"
+   avatar: /img/author-rachwalski.png
+   specialty: "Specialist in facial plastic surgery"
 toc:
-  - id: "tip-rhinoplasty"
-    title: "Tip Rhinoplasty"
-  - id: "techniques"
-    title: "Techniques"
-  - id: "results"
-    title: "Results"
+   - id: "tip-rhinoplasty"
+     title: "Tip Rhinoplasty"
+   - id: "techniques"
+     title: "Techniques"
+   - id: "results"
+     title: "Results"
 featured: false
 ---
 
@@ -28,7 +28,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-![Post image](../../assets/img/services/rhinoplasty/services-img-2.png)
 
 ## Techniques
 
@@ -58,8 +57,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 <div class="post-images-grid">
-  <img src="/img/services-img-1.png" alt="Before" />
-  <img src="/img/services-img-2.png" alt="After" />
+  <img src="/img/blog/post/post-img.jpg" alt="Before" />
+  <img src="/img/blog/post/post-img.jpg" alt="After" />
 </div>
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

@@ -3,8 +3,9 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
 import "@styles/pages/_alphabet.scss";
 import clinicAlphandImg from "@assets/img/about/clinic-alphand/clinic-alphand.jpg";
+import clinicAlphandImgMobile from "@assets/img/about/clinic-alphand/clinic-alphand-hero-mobile.jpg";
 import Icon from "@components/ui/Icon.astro";
-import Img from "@components/media/Img.astro";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
 import "@styles/pages/_clinic-alphand.scss";
 import footerBg from "@assets/img/footer/footer-bg-1.png";
 ---
@@ -15,9 +16,10 @@ import footerBg from "@assets/img/footer/footer-bg-1.png";
    footerBg={footerBg}
 >
    <PageMain>
-      <section class="alphand-hero">
-         <Img
-            src={clinicAlphandImg}
+      <section class="alphand-hero hero-circle">
+         <ResponsiveImg
+            srcDesktop={clinicAlphandImg}
+            srcMobile={clinicAlphandImgMobile}
             alt="Hero"
             loading="eager"
             fetchpriority="high"
@@ -25,7 +27,7 @@ import footerBg from "@assets/img/footer/footer-bg-1.png";
             quality={88}
             wrapperClass="alphand-hero__bg hero-gradient__bg hero-gradient__bg--height-100"
          />
-         <div class="alphand-hero__container pt-180 pb-80">
+         <div class="alphand-hero__container hero-full-vh pt-180 pb-80">
             <div class="alphand-hero__logo">
                <Icon name="alphand-logo" />
             </div>

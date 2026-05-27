@@ -50,9 +50,15 @@
 }
 
 .menu-open .header__btn {
-   background-color: var(--color-white);
+   background-color: var(--color-primary);
    color: var(--color-black);
    border-color: var(--color-white);
    position: relative;
    z-index: 101;
+}
+
+@media (any-hover: hover) {
+   .menu-open .btn-dark:hover {
+      color: var(--color-white);
+   }
 }
