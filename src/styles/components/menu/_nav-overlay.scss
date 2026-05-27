@@ -205,6 +205,29 @@
       background: var(--color-blue);
       color: var(--color-black);
    }
+
+   // First item active by default — hidden when another item is hovered
+   .nav-overlay[data-menu-open="true"] .nav-sub:first-child > .nav-sub__row {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+   }
+
+   .nav-overlay[data-menu-open="true"] .nav-sub:first-child > .nav-sub__trigger {
+      background: var(--color-blue);
+      color: var(--color-black);
+   }
+
+   .nav-overlay[data-menu-open="true"] .nav-overlay__list:has(.nav-sub:not(:first-child):hover) .nav-sub:first-child > .nav-sub__row {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(#{toRem(-10)});
+   }
+
+   .nav-overlay[data-menu-open="true"] .nav-overlay__list:has(.nav-sub:not(:first-child):hover) .nav-sub:first-child > .nav-sub__trigger {
+      background: transparent;
+      color: var(--color-text);
+   }
 }
 
 // ── nav-sub (items with submenu) ──────────────────────────────────────────────
