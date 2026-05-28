@@ -666,6 +666,12 @@
 .lecture-slider {
    position: relative;
 
+   .swiper {
+      @include respond-to("md") {
+         margin-right: toRem(-15);
+      }
+   }
+
    &__controls {
       display: flex;
       align-items: center;
