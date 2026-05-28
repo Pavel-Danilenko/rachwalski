@@ -21,7 +21,7 @@
    }
 
    &__grid {
-      .swiper {
+      &.cards-slider .swiper {
          @include respond-to("md") {
             margin-right: 0;
          }

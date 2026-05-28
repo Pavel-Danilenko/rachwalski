@@ -108,7 +108,7 @@
    // .alphand-founder__gallery
 
    &__gallery {
-      .swiper {
+      &.cards-slider .swiper {
          @include respond-to("md") {
             margin-right: 0;
          }
@@ -201,7 +201,7 @@
    // .alphand-clinic__row
 
    &__row {
-      .swiper {
+      &.cards-slider .swiper {
          @include respond-to("md") {
             margin-right: 0;
          }
