@@ -208,7 +208,7 @@
    will-change: transform;
    background: var(--color-overlay-light);
    backdrop-filter: blur(12px);
-   border: var(--border-sm) solid rgba(255, 255, 255, 0.15);
+   border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
 }
 
 .t-style p {
@@ -349,11 +349,12 @@
    &::before {
       content: "";
       width: 100%;
-      height: 101%;
+      height: calc(100% + toRem(120));
       position: absolute;
       top: toRem(-1);
       left: 0;
       z-index: 1;
+      pointer-events: none;
       background: var(--gradient-top-gradient);
    }
 }
@@ -373,16 +374,16 @@
    }
 }
 .light-gradientp-top {
-   &::before {
-      content: "";
-      width: 100%;
-      height: toRem(140);
-      position: absolute;
-      top: toRem(-1);
-      left: 0;
-      z-index: 1;
-      background: var(--gradient-top-gradient-light);
-   }
+   // &::before {
+   //    content: "";
+   //    width: 100%;
+   //    height: toRem(140);
+   //    position: absolute;
+   //    top: toRem(3);
+   //    left: 0;
+   //    z-index: 1;
+   //    background: var(--gradient-top-gradient-light);
+   // }
 }
 .hero-mask-top {
    &::after {

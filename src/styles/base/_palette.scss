@@ -242,15 +242,15 @@ $gradients: (
       ),
    top-gradient: linear-gradient(
          180deg,
-         rgba(11, 17, 26, 0) 0%,
-         #0b111a 6%,
-         #0e1e30 20%,
-         #12243a 25%,
-         #1a2e4a 35%,
-         #2d4a70 48%,
-         #476895 58%,
-         #7ba3c6 80%,
-         #b2c6de 99%
+         #0b111a 0%,
+         #0b111a 2%,
+         #0d1a2b 12%,
+         #12243a 23%,
+         #1f3452 31%,
+         #263e60 36%,
+         #476895 53%,
+         #ccd5e1 84%,
+         #e4eaf3 100%
       ),
    footer-bottom-gradient: linear-gradient(
          to bottom,
@@ -260,7 +260,7 @@ $gradients: (
    hero-mask: linear-gradient(180deg, rgba(11, 17, 26, 0) 0%, #0b111a 100%),
    top-gradient-light: linear-gradient(
          180deg,
-         #b2c6de 3%,
+         #ccd5e1 0%,
          #e4eaf3 60%,
          #e4eaf3 100%
       ),
