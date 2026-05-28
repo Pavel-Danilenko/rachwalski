@@ -583,10 +583,6 @@
 .bio-book {
    // .bio-book__container
 
-   &__container {
-      @include fluid-space(padding-block, 60, 100);
-   }
-
    // .bio-book__grid
 
    &__grid {
@@ -665,9 +661,6 @@
 //----------------
 
 .bio-lectures {
-   &__container {
-      @include fluid-space(padding-block, 60, 100);
-   }
 }
 
 .lecture-slider {

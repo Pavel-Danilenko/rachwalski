@@ -19,8 +19,6 @@
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: var(--radius-full);
-      height: toRem(40);
-      gap: toRem(28);
 
       opacity: 0;
       pointer-events: none;
@@ -44,7 +42,7 @@
       white-space: nowrap;
       font-weight: 600;
       font-size: toRem(14);
-      padding: toRem(12) toRem(16);
+      padding: toRem(8) toRem(14);
       cursor: pointer;
       border: none;
       background: none;

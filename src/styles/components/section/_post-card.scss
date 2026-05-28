@@ -12,6 +12,9 @@
       aspect-ratio: 400 / 424;
       flex-shrink: 0;
       @include fluid-space(margin-bottom, 12, 16);
+      @include respond-to("md") {
+         aspect-ratio: 343 / 424;
+      }
    }
 
    // .post-card__img

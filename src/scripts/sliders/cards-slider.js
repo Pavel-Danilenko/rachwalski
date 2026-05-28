@@ -18,7 +18,7 @@ function enable(el) {
       observer: true,
       observeParents: true,
       autoHeight: true,
-      slidesPerView: 1.2,
+      slidesPerView: parseFloat(el.dataset.slidesPerView ?? "1.2"),
       spaceBetween: 12,
       navigation: {
          prevEl: el.querySelector(".slider__arrow--prev"),

@@ -3,7 +3,7 @@
    "color variable": {
       "prefix": "cv",
       "scope": "scss,css",
-      "body": "var(--color-${1|bg,bg-alt,surface,text,text-muted,border,overlay-dark,overlay-light,overlay-border,overlay-medium,bg-dark,bg-light,light-blue-overlay,surface-dark,surface-glass,white,black,blue,light-blue,primary,primary-hover,secondary,secondary-hover,accent,accent-hover,gray-blue,success,warning,error,info|})",
+      "body": "var(--color-${1|bg,bg-alt,surface,text,text-muted,border,overlay-dark,overlay-light,overlay-border,overlay-medium,bg-dark,bg-light,bg-light-blue,light-blue-overlay,surface-dark,surface-glass,backdrop,white,black,blue,light-blue,primary,primary-hover,secondary,secondary-hover,accent,accent-hover,gray-blue,success,warning,error,info|})",
       "description": "CSS color variable — всі кольори з palette.scss"
    },
 
@@ -65,6 +65,7 @@
 
 
 
+
    "respond-to custom": {
       "prefix": "rpc",
       "body": "@include respond-to(${1:900}) {\n\t$2\n}",
@@ -111,6 +112,7 @@
       "body": "@include respond-from(\"xxl\") {\n\t$0\n}",
       "description": "min-width 1440px"
    },
+
 
 
 
