@@ -150,12 +150,7 @@
          width: 100%;
          height: toRem(44);
          border-radius: var(--radius-xl);
-         background: transparent;
-         will-change: transform;
          transform: translateZ(0);
-         background: var(--color-overlay-light);
-         backdrop-filter: blur(10px);
-         border: none;
          padding-inline: toRem(14);
          gap: toRem(8);
          .icon {
