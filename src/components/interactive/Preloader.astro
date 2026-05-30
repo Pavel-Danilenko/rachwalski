@@ -11,6 +11,10 @@ interface Props {
    minDisplayTime?: number;
    // Час за який лічильник доходить до 90% (мс) — імітація швидкості завантаження
    simulationDuration?: number;
+   // Логотип — текст або зображення (необов'язково)
+   logoText?: string;
+   logoSrc?: string;
+   logoAlt?: string;
 }
 
 const {
@@ -18,6 +22,9 @@ const {
    fadeDuration = 600,
    minDisplayTime = 0,
    simulationDuration = 800,
+   logoText,
+   logoSrc,
+   logoAlt = "Logo",
 } = Astro.props;
 ---
 
@@ -32,6 +39,14 @@ const {
    data-min-display-time={minDisplayTime}
    data-simulation-duration={simulationDuration}
 >
+   {(logoSrc || logoText) && (
+      <div class="preloader__logo">
+         {logoSrc
+            ? <img src={logoSrc} alt={logoAlt} class="preloader__logo-img" />
+            : <span class="preloader__logo-text">{logoText}</span>
+         }
+      </div>
+   )}
    <div class="preloader__counter">
       <span class="preloader__number" id="preloaderNumber">0</span>
       <span class="preloader__percent">%</span>

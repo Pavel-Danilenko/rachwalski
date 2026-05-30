@@ -389,11 +389,17 @@ $config = require $configFile;
 
 // CORS Headers
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // JSON Response
 header("Content-Type: application/json; charset=utf-8");
+
+// CORS preflight
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+   http_response_code(204);
+   exit();
+}
 
 // Перевірка методу запиту
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -409,7 +415,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 // ЗБИРАЄМО ВСІ ПОЛЯ АВТОМАТИЧНО
 // ========================================
 
-$systemFields = ["recipient_email", "recipient_name", "sender_name", "subject"];
+$systemFields = ["recipient_email", "recipient_name", "sender_name", "subject", "form_key"];
 $allFields = [];
 
 foreach ($_POST as $key => $value) {
@@ -452,8 +458,8 @@ $subject_field = isset($_POST["subject"]) ? trim($_POST["subject"]) : "";
 
 $errors = [];
 
-if (empty($name) || strlen($name) < 2) {
-   $errors[] = "Name is required (min 2 characters)";
+if (!empty($name) && strlen($name) < 2) {
+   $errors[] = "Name is too short (min 2 characters)";
 }
 
 if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -595,6 +601,18 @@ $email_body =
          opacity: 0.9;
          font-size: 14px;
       }
+      .badge {
+         display: inline-block;
+         margin-top: 12px;
+         padding: 4px 14px;
+         background: rgba(255,255,255,0.2);
+         border: 1px solid rgba(255,255,255,0.4);
+         border-radius: 20px;
+         font-size: 12px;
+         font-weight: 600;
+         letter-spacing: 0.5px;
+         text-transform: uppercase;
+      }
       .content {
          padding: 30px 20px;
       }
@@ -645,9 +663,8 @@ $email_body =
    <div class="container">
       <div class="header">
          <h1>📧 New Contact Message</h1>
-         <p>' .
-   htmlspecialchars($sender_name) .
-   '</p>
+         <p>' . htmlspecialchars($sender_name) . '</p>
+         ' . (!empty($form_key) ? '<div class="badge">' . htmlspecialchars($form_key) . '</div>' : '') . '
       </div>
       
       <div class="content">
@@ -665,7 +682,7 @@ $email_body =
    date("d.m.Y H:i:s") .
    '<br>
             <strong>User Agent:</strong> ' .
-   htmlspecialchars($_SERVER["HTTP_USER_AGENT"]) .
+   htmlspecialchars($_SERVER["HTTP_USER_AGENT"] ?? "Unknown") .
    '
          </div>
       </div>
@@ -684,6 +701,9 @@ foreach ($allFields as $key => $value) {
    $fieldsText .= formatFieldName($key) . ": " . $value . "\n";
 }
 $fieldsText .= "\n---\n";
+if (!empty($form_key)) {
+   $fieldsText .= "Form: " . $form_key . "\n";
+}
 $fieldsText .= "IP: " . $_SERVER["REMOTE_ADDR"] . "\n";
 $fieldsText .= "Date: " . date("d.m.Y H:i:s");
 
@@ -722,6 +742,33 @@ try {
    $mailer->Subject = $email_subject;
    $mailer->Body = $email_body;
    $mailer->AltBody = $fieldsText;
+
+   // Вкладення файлів
+   $allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "application/pdf"];
+   $maxFileSize  = 5 * 1024 * 1024; // 5 MB
+
+   if (!empty($_FILES)) {
+      foreach ($_FILES as $fileField) {
+         $indexes = isset($fileField["name"]) && is_array($fileField["name"])
+            ? array_keys($fileField["name"])
+            : [0];
+
+         foreach ($indexes as $i) {
+            $tmpName  = is_array($fileField["tmp_name"]) ? $fileField["tmp_name"][$i] : $fileField["tmp_name"];
+            $origName = is_array($fileField["name"])     ? $fileField["name"][$i]     : $fileField["name"];
+            $fileError = is_array($fileField["error"])   ? $fileField["error"][$i]    : $fileField["error"];
+            $fileSize = is_array($fileField["size"])     ? $fileField["size"][$i]     : $fileField["size"];
+
+            if ($fileError !== UPLOAD_ERR_OK || !is_uploaded_file($tmpName)) continue;
+            if ($fileSize > $maxFileSize) continue;
+
+            $mimeType = mime_content_type($tmpName);
+            if (!in_array($mimeType, $allowedTypes)) continue;
+
+            $mailer->addAttachment($tmpName, $origName);
+         }
+      }
+   }
 
    $mailer->send();
 

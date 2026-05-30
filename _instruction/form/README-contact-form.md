@@ -29,7 +29,7 @@ import ContactForm from "@components/forms/ContactForm.astro";
 import CustomSelect from "@components/forms/CustomSelect.astro";
 ---
 
-<ContactForm recipientEmail="you@gmail.com">
+<ContactForm formKey="contact">
    <!-- поля через slot -->
 </ContactForm>
 ```
@@ -44,8 +44,8 @@ import CustomSelect from "@components/forms/CustomSelect.astro";
 | ------------------- | ---------------------- | ------------------------ | ------------------------------------------- |
 | `backend`           | `"php" \| "api"`       | `"php"`                  | Метод відправки                             |
 | `action`            | `string`               | —                        | Свій URL (замінює дефолтний)                |
-| `formKey`           | `string`               | —                        | Ключ форми — сервер знаходить email з env/config (безпечно) |
-| `recipientEmail`    | `string`               | —                        | Прямий email — видно в HTML, лише якщо formKey не вказаний  |
+| `formKey`           | `string`               | —                        | Ключ форми — сервер знаходить email з конфігу (безпечно, email не в HTML) |
+| `recipientEmail`    | `string`               | —                        | Прямий email — видно в HTML, лише якщо `formKey` не вказаний |
 | `recipientName`     | `string`               | —                        | Ім'я отримувача                             |
 | `senderName`        | `string`               | —                        | Підпис відправника в листі                  |
 | `method`            | `"POST" \| "GET"`      | `"POST"`                 | Метод форми                                 |
@@ -54,11 +54,13 @@ import CustomSelect from "@components/forms/CustomSelect.astro";
 | `errorMessage`      | `string`               | `"Помилка відправки..."` | Повідомлення при помилці                    |
 | `modalType`         | `"inline" \| "modal"`  | `"inline"`               | Де показувати результат                     |
 | `autoCloseDuration` | `number`               | `50`                     | Секунди автозакриття modal (0 = вимкнено)   |
-| `successIcon`       | `string`               | `"check-circle"`         | ID іконки зі sprite (успіх)                 |
-| `errorIcon`         | `string`               | `"x-circle"`             | ID іконки зі sprite (помилка)               |
+| `successIcon`       | `string`               | —                        | ID іконки зі sprite (успіх)                 |
+| `errorIcon`         | `string`               | —                        | ID іконки зі sprite (помилка)               |
 | `successImage`      | `string`               | —                        | URL картинки для успіху (пріоритет над icon)|
 | `errorImage`        | `string`               | —                        | URL картинки для помилки                    |
 | `lockScroll`        | `boolean`              | `false`                  | Блокувати скрол при відкритті modal         |
+
+> Якщо `successIcon`/`errorIcon` не передані — відображаються вбудовані SVG-іконки (галочка / хрестик).
 
 ---
 
@@ -71,7 +73,7 @@ import CustomSelect from "@components/forms/CustomSelect.astro";
 ```astro
 <ContactForm
    backend="php"
-   recipientEmail="you@gmail.com"
+   formKey="contact"
    successMessage="Листа надіслано!"
 >
    <!-- поля -->
@@ -90,8 +92,9 @@ import CustomSelect from "@components/forms/CustomSelect.astro";
 ```
 public/api/
 ├── send-email.php            — обробник (не чіпаємо)
-├── mail.config.php           — твої налаштування (не в git)
-└── mail.config.example.php   — шаблон конфігу
+├── mail.config.php           — налаштування (не в git)
+├── mail.config.example.php   — шаблон конфігу
+└── mail-settings.wp.php      — Settings Page для WordPress
 vendor/                       — PHPMailer (встановлюється один раз)
 ```
 
@@ -107,31 +110,32 @@ composer require phpmailer/phpmailer
 
 #### Крок 2 — створити конфіг
 
-Скопіюй шаблон:
 ```bash
 cp public/api/mail.config.example.php public/api/mail.config.php
 ```
 
-Відкрий `public/api/mail.config.php`. Побачиш такий вміст:
+Відкрий `public/api/mail.config.php` і заповни:
 
 ```php
-'smtp_host' => 'localhost',   // ← адреса SMTP сервера
-'smtp_port' => 1025,          // ← порт
-'smtp_user' => '',            // ← логін (email на хостингу)
-'smtp_pass' => '',            // ← пароль
+// SMTP сервер хостингу
+'smtp_host' => 'mail.domain.com',
+'smtp_port' => 587,
+'smtp_user' => 'noreply@domain.com',
+'smtp_pass' => 'password',
+
+// Відправник (має збігатись зі smtp_user)
+'from_email' => 'noreply@domain.com',
+'from_name'  => 'Website Name',
+
+// Куди іде кожна форма
+'form_emails' => [
+   'book'       => 'office@domain.com',    // Popup "Book consultation"
+   'contact'    => 'office@domain.com',    // Сторінка Contact + Footer
+   'newsletter' => 'marketing@domain.com', // Newsletter
+],
 ```
 
-**Для локального тесту** — нічого не змінюй, файл вже налаштований на Mailhog.
-
-**Для продакшну** — заміни значення на дані свого хостингу:
-```php
-'smtp_host' => 'smtp.gmail.com',          // ← свій SMTP сервер
-'smtp_port' => 587,                        // ← свій порт
-'smtp_user' => 'noreply@yourdomain.com',   // ← свій email
-'smtp_pass' => 'your-password',            // ← свій пароль
-```
-
-> Де взяти ці дані — дивись розділ **SMTP дані для популярних сервісів** нижче.
+> `form_emails` — безпечний варіант: email не потрапляє в HTML, зберігається тільки в серверному конфігу.
 
 ---
 
@@ -143,26 +147,23 @@ Mailhog — fake SMTP сервер: листи перехоплюються і �
 brew install mailhog   # один раз
 ```
 
-Запустити 3 термінали:
+Запуск (один термінал):
 
-| # | Команда | Посилання |
-|---|---------|-----------|
-| 1 | `mailhog` | `http://localhost:8025` — перегляд листів |
-| 2 | `cd public/api && php -S localhost:8888` | PHP сервер |
-| 3 | `npm run dev` | `http://localhost:4321` — сайт |
-
-В компоненті тимчасово вкажи `action`:
-```astro
-<ContactForm
-   backend="php"
-   action="http://localhost:8888/send-email.php"
-   recipientEmail="test@example.com"
->
+```bash
+npm run dev
 ```
 
-Відправ форму → перевір листи на `http://localhost:8025`.
+`npm run dev` автоматично стартує **три процеси** разом:
 
-> Перед деплоєм — прибери `action` з компонента.
+| Процес | Посилання |
+|--------|-----------|
+| Astro dev server | `http://localhost:4321` — сайт |
+| PHP server | `http://localhost:8888` — обробник форм |
+| Mailhog | `http://localhost:8025` — перегляд листів |
+
+> URL PHP сервера підставляється **автоматично** — нічого змінювати в компоненті не потрібно.
+
+Відправ форму → перевір листи на `http://localhost:8025`.
 
 ---
 
@@ -205,15 +206,39 @@ npm run build
 
 ---
 
+#### WordPress
+
+`mail.config.php` **автоматично визначає** WordPress-середовище і читає налаштування з WP Options замість захардкоджених значень.
+
+Щоб клієнт міг міняти налаштування з адмінки — підключи в `functions.php` теми:
+
+```php
+require_once get_template_directory() . '/api/mail-settings.wp.php';
+```
+
+Після цього в WP Адмінці з'явиться **Параметри → Mail Settings** з полями:
+
+| Секція | Поля |
+|--------|------|
+| SMTP | Host, Port, User, Password |
+| Sender | From Email, From Name |
+| Form Recipients | Book Consultation, Contact / Footer, Newsletter |
+| Fallback | Recipient Email, Name |
+
+> Без підключення `mail-settings.wp.php` — `mail.config.php` все одно спробує знайти WordPress і прочитати опції, але сторінка налаштувань не з'явиться.
+
+---
+
 #### Troubleshooting
 
 | Проблема | Рішення |
 |----------|---------|
 | `mail.config.php not found` | Скопіюй `mail.config.example.php → mail.config.php` |
-| Лист не приходить в Mailhog | Перевір що `smtp_host = localhost`, `smtp_port = 1025` в конфігу |
+| Лист не приходить в Mailhog | Перевір що `smtp_host = localhost`, `smtp_port = 1025` |
 | "Class 'PHPMailer' not found" | Папка `vendor/` не завантажена на хостинг |
 | Листи не приходять на продакшні | Перевір SMTP дані, папку spam, спробуй `smtp_port = 465` |
 | Лист потрапляє в спам | `from_email` має збігатись з `smtp_user` |
+| Форма без `name` поля (footer/newsletter) | Поле `name` опціональне — валідується тільки якщо заповнене |
 
 ---
 
@@ -234,27 +259,19 @@ npm run build
 **`.env`** — додай email для кожного ключа:
 ```env
 FORM_CONTACT=contact@gmail.com
-FORM_SALES=sales@company.com
-FORM_SUPPORT=support@company.com
+FORM_BOOK=office@gmail.com
+FORM_NEWSLETTER=marketing@gmail.com
 
 # Fallback якщо formKey не вказаний
 CONTACT_EMAIL=your-email@gmail.com
-```
 
-> Email зберігається тільки на сервері — в HTML не потрапляє.
-
-**Налаштування `.env`:**
-
-```env
+# SMTP
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your-email@gmail.com
 SMTP_PASS=your-app-password
-CONTACT_EMAIL=recipient@gmail.com
 ```
 
-> `CONTACT_EMAIL` — fallback якщо `recipientEmail` не переданий через props.  
-> Для Gmail: [створити App Password](https://myaccount.google.com/apppasswords) (потрібна двофакторна автентифікація).  
 > Endpoint знаходиться: `src/pages/api/contact.ts`
 
 ---
@@ -333,7 +350,7 @@ CONTACT_EMAIL=recipient@gmail.com
 
 ### modal
 
-Спливаюче вікно на весь екран:
+Спливаюче вікно на весь екран. Modal автоматично **порталиться в `<body>`** щоб `position: fixed` не конфліктував з трансформованими предками.
 
 ```astro
 <ContactForm
@@ -364,13 +381,9 @@ CONTACT_EMAIL=recipient@gmail.com
 2. Введи префікс (`cform`, `fgroup`, `fgroupta`)
 3. Натисни `Tab` — розгорнеться сніпет з курсорами по полях
 
-> Сніпет `cform` має вибір через `Tab`: `backend` (api/php), `modalType` (inline/modal) та плейсхолдери для всіх текстів.
-
 ---
 
 ## Сніпет — базова форма
-
-Готова структура для швидкого старту. Скопіюй і підставляй:
 
 ```astro
 ---
@@ -379,7 +392,7 @@ import CustomSelect from "@components/forms/CustomSelect.astro";
 ---
 
 <ContactForm
-   backend="api"
+   backend="php"
    formKey="contact"
    successMessage="Дякуємо! Ми зв'яжемося з вами найближчим часом."
    errorMessage="Помилка відправки. Спробуйте ще раз."

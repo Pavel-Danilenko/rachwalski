@@ -5,7 +5,7 @@
    "scripts": {
       "snippets": "node scripts/generate-snippets.js",
       "predev": "node scripts/generate-snippets.js",
-      "dev": "astro dev",
+      "dev": "concurrently -n \"astro,php,mail,open\" -c \"cyan,yellow,magenta,green\" \"astro dev\" \"php -S localhost:8888 -t public/api\" \"mailhog\" \"sleep 4 && /usr/bin/open http://localhost:4321 && /usr/bin/open http://localhost:8025\"",
       "build": "astro build",
       "build:plugin": "cross-env PUBLIC_IMAGE_MODE=plugin astro build",
       "build:astro": "cross-env PUBLIC_IMAGE_MODE=astro astro build",
@@ -36,6 +36,7 @@
       "@prettier/plugin-php": "^0.24.0",
       "@shopify/prettier-plugin-liquid": "^1.10.0",
       "@types/nodemailer": "^7.0.9",
+      "concurrently": "^10.0.0",
       "cross-env": "^10.1.0",
       "cssnano": "^7.1.2",
       "dotenv": "^17.2.3",

@@ -1,49 +1,51 @@
 <?php
 /**
- * Конфігурація відправки email
+ * Mail Configuration — ПРИКЛАД
  *
  * Скопіюй цей файл:
  *   mail.config.example.php → mail.config.php
  *
- * Заповни значення під своє середовище.
- * mail.config.php не потрапляє в git.
+ * mail.config.php НЕ потрапляє в git (є в .gitignore).
+ *
+ * ─── На WordPress ─────────────────────────────────────────────────────────────
+ * Підключи mail-settings.wp.php в functions.php теми:
+ *   require_once get_template_directory() . '/api/mail-settings.wp.php';
+ *
+ * Тоді всі значення нижче налаштовуються в:
+ *   WP Адмінка → Параметри → Mail Settings
+ *   (без редагування коду)
+ *
+ * ─── Без WordPress ────────────────────────────────────────────────────────────
+ * Заповни значення напряму в mail.config.php
  */
 
 return [
 
-   // ─── Локальна розробка (Mailhog) ───────────────────────────────────────────
-   // Залиш як є — просто запусти `mailhog` в терміналі
+   // ─── SMTP ─────────────────────────────────────────────────────────────────
+   // Локальна розробка (Mailhog):  host=localhost, port=1025, user/pass=''
+   // Gmail:  host=smtp.gmail.com,  port=587, pass=App Password
+   // cPanel: host=mail.domain.com, port=587
    'smtp_host' => 'localhost',
    'smtp_port' => 1025,
    'smtp_user' => '',
    'smtp_pass' => '',
 
-   // ─── Продакшн ─────────────────────────────────────────────────────────────
-   // Закоментуй рядки вище і розкоментуй нижче.
-   // Дані береш у хостинг-провайдера (cPanel → Email Accounts → Configure).
-   //
-   // 'smtp_host' => 'smtp.yourdomain.com',   // або smtp.gmail.com для Gmail
-   // 'smtp_port' => 587,                      // 587 (TLS) або 465 (SSL)
-   // 'smtp_user' => 'noreply@yourdomain.com', // email з хостингу або Gmail
-   // 'smtp_pass' => 'your-password',          // пароль або App Password
+   // ─── Відправник ───────────────────────────────────────────────────────────
+   // from_email має збігатись зі smtp_user на реальному хостингу
+   'from_email' => 'noreply@rachwalski.com',
+   'from_name'  => 'Rachwalski Website',
 
-   // ─── Відправник ────────────────────────────────────────────────────────────
-   // Має збігатись з smtp_user на реальному хостингу (інакше потрапить у спам)
-   'from_email' => 'noreply@yourdomain.com',
-   'from_name'  => 'Website',
-
-   // ─── Мапи форм (formKey → email) ───────────────────────────────────────────
-   // Використовується коли в компоненті передаєш formKey="contact"
-   // Email не потрапляє в HTML — безпечний варіант для кількох форм
+   // ─── Отримувачі форм ──────────────────────────────────────────────────────
+   // formKey у компоненті → email куди йде лист
    'form_emails' => [
-      'contact' => 'contact@yourdomain.com',
-      'sales'   => 'sales@yourdomain.com',
-      'support' => 'support@yourdomain.com',
+      'book'       => 'office@rachwalski.com',    // Popup "Book consultation"
+      'contact'    => 'office@rachwalski.com',    // Сторінка Contact + Footer
+      'newsletter' => 'marketing@rachwalski.com', // Newsletter секція
    ],
 
-   // ─── Fallback отримувач ────────────────────────────────────────────────────
-   // Якщо formKey не переданий і recipientEmail не вказаний в компоненті
-   'recipient_email' => 'your-email@gmail.com',
+   // ─── Fallback ─────────────────────────────────────────────────────────────
+   // Якщо formKey не переданий і recipientEmail не вказаний
+   'recipient_email' => 'office@rachwalski.com',
    'recipient_name'  => 'Admin',
 
 ];

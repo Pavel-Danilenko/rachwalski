@@ -55,8 +55,8 @@ const {
    // Modal settings
    modalType = "inline",
    autoCloseDuration = 50,
-   successIcon = "check-circle",
-   errorIcon = "x-circle",
+   successIcon,
+   errorIcon,
    successImage,
    errorImage,
    lockScroll = false,
@@ -70,7 +70,12 @@ const {
 void rest; // used in template as {...rest}
 
 const finalAction =
-   action || (backend === "php" ? "/api/send-email.php" : "/api/contact");
+   action ||
+   (backend === "php"
+      ? import.meta.env.DEV
+         ? "http://localhost:8888/send-email.php"
+         : "/api/send-email.php"
+      : "/api/contact");
 ---
 
 <form
@@ -92,6 +97,7 @@ const finalAction =
    {...rest}
 >
    {formKey && <input type="hidden" name="form_key" value={formKey} />}
+   <input type="text" name="website" value="" autocomplete="off" aria-hidden="true" tabindex="-1" style="display:none" />
    {
       !formKey && recipientEmail && (
          <input type="hidden" name="recipient_email" value={recipientEmail} />
@@ -113,7 +119,7 @@ const finalAction =
 <!-- Modal (якщо modalType="modal") -->
 {
    modalType === "modal" && (
-      <div class="form-modal" data-form-id={formId} style="display: none;">
+      <div class="form-modal" data-form-id={formId}>
          <div class="form-modal__backdrop" />
          <div class="form-modal__container">
             <button type="button" class="form-modal__close" aria-label="Close">

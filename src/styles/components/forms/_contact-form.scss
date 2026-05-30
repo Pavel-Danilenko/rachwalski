@@ -190,80 +190,92 @@
    position: fixed;
    inset: 0;
    z-index: var(--z-modal);
-   display: none;
+   display: flex;
    align-items: center;
    justify-content: center;
+   padding: toRem(16);
    opacity: 0;
+   pointer-events: none;
    transition: opacity var(--transition-base);
 
    &.visible {
       opacity: 1;
+      pointer-events: auto;
 
       .form-modal__container {
          transform: scale(1) translateY(0);
+      }
+
+      .form-modal__backdrop {
+         opacity: 1;
       }
    }
 
    &.success .form-modal__icon {
       color: #10b981;
-      background: #d1fae5;
-      border-color: #6ee7b7;
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.3);
    }
 
    &.error .form-modal__icon {
-      color: #ef4444;
-      background: #fee2e2;
-      border-color: #fca5a5;
+      color: #f87171;
+      background: rgba(248, 113, 113, 0.12);
+      border-color: rgba(248, 113, 113, 0.3);
    }
 }
 
 :where(.form-modal__backdrop) {
    position: absolute;
    inset: 0;
-   background: rgba(0, 0, 0, 0.6);
-   backdrop-filter: blur(toRem(4));
+   background: rgba(9, 12, 17, 0.5);
+   opacity: 0;
+   transition: opacity var(--transition-base);
+   pointer-events: none;
 }
 
-:where(.form-modal__container) {
+.form-modal .form-modal__container {
    position: relative;
    z-index: 1;
-   max-width: toRem(500);
-   width: 90%;
-   padding: toRem(48) toRem(32);
-   background: #fff;
+   max-width: toRem(360);
+   width: 100%;
+   @include fluid-space(padding, 32, 56);
+   background: var(--color-surface);
+   border: toRem(1) solid rgba(255, 255, 255, 0.08);
    border-radius: var(--radius-xl);
-   box-shadow: 0 toRem(20) toRem(40) rgba(0, 0, 0, 0.12);
    text-align: center;
-   transform: scale(0.9) translateY(toRem(20));
+   transform: scale(0.92) translateY(toRem(24));
    transition: transform var(--transition-base);
 }
 
 :where(.form-modal__close) {
    position: absolute;
-   top: toRem(16);
-   right: toRem(16);
+   top: toRem(12);
+   right: toRem(12);
    display: flex;
    align-items: center;
    justify-content: center;
-   width: toRem(40);
-   height: toRem(40);
+   flex-shrink: 0;
+   width: toRem(32);
+   height: toRem(32);
    padding: 0;
-   background: #f1f5f9;
-   border: none;
+   background: rgba(255, 255, 255, 0.06);
+   border: toRem(1) solid rgba(255, 255, 255, 0.1);
    border-radius: var(--radius-full);
-   color: #64748b;
+   color: var(--color-text);
    cursor: pointer;
-   transition: all var(--transition-fast);
-
-   &:hover {
-      background: #e2e8f0;
-      color: #334155;
-      transform: scale(1.1) rotate(90deg);
-   }
+   transition: background var(--transition-fast), color var(--transition-fast);
+   line-height: 0;
 
    svg {
-      width: toRem(20);
-      height: toRem(20);
+      width: toRem(14);
+      height: toRem(14);
+      display: block;
+      margin: auto;
+   }
+
+   &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--color-white);
    }
 }
 
@@ -271,33 +283,34 @@
    display: flex;
    align-items: center;
    justify-content: center;
-   width: toRem(100);
-   height: toRem(100);
-   margin: 0 auto toRem(24);
+   @include fluid-space(width, 72, 88);
+   @include fluid-space(height, 72, 88);
+   margin: 0 auto toRem(20);
    border-radius: var(--radius-full);
-   border: toRem(3) solid;
+   border: toRem(1) solid;
 }
 
 :where(.form-modal__message) {
-   font-size: var(--text-lg);
-   font-weight: 600;
+   @include fluid(font-size, 15, 18);
+   font-weight: 500;
+   color: var(--color-text);
    line-height: 1.6;
 }
 
 :where(.form-modal__default-icon),
 :where(.form-modal__svg-icon) {
-   width: toRem(50);
-   height: toRem(50);
+   @include fluid-space(width, 32, 40);
+   @include fluid-space(height, 32, 40);
    stroke: currentColor;
    fill: none;
-   stroke-width: 2.5;
+   stroke-width: 2;
    stroke-linecap: round;
    stroke-linejoin: round;
 }
 
 :where(.form-modal__image) {
-   width: toRem(70);
-   height: toRem(70);
+   width: toRem(64);
+   height: toRem(64);
    object-fit: contain;
 }
 

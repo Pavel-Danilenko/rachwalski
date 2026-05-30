@@ -3,11 +3,11 @@
 // ── CSS-змінні прелоадера (перевизнач у проєкті якщо потрібні інші кольори) ──
 // Приклад: .preloader { --preloader-bg: var(--color-bg); --preloader-color: var(--color-text); }
 .preloader {
-   --preloader-bg:           #0a0a0a;
-   --preloader-color:        #ffffff;
-   --preloader-color-muted:  color-mix(in srgb, #fff 40%, transparent);
-   --preloader-bar-track:    color-mix(in srgb, #fff 10%, transparent);
-   --preloader-bar-fill:     #ffffff;
+   --preloader-bg:           var(--color-surface);
+   --preloader-color:        var(--color-text);
+   --preloader-color-muted:  color-mix(in srgb, var(--color-text) 40%, transparent);
+   --preloader-bar-track:    color-mix(in srgb, var(--color-text) 10%, transparent);
+   --preloader-bar-fill:     var(--color-text);
 }
 
 // ── Wrapper ───────────────────────────────────────────────────────────────────
@@ -22,6 +22,27 @@
    justify-content: center;
    gap: toRem(32);
    // transition задається динамічно через JS
+
+   // ── Лого ──────────────────────────────────────────────────────────────────
+   &__logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+   }
+
+   &__logo-img {
+      display: block;
+      max-height: toRem(40);
+      width: auto;
+   }
+
+   &__logo-text {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--preloader-color);
+      letter-spacing: -0.02em;
+      line-height: 1;
+   }
 
    // ── Лічильник ─────────────────────────────────────────────────────────────
    &__counter {

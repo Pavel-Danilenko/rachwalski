@@ -416,17 +416,13 @@ function showModal(form, type, message) {
             : '<svg class="form-modal__default-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
    }
 
-   // 🔥 НОВИНКА: Опціональне блокування скролу
-   if (lockScroll) {
-      // Додаємо клас на <html>
-      document.documentElement.classList.add("form-modal-show");
+   // Вмикаємо blur-backdrop через body::before
+   document.documentElement.classList.add("form-modal-open");
 
-      // bodyLock() вже сам додає клас "lock" і padding!
+   if (lockScroll) {
+      document.documentElement.classList.add("form-modal-show");
       bodyLock();
    }
-
-   // Показуємо modal
-   modal.style.display = "flex";
 
    // Анімація появи
    requestAnimationFrame(() => {
@@ -446,18 +442,14 @@ function showModal(form, type, message) {
  */
 function closeModal(modal, lockScroll = false) {
    modal.classList.remove("visible");
+   document.documentElement.classList.remove("form-modal-open");
 
-   // 🔥 НОВИНКА: Розблокування скролу
    if (lockScroll) {
-      // Прибираємо наш клас
       document.documentElement.classList.remove("form-modal-show");
-
-      // bodyUnlock() вже сам прибирає клас "lock" і padding!
       bodyUnlock();
    }
 
    setTimeout(() => {
-      modal.style.display = "none";
       modal.classList.remove("success", "error");
    }, 300);
 }

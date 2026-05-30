@@ -1,6 +1,6 @@
 @use "@styles/utils" as *;
 
-// ── Backdrop ──────────────────────────────────────────────────────────────────
+// ── Backdrop (popup) ──────────────────────────────────────────────────────────
 body::after {
    content: "";
    position: fixed;
@@ -12,6 +12,22 @@ body::after {
 }
 
 .popup-show body::after {
+   opacity: 1;
+}
+
+// ── Backdrop (form-modal) — blur layer, always in DOM ─────────────────────────
+body::before {
+   content: "";
+   position: fixed;
+   inset: 0;
+   opacity: 0;
+   backdrop-filter: blur(8px);
+   pointer-events: none;
+   transition: opacity var(--transition-base);
+   z-index: calc(var(--z-modal, 400) - 1);
+}
+
+html.form-modal-open body::before {
    opacity: 1;
 }
 

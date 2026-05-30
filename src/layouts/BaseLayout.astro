@@ -4,6 +4,7 @@ import Footer from "@components/layout/Footer.astro";
 import Popups from "@components/popups/Popups.astro";
 import MobileBookingBar from "@components/ui/MobileBookingBar.astro";
 import IconSprite from "@components/ui/IconSprite.astro";
+import Preloader from "@components/interactive/Preloader.astro";
 import "@styles/main.scss";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -102,6 +103,7 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
       }
    </head>
    <body>
+      <Preloader />
       <IconSprite />
 
       <div class="wrapper" data-barba="wrapper">

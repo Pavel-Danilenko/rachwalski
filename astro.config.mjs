@@ -52,6 +52,12 @@ export default defineConfig({
          legalComments: "none",
       },
 
+      server: {
+         proxy: {
+            "/api": "http://localhost:8888",
+         },
+      },
+
       css: {
          preprocessorOptions: {
             scss: {
