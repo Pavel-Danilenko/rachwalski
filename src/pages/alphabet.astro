@@ -2,12 +2,14 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
 import "@styles/pages/_alphabet.scss";
-import clinicAlphandImg from "@assets/img/about/clinic-alphand/clinic-alphand.jpg";
-import clinicAlphandImgMobile from "@assets/img/about/clinic-alphand/clinic-alphand-hero-mobile.jpg";
 import Icon from "@components/ui/Icon.astro";
-import ResponsiveImg from "@components/media/ResponsiveImg.astro";
 import "@styles/pages/_clinic-alphand.scss";
 import footerBg from "@assets/img/footer/footer-bg-1.png";
+import alphabetImg1 from "@assets/img/alphabet/alphabet-img-1.png";
+import alphabetImg2 from "@assets/img/alphabet/alphabet-img-2.png";
+import alphabetImg3 from "@assets/img/alphabet/alphabet-img-3.png";
+import Img from "@components/media/Img.astro";
+import heroBgGradient from "@assets/img/other/bg.jpg";
 ---
 
 <BaseLayout
@@ -16,20 +18,136 @@ import footerBg from "@assets/img/footer/footer-bg-1.png";
    footerBg={footerBg}
 >
    <PageMain>
-      <section class="alphand-hero hero-circle">
-         <ResponsiveImg
-            srcDesktop={clinicAlphandImg}
-            srcMobile={clinicAlphandImgMobile}
+      <section class="alphabet hero-circle">
+         <Img
+            src={heroBgGradient}
             alt="Hero"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--fees"
             loading="eager"
             fetchpriority="high"
             decoding="sync"
-            quality={88}
-            wrapperClass="alphand-hero__bg hero-gradient__bg hero-gradient__bg--height-100"
+            quality={90}
          />
-         <div class="alphand-hero__container hero-full-vh pt-180 pb-80">
-            <div class="alphand-hero__logo">
-               <Icon name="alphand-logo" />
+         <div class="alphabet__container pt-180 pb-80">
+            <h1 class="alphabet__title fs-36v t-center mb-40">Lexicon</h1>
+
+            <!-- Letter A -->
+            <div class="alphabet__row">
+               <div class="alphabet__column-left glass-dark br-12">
+                  <Img
+                     src={alphabetImg1}
+                     alt="Letter A"
+                     quality={88}
+                     loading="lazy"
+                     wrapperClass="alphabet__img"
+                  />
+               </div>
+               <div class="alphabet__column-right glass-dark br-12">
+                  <div class="alphabet__links">
+                     <a href="#" class="alphabet__link"
+                        >Acide hyaluronique <Icon name="arrow-link-top" /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Alopecie <Icon name="arrow-link-top" /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Asymétrie des sourcils <Icon
+                           name="arrow-link-top"
+                        /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Augmentation des pommettes <Icon
+                           name="arrow-link-top"
+                        /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Augmentation des pommettes <Icon
+                           name="arrow-link-top"
+                        /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Augmentation des pommettes <Icon
+                           name="arrow-link-top"
+                        /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Augmentation des pommettes <Icon
+                           name="arrow-link-top"
+                        /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Augmentation des pommettes <Icon
+                           name="arrow-link-top"
+                        /></a
+                     >
+                  </div>
+               </div>
+            </div>
+
+            <!-- Letter B -->
+            <div class="alphabet__row">
+               <div class="alphabet__column-left glass-dark br-12">
+                  <Img
+                     src={alphabetImg2}
+                     alt="Letter B"
+                     quality={88}
+                     loading="lazy"
+                     wrapperClass="alphabet__img"
+                  />
+               </div>
+               <div class="alphabet__column-right glass-dark br-12">
+                  <div class="alphabet__links">
+                     <a href="#" class="alphabet__link"
+                        >Acide hyaluronique <Icon name="arrow-link-top" /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Alopecie <Icon name="arrow-link-top" /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Asymétrie des sourcils <Icon
+                           name="arrow-link-top"
+                        /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Augmentation des pommettes <Icon
+                           name="arrow-link-top"
+                        /></a
+                     >
+                  </div>
+               </div>
+            </div>
+
+            <!-- Letter C -->
+            <div class="alphabet__row">
+               <div class="alphabet__column-left glass-dark br-12">
+                  <Img
+                     src={alphabetImg3}
+                     alt="Letter C"
+                     quality={88}
+                     loading="lazy"
+                     wrapperClass="alphabet__img"
+                  />
+               </div>
+               <div class="alphabet__column-right glass-dark br-12">
+                  <div class="alphabet__links">
+                     <a href="#" class="alphabet__link"
+                        >Acide hyaluronique <Icon name="arrow-link-top" /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Alopecie <Icon name="arrow-link-top" /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Asymétrie des sourcils <Icon
+                           name="arrow-link-top"
+                        /></a
+                     >
+                     <a href="#" class="alphabet__link"
+                        >Augmentation des pommettes <Icon
+                           name="arrow-link-top"
+                        /></a
+                     >
+                  </div>
+               </div>
             </div>
          </div>
       </section>

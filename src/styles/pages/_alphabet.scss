@@ -1,1 +1,76 @@
 @use "@styles/utils" as *;
+
+.alphabet {
+   position: relative;
+   // .alphabet__container
+
+   &__container {
+   }
+
+   // .alphabet__title
+
+   &__title {
+   }
+
+   // .alphabet__row
+
+   &__row {
+      display: grid;
+      @include fluid-space(gap, 8, 40);
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 8, 12);
+      }
+      @include respond-from("md") {
+         grid-template-columns: repeat(2, 1fr);
+      }
+   }
+
+   // .alphabet__column-left
+
+   &__column-left {
+   }
+
+   // .alphabet__img
+
+   &__img {
+      width: 100%;
+      padding: toRem(10);
+      height: 100%;
+      & img {
+         object-fit: contain;
+         object-position: center;
+      }
+   }
+
+   // .alphabet__column-right
+
+   &__column-right {
+      @include fluid-space(padding, 16, 62);
+      align-content: center;
+   }
+
+   // .alphabet__links
+
+   &__links {
+      display: flex;
+      flex-direction: column;
+      @include fluid-space(row-gap, 12, 30);
+   }
+
+   // .alphabet__link
+
+   &__link {
+      @include fluid(font-size, 12, 24);
+      display: flex;
+      align-items: center;
+      column-gap: toRem(10);
+      text-decoration: underline;
+      & .icon {
+         font-size: toRem(0);
+         transition: font-size var(--transition-base);
+      }
+      &:hover .icon {
+         @include fluid(font-size, 8, 12);
+      }
+   }
+}

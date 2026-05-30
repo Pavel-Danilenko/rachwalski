@@ -469,6 +469,11 @@ function initModals() {
    const modals = document.querySelectorAll(".form-modal");
 
    modals.forEach((modal) => {
+      // Portal: move to body so position:fixed is never clipped by a transformed ancestor
+      if (modal.parentElement !== document.body) {
+         document.body.appendChild(modal);
+      }
+
       const closeBtn = modal.querySelector(".form-modal__close");
       const backdrop = modal.querySelector(".form-modal__backdrop");
 
