@@ -33,7 +33,7 @@
    }
 
    &__logo {
-      @include fluid-space(height, 36, 80);
+      @include fluid-space(height, 32, 64);
       .icon {
          width: 100%;
          height: 100%;
@@ -78,7 +78,5 @@
       display: flex;
       flex-wrap: wrap;
       @include fluid-space(gap, 16, 24);
-      .btn {
-      }
    }
 }

@@ -253,7 +253,7 @@
    &__avatar {
       width: toRem(40);
       height: toRem(40);
-      border-radius: 50%;
+      border-radius: toRem(12);
       overflow: hidden;
       flex-shrink: 0;
 
@@ -273,7 +273,6 @@
 
    &__role {
       font-size: toRem(13);
-      opacity: 0.6;
    }
 }
 
@@ -438,9 +437,9 @@
 }
 
 .hero-gradient__bg--height-100 {
-   height: auto;
+   height: 100%;
    @include respond-to("md") {
-      height: 100vh;
+      height: 70vh;
       height: 70svh;
    }
 }

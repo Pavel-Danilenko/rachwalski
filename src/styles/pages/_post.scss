@@ -151,7 +151,7 @@
    display: none;
    width: 100%;
    aspect-ratio: 16 / 9;
-   border-radius: var(--radius-lg);
+   border-radius: toRem(12);
    overflow: hidden;
    margin-bottom: toRem(40);
 
@@ -215,7 +215,7 @@
 
    :where(img) {
       width: 100%;
-      border-radius: var(--radius-lg);
+      border-radius: toRem(12);
    }
 
    ul,
@@ -241,7 +241,6 @@
    &__avatar {
       width: toRem(56);
       height: toRem(56);
-      border-radius: 50%;
       overflow: hidden;
       flex-shrink: 0;
 
