@@ -71,17 +71,16 @@
          @include fluid-space(margin-bottom, 4, 8);
       }
    }
-
-   // .blog-hero__text
-
-   &__text {
-   }
 }
 
 .blog-list {
    position: relative;
 
    &__container {
+   }
+   .pagination-wrapper {
+      position: relative;
+      z-index: 2;
    }
 
    &__filters {
@@ -190,7 +189,8 @@
    &__grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      @include fluid-space(gap, 16, 24);
+      @include fluid-space(column-gap, 16, 24);
+      @include fluid-space(row-gap, 20, 32);
 
       @include respond-to("lg") {
          grid-template-columns: repeat(2, 1fr);

@@ -214,7 +214,7 @@ $gradients: (
    prices-bottom-gradient: linear-gradient(
          to top,
          #0b111a 0%,
-         rgba(11, 17, 26, 0.9) 20%,
+         rgba(11, 17, 26, 0.88) 20%,
          rgba(11, 17, 26, 0.6) 50%,
          rgba(11, 17, 26, 0.2) 75%,
          transparent 100%
@@ -293,9 +293,10 @@ $gradients: (
    blog-hero-light: linear-gradient(
          0deg,
          #e4eaf3 0%,
+         #e4eaf3 0%,
          #b2c6de 23%,
-         #758cac 47%,
-         hsla(214, 42%, 24%, 0) 100%
+         rgba(117, 140, 172, 1) 47%,
+         rgba(35, 57, 86, 0) 100%
       ),
 );
 

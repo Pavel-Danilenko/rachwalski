@@ -481,9 +481,9 @@
       width: 100%;
       left: 0;
       z-index: 2;
-      @include fluid-space(height, 124, 170);
+      @include fluid-space(height, 124, 222);
       background: var(--gradient-blog-hero-light);
-      @include fluid-space(bottom, -1, -60);
+      @include fluid-space(bottom, -1, -96);
    }
 }
 .topics__inner {
