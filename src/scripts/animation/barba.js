@@ -257,6 +257,7 @@ function cleanupPage() {
       ["[data-number-input][data-initialized]", "initialized"],
       ["[data-google-map-initialized]",    "googleMapInitialized"],
       ["[data-slide-nav-init]",            "slideNavInit"],
+      ["[data-partners][data-partners-init]", "partnersInit"],
       ["[data-custom-search-init]",         "customSearchInit"],
       ["[data-blog-search-init]",          "blogSearchInit"],
       ["[data-blog-filter-init]",          "blogFilterInit"],

@@ -154,6 +154,9 @@ async function loadModules() {
    if (document.querySelector("[data-mobile-booking-bar]"))
       tasks.push(import("@scripts/init/mobile-booking-bar"));
 
+   if (document.querySelector("[data-partners]"))
+      tasks.push(import("@scripts/init/partners"));
+
    await Promise.all(tasks);
 }
 
