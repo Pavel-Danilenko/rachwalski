@@ -483,3 +483,200 @@ about: { animation: "my-animation" }
 ```html
 <a href="/page" class="no-transition">Без анімації</a>
 ```
+
+---
+
+## Підключення власних скриптів — сумісність з Barba ⚠️
+
+> Це найважливіший розділ якщо пишеш нові скрипти. Неправильне підключення = скрипт не працює після Barba-навігації.
+
+### Чому скрипти ламаються після переходу
+
+Barba не перезавантажує сторінку — він замінює лише `<main data-barba="container">`. Це означає:
+
+- `<script>` теги всередині Astro компонентів запускаються **тільки один раз** при початковому завантаженні
+- Якщо юзер зайшов спочатку на **іншу сторінку** (де скрипт відсутній), а потім перейшов на **цільову** — скрипт ніколи не виконався, `page:ready` listener не зареєстрований → скрипт не ініціалізується
+
+**Приклад проблеми:**
+```
+/blog → перезавантаження → /home (Barba) → партнери не анімуються ❌
+```
+Причина: `partners.js` ніколи не завантажувався на `/blog`, тому `page:ready` listener відсутній.
+
+---
+
+### ✅ Правильний патерн підключення
+
+Всі скрипти мають проходити через `loadModules()` в `app.js`. Саме він викликається на кожен `page:ready`.
+
+#### Крок 1 — Додати в `app.js`
+
+```js
+// src/scripts/app.js — в функцію loadModules()
+
+if (document.querySelector("[data-my-feature]"))
+   tasks.push(import("@scripts/init/my-feature"));
+```
+
+Selector перевіряє чи є елемент **на поточній сторінці** після кожного Barba-переходу.
+
+#### Крок 2 — Написати скрипт за шаблоном
+
+```js
+// src/scripts/init/my-feature.js
+
+function initMyFeature() {
+   const elements = document.querySelectorAll("[data-my-feature]");
+
+   elements.forEach((el) => {
+      // Захист від подвійної ініціалізації
+      if (el.dataset.myFeatureInit) return;
+      el.dataset.myFeatureInit = "true";
+
+      // ... логіка
+   });
+}
+
+// Запуск при першому завантаженні (якщо DOM вже готовий)
+if (document.readyState === "loading") {
+   document.addEventListener("DOMContentLoaded", initMyFeature);
+} else {
+   initMyFeature();
+}
+
+// Запуск після кожного Barba-переходу
+document.addEventListener("page:ready", initMyFeature);
+```
+
+#### Крок 3 — Прибрати `<script>` з Astro компонента (якщо є)
+
+```astro
+<!-- ❌ НЕ ПРАВИЛЬНО — запускається лише раз при першому завантаженні -->
+<script>
+   import "@scripts/init/my-feature";
+</script>
+
+<!-- ✅ ПРАВИЛЬНО — нічого не імпортуємо в компоненті, все через app.js -->
+```
+
+#### Крок 4 — Додати cleanup в `barba.js`
+
+Щоб при переході скидався прапорець ініціалізації:
+
+```js
+// src/scripts/animation/barba.js — в функцію cleanupPage()
+
+["[data-my-feature][data-my-feature-init]", "myFeatureInit"],
+```
+
+---
+
+### Захист від подвійної ініціалізації
+
+`loadModules()` викликається при кожному `page:ready`. Без захисту — скрипт ініціалізується двічі на одному елементі.
+
+```js
+// dataset-атрибут на елементі — скидається барбою при переході
+if (el.dataset.myFeatureInit) return;
+el.dataset.myFeatureInit = "true";
+```
+
+`cleanupPage()` в `barba.js` видаляє ці атрибути **перед** переходом → нова сторінка завжди отримує чисті елементи.
+
+---
+
+### Скасування при переході (для складних анімацій)
+
+Якщо скрипт запускає `requestAnimationFrame`, таймери або підписки — їх треба скасувати при `page:leave`:
+
+```js
+// Реєстр активних функцій скасування
+const activeCancels = new Set();
+
+document.addEventListener("page:leave", () => {
+   activeCancels.forEach((fn) => fn());
+   activeCancels.clear();
+});
+
+function runAnimation(element) {
+   let cancelled = false;
+
+   function cancel() {
+      cancelled = true;
+      activeCancels.delete(cancel);
+      // ... cleanup: clearInterval, removeEventListener, cancelAnimationFrame тощо
+   }
+   activeCancels.add(cancel);
+
+   function tick() {
+      if (cancelled) return;
+      // ... анімація
+      requestAnimationFrame(tick);
+   }
+   requestAnimationFrame(tick);
+}
+```
+
+---
+
+### Page Visibility API (для canvas/rAF анімацій)
+
+Коли юзер перемикає вкладку → `requestAnimationFrame` паузується, але `performance.now()` продовжує рахувати. При поверненні `elapsed` стрибає → анімація ламається.
+
+```js
+let hiddenAt = null;
+let start = performance.now();
+
+const onVisibility = () => {
+   if (document.hidden) {
+      hiddenAt = performance.now();
+   } else if (hiddenAt !== null) {
+      // Зміщуємо start на час відсутності — анімація відновлюється з тієї ж точки
+      start += performance.now() - hiddenAt;
+      hiddenAt = null;
+   }
+};
+document.addEventListener("visibilitychange", onVisibility);
+
+// Прибираємо при cleanup
+function cancel() {
+   document.removeEventListener("visibilitychange", onVisibility);
+}
+```
+
+---
+
+### Чеклист нового скрипта ✅
+
+```
+□ Selector перевірено в loadModules() (app.js)
+□ Скрипт НЕ імпортується напряму в Astro компоненті
+□ initXxx() викликається одразу + реєструється в page:ready
+□ dataset-прапорець захищає від подвійної ініціалізації
+□ Прапорець очищається в cleanupPage() (barba.js)
+□ rAF / інтервали / listeners скасовуються при page:leave
+□ Page Visibility API компенсує час прихованої вкладки
+```
+
+---
+
+### Приклад — partners.js (реальний кейс)
+
+```
+Проблема: юзер зайшов на /blog → F5 → перейшов на /home → зірки не анімуються
+
+Причина: partners.js підключався через <script> в Partners.astro
+         → не виконувався на /blog
+         → page:ready listener відсутній
+         → після Barba-переходу на /home — не ініціалізується
+
+Рішення:
+1. Прибрали <script> з Partners.astro
+2. Додали в loadModules():
+      if (document.querySelector("[data-partners]"))
+         tasks.push(import("@scripts/init/partners"));
+3. partners.js: initPartners() + page:ready listener
+4. cleanupPage(): ["[data-partners][data-partners-init]", "partnersInit"]
+5. page:leave: activeCancels.forEach(fn => fn()) — скасування rAF
+6. visibilitychange: компенсація часу прихованої вкладки
+```
