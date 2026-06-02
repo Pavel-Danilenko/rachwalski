@@ -2,6 +2,7 @@
 
 .partners {
    position: relative;
+   contain: layout paint; // ізолює секцію — браузер не перераховує layout всього документу
    @include fluid-space(padding-block, 48, 80);
 
    &__title {
@@ -18,11 +19,13 @@
    }
 
    // ── Декоративні зірки-крапки ─────────────────────────────────────────────
+   // mix-blend-mode на wrapper — один compositor layer замість 12
    &__stars {
       position: absolute;
       inset: 0;
       pointer-events: none;
       overflow: hidden;
+      mix-blend-mode: color-dodge;
    }
 
    &__star-dot {
@@ -30,14 +33,11 @@
       width: toRem(10);
       height: toRem(10);
       border-radius: 50%;
-      // Figma: чорна заливка + radial gradient + Color Dodge blend mode
-      // Color Dodge освітлює фон там де є світлий піксель — ефект зірки
       background: radial-gradient(circle,
          #fff        0%,
          rgba(140,195,255,0.85) 35%,
          #000        100%
       );
-      mix-blend-mode: color-dodge;
 
       // 3 різні анімації — крапки ніколи не мерехтять синхронно
       &:nth-child(3n+1) { animation: twinkle-a var(--dur) ease-in-out infinite var(--del) alternate; }
@@ -111,14 +111,14 @@
       position: absolute;
       inset: 50% auto auto 50%;
       translate: -50% -50%;
-      width: toRem(420);
-      height: toRem(300);
+      width: toRem(300);
+      height: toRem(220);
       pointer-events: none;
       z-index: 2;
+      will-change: opacity;
    }
 
    &__logo {
-
       display: block;
       @include fluid-space(max-width, 100, 160);
       @include fluid-space(max-height, 28, 44);
@@ -129,6 +129,7 @@
       position: relative;
       z-index: 1;
       filter: brightness(0) invert(1);
+      will-change: opacity, transform;
    }
 }
 

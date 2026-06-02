@@ -1,5 +1,19 @@
 import gsap from "gsap";
 
+// ─── Оптимізація 1: один глобальний rAF замість 9 окремих ────────────────────
+const activeFrames = new Set();
+let globalRafId = null;
+
+function scheduleTick() {
+   globalRafId = requestAnimationFrame((now) => {
+      globalRafId = null;
+      activeFrames.forEach((fn) => fn(now));
+      if (activeFrames.size) scheduleTick();
+   });
+}
+function addFrame(fn)    { activeFrames.add(fn);    if (!globalRafId) scheduleTick(); }
+function removeFrame(fn) { activeFrames.delete(fn); }
+
 // ─── Global cancel registry — всі активні цикли ───────────────────────────────
 const activeCancels = new Set();
 
@@ -155,21 +169,35 @@ function drawNebulaLayer(ctx, cx, cy, progress, puffs, blurPx, layerIdx) {
 }
 
 function drawNebula(ctx, cx, cy, progress, puffs) {
-   drawNebulaLayer(ctx, cx, cy, progress, puffs, 16, 0); // великі фонові
-   drawNebulaLayer(ctx, cx, cy, progress, puffs, 9,  1); // середні пуфи
-   drawNebulaLayer(ctx, cx, cy, progress, puffs, 4,  2); // яскраві вихри
+   drawNebulaLayer(ctx, cx, cy, progress, puffs, 16, 0);
+   drawNebulaLayer(ctx, cx, cy, progress, puffs, 9,  1);
+   drawNebulaLayer(ctx, cx, cy, progress, puffs, 4,  2);
+}
+
+// ─── Оптимізація 2: pre-bake туману — blur один раз, далі drawImage ───────────
+// Бейкаємо при progress=0.35 — пік видимості пуфів (при 1.0 всі вже зникли)
+function prebakeNebula(W, H, dpr, cx, cy, puffs) {
+   const oc = document.createElement("canvas");
+   // Offscreen canvas для blur не потребує повного DPR — blur маскує різницю
+   const bakeDpr = Math.min(dpr, 1);
+   oc.width  = W * bakeDpr;
+   oc.height = H * bakeDpr;
+   const octx = oc.getContext("2d");
+   octx.scale(bakeDpr, bakeDpr);
+   drawNebula(octx, cx, cy, 0.5, puffs);
+   return oc;
 }
 
 // ─── Phase timings (ms) ───────────────────────────────────────────────────────
 const T = {
-   DOT_GROW:    800,   // 0 → 800    : dot з'являється
-   STAR_BURST:  2000,  // 800 → 2000 : зірка росте і одразу вибухає (merged, no pause)
-   NEBULA_END:  3200,  // 2000 → 3200: туманність розвіюється
-   HOLD_END:    8200,  // 3200 → 8200: лого видно (5 s)
-   HIDE_END:    8700,  // 8200 → 8700: лого зникає
-   WAIT_END:    10700, // 8700 → 10700: 2 s пауза перед наступною крапкою
+   DOT_GROW:    1200,  // 0 → 1200   : dot повільно з'являється
+   STAR_BURST:  3000,  // 1200 → 3000: зірка росте і вибухає
+   NEBULA_END:  5000,  // 3000 → 5000: туманність розвіюється
+   HOLD_END:    10000, // 5000 → 10000: лого видно (5 s)
+   HIDE_END:    10600, // 10000 → 10600: лого зникає
+   WAIT_END:    12600, // 10600 → 12600: 2 s пауза
 };
-const LOGO_FADE_IN_START = 1800;
+const LOGO_FADE_IN_START = 2600;
 
 // ─── Run one full cycle for a slot ───────────────────────────────────────────
 // startAt — скільки ms вже "пройшло" в циклі (для першого запуску)
@@ -183,7 +211,8 @@ function runCycle(slot, logoData, onCycleEnd, startAt = 0) {
    gsap.set(img, { opacity: 0, scale: 0.88 });
 
    // Setup canvas — якщо розміри ще 0 (не відрендерено), чекаємо наступний кадр
-   const dpr = window.devicePixelRatio || 1;
+   // Cap DPR 1.5 — для розмитих ефектів різниця між 1.5 і 2 невидима
+   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
    let W = canvas.offsetWidth;
    let H = canvas.offsetHeight;
    if (!W || !H) {
@@ -228,6 +257,7 @@ function runCycle(slot, logoData, onCycleEnd, startAt = 0) {
    function cancel() {
       if (cancelled) return;
       cancelled = true;
+      removeFrame(frame);
       document.removeEventListener("visibilitychange", onVisibility);
       gsap.killTweensOf(img);
       ctx.clearRect(0, 0, W, H);
@@ -242,76 +272,78 @@ function runCycle(slot, logoData, onCycleEnd, startAt = 0) {
       onCycleEnd();
    }
 
-   function ease(t) { return 1 - Math.pow(1 - t, 3); } // cubic ease-out
+   function ease(t) { return 1 - Math.pow(1 - t, 3); }
+
+   // Pre-baked nebula — створюється один раз при першому вибуху
+   let nebulaBaked = null;
+
+   function drawNebulaFast(progress) {
+      if (!nebulaBaked) nebulaBaked = prebakeNebula(W, H, dpr, cx, cy, puffs);
+      // progress 0→1: fade in першу половину, fade out другу
+      const alpha = progress < 0.5
+         ? progress * 2             // 0→1
+         : (1 - progress) * 2;      // 1→0
+      if (alpha < 0.005) return;
+      // scale 0.55→1.15 — імітує розширення хмари
+      const scale = 0.55 + progress * 0.6;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+      ctx.translate(-cx, -cy);
+      ctx.globalAlpha = Math.min(alpha * 1.6, 1);
+      ctx.drawImage(nebulaBaked, 0, 0, W, H);
+      ctx.restore();
+      ctx.globalAlpha = 1;
+   }
 
    function frame(now) {
       if (done || cancelled) return;
       const ms = now - start;
-      ctx.clearRect(0, 0, W, H);
 
-      // ── Phase 1: dot grows (0 → T.DOT_GROW)
-      if (ms < T.DOT_GROW) {
-         const t = ease(ms / T.DOT_GROW);
-         drawDot(ctx, cx, cy, 5 * t, t);
-      }
-
-      // ── Phase 2+3 merged: зірка росте лінійно → одразу вибухає без паузи
-      else if (ms < T.STAR_BURST) {
-         const t = (ms - T.DOT_GROW) / (T.STAR_BURST - T.DOT_GROW); // лінійний 0→1
-
-         // Зростання: лінійне до 60% фази (без ease-out = без уповільнення)
-         const growT  = Math.min(t / 0.6, 1);
-         const rayLen = 30 * growT;           // max 30 (менше ніж раніше)
-         const dotR   = 5 + 3 * growT;
-
-         // Вибух починається з 40% — overlap з ростом
-         const burstT  = Math.max((t - 0.4) / 0.6, 0);
-         const starAlpha = 1 - ease(burstT);
-
-         if (starAlpha > 0.01) {
-            drawDot(ctx, cx, cy, dotR + 14 * burstT, starAlpha);
-            drawRays(ctx, cx, cy, rayLen + 16 * burstT, starAlpha);
-         }
-         if (burstT > 0) {
-            drawNebula(ctx, cx, cy, burstT * 0.5, puffs);
-         }
-      }
-
-      // ── Phase 4: туманність розвіюється (T.STAR_BURST → T.NEBULA_END)
-      else if (ms < T.NEBULA_END) {
-         const nT = (ms - T.STAR_BURST) / (T.NEBULA_END - T.STAR_BURST);
-         drawNebula(ctx, cx, cy, 0.5 + nT * 0.5, puffs);
-      }
-
-      // ── Phase 6+: canvas clear, logo holds
-      else {
-         ctx.clearRect(0, 0, W, H);
-      }
-
-      // Logo fade IN during explosion/nebula
+      // ── Тригери GSAP (перевіряємо незалежно від фази)
       if (!logoFadeStarted && ms >= LOGO_FADE_IN_START) {
          logoFadeStarted = true;
          gsap.to(img, { opacity: 1, scale: 1, duration: 1.1, ease: "power2.out" });
       }
-
-      // Logo fade OUT at end of hold
       if (!logoHideStarted && ms >= T.HOLD_END) {
          logoHideStarted = true;
-         gsap.to(img, {
-            opacity: 0, scale: 0.88, duration: 0.5, ease: "power2.in",
-         });
+         gsap.to(img, { opacity: 0, scale: 0.88, duration: 0.5, ease: "power2.in" });
       }
 
-      // Cycle end
-      if (ms >= T.WAIT_END) {
-         cleanup();
+      // ── Кінець циклу
+      if (ms >= T.WAIT_END) { cleanup(); return; }
+
+      // ── Idle фази (HOLD + WAIT): canvas не малюємо, знижуємо до ~2fps
+      // setTimeout коректно відновлюється після прихованої вкладки завдяки
+      // onVisibility який зміщує `start` — наступний frame(now) побачить правильний ms
+      if (ms >= T.NEBULA_END) {
+         setTimeout(() => { if (!done && !cancelled) addFrame(frame); }, 500);
          return;
       }
 
-      requestAnimationFrame(frame);
+      // ── Canvas малювання (лише перші ~3.2s)
+      ctx.clearRect(0, 0, W, H);
+
+      if (ms < T.DOT_GROW) {
+         const t = ease(ms / T.DOT_GROW);
+         drawDot(ctx, cx, cy, 5 * t, t);
+      } else if (ms < T.STAR_BURST) {
+         const t      = (ms - T.DOT_GROW) / (T.STAR_BURST - T.DOT_GROW);
+         const growT  = Math.min(t / 0.6, 1);
+         const burstT = Math.max((t - 0.4) / 0.6, 0);
+         const alpha  = 1 - ease(burstT);
+         if (alpha > 0.01) {
+            drawDot(ctx, cx, cy, 5 + 3 * growT + 14 * burstT, alpha);
+            drawRays(ctx, cx, cy, 30 * growT + 16 * burstT, alpha);
+         }
+         if (burstT > 0) drawNebulaFast(burstT * 0.5);
+      } else if (ms < T.NEBULA_END) {
+         const nT = (ms - T.STAR_BURST) / (T.NEBULA_END - T.STAR_BURST);
+         drawNebulaFast(0.5 + nT * 0.5);
+      }
    }
 
-   requestAnimationFrame(frame);
+   addFrame(frame);
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
