@@ -26,6 +26,7 @@ document.addEventListener("page:leave", () => {
 // ─── Draw helpers ─────────────────────────────────────────────────────────────
 
 function drawDot(ctx, cx, cy, radius, alpha) {
+   if (radius <= 0 || alpha <= 0) return;
    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
    g.addColorStop(0,   `rgba(255,255,255,${alpha.toFixed(3)})`);
    g.addColorStop(0.5, `rgba(210,225,255,${(alpha * 0.5).toFixed(3)})`);
@@ -84,94 +85,83 @@ function drawRays(ctx, cx, cy, rayLen, alpha) {
 function buildPuffs() {
    const puffs = [];
 
-   // Великі фонові хмари — canvas 420px, center 210px → safe zone ~190px
-   const bgN = 4 + Math.floor(Math.random() * 4);
+   // Великі м'які фонові кулі — основа туманності
+   const bgN = 5 + Math.floor(Math.random() * 3);
    for (let i = 0; i < bgN; i++) {
       const a = Math.random() * Math.PI * 2;
-      const d = 10 + Math.random() * 38; // max dist ~48px
+      const d = 8 + Math.random() * 32;
       puffs.push({
-         dx: Math.cos(a) * d, dy: Math.sin(a) * d * (0.4 + Math.random() * 0.6),
-         rx: 45 + Math.random() * 50, ry: 28 + Math.random() * 42, // max rx 95px → 48+95+16blur=159px ✓
-         rot: Math.random() * Math.PI, delay: Math.random() * 0.15,
-         alpha: 0.09 + Math.random() * 0.17, blurLayer: 0,
-         tint: [255, 255, 255],
+         dx: Math.cos(a) * d,
+         dy: Math.sin(a) * d * 0.65,
+         r:  42 + Math.random() * 45,
+         delay: Math.random() * 0.12,
+         alpha: 0.18 + Math.random() * 0.16,
+         blur:  16 + Math.random() * 6,
       });
    }
 
-   // Середні пуфи — max spread ~135px від центру
-   const midN = 20 + Math.floor(Math.random() * 12);
+   // Середні щільні кулі — видима структура хмари
+   const midN = 20 + Math.floor(Math.random() * 10);
    for (let i = 0; i < midN; i++) {
-      const a    = Math.random() * Math.PI * 2;
-      const dist = 4 + Math.random() * 62; // max dist ~66px
-      const rx   = 10 + Math.random() * 32;
-      const ry   = Math.random() > 0.5 ? rx * (0.15 + Math.random() * 0.4) : rx * (0.6 + Math.random() * 0.55);
+      const a = Math.random() * Math.PI * 2;
+      const d = 2 + Math.random() * 55;
       puffs.push({
-         dx: Math.cos(a) * dist + (Math.random() - 0.5) * 22, // scatter ±22
-         dy: Math.sin(a) * dist * (0.48 + Math.random() * 0.7) + (Math.random() - 0.5) * 16,
-         rx, ry, rot: Math.random() * Math.PI * 2,
-         delay: Math.random() * 0.45,
-         alpha: 0.18 + Math.random() * 0.46, blurLayer: 1,
-         tint: Math.random() > 0.6 ? [205, 220, 255] : [255, 255, 255],
+         dx: Math.cos(a) * d + (Math.random() - 0.5) * 20,
+         dy: Math.sin(a) * d * 0.68 + (Math.random() - 0.5) * 15,
+         r:  10 + Math.random() * 26,
+         delay: Math.random() * 0.4,
+         alpha: 0.28 + Math.random() * 0.38,
+         blur:  7 + Math.random() * 7,
       });
    }
 
-   // Яскраві вихри — центр вибуху
-   const wspN = 5 + Math.floor(Math.random() * 6);
-   for (let i = 0; i < wspN; i++) {
-      const rx = 6 + Math.random() * 18;
+   // Яскраві дрібні кулі — яскрава серцевина
+   const coreN = 6 + Math.floor(Math.random() * 4);
+   for (let i = 0; i < coreN; i++) {
       puffs.push({
-         dx: (Math.random() - 0.5) * 32, dy: (Math.random() - 0.5) * 26,
-         rx, ry: rx * (0.5 + Math.random() * 0.8),
-         rot: Math.random() * Math.PI, delay: 0,
-         alpha: 0.4 + Math.random() * 0.45, blurLayer: 2,
-         tint: [255, 255, 255],
+         dx: (Math.random() - 0.5) * 22,
+         dy: (Math.random() - 0.5) * 18,
+         r:  6 + Math.random() * 14,
+         delay: Math.random() * 0.08,
+         alpha: 0.5 + Math.random() * 0.4,
+         blur:  3 + Math.random() * 4,
       });
    }
 
    return puffs;
 }
 
-function drawNebulaLayer(ctx, cx, cy, progress, puffs, blurPx, layerIdx) {
-   ctx.save();
-   ctx.filter = `blur(${blurPx}px)`;
+function drawNebula(ctx, cx, cy, progress, puffs) {
    puffs.forEach((p) => {
-      if (p.blurLayer !== layerIdx) return;
       const raw   = (progress - p.delay) / (1 - p.delay);
       const t     = Math.max(0, Math.min(raw, 1));
       if (t <= 0) return;
       const eased = 1 - Math.pow(1 - t, 2);
-      const px    = cx + p.dx * eased;
-      const py    = cy + p.dy * eased;
-      const rx    = p.rx * (0.18 + eased * 1.0);
-      const ry    = p.ry * (0.18 + eased * 1.0);
-      const fi    = Math.min(t / 0.13, 1);
-      const fo    = 1 - Math.pow(Math.max((t - 0.18) / 0.82, 0), 1.1);
+      const fi    = Math.min(t / 0.12, 1);
+      const fo    = 1 - Math.pow(Math.max((t - 0.15) / 0.85, 0), 1.1);
       const a     = p.alpha * fi * fo;
       if (a < 0.003) return;
-      const [r, g, b] = p.tint;
-      const maxR  = Math.max(rx, ry);
-      const grad  = ctx.createRadialGradient(0, 0, 0, 0, 0, maxR);
-      grad.addColorStop(0,    `rgba(${r},${g},${b},${(a * 0.9).toFixed(3)})`);
-      grad.addColorStop(0.35, `rgba(${r},${g},${b},${(a * 0.4).toFixed(3)})`);
-      grad.addColorStop(1,    `rgba(${r},${g},${b},0)`);
+
+      const px = cx + p.dx * eased;
+      const py = cy + p.dy * eased;
+      const r  = p.r * (0.2 + eased);
+      if (r <= 0) return;
+
       ctx.save();
-      ctx.translate(px, py);
-      ctx.rotate(p.rot);
-      ctx.scale(rx / maxR, ry / maxR);
+      ctx.filter = `blur(${p.blur}px)`;
+
+      const g = ctx.createRadialGradient(px, py, 0, px, py, r);
+      g.addColorStop(0,   `rgba(255,255,255,${Math.min(a * 1.1, 1).toFixed(3)})`);
+      g.addColorStop(0.3, `rgba(240,245,255,${(a * 0.65).toFixed(3)})`);
+      g.addColorStop(0.7, `rgba(220,232,255,${(a * 0.2).toFixed(3)})`);
+      g.addColorStop(1,   `rgba(255,255,255,0)`);
+
       ctx.beginPath();
-      ctx.arc(0, 0, maxR, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
+      ctx.arc(px, py, r, 0, Math.PI * 2);
+      ctx.fillStyle = g;
       ctx.fill();
       ctx.restore();
    });
-   ctx.filter = "none";
-   ctx.restore();
-}
-
-function drawNebula(ctx, cx, cy, progress, puffs) {
-   drawNebulaLayer(ctx, cx, cy, progress, puffs, 16, 0);
-   drawNebulaLayer(ctx, cx, cy, progress, puffs, 9,  1);
-   drawNebulaLayer(ctx, cx, cy, progress, puffs, 4,  2);
 }
 
 // ─── Оптимізація 2: pre-bake туману — blur один раз, далі drawImage ───────────
@@ -184,7 +174,7 @@ function prebakeNebula(W, H, dpr, cx, cy, puffs) {
    oc.height = H * bakeDpr;
    const octx = oc.getContext("2d");
    octx.scale(bakeDpr, bakeDpr);
-   drawNebula(octx, cx, cy, 0.5, puffs);
+   drawNebula(octx, cx, cy, 0.35, puffs);
    return oc;
 }
 
@@ -279,20 +269,25 @@ function runCycle(slot, logoData, onCycleEnd, startAt = 0) {
 
    function drawNebulaFast(progress) {
       if (!nebulaBaked) nebulaBaked = prebakeNebula(W, H, dpr, cx, cy, puffs);
-      // progress 0→1: fade in першу половину, fade out другу
-      const alpha = progress < 0.5
-         ? progress * 2             // 0→1
-         : (1 - progress) * 2;      // 1→0
+      const alpha = progress < 0.5 ? progress * 2 : (1 - progress) * 2;
       if (alpha < 0.005) return;
-      // scale 0.55→1.15 — імітує розширення хмари
-      const scale = 0.55 + progress * 0.6;
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.scale(scale, scale);
-      ctx.translate(-cx, -cy);
-      ctx.globalAlpha = Math.min(alpha * 1.6, 1);
-      ctx.drawImage(nebulaBaked, 0, 0, W, H);
-      ctx.restore();
+      const a = Math.min(alpha * 1.6, 1);
+
+      function stamp(scale, layerAlpha, yOffset) {
+         ctx.save();
+         ctx.translate(cx, cy + yOffset);
+         ctx.scale(scale, scale);
+         ctx.translate(-cx, -cy);
+         ctx.globalAlpha = layerAlpha;
+         ctx.drawImage(nebulaBaked, 0, 0, W, H);
+         ctx.restore();
+      }
+
+      // Три шари — створюють відчуття глибини та підйому диму
+      const s = 0.55 + progress * 0.6;
+      stamp(s,        a * 0.55, 0);               // фоновий шар — великий
+      stamp(s * 0.72, a * 0.75, -10 * progress);  // середній — трохи вгору
+      stamp(s * 0.42, a * 0.5,  -22 * progress);  // передній — ще вище (дим піднімається)
       ctx.globalAlpha = 1;
    }
 

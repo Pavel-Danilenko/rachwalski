@@ -1,5 +1,6 @@
 ---
 import "@styles/components/section/_partners.scss";
+import Icon from "@components/ui/Icon.astro";
 
 interface Props {
    title?: string;
@@ -7,11 +8,10 @@ interface Props {
    logos?: { src: string; alt: string }[];
    visibleCount?: number;
    interval?: number;
+   class?: string;
 }
 
 const {
-   title = "Dr Martin Rachwalski in the media",
-   titleHref = "/rhinoplasty",
    logos = [
       { src: "/img/partner/partner-1.svg", alt: "Partner 1" },
       { src: "/img/partner/partner-2.svg", alt: "Partner 2" },
@@ -23,8 +23,9 @@ const {
       { src: "/img/partner/partner-8.svg", alt: "Partner 8" },
       { src: "/img/partner/partner-9.svg", alt: "Partner 9" },
    ],
-   visibleCount,        // якщо не передано — авто (min logos.length, 9)
+   visibleCount,
    interval = 2800,
+   class: className,
 } = Astro.props;
 
 // Скільки слотів показувати: не більше 9 і не більше ніж є лого
@@ -32,19 +33,18 @@ const slots = Math.min(visibleCount ?? logos.length, 9);
 ---
 
 <section
-   class="partners"
+   class:list={["partners", className]}
    data-partners
    data-logos={JSON.stringify(logos)}
    data-visible={slots}
    data-interval={interval}
 >
    <div class="partners__container">
-      <a href={titleHref} class="partners__title">
-         {title}
-         <span class="partners__arrow">↗</span>
+      <a href="/rhinoplasty" class="partners__title fs-36 fw-500">
+         Dr Martin Rachwalski in the media
+         <Icon name="arrow-link-top" />
       </a>
 
-      <!-- Декоративні зірки-крапки -->
       <div class="partners__stars" aria-hidden="true">
          <span class="partners__star-dot"></span>
          <span class="partners__star-dot"></span>
@@ -61,13 +61,14 @@ const slots = Math.min(visibleCount ?? logos.length, 9);
       </div>
 
       <div class="partners__grid">
-         {Array.from({ length: slots }).map((_, i) => (
-            <div class="partners__slot" data-slot={i}>
-               <canvas class="partners__canvas" aria-hidden="true" />
-               <img class="partners__logo" src="" alt="" loading="lazy" />
-            </div>
-         ))}
+         {
+            Array.from({ length: slots }).map((_, i) => (
+               <div class="partners__slot" data-slot={i}>
+                  <canvas class="partners__canvas" aria-hidden="true" />
+                  <img class="partners__logo" src="" alt="" loading="lazy" />
+               </div>
+            ))
+         }
       </div>
    </div>
 </section>
-

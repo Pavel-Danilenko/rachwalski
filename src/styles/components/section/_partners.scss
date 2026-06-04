@@ -4,18 +4,47 @@
    position: relative;
    contain: layout paint; // ізолює секцію — браузер не перераховує layout всього документу
    @include fluid-space(padding-block, 48, 80);
-
+   &::before {
+      content: "";
+      width: 100%;
+      height: 53%;
+      position: absolute;
+      bottom: toRem(-0.2);
+      left: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+         180deg,
+         #0b111a 0%,
+         rgba(14, 23, 38, 0.86) 20%,
+         rgba(22, 40, 65, 0.92) 35%,
+         rgba(45, 70, 105, 1) 50%,
+         rgba(95, 130, 175, 0.99) 65%,
+         rgba(165, 185, 210, 0.96) 80%,
+         #e4eaf3 100%
+      );
+   }
+   &__container {
+      position: relative;
+      z-index: 1;
+   }
    &__title {
-      text-align: center;
-      @include fluid(font-size, 14, 16);
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      color: var(--color-text);
-      margin-bottom: toRem(48);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: toRem(6);
+      gap: toRem(10);
+      &:not(:last-child) {
+         @include fluid-space(margin-bottom, 40, 100);
+      }
+      & .icon {
+         @include fluid-space(font-size, 12, 16);
+         transition: translate var(--transition-base);
+      }
+      @media (any-hover: hover) {
+         &:hover .icon {
+            translate: toRem(2) toRem(-2);
+         }
+      }
    }
 
    // ── Декоративні зірки-крапки ─────────────────────────────────────────────
@@ -33,33 +62,105 @@
       width: toRem(10);
       height: toRem(10);
       border-radius: 50%;
-      background: radial-gradient(circle,
-         #fff        0%,
-         rgba(140,195,255,0.85) 35%,
-         #000        100%
+      background: radial-gradient(
+         circle,
+         #fff 0%,
+         rgba(140, 195, 255, 0.85) 35%,
+         #000 100%
       );
 
       // 3 різні анімації — крапки ніколи не мерехтять синхронно
-      &:nth-child(3n+1) { animation: twinkle-a var(--dur) ease-in-out infinite var(--del) alternate; }
-      &:nth-child(3n+2) { animation: twinkle-b var(--dur) ease-in-out infinite var(--del) alternate; }
-      &:nth-child(3n)   { animation: twinkle-c var(--dur) ease-in-out infinite var(--del) alternate; }
+      &:nth-child(3n + 1) {
+         animation: twinkle-a var(--dur) ease-in-out infinite var(--del)
+            alternate;
+      }
+      &:nth-child(3n + 2) {
+         animation: twinkle-b var(--dur) ease-in-out infinite var(--del)
+            alternate;
+      }
+      &:nth-child(3n) {
+         animation: twinkle-c var(--dur) ease-in-out infinite var(--del)
+            alternate;
+      }
 
       // Позиції та індивідуальні тайминги
       // Великі тайминги + великі затримки → рідкі нерегулярні спалахи
-      &:nth-child(1)  { top: 7%;  left: 4%;  --dur: 14s;  --del: 0s;    }
-      &:nth-child(2)  { top: 20%; left: 15%; --dur: 18s;  --del: 5.5s;  }
-      &:nth-child(3)  { top: 5%;  left: 47%; --dur: 12s;  --del: 2.8s;  }
-      &:nth-child(4)  { top: 14%; left: 74%; --dur: 20s;  --del: 9.0s;  }
-      &:nth-child(5)  { top: 4%;  left: 92%; --dur: 15s;  --del: 1.5s;  }
-      &:nth-child(6)  { top: 46%; left: 1%;  --dur: 17s;  --del: 11.0s; }
-      &:nth-child(7)  { top: 53%; left: 62%; --dur: 13s;  --del: 4.2s;  }
-      &:nth-child(8)  { top: 40%; left: 89%; --dur: 19s;  --del: 7.5s;  }
-      &:nth-child(9)  { top: 78%; left: 7%;  --dur: 16s;  --del: 0.7s;  }
-      &:nth-child(10) { top: 86%; left: 33%; --dur: 11s;  --del: 13.0s; }
-      &:nth-child(11) { top: 80%; left: 57%; --dur: 22s;  --del: 6.3s;  }
-      &:nth-child(12) { top: 72%; left: 86%; --dur: 15s;  --del: 8.8s;  }
+      &:nth-child(1) {
+         top: 7%;
+         left: 4%;
+         --dur: 14s;
+         --del: 0s;
+      }
+      &:nth-child(2) {
+         top: 20%;
+         left: 15%;
+         --dur: 18s;
+         --del: 5.5s;
+      }
+      &:nth-child(3) {
+         top: 5%;
+         left: 47%;
+         --dur: 12s;
+         --del: 2.8s;
+      }
+      &:nth-child(4) {
+         top: 14%;
+         left: 74%;
+         --dur: 20s;
+         --del: 9s;
+      }
+      &:nth-child(5) {
+         top: 4%;
+         left: 92%;
+         --dur: 15s;
+         --del: 1.5s;
+      }
+      &:nth-child(6) {
+         top: 46%;
+         left: 1%;
+         --dur: 17s;
+         --del: 11s;
+      }
+      &:nth-child(7) {
+         top: 53%;
+         left: 62%;
+         --dur: 13s;
+         --del: 4.2s;
+      }
+      &:nth-child(8) {
+         top: 40%;
+         left: 89%;
+         --dur: 19s;
+         --del: 7.5s;
+      }
+      &:nth-child(9) {
+         top: 78%;
+         left: 7%;
+         --dur: 16s;
+         --del: 0.7s;
+      }
+      &:nth-child(10) {
+         top: 86%;
+         left: 33%;
+         --dur: 11s;
+         --del: 13s;
+      }
+      &:nth-child(11) {
+         top: 80%;
+         left: 57%;
+         --dur: 22s;
+         --del: 6.3s;
+      }
+      &:nth-child(12) {
+         top: 72%;
+         left: 86%;
+         --dur: 15s;
+         --del: 8.8s;
+      }
 
-      @include respond-to("sm") { display: none; }
+      @include respond-to("sm") {
+         display: none;
+      }
    }
 
    &__arrow {
@@ -88,22 +189,60 @@
       align-items: center;
       @include fluid-space(height, 40, 56);
 
-      // Органічне розташування в межах колонки
-      &:nth-child(1)  { justify-self: start;                                                             }
-      &:nth-child(2)  { justify-self: center; transform: translateX(toRem(-16)) translateY(toRem(-12)); }
-      &:nth-child(3)  { justify-self: end;    transform: translateY(toRem(8));                           }
+      // Хаотичне розташування — кожен слот на своїй позиції всередині колонки
+      &:nth-child(1) {
+         justify-self: start;
+         transform: translateX(toRem(8)) translateY(toRem(-18));
+      }
+      &:nth-child(2) {
+         justify-self: end;
+         transform: translateX(toRem(-10)) translateY(toRem(6));
+      }
+      &:nth-child(3) {
+         justify-self: center;
+         transform: translateX(toRem(22)) translateY(toRem(-8));
+      }
 
-      &:nth-child(4)  { justify-self: start;  transform: translateX(toRem(32)) translateY(toRem(10));   }
-      &:nth-child(5)  { justify-self: center; transform: translateX(toRem(12));                          }
-      &:nth-child(6)  { justify-self: end;    transform: translateX(toRem(-24)) translateY(toRem(6));   }
+      &:nth-child(4) {
+         justify-self: end;
+         transform: translateX(toRem(-28)) translateY(toRem(20));
+      }
+      &:nth-child(5) {
+         justify-self: start;
+         transform: translateX(toRem(44)) translateY(toRem(-5));
+      }
+      &:nth-child(6) {
+         justify-self: center;
+         transform: translateX(toRem(-14)) translateY(toRem(16));
+      }
 
-      &:nth-child(7)  { justify-self: start;  transform: translateY(toRem(-6));                          }
-      &:nth-child(8)  { justify-self: center; transform: translateX(toRem(-20)) translateY(toRem(5));   }
-      &:nth-child(9)  { justify-self: end;    transform: translateX(toRem(-12)) translateY(toRem(-8));  }
+      &:nth-child(7) {
+         justify-self: center;
+         transform: translateX(toRem(30)) translateY(toRem(-14));
+      }
+      &:nth-child(8) {
+         justify-self: end;
+         transform: translateX(toRem(-8)) translateY(toRem(10));
+      }
+      &:nth-child(9) {
+         justify-self: start;
+         transform: translateX(toRem(18)) translateY(toRem(-20));
+      }
 
       @include respond-to("sm") {
-         // На мобілці — по центру, без scatter
-         &:nth-child(n) { justify-self: center; transform: none; }
+         // Сходинки на мобілці
+         &:nth-child(3n + 1) {
+            justify-self: start;
+            transform: translateX(toRem(16));
+         }
+         &:nth-child(3n + 2) {
+            justify-self: center;
+            transform: none;
+         }
+         &:nth-child(3n) {
+            justify-self: end;
+            transform: translateX(toRem(-16));
+         }
       }
    }
 
@@ -120,8 +259,8 @@
 
    &__logo {
       display: block;
-      @include fluid-space(max-width, 100, 160);
-      @include fluid-space(max-height, 28, 44);
+      @include fluid-space(max-width, 140, 160);
+      @include fluid-space(max-height, 38, 44);
       width: auto;
       height: auto;
       object-fit: contain;
@@ -135,16 +274,28 @@
 
 // Два стопи + alternate = чиста синусоїда, жодних стрибків
 @keyframes twinkle-a {
-   from { opacity: 0.15; }
-   to   { opacity: 1;    }
+   from {
+      opacity: 0.15;
+   }
+   to {
+      opacity: 1;
+   }
 }
 
 @keyframes twinkle-b {
-   from { opacity: 0.2;  }
-   to   { opacity: 0.9;  }
+   from {
+      opacity: 0.2;
+   }
+   to {
+      opacity: 0.9;
+   }
 }
 
 @keyframes twinkle-c {
-   from { opacity: 0.1;  }
-   to   { opacity: 0.85; }
+   from {
+      opacity: 0.1;
+   }
+   to {
+      opacity: 0.85;
+   }
 }

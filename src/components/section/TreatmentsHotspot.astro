@@ -1,0 +1,99 @@
+---
+import "@styles/components/section/_treatments-hotspot.scss";
+import Icon from "@components/ui/Icon.astro";
+import Img from "@components/media/Img.astro";
+import img1 from "@assets/img/main/treatments-img-1.png";
+import img2 from "@assets/img/main/treatments-img-2.png";
+---
+
+<section class="treatments">
+   <div class="treatments__container pb-80 pt-80">
+      <!-- Card 1 -->
+      <div class="treatments__card treatments__card--1">
+         <span class="treatments__label fs-24">Aesthetic medicine</span>
+         <div class="treatments__media">
+            <Img src={img1} alt="Aesthetic medicine" loading="lazy" />
+            <div
+               class="treatments__hotspot"
+               data-hotspot
+               data-x="92"
+               data-y="32"
+               data-y-sm="10"
+            >
+               <div class="treatments__dot">
+                  <span class="treatments__dot-ring"></span>
+               </div>
+               <div class="treatments__popup">
+                  <!-- Ламана лінія: діагональ від крапки → горизонталь під текстом -->
+                  <svg
+                     class="treatments__line treatments__line--1"
+                     viewBox="0 0 280 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <polyline
+                        points="26,58 58,10 360,10"
+                        stroke="rgba(255,255,255,1)"
+                        stroke-width="1"
+                        fill="none"></polyline>
+                  </svg>
+                  <div class="treatments__popup-box">
+                     <a href="#" class="treatments__link">
+                        Surgical nose correction
+                        <Icon name="arrow-link-top" />
+                     </a>
+                     <a href="#" class="treatments__link">
+                        Non-surgical nose enhancement
+                        <Icon name="arrow-link-top" />
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="treatments__card treatments__card--2">
+         <span class="treatments__label fs-24">Facial aesthetic surgery</span>
+         <div class="treatments__media">
+            <Img src={img2} alt="Facial aesthetic surgery" loading="lazy" />
+            <div
+               class="treatments__hotspot"
+               data-hotspot
+               data-x="30"
+               data-y="42"
+               data-y-sm="10"
+            >
+               <div class="treatments__dot">
+                  <span class="treatments__dot-ring"></span>
+               </div>
+               <div class="treatments__popup">
+                  <!-- Ламана лінія: діагональ від крапки → горизонталь під текстом (дзеркально) -->
+                  <svg
+                     class="treatments__line treatments__line--2"
+                     viewBox="0 0 260 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <polyline
+                        points="234,58 202,10 -80,10"
+                        stroke="rgba(255,255,255,1)"
+                        stroke-width="1"
+                        fill="none"></polyline>
+                  </svg>
+                  <div class="treatments__popup-box">
+                     <a href="#" class="treatments__link">
+                        Botox Injections
+                        <Icon name="arrow-link-top" />
+                     </a>
+                     <a href="#" class="treatments__link">
+                        Hyaluronic acid injections
+                        <Icon name="arrow-link-top" />
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>

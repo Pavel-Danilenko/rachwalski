@@ -76,6 +76,7 @@
 
 
 
+
    "respond-to custom": {
       "prefix": "rpc",
       "body": "@include respond-to(${1:900}) {\n\t$2\n}",
@@ -122,6 +123,7 @@
       "body": "@include respond-from(\"xxl\") {\n\t$0\n}",
       "description": "min-width 1440px"
    },
+
 
 
 

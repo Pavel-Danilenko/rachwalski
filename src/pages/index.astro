@@ -11,6 +11,7 @@ import aboutImg from "@assets/img/biography/martin.png";
 import PostsSection from "@components/section/PostsSection.astro";
 import PopularReviews from "@components/section/PopularReviews.astro";
 import Partners from "@components/section/Partners.astro";
+import TreatmentsHotspot from "@components/section/TreatmentsHotspot.astro";
 import { getCollection } from "astro:content";
 import footerBg from "@assets/img/footer/footer-bg-8.png";
 import ResponsiveImg from "@components/media/ResponsiveImg.astro";
@@ -100,8 +101,9 @@ const reviews = [
             </div>
          </div>
       </section>
+      <TreatmentsHotspot />
       <Partners />
-      <section class="main-about bg-white">
+      <section class="main-about bg-white mt-1">
          <div class="main-about__container pt-80 pb-80">
             <div class="main-about__column-left bg-white-medium br-12">
                <Img
@@ -132,7 +134,11 @@ const reviews = [
                   />
                </div>
                <div class="main-about__btns">
-                  <a href="#" data-popup-open="book" class="btn btn-dark btn--medium">
+                  <a
+                     href="#"
+                     data-popup-open="book"
+                     class="btn btn-dark btn--medium"
+                  >
                      Book consultation
                   </a>
                   <a href="" class="btn btn--medium btn-dark-outline">

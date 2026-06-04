@@ -157,6 +157,9 @@ async function loadModules() {
    if (document.querySelector("[data-partners]"))
       tasks.push(import("@scripts/init/partners"));
 
+   if (document.querySelector("[data-hotspot]"))
+      tasks.push(import("@scripts/init/treatments-hotspot"));
+
    await Promise.all(tasks);
 }
 
