@@ -19,15 +19,16 @@ function positionHotspot(hotspot) {
    const offsetX = rect.left - mediaRect.left + rect.width  * (x / 100);
    const offsetY = rect.top  - mediaRect.top  + rect.height * (y / 100);
 
-   // Розмір крапки (48px) — компенсуємо відсутній translate(-50%,-50%)
-   const dotSize = 48;
+   // Розмір крапки за замовчуванням (28px) — компенсуємо відсутній translate
+   const dotSize = 28;
    const dotHalf = dotSize / 2;
 
    hotspot.style.left = `${offsetX - dotHalf}px`;
    hotspot.style.top  = `${offsetY - dotHalf}px`;
 
    if (!isMobile) {
-      const isCard2 = !!hotspot.closest(".treatments__card--2");
+      // data-side="left" → попап ліворуч, "right" → праворуч (default)
+      const isLeft = hotspot.dataset.side === "left";
       const line  = hotspot.querySelector(".treatments__line");
       const box   = hotspot.querySelector(".treatments__popup-box");
       const popup = hotspot.querySelector(".treatments__popup");
@@ -41,11 +42,11 @@ function positionHotspot(hotspot) {
       const scale = rect.width / 450;
 
       if (line) {
-         line.style.width  = `${Math.round((isCard2 ? 260 : 280) * scale)}px`;
+         line.style.width  = `${Math.round((isLeft ? 260 : 280) * scale)}px`;
          line.style.height = `${Math.round(88 * scale)}px`;
          line.style.bottom = `${Math.round(-2 * scale)}px`;
          line.style.top    = "auto";
-         if (isCard2) { line.style.right = `${Math.round(-4 * scale)}px`; line.style.left = "auto"; }
+         if (isLeft) { line.style.right = `${Math.round(-4 * scale)}px`; line.style.left = "auto"; }
          else         { line.style.left  = `${Math.round(-4 * scale)}px`; line.style.right = "auto"; }
       }
 
@@ -53,7 +54,7 @@ function positionHotspot(hotspot) {
          box.style.bottom    = `${Math.round(80 * scale)}px`;
          box.style.top       = "auto";
          box.style.transform = "";
-         if (isCard2) { box.style.right = `${Math.round(54 * scale)}px`; box.style.left = "auto"; }
+         if (isLeft) { box.style.right = `${Math.round(54 * scale)}px`; box.style.left = "auto"; }
          else         { box.style.left  = `${Math.round(54 * scale)}px`; box.style.right = "auto"; }
       }
    }
@@ -128,14 +129,6 @@ function initTreatmentsHotspot() {
       positionAllHotspots();
    });
 }
-
-if (document.readyState === "loading") {
-   document.addEventListener("DOMContentLoaded", initTreatmentsHotspot);
-} else {
-   initTreatmentsHotspot();
-}
-
-document.addEventListener("page:ready", initTreatmentsHotspot);
 
 if (document.readyState === "loading") {
    document.addEventListener("DOMContentLoaded", initTreatmentsHotspot);

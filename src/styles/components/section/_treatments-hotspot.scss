@@ -16,7 +16,7 @@
 
    &__card {
       position: relative;
-      flex: 0 0 35%;
+      flex: 0 0 45%;
       overflow: visible;
 
       &--2 {
@@ -68,39 +68,51 @@
 
    &__dot {
       position: relative;
-      width: toRem(48);
-      height: toRem(48);
+      width: toRem(28);
+      height: toRem(28);
       border-radius: 50%;
-      transition: scale var(--transition-base);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+      transition: box-shadow var(--transition-base);
 
-      // Зовнішнє кільце — 12%
-      background: rgba(255, 255, 255, 0.12);
-
-      // Середнє кільце — 20%
+      // Middle circle — з'являється тільки в активному стані
       &::before {
          content: "";
          position: absolute;
-         inset: toRem(8);
+         inset: toRem(10);
          border-radius: 50%;
          background: rgba(255, 255, 255, 0.2);
+         opacity: 0;
+         transition: opacity var(--transition-base);
       }
 
-      // Центр — 90%
+      // Inner circle 8×8px — завжди видимий
       &::after {
          content: "";
          position: absolute;
-         inset: toRem(18);
+         width: toRem(8);
+         height: toRem(8);
          border-radius: 50%;
          background: rgba(255, 255, 255, 0.9);
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+      }
+   }
+
+   // Активний стан — middle коло + зовнішній ring 12% через box-shadow
+   &__hotspot.is-open &__dot {
+      box-shadow: 0 0 0 toRem(10) rgba(255, 255, 255, 0.12);
+
+      &::before {
+         opacity: 1;
       }
    }
 
    &__dot-ring {
       position: absolute;
-      inset: toRem(-8);
+      inset: toRem(-6);
       border-radius: 50%;
       border: toRem(1) solid rgba(255, 255, 255, 0.2);
       animation: hotspot-pulse 2.4s ease-out infinite;
@@ -131,9 +143,7 @@
       display: flex;
       flex-direction: column;
       gap: toRem(4);
-
    }
-
 
    &__link {
       cursor: pointer;
@@ -160,38 +170,24 @@
       }
    }
 
-   &__card--1 &__line {
-      width: toRem(280);
-      height: toRem(88);
-      bottom: toRem(-2);
+   // CSS fallback — JS перевизначає через inline styles
+   :global([data-side="right"]) &__line {
       left: toRem(-4);
-      position: absolute;
-      pointer-events: none;
-      overflow: visible;
+      right: auto;
    }
-
-   &__card--1 &__popup-box {
-      bottom: toRem(80);
-      left: toRem(54);
-      position: absolute;
-   }
-
-   &__card--2 &__line {
-      width: toRem(260);
-      height: toRem(88);
-      bottom: toRem(-2);
+   :global([data-side="left"]) &__line {
       right: toRem(-4);
       left: auto;
-      position: absolute;
-      pointer-events: none;
-      overflow: visible;
    }
-
-   &__card--2 &__popup-box {
+   :global([data-side="right"]) &__popup-box {
+      left: toRem(54);
+      right: auto;
       bottom: toRem(80);
+   }
+   :global([data-side="left"]) &__popup-box {
       right: toRem(54);
       left: auto;
-      position: absolute;
+      bottom: toRem(80);
    }
 
    // ── sm: менша картинка, менша крапка, popup по центру з glass ───────────
@@ -200,18 +196,6 @@
          :global(.img-wrapper) {
             max-width: 72%;
             margin-inline: auto;
-         }
-      }
-
-      &__dot {
-         width: toRem(30);
-         height: toRem(30);
-
-         &::before {
-            inset: toRem(5);
-         }
-         &::after {
-            inset: toRem(11);
          }
       }
 
@@ -257,15 +241,11 @@
 
    // ── Hover (desktop) + tap (mobile) ────────────────────────────────────────
 
-   &__hotspot.is-open &__dot {
-      scale: 1.3;
-   }
    &__hotspot.is-open &__popup {
       opacity: 1;
       pointer-events: auto;
       transform: scale(1);
    }
-
 }
 
 @keyframes hotspot-pulse {

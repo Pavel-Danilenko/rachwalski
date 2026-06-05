@@ -189,8 +189,7 @@
    &__grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      @include fluid-space(column-gap, 16, 24);
-      @include fluid-space(row-gap, 20, 32);
+      @include fluid-space(gap, 20, 32);
 
       @include respond-to("lg") {
          grid-template-columns: repeat(2, 1fr);

@@ -33,6 +33,7 @@
       align-items: center;
       justify-content: center;
       gap: toRem(10);
+      @include fluid(font-size, 16, 36);
       &:not(:last-child) {
          @include fluid-space(margin-bottom, 40, 100);
       }
