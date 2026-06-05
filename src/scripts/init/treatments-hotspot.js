@@ -8,7 +8,9 @@ function positionHotspot(hotspot) {
    if (!img) return;
 
    const isMobile = window.innerWidth <= 767;
-   const x = parseFloat(hotspot.dataset.x) || 50;
+   const x = isMobile && hotspot.dataset.xSm
+      ? parseFloat(hotspot.dataset.xSm)
+      : parseFloat(hotspot.dataset.x) || 50;
    const y = isMobile && hotspot.dataset.ySm
       ? parseFloat(hotspot.dataset.ySm)
       : parseFloat(hotspot.dataset.y) || 50;
