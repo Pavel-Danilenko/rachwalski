@@ -19,26 +19,37 @@ class MenuActiveLinks {
       links.forEach((link) => {
          const href = link.getAttribute("href");
 
-         // Пропускаємо якщо це anchor (#) або зовнішнє посилання
          if (
             href.startsWith("#") ||
             href.startsWith("http") ||
             href.startsWith("mailto:") ||
-            href.startsWith("tel:")
+            href.startsWith("tel:") ||
+            link.hasAttribute("data-nav-placeholder")
          ) {
             return;
          }
 
-         // Порівнюємо шлях
          if (this.isLinkActive(href, currentPath)) {
             link.classList.add("is-active");
             link.setAttribute("aria-current", "page");
-
          } else {
             link.classList.remove("is-active");
             link.removeAttribute("aria-current");
          }
       });
+
+      this.updateFirstChildState();
+   }
+
+   updateFirstChildState() {
+      const list = document.querySelector(".nav-overlay__list");
+      if (!list) return;
+
+      const hasActiveInSub      = !!list.querySelector(".nav-sub .is-active");
+      const hasActiveStandalone = !!list.querySelector(".nav-overlay__link.is-active");
+
+      // Прибираємо активний перший item тільки коли на standalone-сторінці (fees тощо)
+      list.classList.toggle("suppress-first-active", hasActiveStandalone && !hasActiveInSub);
    }
 
    isLinkActive(href, currentPath) {
