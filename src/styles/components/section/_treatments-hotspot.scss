@@ -101,6 +101,10 @@
       }
    }
 
+   &__hotspot.is-open {
+      z-index: 50;
+   }
+
    // Активний стан — middle коло + зовнішній ring 12% через box-shadow
    &__hotspot.is-open &__dot {
       box-shadow: 0 0 0 toRem(10) rgba(255, 255, 255, 0.12);
@@ -143,6 +147,11 @@
       display: flex;
       flex-direction: column;
       gap: toRem(4);
+      background: rgba(9, 12, 17, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: toRem(12);
+      padding: toRem(16) toRem(20);
+      white-space: nowrap;
    }
 
    &__link {
@@ -227,8 +236,8 @@
          transform: none;
          text-align: left;
          align-items: flex-start;
-         background: rgba(9, 12, 17, 0.82);
-         backdrop-filter: blur(16px);
+         background: rgba(9, 12, 17, 0.88);
+         border: 1px solid rgba(255, 255, 255, 0.08);
          border-radius: toRem(12);
          padding: toRem(20) toRem(24);
          white-space: nowrap;
