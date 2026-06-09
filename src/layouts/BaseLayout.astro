@@ -108,9 +108,9 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
 
       <div class="wrapper" data-barba="wrapper">
          <Header sticky={stickyHeader} />
-         <main data-barba="container" data-barba-namespace={namespace} data-footer-bg={resolvedFooterBg.src}>
+         <div data-barba="container" data-barba-namespace={namespace} data-footer-bg={resolvedFooterBg.src}>
             <slot />
-         </main>
+         </div>
 
          <Footer bgSrc={footerBg} />
       </div>

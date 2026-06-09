@@ -65,6 +65,11 @@ export const nav = {
       url: "/contact",
    },
 
+   facialAssessment: {
+      label: "Assessment by Area",
+      url: "/facial-assessment",
+   },
+
    // ── Facial Assessment (тимчасові плейсхолдери) ───────────────────────────
    faUpperForeheadAnalysis:   { label: "Forehead analysis",      url: "/rhinoplasty" },
    faUpperBrowAssessment:     { label: "Brow assessment",        url: "/rhinoplasty" },

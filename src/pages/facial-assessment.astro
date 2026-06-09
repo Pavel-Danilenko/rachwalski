@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageMain from "@components/ui/PageMain.astro";
+import footerBg from "@assets/img/footer/footer-bg-7.png";
+import "@styles/pages/_facial-assessment.scss";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import imgDesktop from "@assets/img/other/bg.jpg";
+import imgMobile from "@assets/img/other/mobile-gradient.jpg";
+---
+
+<BaseLayout
+   title="Facial Assessment by Area"
+   description="Explore Dr. Rachwalski's facial assessment approach organised by area of the face."
+   footerBg={footerBg}
+>
+   <PageMain>
+      <section class="assessment hero-circle">
+         <ResponsiveImg
+            srcDesktop={imgDesktop}
+            srcMobile={imgMobile}
+            alt="Hero"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--fees"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+         />
+
+         <div class="assessment__container pt-180 pb-80"></div>
+      </section>
+   </PageMain>
+</BaseLayout>

@@ -1,0 +1,122 @@
+@use "@styles/utils" as *;
+
+.assessment {
+   position: relative;
+   min-height: 100vh;
+
+   &__container {
+      position: relative;
+      z-index: 2;
+   }
+
+   &__hero {
+      @include fluid-space(padding-bottom, 40, 60);
+   }
+
+   &__title {
+      @include fluid-space(margin-bottom, 12, 20);
+   }
+
+   &__desc {
+      max-width: toRem(640);
+   }
+}
+
+// ── Area group ────────────────────────────────────────────────────────────────
+
+.assessment-area {
+   &:not(:last-child) {
+      @include fluid-space(margin-bottom, 32, 48);
+   }
+
+   &__heading {
+      @include fluid-space(margin-bottom, 16, 24);
+      @include fluid-space(padding-bottom, 12, 16);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+   }
+}
+
+// ── Accordion override for this page ─────────────────────────────────────────
+
+.assessment-accordion {
+   display: flex;
+   flex-direction: column;
+   row-gap: toRem(4);
+
+   &__item {
+      border-radius: toRem(10);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: background var(--transition-base);
+
+      &:hover {
+         background: rgba(255, 255, 255, 0.07);
+      }
+   }
+
+   &__trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: toRem(12);
+      @include fluid-space(padding, 14, 18);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--color-text);
+      font-family: inherit;
+      font-size: toRem(18);
+      text-align: left;
+
+      .icon {
+         flex-shrink: 0;
+         font-size: toRem(14);
+         transition: rotate var(--transition-base);
+         color: var(--color-text);
+         opacity: 0.5;
+      }
+
+      &[aria-expanded="true"] .icon {
+         rotate: 180deg;
+         opacity: 1;
+      }
+   }
+
+   &__links {
+      display: flex;
+      flex-direction: column;
+      @include fluid-space(padding-inline, 14, 18);
+      @include fluid-space(padding-bottom, 12, 16);
+      row-gap: toRem(2);
+   }
+
+   &__link {
+      display: flex;
+      align-items: center;
+      gap: toRem(8);
+      @include fluid-space(padding, 8, 10);
+      border-radius: toRem(8);
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: toRem(16);
+      opacity: 0.7;
+      transition:
+         opacity var(--transition-base),
+         background var(--transition-base);
+
+      .icon {
+         font-size: toRem(14);
+         flex-shrink: 0;
+         rotate: -45deg;
+      }
+
+      @media (any-hover: hover) {
+         &:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.06);
+         }
+      }
+   }
+}
