@@ -3,12 +3,13 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
 import Icon from "@components/ui/Icon.astro";
 import "@styles/pages/_consultation-locations.scss";
-import Img from "@components/media/Img.astro";
-import heroBgGradient from "@assets/img/other/bg.jpg";
 import SectionHeader from "@components/section/SectionHeader.astro";
 import LocationsMap from "@components/section/LocationsMap.astro";
 import Faq from "@components/section/Faq.astro";
 import footerBg from "@assets/img/footer/footer-bg-5.png";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import imgDesktop from "@assets/img/other/bg.jpg";
+import imgMobile from "@assets/img/other/mobile-gradient.jpg";
 
 const faqItems = [
    {
@@ -62,15 +63,15 @@ const faqItems = [
 >
    <PageMain>
       <section class="cl-locations hero-circle">
-         <Img
-            src={heroBgGradient}
+         <ResponsiveImg
+            srcDesktop={imgDesktop}
+            srcMobile={imgMobile}
             alt="Hero"
             wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
             loading="eager"
             fetchpriority="high"
             decoding="sync"
             quality={90}
-            widths={[768, 1280, 1920]}
          />
          <div class="cl-locations__container pt-180 pb-80">
             <div class="cl-locations__row">

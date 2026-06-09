@@ -90,7 +90,7 @@
       justify-content: space-between;
       flex-wrap: wrap;
       position: relative;
-      z-index: 2;
+      z-index: 3;
       @include fluid-space(gap, 12, 20);
    }
 

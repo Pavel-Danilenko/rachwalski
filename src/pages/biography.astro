@@ -9,7 +9,6 @@ import LectureSlider from "@components/sliders/LectureSlider.astro";
 import "@styles/pages/_biography.scss";
 import "@styles/components/sliders/_topics-slider.scss";
 import Img from "@components/media/Img.astro";
-import heroBgGradient from "@assets/img/other/bg.jpg";
 import booHeroImg from "@assets/img/biography/martin.png";
 import bioJournal1 from "@assets/img/biography/bio-journal-img-1.png";
 import bioJournal2 from "@assets/img/biography/bio-journal-img-2.jpg";
@@ -17,6 +16,9 @@ import bookImg1 from "@assets/img/biography/book-img-1.jpg";
 import bookImg2 from "@assets/img/biography/book-img-2.jpg";
 import footerBg from "@assets/img/footer/footer-bg-3.png";
 import StepBanner from "@/components/section/StepBanner.astro";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import imgDesktop from "@assets/img/other/bg.jpg";
+import imgMobile from "@assets/img/other/mobile-gradient.jpg";
 ---
 
 <BaseLayout
@@ -26,8 +28,9 @@ import StepBanner from "@/components/section/StepBanner.astro";
 >
    <PageMain>
       <section class="bio-hero hero-circle">
-         <Img
-            src={heroBgGradient}
+         <ResponsiveImg
+            srcDesktop={imgDesktop}
+            srcMobile={imgMobile}
             alt="Hero"
             wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
             loading="eager"
@@ -35,6 +38,7 @@ import StepBanner from "@/components/section/StepBanner.astro";
             decoding="sync"
             quality={90}
          />
+
          <div class="bio-hero__container pt-180 pb-80">
             <div class="bio-hero__column-left glass br-12">
                <Img

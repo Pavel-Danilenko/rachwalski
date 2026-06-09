@@ -18,11 +18,11 @@
    @include fluid-space(padding-top, 88, 180);
 }
 .pb-80 {
-   @include fluid-space(padding-bottom, 40, 80);
+   @include fluid-space(padding-bottom, 40, 100);
 }
 
 .pt-80 {
-   @include fluid-space(padding-top, 40, 80);
+   @include fluid-space(padding-top, 40, 100);
 }
 .pb-35 {
    @include fluid-space(padding-bottom, 25, 35);
@@ -408,6 +408,11 @@
    left: 0;
    z-index: 0;
    width: 100%;
+   & img {
+      @include respond-to("md") {
+         object-position: top right;
+      }
+   }
    // &::before { видалити якщо не потрібно
    //    content: "";
    //    width: 100%;

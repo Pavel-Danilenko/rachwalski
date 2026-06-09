@@ -45,11 +45,24 @@ class MenuActiveLinks {
       const list = document.querySelector(".nav-overlay__list");
       if (!list) return;
 
-      const hasActiveInSub      = !!list.querySelector(".nav-sub .is-active");
-      const hasActiveStandalone = !!list.querySelector(".nav-overlay__link.is-active");
+      const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
 
-      // Прибираємо активний перший item тільки коли на standalone-сторінці (fees тощо)
-      list.classList.toggle("suppress-first-active", hasActiveStandalone && !hasActiveInSub);
+      const matchesPath = (link) => {
+         if (link.hasAttribute("data-nav-placeholder")) return false;
+         return (link.getAttribute("href") || "").replace(/\/$/, "") === currentPath;
+      };
+
+      // Активне посилання в першому nav-sub (Dr. Rachwalski)
+      const activeInFirstSub = [...list.querySelectorAll(".nav-sub:first-child a[href]")].some(matchesPath);
+
+      // Активне посилання в будь-якому іншому nav-sub (Resources, etc.)
+      const activeInOtherSub = [...list.querySelectorAll(".nav-sub:not(:first-child) a[href]")].some(matchesPath);
+
+      // Standalone посилання (Fees)
+      const activeStandalone = [...list.querySelectorAll(".nav-overlay__link")].some(matchesPath);
+
+      // Прибираємо перший активний якщо активне щось не в першій вкладці
+      list.classList.toggle("suppress-first-active", activeInOtherSub || (activeStandalone && !activeInFirstSub));
    }
 
    isLinkActive(href, currentPath) {

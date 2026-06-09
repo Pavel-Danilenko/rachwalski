@@ -52,6 +52,8 @@
 .location-card {
    &:not(:last-child) {
       @include fluid-space(margin-bottom, 12, 20);
+      @include fluid-space(padding-bottom, 12, 20);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
    }
    // .location-card__name
    &__name {
@@ -100,6 +102,13 @@
 
    // .location-card__address
    &__address {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--transition-base);
+
+      @media (any-hover: hover) {
+         &:hover { color: var(--color-blue); }
+      }
    }
 
    // .location-card__section

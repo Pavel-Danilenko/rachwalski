@@ -145,5 +145,19 @@
    }
    &__btn {
       @include fluid-space(padding, 20, 24);
+
+      &::before,
+      .faq-accordion__text {
+         opacity: 0.7;
+         transition: opacity var(--transition-base);
+      }
+
+      @media (any-hover: hover) {
+         &:hover::before,
+         &:hover .faq-accordion__text { opacity: 1; }
+      }
+
+      &[aria-expanded="true"]::before,
+      &[aria-expanded="true"] .faq-accordion__text { opacity: 1; }
    }
 }

@@ -9,7 +9,9 @@ import alphabetImg1 from "@assets/img/alphabet/alphabet-img-1.png";
 import alphabetImg2 from "@assets/img/alphabet/alphabet-img-2.png";
 import alphabetImg3 from "@assets/img/alphabet/alphabet-img-3.png";
 import Img from "@components/media/Img.astro";
-import heroBgGradient from "@assets/img/other/bg.jpg";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import imgDesktop from "@assets/img/other/bg.jpg";
+import imgMobile from "@assets/img/other/mobile-gradient.jpg";
 ---
 
 <BaseLayout
@@ -19,8 +21,9 @@ import heroBgGradient from "@assets/img/other/bg.jpg";
 >
    <PageMain>
       <section class="alphabet hero-circle">
-         <Img
-            src={heroBgGradient}
+         <ResponsiveImg
+            srcDesktop={imgDesktop}
+            srcMobile={imgMobile}
             alt="Hero"
             wrapperClass="hero-gradient__bg hero-gradient__bg--fees"
             loading="eager"

@@ -79,7 +79,7 @@ const { items } = Astro.props;
                            data-accordion-trigger
                            class="fs-20 faq-accordion__btn"
                         >
-                           {item.question}
+                           <span class="faq-accordion__text">{item.question}</span>
                            <Icon name="arrow-down" />
                         </button>
                         <div data-accordion-content>

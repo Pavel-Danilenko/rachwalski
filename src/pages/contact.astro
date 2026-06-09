@@ -11,7 +11,9 @@ import LocationsMap from "@components/section/LocationsMap.astro";
 import footerBg from "@assets/img/footer/footer-bg-6.png";
 
 import ContactFormSection from "@components/section/ContactFormSection.astro";
-import heroBgGradient from "@assets/img/other/bg.jpg";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import imgDesktop from "@assets/img/other/bg.jpg";
+import imgMobile from "@assets/img/other/mobile-gradient.jpg";
 
 const faqItems = [
    {
@@ -72,15 +74,15 @@ const procedureOptions = [
 >
    <PageMain>
       <section class="contact hero-circle">
-         <Img
-            src={heroBgGradient}
+         <ResponsiveImg
+            srcDesktop={imgDesktop}
+            srcMobile={imgMobile}
             alt="Hero"
             wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
             loading="eager"
             fetchpriority="high"
             decoding="sync"
             quality={90}
-            widths={[768, 1280, 1920]}
          />
          <div class="contact__container pt-180 pb-80">
             <div class="contact__column-left">

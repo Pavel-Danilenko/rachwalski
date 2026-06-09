@@ -12,6 +12,9 @@ import StepBanner from "@components/section/StepBanner.astro";
 import Faq from "@components/section/Faq.astro";
 import reviewsImg from "@assets/img/reviews/reviews-bg.png";
 import footerBg from "@assets/img/footer/footer-bg-9.png";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import imgDesktop from "@assets/img/other/bg.jpg";
+import imgMobile from "@assets/img/other/mobile-gradient.jpg";
 
 const testimonials = [
    {
@@ -159,8 +162,9 @@ const faqItems = [
 >
    <PageMain>
       <section class="reviews hero-circle">
-         <Img
-            src={heroBgGradient}
+         <ResponsiveImg
+            srcDesktop={imgDesktop}
+            srcMobile={imgMobile}
             alt="Hero"
             wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
             loading="eager"

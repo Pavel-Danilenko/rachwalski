@@ -8,12 +8,13 @@ import { getCollection } from "astro:content";
 import CustomSearch from "@components/forms/CustomSearch.astro";
 import CustomSelect from "@components/forms/CustomSelect.astro";
 import Img from "@components/media/Img.astro";
-import ResponsiveImg from "@components/media/ResponsiveImg.astro";
 import PopularReviews from "@components/section/PopularReviews.astro";
-import heroBgGradient from "@assets/img/other/bg.jpg";
 import heroImgRight from "@assets/img/blog/hero-img-right.png";
 import heroImgRightMobile from "@assets/img/blog/hero-img-right-mobile.png";
 import heroImgleft from "@assets/img/blog/hero-img-left.png";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import imgDesktop from "@assets/img/other/bg.jpg";
+import imgMobile from "@assets/img/other/mobile-gradient.jpg";
 
 const reviews = [
    {
@@ -89,8 +90,9 @@ const categoryOptions = [
 >
    <PageMain>
       <section class="blog-hero blog-hero-light">
-         <Img
-            src={heroBgGradient}
+         <ResponsiveImg
+            srcDesktop={imgDesktop}
+            srcMobile={imgMobile}
             alt="Hero"
             wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
             loading="eager"

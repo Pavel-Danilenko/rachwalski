@@ -18,13 +18,27 @@
 
    &__column-left {
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
       overflow: hidden;
       flex-shrink: 0;
       @include fluid-space(flex-basis, 300, 420);
+      @include respond-from("md") {
+         flex-direction: column;
+         justify-content: flex-end;
+      }
       @include respond-to(870) {
          flex-basis: 100%;
+      }
+   }
+
+   // .bio-hero__img
+
+   &__img {
+      img {
+         object-position: top;
+      }
+
+      @include respond-to("md") {
+         aspect-ratio: 480 / 500;
       }
    }
 
