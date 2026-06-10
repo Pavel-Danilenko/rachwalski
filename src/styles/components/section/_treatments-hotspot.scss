@@ -21,6 +21,7 @@
 
       &--2 {
          margin-top: toRem(110);
+         @include fluid(margin-top, 110, 200);
 
          @include respond-to("md") {
             margin-top: 0;
@@ -39,9 +40,26 @@
    }
 
    &__label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: toRem(8);
       text-align: center;
-      display: block;
+      color: var(--color-text);
+      text-decoration: none;
       @include fluid-space(margin-bottom, 20, 32);
+
+      .icon {
+         font-size: toRem(12);
+         color: var(--color-white);
+         transition: translate var(--transition-base);
+      }
+
+      @media (any-hover: hover) {
+         &:hover .icon {
+            translate: toRem(2) toRem(-2);
+         }
+      }
    }
 
    // ── Image — без рамки, чиста картинка ─────────────────────────────────────

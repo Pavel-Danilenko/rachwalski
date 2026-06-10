@@ -67,6 +67,21 @@
       column-gap: toRem(14);
       font-weight: 400;
       @include fluid(font-size, 16, 24);
+
+      span {
+         opacity: 0.7;
+         transition: opacity var(--transition-base);
+      }
+
+      @media (any-hover: hover) {
+         &:hover span {
+            opacity: 1;
+         }
+      }
+
+      &[aria-expanded="true"] span {
+         opacity: 1;
+      }
    }
    &__link {
       display: flex;
