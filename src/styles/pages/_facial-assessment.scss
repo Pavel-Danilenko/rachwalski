@@ -1,6 +1,51 @@
 @use "@styles/utils" as *;
 
 .assessment {
+   position: relative;
+
+   &__img-top {
+      pointer-events: none;
+      overflow: hidden;
+      position: absolute;
+      left: -16%;
+      top: 4%;
+      width: 40%;
+      max-height: 100%;
+      @include respond-to("md") {
+         width: 100%;
+         top: 14%;
+         left: -30%;
+      }
+      & img {
+         object-fit: contain;
+      }
+   }
+   &__img-bottom {
+      pointer-events: none;
+      overflow: hidden;
+      position: absolute;
+      bottom: 0%;
+      right: -7%;
+      z-index: 0;
+      width: 60%;
+      max-height: 100%;
+      @include respond-to("md") {
+         width: 100%;
+      }
+      & img {
+         object-fit: contain;
+         translate: 0% 20%;
+         @include respond-to("md") {
+            translate: 0% 14%;
+         }
+      }
+   }
+
+   &__container {
+      min-height: 120svh;
+      position: relative;
+      z-index: 3;
+   }
    &__accordion {
       display: flex;
       flex-direction: column;
@@ -9,7 +54,7 @@
    &__inner {
       padding-top: toRem(20);
       border-top: var(--border-sm) solid rgba(255, 255, 255, 0.2);
-      @include fluid(padding-left, 30, 40);
+      @include fluid(padding-left, 20, 40);
    }
    &__body {
       display: flex;

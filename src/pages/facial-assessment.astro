@@ -8,6 +8,9 @@ import imgDesktop from "@assets/img/other/bg.jpg";
 import imgMobile from "@assets/img/other/mobile-gradient.jpg";
 import Accordion from "@components/interactive/accordion.astro";
 import Icon from "@components/ui/Icon.astro";
+import Img from "@components/media/Img.astro";
+import assessmentImgtop from "@assets/img/assessment/assessment-img-top.png";
+import assessmentImgBottom from "@assets/img/assessment/assessment-img-bottom.png";
 ---
 
 <BaseLayout
@@ -16,21 +19,40 @@ import Icon from "@components/ui/Icon.astro";
    footerBg={footerBg}
 >
    <PageMain>
-      <section class="assessment hero-circle">
+      <section class="assessment hero-circle here-bottom__gradient">
          <ResponsiveImg
             srcDesktop={imgDesktop}
             srcMobile={imgMobile}
             alt="Hero"
-            wrapperClass="hero-gradient__bg hero-gradient__bg--fees"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
             loading="eager"
             fetchpriority="high"
             decoding="sync"
             quality={90}
          />
 
+         <Img
+            src={assessmentImgtop}
+            alt="Hero"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            wrapperClass="assessment__img-top"
+            quality={90}
+         />
+         <Img
+            src={assessmentImgBottom}
+            alt="Hero"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            wrapperClass="assessment__img-bottom"
+            quality={90}
+         />
+
          <div class="assessment__container pt-180 pb-80">
             <h1 class="assessment__title fs-36 mb-40 t-center">Upper face</h1>
-            <div class="assessment__inner">
+            <div class="assessment__row">
                <Accordion
                   defaultOpen={[0]}
                   duration={300}
@@ -44,6 +66,18 @@ import Icon from "@components/ui/Icon.astro";
                      <div data-accordion-content>
                         <div>
                            <div class="accordion__body assessment__body">
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
                               <div class="assessment__inner">
                                  <a href="#" class="assessment__link">
                                     <Icon name="arrow-link-top" />

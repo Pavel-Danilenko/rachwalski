@@ -442,6 +442,22 @@
    }
 }
 
+.here-bottom__gradient {
+   &::after {
+      content: "";
+      width: 100%;
+      @include fluid-space(height, 300, 600);
+      position: absolute;
+      bottom: toRem(-1);
+      left: 0;
+      z-index: 0;
+      background: var(--gradient-prices-bottom-gradient);
+      @include respond-to("md") {
+         background: var(--gradient-mobile-bottom-gradient);
+      }
+   }
+}
+
 .hero-gradient__bg--height-100 {
    height: 100%;
    @include respond-to("md") {
