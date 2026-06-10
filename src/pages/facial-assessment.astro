@@ -6,6 +6,8 @@ import "@styles/pages/_facial-assessment.scss";
 import ResponsiveImg from "@components/media/ResponsiveImg.astro";
 import imgDesktop from "@assets/img/other/bg.jpg";
 import imgMobile from "@assets/img/other/mobile-gradient.jpg";
+import Accordion from "@components/interactive/accordion.astro";
+import Icon from "@components/ui/Icon.astro";
 ---
 
 <BaseLayout
@@ -26,7 +28,109 @@ import imgMobile from "@assets/img/other/mobile-gradient.jpg";
             quality={90}
          />
 
-         <div class="assessment__container pt-180 pb-80"></div>
+         <div class="assessment__container pt-180 pb-80">
+            <h1 class="assessment__title fs-36 mb-40 t-center">Upper face</h1>
+            <div class="assessment__inner">
+               <Accordion
+                  defaultOpen={[0]}
+                  duration={300}
+                  class:list={"assessment__accordion"}
+               >
+                  <div data-accordion-item class="glass br-20">
+                     <button data-accordion-trigger class="assessment__trigger">
+                        <Icon name="arrow-down" />
+                        <span>Forehead</span>
+                     </button>
+                     <div data-accordion-content>
+                        <div>
+                           <div class="accordion__body assessment__body">
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div data-accordion-item class="glass br-20">
+                     <button data-accordion-trigger class="assessment__trigger">
+                        <Icon name="arrow-down" />
+                        <span>Temples</span>
+                     </button>
+                     <div data-accordion-content>
+                        <div>
+                           <div class="accordion__body">
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div data-accordion-item class="glass br-20">
+                     <button data-accordion-trigger class="assessment__trigger">
+                        <Icon name="arrow-down" />
+                        <span>Temples</span>
+                     </button>
+                     <div data-accordion-content>
+                        <div>
+                           <div class="accordion__body">
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
+                              <div class="assessment__inner">
+                                 <a href="#" class="assessment__link">
+                                    <Icon name="arrow-link-top" />
+                                    Article name
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </Accordion>
+            </div>
+         </div>
       </section>
    </PageMain>
 </BaseLayout>

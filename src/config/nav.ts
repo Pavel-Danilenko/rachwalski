@@ -71,55 +71,55 @@ export const nav = {
    },
 
    // ── Facial Assessment (тимчасові плейсхолдери) ───────────────────────────
-   faUpperForeheadAnalysis:   { label: "Forehead analysis",      url: "/rhinoplasty" },
-   faUpperBrowAssessment:     { label: "Brow assessment",        url: "/rhinoplasty" },
-   faUpperEyelidEvaluation:   { label: "Eyelid evaluation",      url: "/rhinoplasty" },
+   faUpperForeheadAnalysis:   { label: "Forehead analysis",      url: "/forehead-analysis" },
+   faUpperBrowAssessment:     { label: "Brow assessment",        url: "/brow-assessment" },
+   faUpperEyelidEvaluation:   { label: "Eyelid evaluation",      url: "/eyelid-evaluation" },
 
-   faMidCheekAssessment:      { label: "Cheek assessment",       url: "/rhinoplasty" },
-   faMidNasalEvaluation:      { label: "Nasal evaluation",       url: "/rhinoplasty" },
+   faMidCheekAssessment:      { label: "Cheek assessment",       url: "/cheek-assessment" },
+   faMidNasalEvaluation:      { label: "Nasal evaluation",       url: "/nasal-evaluation" },
 
-   faLowerJawline:            { label: "Jawline assessment",     url: "/rhinoplasty" },
-   faLowerChin:               { label: "Chin evaluation",        url: "/rhinoplasty" },
-   faLowerLip:                { label: "Lip analysis",           url: "/rhinoplasty" },
-   faLowerNeck:               { label: "Neck assessment",        url: "/rhinoplasty" },
+   faLowerJawline:            { label: "Jawline assessment",     url: "/jawline-assessment" },
+   faLowerChin:               { label: "Chin evaluation",        url: "/chin-evaluation" },
+   faLowerLip:                { label: "Lip analysis",           url: "/lip-analysis" },
+   faLowerNeck:               { label: "Neck assessment",        url: "/neck-assessment" },
 
-   faOtherEar:                { label: "Ear assessment",         url: "/rhinoplasty" },
-   faOtherSkin:               { label: "Skin quality",           url: "/rhinoplasty" },
-   faOtherHarmony:            { label: "Overall harmony",        url: "/rhinoplasty" },
-   faOtherSymmetry:           { label: "Facial symmetry",        url: "/rhinoplasty" },
+   faOtherEar:                { label: "Ear assessment",         url: "/ear-assessment" },
+   faOtherSkin:               { label: "Skin quality",           url: "/skin-quality" },
+   faOtherHarmony:            { label: "Overall harmony",        url: "/overall-harmony" },
+   faOtherSymmetry:           { label: "Facial symmetry",        url: "/facial-symmetry" },
 
    // ── Facial Surgery (тимчасові плейсхолдери) ──────────────────────────────
    fsNoseRhinoplasty:         { label: "Rhinoplasty",            url: "/rhinoplasty" },
-   fsNoseSeptoplasty:         { label: "Septoplasty",            url: "/rhinoplasty" },
-   fsNoseTipRefinement:       { label: "Tip refinement",         url: "/rhinoplasty" },
+   fsNoseSeptoplasty:         { label: "Septoplasty",            url: "/septoplasty" },
+   fsNoseTipRefinement:       { label: "Tip refinement",         url: "/tip-refinement" },
 
-   fsEarsOtoplasty:           { label: "Otoplasty",              url: "/rhinoplasty" },
-   fsEarsEarlobeRepair:       { label: "Earlobe repair",         url: "/rhinoplasty" },
+   fsEarsOtoplasty:           { label: "Otoplasty",              url: "/otoplasty" },
+   fsEarsEarlobeRepair:       { label: "Earlobe repair",         url: "/earlobe-repair" },
 
-   fsEyelidsUpper:            { label: "Upper blepharoplasty",   url: "/rhinoplasty" },
-   fsEyelidsLower:            { label: "Lower blepharoplasty",   url: "/rhinoplasty" },
-   fsEyelidsPtosis:           { label: "Ptosis correction",      url: "/rhinoplasty" },
+   fsEyelidsUpper:            { label: "Upper blepharoplasty",   url: "/upper-blepharoplasty" },
+   fsEyelidsLower:            { label: "Lower blepharoplasty",   url: "/lower-blepharoplasty" },
+   fsEyelidsPtosis:           { label: "Ptosis correction",      url: "/ptosis-correction" },
 
-   fsFaceNeckFacelift:        { label: "Facelift",               url: "/rhinoplasty" },
-   fsFaceNeckNecklift:        { label: "Neck lift",              url: "/rhinoplasty" },
-   fsFaceNeckBrowLift:        { label: "Brow lift",              url: "/rhinoplasty" },
+   fsFaceNeckFacelift:        { label: "Facelift",               url: "/facelift" },
+   fsFaceNeckNecklift:        { label: "Neck lift",              url: "/neck-lift" },
+   fsFaceNeckBrowLift:        { label: "Brow lift",              url: "/brow-lift" },
 
    // ── Aesthetic Medicine (тимчасові плейсхолдери) ───────────────────────────
-   amBotoxForehead:           { label: "Forehead lines",         url: "/rhinoplasty" },
-   amBotoxCrowsFeet:          { label: "Crow's feet",            url: "/rhinoplasty" },
-   amBotoxGlabellar:          { label: "Glabellar lines",        url: "/rhinoplasty" },
+   amBotoxForehead:           { label: "Forehead lines",         url: "/forehead-lines" },
+   amBotoxCrowsFeet:          { label: "Crow's feet",            url: "/crows-feet" },
+   amBotoxGlabellar:          { label: "Glabellar lines",        url: "/glabellar-lines" },
 
-   amHaLipFiller:             { label: "Lip filler",             url: "/rhinoplasty" },
-   amHaCheekAugmentation:     { label: "Cheek augmentation",     url: "/rhinoplasty" },
-   amHaNasolabial:            { label: "Nasolabial folds",       url: "/rhinoplasty" },
+   amHaLipFiller:             { label: "Lip filler",             url: "/lip-filler" },
+   amHaCheekAugmentation:     { label: "Cheek augmentation",     url: "/cheek-augmentation" },
+   amHaNasolabial:            { label: "Nasolabial folds",       url: "/nasolabial-folds" },
 
-   amCollagenSculptra:        { label: "Sculptra",               url: "/rhinoplasty" },
-   amCollagenRadiesse:        { label: "Radiesse",               url: "/rhinoplasty" },
-   amCollagenProfhilo:        { label: "Profhilo",               url: "/rhinoplasty" },
+   amCollagenSculptra:        { label: "Sculptra",               url: "/sculptra" },
+   amCollagenRadiesse:        { label: "Radiesse",               url: "/radiesse" },
+   amCollagenProfhilo:        { label: "Profhilo",               url: "/profhilo" },
 
-   amRfMorpheus:              { label: "Morpheus8",              url: "/rhinoplasty" },
-   amRfSecretRf:              { label: "Secret RF",              url: "/rhinoplasty" },
-   amRfFractional:            { label: "Fractional RF",          url: "/rhinoplasty" },
+   amRfMorpheus:              { label: "Morpheus8",              url: "/morpheus8" },
+   amRfSecretRf:              { label: "Secret RF",              url: "/secret-rf" },
+   amRfFractional:            { label: "Fractional RF",          url: "/fractional-rf" },
 
    // ── З дочірніми пунктами ──────────────────────────────────────────────
    // services: {

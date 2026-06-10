@@ -1,0 +1,29 @@
+---
+import "@styles/components/section/_coming-soon.scss";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import imgDesktop from "@assets/img/other/bg.jpg";
+import imgMobile from "@assets/img/other/mobile-gradient.jpg";
+
+interface Props {
+   title?: string;
+}
+
+const { title = "This page is coming soon" } = Astro.props;
+---
+
+<section class="coming-soon hero-circle">
+   <ResponsiveImg
+      srcDesktop={imgDesktop}
+      srcMobile={imgMobile}
+      alt="Hero"
+      wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync"
+      quality={90}
+   />
+
+   <div class="coming-soon__container hero-full-vh pt-180 pb-80">
+      <h1 class="coming-soon__title">{title}</h1>
+   </div>
+</section>

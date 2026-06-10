@@ -1,0 +1,20 @@
+@use "@styles/utils" as *;
+
+.coming-soon {
+   position: relative;
+   &__container {
+      @include container;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+   }
+   &__title {
+      @include fluid(font-size, 32, 96);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-wrap: balance;
+   }
+}

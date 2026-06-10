@@ -409,6 +409,7 @@
    z-index: 0;
    width: 100%;
    & img {
+      width: 100.5%;
       @include respond-to("md") {
          object-position: top right;
       }
