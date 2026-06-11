@@ -27,6 +27,8 @@ interface Props {
    footerBg?: ImageMetadata;
    // Barba namespace — для таргетованих анімацій між конкретними сторінками
    namespace?: string;
+   // Приховати Header, Footer та MobileBookingBar (для самостійних сторінок-заглушок)
+   hideChrome?: boolean;
 }
 
 const {
@@ -44,6 +46,7 @@ const {
    stickyHeader = false,
    footerBg,
    namespace = "default",
+   hideChrome = false,
 } = Astro.props;
 
 const siteOrigin = Astro.site ?? new URL(Astro.url.origin);
@@ -107,16 +110,16 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
       <IconSprite />
 
       <div class="wrapper" data-barba="wrapper">
-         <Header sticky={stickyHeader} />
+         {!hideChrome && <Header sticky={stickyHeader} />}
          <div data-barba="container" data-barba-namespace={namespace} data-footer-bg={resolvedFooterBg.src}>
             <slot />
          </div>
 
-         <Footer bgSrc={footerBg} />
+         {!hideChrome && <Footer bgSrc={footerBg} />}
       </div>
 
       <Popups />
-      <MobileBookingBar />
+      {!hideChrome && <MobileBookingBar />}
 
       <script>
          import "@scripts/app";

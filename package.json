@@ -12,7 +12,7 @@
       "preview": "astro preview",
       "astro": "astro",
       "build:static": "cross-env BUILD_MODE=static astro build",
-      "build-wp": "cross-env BUILD_MODE=wp astro build && find dist-wp -type f \\( -name \"*.png\" -o -name \"*.jpeg\" -o -name \"*.jpg\" \\) -delete && npx prettier --write dist-wp/**/*.html",
+      "build-wp": "cross-env BUILD_MODE=wp astro build && find dist-wp -type f \\( -name \"*.png\" -o -name \"*.jpeg\" -o -name \"*.jpg\" \\) -delete && npx js-beautify --type html --indent-size 3 --replace dist-wp/**/*.html",
       "preview:wp": "astro preview --dir dist-wp",
       "build:shopify": "cross-env BUILD_MODE=shopify astro build",
       "preview:shopify": "astro preview --dir dist-shopify"
@@ -40,6 +40,7 @@
       "cross-env": "^10.1.0",
       "cssnano": "^7.1.2",
       "dotenv": "^17.2.3",
+      "js-beautify": "^1.15.4",
       "prettier": "^3.7.4",
       "prettier-plugin-astro": "^0.14.1",
       "sass": "^1.97.1",

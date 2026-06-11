@@ -11,6 +11,7 @@
  * @param {string}  imageSrc    - URL зображення логотипу
  * @param {string}  imageAlt    - alt для зображення
  * @param {boolean} alwaysLink  - завжди рендерити як <a> (для футера)
+ * @param {boolean} asLink      - примусово задати посилання (true) чи <div> (false), ігноруючи сторінку
  * @param {string}  target      - "_blank" або "_self"
  * @param {string}  class       - додатковий CSS клас
  */
@@ -21,6 +22,7 @@ interface Props {
    imageSrc?: string;
    imageAlt?: string;
    alwaysLink?: boolean;
+   asLink?: boolean;
    target?: "_blank" | "_self";
    class?: string;
 }
@@ -31,21 +33,23 @@ const {
    imageSrc,
    imageAlt = "Logo",
    alwaysLink = false,
+   asLink,
    target = "_self",
    class: className,
 } = Astro.props;
 
 const isHomePage = Astro.url.pathname === "/";
-const isLink = alwaysLink || !isHomePage;
+const isLink = asLink ?? (alwaysLink || !isHomePage);
 const Tag = isLink ? "a" : "div";
 const linkProps = isLink ? { href, target } : {};
+const enableSwap = asLink === undefined && !alwaysLink;
 ---
 
 <Tag
    {...linkProps}
    class:list={["logo", className]}
    data-logo-href={href}
-   data-logo-swap={alwaysLink ? undefined : ""}
+   data-logo-swap={enableSwap ? "" : undefined}
 >
    {
       imageSrc ? (

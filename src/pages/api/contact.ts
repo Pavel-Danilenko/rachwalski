@@ -19,7 +19,8 @@ import nodemailer from "nodemailer";
 
 export const prerender =
    import.meta.env.BUILD_MODE === "shopify" ||
-   import.meta.env.BUILD_MODE === "static"
+   import.meta.env.BUILD_MODE === "static" ||
+   import.meta.env.BUILD_MODE === "wp"
       ? true
       : false;
 

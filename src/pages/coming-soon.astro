@@ -1,0 +1,67 @@
+---
+export const prerender = true;
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+import "@styles/pages/_coming-soon-site.scss";
+import Img from "@components/media/Img.astro";
+import Logo from "@components/ui/Logo.astro";
+import Icon from "@components/ui/Icon.astro";
+import footerBg from "@assets/img/footer/footer-bg.png";
+
+const year = new Date().getFullYear();
+---
+
+<BaseLayout
+   title="Dr. Martin Rachwalski — New Website Coming Soon"
+   description="Our new website is coming soon. Get in touch or book your consultation with Dr. Martin Rachwalski."
+   hideChrome
+>
+   <main class="site-stub">
+      <Img
+         src={footerBg}
+         alt="background"
+         wrapperClass="site-stub__bg"
+         loading="eager"
+         fetchpriority="high"
+         decoding="sync"
+         quality={90}
+      />
+
+      <div class="site-stub__container pt-80">
+         <div class="site-stub__header">
+            <Logo
+               imageSrc="/img/logo.svg"
+               imageAlt="Rachwalski"
+               asLink={false}
+               class="site-stub__logo"
+            />
+            <div class="site-stub__tagline">
+               Facial Surgery | Aesthetic Medicine
+            </div>
+            <a
+               href="https://www.doctolib.fr/chirurgie-maxillo-facial/paris/martin-rachwalski-paris"
+               target="_blank"
+               rel="nofollow noopener noreferrer"
+               class="btn btn--medium outline-btn"
+            >
+               Book online
+            </a>
+         </div>
+
+         <div class="site-stub__center">
+            <div class="site-stub__icon">
+               <Icon name="daimond" />
+            </div>
+            <div class="site-stub__coming">Coming Soon</div>
+         </div>
+
+         <footer class="site-stub__bottom">
+            <div class="site-stub__copyright">
+               © {year} Dr Martin Rachwalski — Facial Surgery & Aesthetic Medicine,
+               Paris. All rights reserved. |{" "}
+               <a href="tel:+33187664715">+33 1 87 66 47 15</a>
+            </div>
+         </footer>
+      </div>
+   </main>
+</BaseLayout>

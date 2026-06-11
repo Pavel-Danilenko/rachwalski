@@ -3,6 +3,7 @@ dist/
 dist-static/
 dist-shopify/
 dist-wp/
+wp-export/
 # generated types
 .astro/
 

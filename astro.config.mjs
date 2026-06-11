@@ -8,6 +8,14 @@ import node from "@astrojs/node";
 
 dotenv.config();
 
+// Прибирає коментарі з CSS без мінімізації (для WP-білду — читабельний, але без зайвого сміття)
+const stripCssComments = {
+   postcssPlugin: "strip-css-comments",
+   OnceExit(root) {
+      root.walkComments((comment) => comment.remove());
+   },
+};
+
 const imageMode = process.env.PUBLIC_IMAGE_MODE || "plugin";
 const isStatic = process.env.BUILD_MODE === "static";
 const isWP = process.env.BUILD_MODE === "wp";
@@ -24,8 +32,8 @@ export default defineConfig({
    site: process.env.PUBLIC_SITE_URL || "https://example.com/",
    outDir: isStatic ? "./dist-static" : isWP ? "./dist-wp" : "./dist",
 
-   output: isStatic ? "static" : "server",
-   ...(!isStatic && {
+   output: isStatic || isWP ? "static" : "server",
+   ...(!isStatic && !isWP && {
       adapter: node({ mode: "standalone" }),
    }),
 
@@ -71,6 +79,11 @@ export default defineConfig({
                      : `@use "@styles/utils" as *;\n${source}`,
             },
          },
+         ...(isWP && {
+            postcss: {
+               plugins: [stripCssComments],
+            },
+         }),
       },
 
       resolve: {
@@ -89,13 +102,13 @@ export default defineConfig({
 
       ...(isWP && {
          build: {
-            minify: isWP || isStatic ? "esbuild" : false,
+            minify: isStatic ? "esbuild" : false,
             assetsInlineLimit: 0,
             cssCodeSplit: true,
             rollupOptions: {
                output: {
-                  entryFileNames: "js/[name].js",
-                  chunkFileNames: "js/[name].js",
+                  entryFileNames: "js/[name]-[hash].js",
+                  chunkFileNames: "js/[name]-[hash].js",
                   assetFileNames: (assetInfo) => {
                      const name = assetInfo.names?.[0] ?? "";
                      if (name.endsWith(".css")) return "css/[name][extname]";
@@ -146,7 +159,7 @@ export default defineConfig({
       sitemap({
          changefreq: "weekly",
          priority: 0.7,
-         filter: (page) => !page.includes("/secret/"),
+         filter: (page) => !page.includes("/secret/") && !page.includes("/alphabet"),
       }),
    ].filter(Boolean),
 

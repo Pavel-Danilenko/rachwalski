@@ -4,4 +4,4 @@ Allow: /
 # Закрити від індексації сторінки з параметрами (фільтри, пагінація тощо)
 # Disallow: /?*
 
-Sitemap: https://example.com/sitemap-index.xml
+Sitemap: https://rachwalski.surgery/sitemap-index.xml
