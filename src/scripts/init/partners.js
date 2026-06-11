@@ -206,7 +206,17 @@ function runCycle(slot, logoData, onCycleEnd, startAt = 0) {
    let W = canvas.offsetWidth;
    let H = canvas.offsetHeight;
    if (!W || !H) {
-      requestAnimationFrame(() => runCycle(slot, logoData, onCycleEnd, startAt));
+      let retryCancelled = false;
+      const cancelRetry = () => {
+         retryCancelled = true;
+         activeCancels.delete(cancelRetry);
+      };
+      activeCancels.add(cancelRetry);
+      requestAnimationFrame(() => {
+         if (retryCancelled) return;
+         activeCancels.delete(cancelRetry);
+         runCycle(slot, logoData, onCycleEnd, startAt);
+      });
       return;
    }
    canvas.width  = W * dpr;
@@ -388,29 +398,15 @@ function initPartners() {
          });
       }
 
-      function start() {
-         const isIntro = !sessionStorage.getItem("partners_shown");
-         if (isIntro) {
-            sessionStorage.setItem("partners_shown", "1");
-            const step = Math.floor(T.WAIT_END / slots.length);
-            slots.forEach((slot, i) => {
-               const logo = nextLogo();
-               runCycle(slot, logo, () => setTimeout(() => runIndependent(slot, logo.src), i * step), 0);
-            });
-         } else {
-            startStaggered();
-         }
-      }
-
       // Якщо секція вже у viewport — стартуємо одразу, інакше чекаємо скрол
       const rect = section.getBoundingClientRect();
       if (rect.top < window.innerHeight && rect.bottom > 0) {
-         requestAnimationFrame(() => requestAnimationFrame(start));
+         requestAnimationFrame(() => requestAnimationFrame(startStaggered));
       } else {
          const observer = new IntersectionObserver((entries) => {
             if (!entries[0].isIntersecting) return;
             observer.disconnect();
-            requestAnimationFrame(() => requestAnimationFrame(start));
+            requestAnimationFrame(() => requestAnimationFrame(startStaggered));
          }, { threshold: 0 });
          observer.observe(section);
       }

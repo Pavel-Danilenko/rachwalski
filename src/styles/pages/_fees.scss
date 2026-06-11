@@ -29,7 +29,7 @@
       position: absolute;
       right: 0;
       z-index: 2;
-      max-height: 40%;
+      max-height: 50%;
       @include respond-from(1199) {
          top: 58vh;
       }
@@ -38,7 +38,6 @@
       }
       @include respond-from("md") {
          top: 20vh;
-         height: toRem(400);
          max-height: none;
       }
       @include respond-to("md") {
