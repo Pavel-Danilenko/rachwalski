@@ -1,5 +1,6 @@
 import Swiper from "swiper";
 import { Navigation } from "swiper/modules";
+import { initTextToggle } from "@scripts/init/text-toggle";
 
 export const selector = "[data-reviews-slider]";
 
@@ -70,6 +71,11 @@ function build(el) {
          nextEl: el.querySelector(".slider__arrow--next"),
       },
    });
+
+   // Нові .swiper-slide пересоздані з originalCardsHTML — кнопки "Show more"
+   // в них ще не мають клік-хендлерів і ResizeObserver, бо initTextToggle()
+   // вже відпрацював на старих (видалених) вузлах. Реініціалізуємо.
+   initTextToggle();
 }
 
 function initReviewsSlider() {
