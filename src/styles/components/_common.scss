@@ -24,6 +24,20 @@
 .pt-80 {
    @include fluid-space(padding-top, 40, 100);
 }
+.pb-40 {
+   @include fluid-space(padding-bottom, 20, 40);
+}
+.pt-40 {
+   @include fluid-space(padding-top, 20, 40);
+}
+
+.pb-20 {
+   @include fluid-space(padding-bottom, 15, 20);
+}
+.pt-20 {
+   @include fluid-space(padding-top, 15, 20);
+}
+
 .pb-35 {
    @include fluid-space(padding-bottom, 25, 35);
 }
