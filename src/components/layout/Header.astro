@@ -9,6 +9,7 @@ import "@styles/components/layout/_header.scss";
 import "@styles/components/menu/_nav-overlay.scss";
 import doctorImg from "@assets/img/services/rhinoplasty/author-small.png";
 import navBG from "@assets/img/nav/nav-bg.png";
+import navGradient from "@assets/img/other/menu-bg.png";
 
 interface Props {
    class?: string;
@@ -25,14 +26,15 @@ const { class: className = "", sticky = false } = Astro.props;
       <div class="header__column-right">
          <LanguageSwitcher
             languages={[
-               { code: "EN", label: "English",  href: "#", active: true },
+               { code: "EN", label: "English", href: "#", active: true },
                { code: "FR", label: "Français", href: "#" },
             ]}
          />
          <button
             type="button"
             data-popup-open="book"
-            class="header__btn btn btn--medium btn-dark">Book consultation</button
+            class="header__btn btn btn--medium btn-dark"
+            >Book consultation</button
          >
 
          <MenuCustom>
@@ -46,6 +48,15 @@ const { class: className = "", sticky = false } = Astro.props;
                      decoding="sync"
                      quality={90}
                      wrapperClass="nav-overlay__bg-img"
+                  />
+                  <Img
+                     src={navGradient}
+                     alt="Hero"
+                     loading="eager"
+                     fetchpriority="high"
+                     decoding="sync"
+                     quality={90}
+                     wrapperClass="nav-overlay__gradient"
                   />
                </div>
                <div class="nav-overlay__body">
@@ -140,19 +151,21 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="faUpperForeheadAnalysis"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="faUpperBrowAssessment"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="faUpperEyelidEvaluation"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="faUpperForeheadAnalysis"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="faUpperBrowAssessment"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="faUpperEyelidEvaluation"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -169,15 +182,17 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="faMidCheekAssessment"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="faMidNasalEvaluation"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="faMidCheekAssessment"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="faMidNasalEvaluation"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -194,23 +209,25 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="faLowerJawline"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="faLowerChin"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="faLowerLip"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="faLowerNeck"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="faLowerJawline"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="faLowerChin"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="faLowerLip"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="faLowerNeck"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -227,23 +244,25 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="faOtherEar"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="faOtherSkin"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="faOtherHarmony"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="faOtherSymmetry"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="faOtherEar"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="faOtherSkin"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="faOtherHarmony"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="faOtherSymmetry"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -281,19 +300,21 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="fsNoseRhinoplasty"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="fsNoseSeptoplasty"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="fsNoseTipRefinement"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="fsNoseRhinoplasty"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="fsNoseSeptoplasty"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="fsNoseTipRefinement"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -310,15 +331,17 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="fsEarsOtoplasty"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="fsEarsEarlobeRepair"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="fsEarsOtoplasty"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="fsEarsEarlobeRepair"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -335,19 +358,21 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="fsEyelidsUpper"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="fsEyelidsLower"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="fsEyelidsPtosis"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="fsEyelidsUpper"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="fsEyelidsLower"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="fsEyelidsPtosis"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -364,19 +389,21 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="fsFaceNeckFacelift"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="fsFaceNeckNecklift"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="fsFaceNeckBrowLift"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="fsFaceNeckFacelift"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="fsFaceNeckNecklift"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="fsFaceNeckBrowLift"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -414,19 +441,21 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="amBotoxForehead"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="amBotoxCrowsFeet"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="amBotoxGlabellar"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="amBotoxForehead"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="amBotoxCrowsFeet"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="amBotoxGlabellar"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -443,19 +472,21 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="amHaLipFiller"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="amHaCheekAugmentation"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="amHaNasolabial"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="amHaLipFiller"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="amHaCheekAugmentation"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="amHaNasolabial"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -464,7 +495,8 @@ const { class: className = "", sticky = false } = Astro.props;
                                              <button
                                                 class="nav-sub__col-title"
                                                 data-menu-dropdown-toggle
-                                                >Collagen Stimulators & Skin Booster</button
+                                                >Collagen Stimulators & Skin
+                                                Booster</button
                                              >
                                              <div
                                                 class="nav-sub__col-links"
@@ -472,19 +504,21 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="amCollagenSculptra"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="amCollagenRadiesse"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="amCollagenProfhilo"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="amCollagenSculptra"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="amCollagenRadiesse"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="amCollagenProfhilo"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
@@ -501,19 +535,21 @@ const { class: className = "", sticky = false } = Astro.props;
                                                 data-show-from="md"
                                              >
                                                 <div>
-                                                   <div class="nav-sub__col-links__inner">
-                                                   <NavItem
-                                                      nav="amRfMorpheus"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="amRfSecretRf"
-                                                      class="nav-sub__link"
-                                                   />
-                                                   <NavItem
-                                                      nav="amRfFractional"
-                                                      class="nav-sub__link"
-                                                   />
+                                                   <div
+                                                      class="nav-sub__col-links__inner"
+                                                   >
+                                                      <NavItem
+                                                         nav="amRfMorpheus"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="amRfSecretRf"
+                                                         class="nav-sub__link"
+                                                      />
+                                                      <NavItem
+                                                         nav="amRfFractional"
+                                                         class="nav-sub__link"
+                                                      />
                                                    </div>
                                                 </div>
                                              </div>
