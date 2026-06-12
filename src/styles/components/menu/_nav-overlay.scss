@@ -59,11 +59,11 @@
    &__bg-img {
       pointer-events: none;
       position: absolute;
-      left: -25%;
-      top: 50%;
+      left: -20%;
+      top: 60%;
       translate: 0 -50%;
       z-index: 2;
-      height: 170%;
+      height: 150%;
       max-width: 100%;
       & img {
          width: 100%;
@@ -196,27 +196,37 @@
    }
 
    .nav-overlay[data-menu-open="true"] .nav-sub:has(:hover) > .nav-sub__row,
-   .nav-overlay[data-menu-open="true"] .nav-sub:has(.is-active) > .nav-sub__row {
+   .nav-overlay[data-menu-open="true"]
+      .nav-sub:has(.is-active)
+      > .nav-sub__row {
       opacity: 1;
       pointer-events: auto;
       transform: translateX(0);
    }
 
    // Ховаємо активну панель коли інший nav-sub в hover
-   .nav-overlay[data-menu-open="true"] .nav-overlay__list:has(.nav-sub:hover) .nav-sub:not(:hover):has(.is-active) > .nav-sub__row {
+   .nav-overlay[data-menu-open="true"]
+      .nav-overlay__list:has(.nav-sub:hover)
+      .nav-sub:not(:hover):has(.is-active)
+      > .nav-sub__row {
       opacity: 0;
       pointer-events: none;
       transform: translateX(#{toRem(-10)});
    }
 
    .nav-overlay[data-menu-open="true"] .nav-sub:has(:hover) > .nav-sub__trigger,
-   .nav-overlay[data-menu-open="true"] .nav-sub:has(.is-active) > .nav-sub__trigger {
+   .nav-overlay[data-menu-open="true"]
+      .nav-sub:has(.is-active)
+      > .nav-sub__trigger {
       background: var(--color-blue);
       color: var(--color-black);
    }
 
    // Скидаємо активний тригер коли інший nav-sub в hover
-   .nav-overlay[data-menu-open="true"] .nav-overlay__list:has(.nav-sub:hover) .nav-sub:not(:hover):has(.is-active) > .nav-sub__trigger {
+   .nav-overlay[data-menu-open="true"]
+      .nav-overlay__list:has(.nav-sub:hover)
+      .nav-sub:not(:hover):has(.is-active)
+      > .nav-sub__trigger {
       background: transparent;
       color: var(--color-text);
    }

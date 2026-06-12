@@ -9,10 +9,10 @@
    &__img {
       position: absolute;
       right: 0;
-      bottom: 10%;
+      bottom: -13%;
       z-index: 1;
       width: 50%;
-      height: 70vh;
+      height: 100%;
       img {
          object-fit: contain;
          object-position: right;
@@ -158,4 +158,3 @@
       }
    }
 }
-
