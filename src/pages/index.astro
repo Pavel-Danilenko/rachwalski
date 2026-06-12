@@ -15,6 +15,9 @@ import TreatmentsHotspot from "@components/section/TreatmentsHotspot.astro";
 import { getCollection } from "astro:content";
 import footerBg from "@assets/img/footer/footer-bg-8.png";
 import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import LocationsMap from "@components/section/LocationsMap.astro";
+import SectionHeader from "@components/section/SectionHeader.astro";
+import Faq from "@components/section/Faq.astro";
 
 const latestPosts = (await getCollection("blog"))
    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
@@ -74,6 +77,50 @@ const reviews = [
       text: "Second visit for botox and once again the results are perfect. The team is professional and welcoming. Dr. Rachwalski always takes time to discuss what I want and delivers exactly that.",
       author: "Thomas",
       source: "estheticon",
+   },
+];
+
+const faqItems = [
+   {
+      question: "How long is the recovery time after a facelift?",
+      answer:
+         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+   },
+   {
+      question: "Who is Dr. Martin Rachwalski?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What are his main areas of expertise?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he perform aesthetic surgical procedures?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What non-surgical aesthetic treatments are available?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Where are the consultation locations?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his academic and research background?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he treat complex congenital conditions?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "How can I book a consultation?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his professional affiliation in France?",
+      answer: "Lorem ipsum...",
    },
 ];
 ---
@@ -159,4 +206,19 @@ const reviews = [
          class="dark-gradient__bottom mt-1"
       />
    </PageMain>
+
+   <section class="contact-map pt-80 pb-80">
+      <div class="contact-map__container mb-40">
+         <SectionHeader>
+            <h2 slot="left">Your consultation, your convenience</h2>
+            <div slot="right">
+               Dr. Martin Rachwalski welcomes patients in multiple locations to
+               make your visit as comfortable as possible.
+            </div>
+         </SectionHeader>
+      </div>
+      <LocationsMap />
+   </section>
+
+   <Faq items={faqItems} />
 </BaseLayout>
