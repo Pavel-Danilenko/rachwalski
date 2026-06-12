@@ -188,3 +188,22 @@ $_offset: #{"max(#{$_pad}px, calc((100vw - #{$max-width-container}px) / 2 + #{$_
 @mixin fluid-space($property, $min, $max, $from: $mobile, $to: $pc) {
    @include fluid($property, $min, $max, $from, $to);
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// fluid-offset($property, $base, $min, $max, $from, $to)
+//
+// $property = $base + плавна додаткова величина (clamp між $min і $max).
+//
+//   @include fluid-offset(height, 100%, 80, 200);
+//   → height: calc(100% + clamp(80px, ...vw..., 200px));
+// ─────────────────────────────────────────────────────────────────────────────
+@mixin fluid-offset($property, $base, $min, $max, $from: $mobile, $to: $pc) {
+   $slope: math.div($max - $min, $to - $from);
+   $intercept: $min - $slope * $from;
+   $preferred: "#{$slope * 100}vw + #{$intercept}px";
+   @if $min <= $max {
+      #{$property}: calc(#{$base} + clamp(#{$min}px, calc(#{$preferred}), #{$max}px));
+   } @else {
+      #{$property}: calc(#{$base} + clamp(#{$max}px, calc(#{$preferred}), #{$min}px));
+   }
+}

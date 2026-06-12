@@ -359,7 +359,9 @@
 
 .tech-info {
    // .tech-info__container
-
+   &__content {
+      position: relative;
+   }
    // .tech-info__row
 
    &__row {

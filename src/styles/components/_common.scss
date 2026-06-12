@@ -24,6 +24,15 @@
 .pt-80 {
    @include fluid-space(padding-top, 40, 100);
 }
+
+.pb-60 {
+   @include fluid-space(padding-bottom, 30, 60);
+}
+
+.pt-60 {
+   @include fluid-space(padding-top, 30, 60);
+}
+
 .pb-40 {
    @include fluid-space(padding-bottom, 20, 40);
 }
@@ -378,6 +387,18 @@
 }
 .dark-gradient__bottom {
    background: var(--gradient-bottom-gradient-dark);
+}
+
+.dark-gradient__bottom--longer {
+   &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      @include fluid-offset(height, 100%, 130, 220);
+      background: var(--gradient-bottom-gradient-dark);
+   }
 }
 .hero-mask {
    &::before {

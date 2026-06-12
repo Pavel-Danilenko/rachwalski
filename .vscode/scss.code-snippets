@@ -184,6 +184,25 @@
       "description": "fluid з кастомними брейкпоінтами",
    },
 
+   // ─── fluid-offset() — base + плавна додаткова величина ───────────────────
+   "fluid-offset": {
+      "prefix": "fo",
+      "scope": "scss,css",
+      "body": [
+         "@include fluid-offset(${1|height,width,padding-top,padding-bottom,margin-top,margin-bottom|}, ${2:100%}, ${3:min}, ${4:max});",
+      ],
+      "description": "fluid-offset(property, base, min, max) → calc(base + clamp(min, ...vw..., max))",
+   },
+
+   "fluid-offset custom bp": {
+      "prefix": "fobp",
+      "scope": "scss,css",
+      "body": [
+         "@include fluid-offset(${1|height,width,padding-top,padding-bottom,margin-top,margin-bottom|}, ${2:100%}, ${3:min}, ${4:max}, ${5|bp(\"xs\"),bp(\"sm\"),bp(\"md\"),bp(\"lg\"),bp(\"xl\"),bp(\"xxl\"),320,480,768|}, ${6|bp(\"xl\"),bp(\"xxl\"),bp(\"lg\"),1200,1440,1920|});",
+      ],
+      "description": "fluid-offset з кастомними брейкпоінтами",
+   },
+
    // ─── fluid-type() — шрифти ────────────────────────────────────────────────
    "fluid-type": {
       "prefix": "ft",

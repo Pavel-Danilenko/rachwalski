@@ -596,7 +596,10 @@
 
 .bio-book {
    // .bio-book__container
-
+   &__container {
+      position: relative;
+      z-index: 1;
+   }
    // .bio-book__grid
 
    &__grid {
@@ -675,6 +678,10 @@
 //----------------
 
 .bio-lectures {
+   position: relative;
+   &__container {
+      position: relative;
+   }
 }
 
 .lecture-slider {
