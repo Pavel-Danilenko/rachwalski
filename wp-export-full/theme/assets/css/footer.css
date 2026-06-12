@@ -1,0 +1,249 @@
+.footer {
+  position: relative;
+  background: var(--gradient-bg-dark-navy);
+}
+.footer__bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 78%;
+}
+@media (max-width: 47.99875em) {
+  .footer__bg {
+    max-height: 60%;
+  }
+}
+.footer::after {
+  content: "";
+  width: 100%;
+  height: 40%;
+  position: absolute;
+  z-index: 1;
+  top: -0.0625rem;
+  left: 0;
+  background: var(--gradient-footer-gradient-top);
+}
+@media (max-width: 47.99875em) {
+  .footer::after {
+    height: 74%;
+  }
+}
+.footer::before {
+  content: "";
+  width: 100%;
+  height: 30%;
+  position: absolute;
+  z-index: 1;
+  bottom: -0.0625rem;
+  left: 0;
+  background: var(--gradient-footer-bottom-gradient);
+}
+@media (max-width: 47.99875em) {
+  .footer::before {
+    height: 40%;
+  }
+}
+.footer__container {
+  position: relative;
+  z-index: 3;
+}
+.footer__top {
+  padding: 3rem 0 2rem;
+}
+.footer__top:empty {
+  display: none;
+}
+.footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.footer__col-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+}
+.footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.875rem 0;
+  flex-wrap: wrap;
+  z-index: 3;
+  position: relative;
+}
+@media (max-width: 47.99875em) {
+  .footer__bottom {
+    justify-content: center;
+    flex-direction: column-reverse;
+  }
+}
+.footer__copyright {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted, #888);
+}
+
+.footer-newsletter:not(:last-child) {
+  margin-bottom: 2.5rem;
+}
+.footer-newsletter__icon {
+  width: clamp(180px, (16.6045533375vw + 52.4803512786px), 270px);
+  aspect-ratio: 270/180;
+  color: var(--color-light-blue);
+}
+.footer-newsletter__icon svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.footer-newsletter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-form {
+  width: 100%;
+  max-width: 26.625rem;
+}
+.footer-form:not(:last-child) {
+  margin-bottom: 2.5rem;
+}
+.footer-form__fields {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem 0.75rem;
+  flex-wrap: wrap;
+}
+.footer-form__group {
+  flex-grow: 1;
+  flex-basis: 12.5rem;
+}
+.footer-form__input {
+  border-radius: var(--radius-xl);
+  font-size: 1rem;
+  padding: 0.5rem 0.875rem;
+  color: var(--color-white);
+  min-height: 3.3125rem;
+}
+.footer-form__input::placeholder {
+  color: inherit;
+}
+@media (max-width: 26.25em) {
+  .footer-form__btn {
+    width: 100%;
+  }
+}
+
+.footer-contact {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem 2rem;
+}
+@media (max-width: 47.99875em) {
+  .footer-contact {
+    justify-content: center;
+  }
+}
+@media (max-width: 47.99875em) {
+  .footer-contact__column-left {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.footer-contact__logo:not(:last-child) {
+  margin-bottom: 1.25rem;
+}
+.footer-contact__logo {
+  width: clamp(180px, (7.3798014833vw + 123.3246005682px), 220px);
+}
+.footer-contact__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(14px, (1.1069702225vw + 5.4986900852px), 20px);
+}
+@media (max-width: 47.99875em) {
+  .footer-contact__socials {
+    width: 100%;
+    justify-content: space-around;
+  }
+}
+.footer-contact__link {
+  font-size: 1.75rem;
+  color: var(--color-light-blue);
+  transition: color var(--transition-base);
+  cursor: pointer;
+}
+.footer-contact__link:hover {
+  color: var(--color-blue);
+}
+
+.footer__copyright {
+  color: var(--color-text);
+}
+
+.footer__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.footer__link {
+  font-size: clamp(14px, (0.3689900742vw + 11.1662300284px), 16px);
+  position: relative;
+}
+.footer__link::before {
+  content: "";
+  width: 0%;
+  transition: width var(--transition-base);
+  height: 0.0625rem;
+  background: var(--color-text);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+.footer__link:hover::before {
+  width: 100%;
+}
+
+/* Базові стилі для іконок та логотипа (раніше — scoped Astro-стилі) */
+.icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  fill: currentColor;
+  stroke: currentColor;
+}
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: inherit;
+}
+.logo[href] {
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+.logo__img {
+  display: block;
+  width: 100%;
+}
+.footer-contact__custom-icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+}

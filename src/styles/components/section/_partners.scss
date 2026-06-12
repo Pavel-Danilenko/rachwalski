@@ -2,31 +2,32 @@
 
 .partners {
    position: relative;
-   contain: layout paint; // ізолює секцію — браузер не перераховує layout всього документу
-   @include fluid-space(padding-block, 48, 80);
+   contain: layout paint;
    &::before {
       content: "";
       width: 100%;
-      height: 53%;
+      height: 63%;
       position: absolute;
-      bottom: toRem(-0.2);
+      bottom: toRem(-0.5);
       left: 0;
       z-index: 1;
       pointer-events: none;
       background: linear-gradient(
          180deg,
          #0b111a 0%,
-         rgba(14, 23, 38, 0.86) 20%,
-         rgba(22, 40, 65, 0.92) 35%,
-         rgba(45, 70, 105, 1) 50%,
-         rgba(95, 130, 175, 0.99) 65%,
-         rgba(165, 185, 210, 0.96) 80%,
+         #0e1726 20%,
+         #162841 35%,
+         #2d4669 50%,
+         #5f82af 65%,
+         #a5b9d2 80%,
          #e4eaf3 100%
       );
    }
    &__container {
       position: relative;
       z-index: 1;
+      @include fluid-space(padding-top, 48, 100);
+      @include fluid-space(padding-bottom, 60, 200);
    }
    &__title {
       display: flex;
@@ -175,7 +176,6 @@
       grid-template-columns: repeat(3, 1fr);
       @include fluid-space(row-gap, 48, 80);
       column-gap: toRem(16);
-      max-width: toRem(860);
       margin-inline: auto;
 
       @include respond-to("sm") {
