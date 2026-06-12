@@ -6,6 +6,9 @@
 .t-center {
    text-align: center;
 }
+.t-balance {
+   text-wrap: balance;
+}
 .hero-full-vh {
    min-height: 100vh;
    min-height: 100svh;
@@ -338,7 +341,7 @@
    @include fluid-space(font-size, 16, 24);
 }
 .fs-20 {
-   @include fluid-space(font-size, 16, 20);
+   @include fluid-space(font-size, 14, 20);
 }
 
 .fs-32 {
