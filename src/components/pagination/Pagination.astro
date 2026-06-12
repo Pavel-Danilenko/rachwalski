@@ -7,6 +7,10 @@ type NavVariant = "default" | "pill" | "minimal" | "outline" | "ghost";
 interface Props {
    // ─── логіка ───────────────────────────────────────────────────────────────
    perPage?: number;
+   // адаптивна кількість елементів на сторінці (за брейкпоінтами @styles/settings)
+   perPageSm?: number; // ≤ 480px
+   perPageMd?: number; // ≤ 767.98px
+   perPageLg?: number; // ≤ 991.98px
    itemSelector: string;
    siblings?: number;
 
@@ -60,6 +64,9 @@ interface Props {
 
 const {
    perPage = 6,
+   perPageSm,
+   perPageMd,
+   perPageLg,
    itemSelector,
    siblings = 1,
 
@@ -110,6 +117,9 @@ const {
    data-pagination-root
 
    data-per-page={perPage}
+   data-per-page-sm={perPageSm}
+   data-per-page-md={perPageMd}
+   data-per-page-lg={perPageLg}
    data-item-selector={itemSelector}
    data-siblings={siblings}
    data-animation={animation}

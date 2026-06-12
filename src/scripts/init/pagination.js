@@ -143,6 +143,9 @@ class Pagination {
 
       // ─── Параметри ──────────────────────────────────────────────────────────
       this.perPage = parseInt(root.dataset.perPage ?? "6", 10);
+      this.perPageSm = root.dataset.perPageSm ? parseInt(root.dataset.perPageSm, 10) : null;
+      this.perPageMd = root.dataset.perPageMd ? parseInt(root.dataset.perPageMd, 10) : null;
+      this.perPageLg = root.dataset.perPageLg ? parseInt(root.dataset.perPageLg, 10) : null;
       this.selector = root.dataset.itemSelector;
       this.siblings = parseInt(root.dataset.siblings ?? "1", 10);
 
@@ -198,8 +201,11 @@ class Pagination {
       this.current = this.urlSync ? this.#readPageFromUrl() : 1;
 
       this._changeTimer = null;
+      this._scrollTimer = null;
+      this._mqCleanup = null;
 
       this.#init();
+      this.#initResponsive();
       Pagination.#instances.set(root, this);
 
       // Зовнішній фільтр (пошук) сигналізує що треба перерахувати items
@@ -221,11 +227,44 @@ class Pagination {
    }
 
    get pages() {
-      return Math.max(1, Math.ceil(this.total / this.perPage));
+      return Math.max(1, Math.ceil(this.total / this.#getActivePerPage()));
    }
 
    get anim() {
       return ANIMATIONS[this.animation] ?? ANIMATIONS.fade;
+   }
+
+   // ─── Responsive perPage ───────────────────────────────────────────────────
+
+   #getActivePerPage() {
+      if (this.perPageSm != null && window.matchMedia("(max-width: 480px)").matches) {
+         return this.perPageSm;
+      }
+      if (this.perPageMd != null && window.matchMedia("(max-width: 767.98px)").matches) {
+         return this.perPageMd;
+      }
+      if (this.perPageLg != null && window.matchMedia("(max-width: 991.98px)").matches) {
+         return this.perPageLg;
+      }
+      return this.perPage;
+   }
+
+   #initResponsive() {
+      if (this.perPageSm == null && this.perPageMd == null && this.perPageLg == null) return;
+
+      const breakpoints = [
+         this.perPageSm != null ? "(max-width: 480px)" : null,
+         this.perPageMd != null ? "(max-width: 767.98px)" : null,
+         this.perPageLg != null ? "(max-width: 991.98px)" : null,
+      ].filter(Boolean);
+
+      const mqs = breakpoints.map((bp) => window.matchMedia(bp));
+      const handler = () => {
+         this.current = 1;
+         this.#init();
+      };
+      mqs.forEach((mq) => mq.addEventListener("change", handler));
+      this._mqCleanup = () => mqs.forEach((mq) => mq.removeEventListener("change", handler));
    }
 
    // ─── Init ─────────────────────────────────────────────────────────────────
@@ -278,11 +317,22 @@ class Pagination {
       this.#announce();
       this.#dispatch(page, prev);
 
-      if (this.scrollToEnabled) this.#scrollTo();
+      if (this.scrollToEnabled) {
+         // Чекаємо завершення crossfade (#changePage), щоб під час
+         // плавного скролу не відбувались DOM-мутації — на iOS Safari
+         // вони обривають scrollTo({behavior:"smooth"}) на половині шляху.
+         if (this._scrollTimer) clearTimeout(this._scrollTimer);
+         const delay = this.animation === "none" ? 0 : Math.min(this.duration * 0.4, 120);
+         this._scrollTimer = setTimeout(() => this.#scrollTo(), delay);
+      }
       if (this.urlSync) this.#pushUrl(page);
    }
 
    destroy() {
+      if (this._scrollTimer) clearTimeout(this._scrollTimer);
+      this._scrollTimer = null;
+      this._mqCleanup?.();
+      this._mqCleanup = null;
       if (this.nav) this.nav.innerHTML = "";
       this.#removeProgress();
       this.#removeAnnouncer();
@@ -351,8 +401,9 @@ class Pagination {
    }
 
    #getPageItems(page) {
-      const start = (page - 1) * this.perPage;
-      const end = start + this.perPage;
+      const perPage = this.#getActivePerPage();
+      const start = (page - 1) * perPage;
+      const end = start + perPage;
       return this.items.slice(start, end);
    }
 
