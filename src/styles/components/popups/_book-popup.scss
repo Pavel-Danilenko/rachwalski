@@ -6,6 +6,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      @include fluid-space(padding-right, 32, 50);
    }
 
    // .book-popup__title
