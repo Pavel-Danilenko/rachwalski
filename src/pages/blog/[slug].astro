@@ -104,7 +104,7 @@ const breadcrumbTitle = title.length > 32 ? title.slice(0, 32) + "…" : title;
          <Img
             src={heroBgGradient}
             alt="Hero"
-            wrapperClass="hero-gradient__bg hero-gradient__bg--height-100"
+            wrapperClass="hero-gradient__bg hero-gradient__bg--height-100 hero-circle"
             loading="eager"
             fetchpriority="high"
             decoding="sync"
@@ -155,13 +155,15 @@ const breadcrumbTitle = title.length > 32 ? title.slice(0, 32) + "…" : title;
             <div class="post-content__layout">
                <article class="post-content__main">
                   <div class="post-body t-style">
-                     {image && (
-                        <Img
-                           src={image}
-                           alt={title}
-                           wrapperClass="post-body__cover"
-                        />
-                     )}
+                     {
+                        image && (
+                           <Img
+                              src={image}
+                              alt={title}
+                              wrapperClass="post-body__cover"
+                           />
+                        )
+                     }
                      <Content />
                   </div>
                </article>

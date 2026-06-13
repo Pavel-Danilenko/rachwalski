@@ -449,7 +449,7 @@
    & img {
       width: 100.5%;
       @include respond-to("md") {
-         object-position: top right;
+         object-position: top left;
       }
    }
    // &::before { видалити якщо не потрібно
