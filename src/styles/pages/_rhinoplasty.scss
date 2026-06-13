@@ -3,7 +3,7 @@
 $hero-bottom-stops: (
    (320, 767, 20, 40),
    (768, 1199, 50, 60),
-   (1200, bp("xxl"), 70, 80),
+   (1200, bp("xxl"), 70, 80)
 );
 
 .rhinoplasty-hero {
@@ -80,6 +80,7 @@ $hero-bottom-stops: (
    }
 
    &__img {
+      flex-shrink: 0;
       width: toRem(50);
       height: toRem(50);
       overflow: hidden;
