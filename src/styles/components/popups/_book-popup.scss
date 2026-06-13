@@ -34,7 +34,7 @@
    &__option {
       border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       @include fluid-space(padding, 16, 32);
       background-color: var(--color-surface-glas);
       flex-direction: column;
@@ -55,7 +55,14 @@
          height: 100%;
       }
    }
-
+   &__second {
+      @include fluid-space(margin-top, 12, 18);
+      @include respond-to("md") {
+         &:not(:last-child) {
+            margin-bottom: toRem(26);
+         }
+      }
+   }
    // .book-popup__option-title
    &__option-title {
       &:not(:last-child) {
