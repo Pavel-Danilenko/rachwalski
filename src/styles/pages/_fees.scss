@@ -41,16 +41,13 @@
       z-index: 2;
       max-height: 50%;
       @include respond-from(1199) {
-         top: 58vh;
+         top: 45vh;
       }
       & img {
          object-fit: contain;
       }
-      @include respond-from("md") {
-         top: 20vh;
-         max-height: none;
-      }
       @include respond-to("md") {
+         max-height: none;
          bottom: 10%;
          right: -58%;
          width: 140%;
