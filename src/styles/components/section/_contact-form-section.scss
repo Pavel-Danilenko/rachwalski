@@ -13,7 +13,6 @@
    &__group {
       display: flex;
       flex-direction: column;
-      gap: toRem(4);
 
       &--full {
          grid-column: 1 / -1;
@@ -92,9 +91,24 @@
             outline: none;
          }
 
-         .phone-input__flag  { order: 1; font-size: toRem(14); font-weight: 400; color: var(--color-text); }
-         .phone-input__arrow { order: 2; font-size: toRem(12); font-weight: 400; color: var(--color-text); }
-         .phone-input__dial  { order: 3; font-size: toRem(14); font-weight: 400; color: var(--color-text); }
+         .phone-input__flag {
+            order: 1;
+            font-size: toRem(14);
+            font-weight: 400;
+            color: var(--color-text);
+         }
+         .phone-input__arrow {
+            order: 2;
+            font-size: toRem(12);
+            font-weight: 400;
+            color: var(--color-text);
+         }
+         .phone-input__dial {
+            order: 3;
+            font-size: toRem(14);
+            font-weight: 400;
+            color: var(--color-text);
+         }
       }
 
       .phone-input__number {
@@ -136,8 +150,14 @@
       display: flex;
       transition: border-color var(--transition-base);
 
-      .custom-select__value  { color: var(--color-text); font-weight: 400; }
-      .custom-select__arrow  { color: var(--color-text); font-size: toRem(12); }
+      .custom-select__value {
+         color: var(--color-text);
+         font-weight: 400;
+      }
+      .custom-select__arrow {
+         color: var(--color-text);
+         font-size: toRem(12);
+      }
 
       &:focus {
          border-color: rgba(255, 255, 255, 0.4);
@@ -165,7 +185,7 @@
    }
 
    &__policy-link {
-      color:var(--color-blue);
+      color: var(--color-blue);
       text-decoration: underline;
       text-underline-offset: toRem(2);
    }
