@@ -392,6 +392,12 @@
    // .tech-info__container
    &__content {
       position: relative;
+      &.dark-gradient__bottom--longer::before {
+         @include respond-to("md") {
+            height: 50%;
+            @include fluid(top, -100, -140, bp("xs"), bp("md"));
+         }
+      }
    }
    // .tech-info__row
 
