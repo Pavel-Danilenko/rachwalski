@@ -31,7 +31,7 @@ const { items } = Astro.props;
                      wrapperClass="faq-author__img br-12"
                   />
                   <div class="faq-author__description">
-                     <div class="faq-author__name fs-24">
+                     <div class="faq-author__name fw-600 fs-24">
                         Dr. Martin Rachwalski
                      </div>
                      <div class="faq-author__text">Facial Surgeon</div>
@@ -80,7 +80,10 @@ const { items } = Astro.props;
                         <Icon name="twitter" />
                      </a>
                   </div>
-                  <a href="/contact#contact-form" class="faq-social__btn btn--medium btn white-btn">
+                  <a
+                     href="/contact#contact-form"
+                     class="faq-social__btn btn--medium btn white-btn"
+                  >
                      Contact us
                   </a>
                </div>
@@ -103,7 +106,9 @@ const { items } = Astro.props;
                            data-accordion-trigger
                            class="fs-20 faq-accordion__btn"
                         >
-                           <span class="faq-accordion__text">{item.question}</span>
+                           <span class="faq-accordion__text">
+                              {item.question}
+                           </span>
                            <Icon name="arrow-down" />
                         </button>
                         <div data-accordion-content>
