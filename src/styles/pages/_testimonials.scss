@@ -14,16 +14,16 @@
       z-index: 1;
       width: 80%;
       height: 80%;
+      overflow: hidden;
       img {
          object-fit: contain;
          object-position: right;
       }
       @include respond-to("md") {
-         width: 80%;
+         width: 150%;
          bottom: 0;
-         translate:
-            0,
-            -50%;
+         right: -75%;
+         translate: 0 -45%;
       }
    }
    &__container {
