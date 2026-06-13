@@ -2,6 +2,7 @@
 @use "sass:meta";
 @use "@styles/settings" as *;
 @use "sass:map";
+@use "sass:list";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // BLEED GRID — секція де одна сторона йде до краю екрана, інша по сітці
@@ -205,5 +206,99 @@ $_offset: #{"max(#{$_pad}px, calc((100vw - #{$max-width-container}px) / 2 + #{$_
       #{$property}: calc(#{$base} + clamp(#{$min}px, calc(#{$preferred}), #{$max}px));
    } @else {
       #{$property}: calc(#{$base} + clamp(#{$max}px, calc(#{$preferred}), #{$min}px));
+   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// fluid-rem($property, $min, $max, $from, $to)
+//
+// Те саме що fluid(), але результат у rem замість px
+// (як fluid-value() з utils/functions.scss).
+//
+//   @include fluid-rem(padding-bottom, 40, 80, bp("md"), bp("xl"));
+//   → padding-bottom: clamp(2.5rem, calc(...vw...rem), 5rem);
+// ─────────────────────────────────────────────────────────────────────────────
+@mixin fluid-rem($property, $min, $max, $from: $mobile, $to: $pc) {
+   $slope: math.div($max - $min, $to - $from);
+   $intercept: $min - $slope * $from;
+   $preferred: "#{$slope * 100}vw + #{math.div($intercept, 16)}rem";
+   @if $min <= $max {
+      #{$property}: clamp(#{math.div($min, 16)}rem, calc(#{$preferred}), #{math.div($max, 16)}rem);
+   } @else {
+      #{$property}: clamp(#{math.div($max, 16)}rem, calc(#{$preferred}), #{math.div($min, 16)}rem);
+   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// fluid-stops($property, $segments)
+//
+// Декілька НЕЗАЛЕЖНИХ fluid-діапазонів («сегментів») для однієї властивості —
+// кожен сегмент має свою пару брейкпоінтів і свою пару значень. На межі між
+// сегментами значення може стрибати (розрив), а не плавно перетікати — саме
+// для точкового налаштування «десктоп / планшет / телефон» окремо.
+//
+// $segments — список 4-елементних списків (from, to, min, max):
+//   from, to — брейкпоінти (px-число або ім'я з $breakpoints), from < to
+//   min, max — значення (px) на from і to відповідно
+//
+// Сегмент з найменшим `from` діє і нижче нього (фіксоване значення `min`).
+// Сегмент з найбільшим `to` діє і вище нього (фіксоване значення `max`).
+// Усе йде через fluid-rem(), результат — у rem.
+//
+//   @include fluid-stops(padding-bottom, (
+//      (320, 767, 20, 40),        // телефон:  320px → 1.25rem,  767px → 2.5rem
+//      (768, 1199, 50, 60),       // планшет:  768px → 3.125rem, 1199px → 3.75rem
+//      (1200, bp("xxl"), 70, 80), // десктоп: 1200px → 4.375rem, 1440px+ → 5rem
+//   ));
+// ─────────────────────────────────────────────────────────────────────────────
+@mixin fluid-stops($property, $segments) {
+   $count: list.length($segments);
+
+   $global-from: null;
+   $global-to: null;
+   @each $seg in $segments {
+      $from: list.nth($seg, 1);
+      $to: list.nth($seg, 2);
+      @if meta.type-of($from) == "string" {
+         $from: map.get($breakpoints, $from);
+      }
+      @if meta.type-of($to) == "string" {
+         $to: map.get($breakpoints, $to);
+      }
+      @if $global-from == null or $from < $global-from {
+         $global-from: $from;
+      }
+      @if $global-to == null or $to > $global-to {
+         $global-to: $to;
+      }
+   }
+
+   @each $seg in $segments {
+      $from: list.nth($seg, 1);
+      $to: list.nth($seg, 2);
+      $min: list.nth($seg, 3);
+      $max: list.nth($seg, 4);
+      @if meta.type-of($from) == "string" {
+         $from: map.get($breakpoints, $from);
+      }
+      @if meta.type-of($to) == "string" {
+         $to: map.get($breakpoints, $to);
+      }
+
+      @if $count == 1 or ($from == $global-from and $to == $global-to) {
+         @include fluid-rem($property, $min, $max, $from, $to);
+      } @else if $from == $global-from {
+         @include respond-to($to) {
+            @include fluid-rem($property, $min, $max, $from, $to);
+         }
+      } @else if $to == $global-to {
+         @include respond-from($from) {
+            @include fluid-rem($property, $min, $max, $from, $to);
+         }
+      } @else {
+         @include respond-between($from, $to) {
+            @include fluid-rem($property, $min, $max, $from, $to);
+         }
+      }
    }
 }

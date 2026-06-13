@@ -1,5 +1,11 @@
 @use "@styles/utils" as *;
 
+$hero-bottom-stops: (
+   (320, 767, 20, 40),
+   (768, 1199, 50, 60),
+   (1200, bp("xxl"), 70, 80),
+);
+
 .rhinoplasty-hero {
    // .rhinoplasty-hero__container
    position: relative;
@@ -15,7 +21,8 @@
    &__container {
       position: relative;
       @include fluid-space(padding-top, 90, 128);
-      @include fluid-space(padding-bottom, 20, 168);
+      @include fluid-stops(padding-bottom, $hero-bottom-stops);
+      @include fluid-stops(margin-bottom, $hero-bottom-stops);
       display: flex;
       flex-direction: column;
       justify-content: end;
@@ -46,7 +53,7 @@
    &__item {
       position: relative;
       @include respond-from("md") {
-         margin-top: toRem(-80);
+         @include fluid-space(margin-top, -40, -80);
       }
       @include fluid-space(padding, 20, 32);
    }

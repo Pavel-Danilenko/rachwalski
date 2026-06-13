@@ -13,8 +13,8 @@
    min-height: 100vh;
    min-height: 100svh;
    @include respond-to("md") {
-      min-height: 60vh;
-      min-height: 60svh;
+      min-height: 70vh;
+      min-height: 70svh;
    }
 }
 .pt-180 {
@@ -413,6 +413,9 @@
       width: 100%;
       height: 100%;
       background: var(--gradient-hero-mask);
+      @include respond-to("md") {
+         height: 26%;
+      }
    }
 }
 .light-gradientp-top {

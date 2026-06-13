@@ -205,6 +205,20 @@
       "description": "fluid-offset з кастомними брейкпоінтами",
    },
 
+   // ─── fluid-stops() — окремі fluid-сегменти для телефону/планшету/пк ──────────
+   "fluid-stops": {
+      "prefix": "fstops",
+      "scope": "scss,css",
+      "body": [
+         "@include fluid-stops(${1|padding-top,padding-bottom,margin-top,margin-bottom,gap,padding,font-size,width,height,top,bottom|}, (",
+         "\t(320, 767, ${2:20}, ${3:40}),",
+         "\t(768, 1199, ${4:50}, ${5:60}),",
+         "\t(1200, ${6|bp(\"xxl\"),1440,1920|}, ${7:70}, ${8:80}),",
+         "));",
+      ],
+      "description": "fluid-stops(property, ((from, to, min, max), ...)) — окремі fluid-сегменти для телефону/планшету/пк, кожен зі своїми межами та значеннями (на стиках можливий стрибок)",
+   },
+
    // ─── fluid-type() — шрифти ────────────────────────────────────────────────
    "fluid-type": {
       "prefix": "ft",

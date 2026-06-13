@@ -13,7 +13,9 @@ import Faq from "@components/section/Faq.astro";
 import SliderTopics from "@/components/sliders/SliderTopics.astro";
 import StepBanner from "@/components/section/StepBanner.astro";
 import footerBg from "@assets/img/footer/footer-bg.png";
-
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import heroDesktop from "@assets/img/services/rhinoplasty/rhinoplasty-bg.png";
+import heroMobile from "@assets/img/services/rhinoplasty/rhinoplasty-bg-mobile.png";
 const faqItems = [
    {
       question: "How long is the recovery time after a facelift?",
@@ -66,16 +68,15 @@ const faqItems = [
 >
    <PageMain>
       <section class="rhinoplasty-hero hero-circle">
-         <Img
-            src={heroImg}
+         <ResponsiveImg
+            srcDesktop={heroDesktop}
+            srcMobile={heroMobile}
             alt="Hero"
-            width={1920}
-            height={1080}
             loading="eager"
-            wrapperClass="rhinoplasty-hero__img hero-mask hero-mask-top"
             fetchpriority="high"
             decoding="sync"
             quality={90}
+            wrapperClass="rhinoplasty-hero__img hero-mask hero-mask-top"
          />
 
          <div class="rhinoplasty-hero__container hero-full-vh">
