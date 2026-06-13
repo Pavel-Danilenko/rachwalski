@@ -231,8 +231,8 @@
 }
 
 .glass {
-   background: var(--color-overlay-light);
-   backdrop-filter: blur(12px);
+   background: rgba(255, 255, 255, 0.02);
+   backdrop-filter: blur(12px) saturate(108%);
    border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
 }
 
