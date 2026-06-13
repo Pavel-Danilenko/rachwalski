@@ -181,10 +181,10 @@
    &__socials {
       display: flex;
       flex-wrap: wrap;
-      @include fluid-space(gap, 14, 20);
+      gap: toRem(22);
       @include respond-to("md") {
          width: 100%;
-         justify-content: space-around;
+         justify-content: center;
       }
    }
    &__link {
