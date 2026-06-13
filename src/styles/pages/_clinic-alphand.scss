@@ -317,6 +317,12 @@
    // .alphand-tech__row
 
    &__row {
+      &.cards-slider .swiper {
+         @include respond-to("md") {
+            margin-right: 0;
+         }
+      }
+
       .swiper-wrapper {
          @include respond-from("md") {
             display: grid;
@@ -330,6 +336,31 @@
 
       .swiper-slide {
          height: auto;
+      }
+
+      .cards-slider__controls {
+         @include respond-to("md") {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            aspect-ratio: 311 / 388;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-inline: toRem(12);
+            pointer-events: none;
+            margin-top: 0;
+
+            .slider__arrow {
+               pointer-events: auto;
+               background-color: rgba(255, 255, 255, 0.4);
+               border: none;
+               color: var(--color-black);
+               backdrop-filter: blur(4px);
+               font-size: toRem(16);
+            }
+         }
       }
    }
 

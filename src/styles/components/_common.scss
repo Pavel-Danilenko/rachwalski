@@ -476,6 +476,7 @@
       background: var(--gradient-prices-bottom-gradient);
       @include respond-to("md") {
          background: var(--gradient-mobile-bottom-gradient);
+         height: 42%;
       }
    }
 }
