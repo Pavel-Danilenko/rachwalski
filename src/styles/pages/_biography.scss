@@ -437,7 +437,7 @@
 
    &__grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: toRem(12);
 
       @include respond-to(950) {
@@ -491,10 +491,10 @@
       text-decoration: underline;
       & .icon {
          font-size: toRem(10);
-         transition: color var(--transition-base);
+         transition: translate var(--transition-base);
       }
       &:hover .icon {
-         color: var(--color-blue);
+         translate: (toRem(2) toRem(-2));
       }
    }
 
@@ -584,10 +584,10 @@
       text-decoration: underline;
       & .icon {
          font-size: toRem(10);
-         transition: color var(--transition-base);
+         transition: translate var(--transition-base);
       }
       &:hover .icon {
-         color: var(--color-blue);
+         translate: (toRem(2) toRem(-2));
       }
    }
 }
@@ -667,10 +667,10 @@
       margin-top: toRem(12);
       & .icon {
          font-size: toRem(10);
-         transition: color var(--transition-base);
+         transition: translate var(--transition-base);
       }
       &:hover .icon {
-         color: var(--color-blue);
+         translate: (toRem(2) toRem(-2));
       }
    }
 }
