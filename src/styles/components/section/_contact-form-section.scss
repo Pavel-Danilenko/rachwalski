@@ -25,6 +25,9 @@
       font-weight: 500;
       line-height: toRem(20);
       color: var(--color-text);
+      &:not(:last-child) {
+         margin-bottom: toRem(4);
+      }
    }
 
    // ── Input / Textarea ──────────────────────────────────────
@@ -166,11 +169,6 @@
    }
 
    // ── Footer ────────────────────────────────────────────────
-   &__footer {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: toRem(16);
-   }
 
    &__right {
       display: flex;
@@ -217,8 +215,12 @@
       }
 
       &__footer {
+         display: grid;
          grid-template-columns: 1fr;
          gap: 0.4rem 1.25rem;
+         @include respond-to("md") {
+            gap: toRem(2);
+         }
       }
 
       &__right {
