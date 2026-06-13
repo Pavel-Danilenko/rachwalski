@@ -194,16 +194,14 @@
    color: var(--color-black);
 
    h2 {
-      @include fluid(font-size, 22, 32);
-      font-weight: 600;
+      @include fluid(font-size, 18, 34);
       color: var(--color-black);
       margin-bottom: toRem(16);
       scroll-margin-top: toRem(120);
    }
 
    h3 {
-      @include fluid(font-size, 18, 24);
-      font-weight: 600;
+      @include fluid(font-size, 16, 24);
       color: var(--color-black);
       margin-top: toRem(28);
       margin-bottom: toRem(12);
