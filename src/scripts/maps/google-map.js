@@ -141,9 +141,29 @@ function initMap(el) {
          },
       });
 
-      if (panX !== 0 || panY !== 0) {
-         google.maps.event.addListenerOnce(map, "idle", () => map.panBy(panX, panY));
-      }
+      // На мобільних екранах ручний panX/panY (підібраний під широкі екрани)
+      // може виштовхувати один з пінів за межі видимої області — замість
+      // нього вписуємо карту так, щоб всі піни були видимі (fitBounds).
+      const mobileQuery = window.matchMedia("(max-width: 767.98px)");
+
+      const applyLayout = (isMobile) => {
+         if (isMobile && markers.length > 1) {
+            const bounds = new google.maps.LatLngBounds();
+            markers.forEach((m) => bounds.extend({ lat: m.lat, lng: m.lng }));
+            map.fitBounds(bounds, 48);
+         } else {
+            map.setCenter(center);
+            map.setZoom(zoom);
+            if (panX !== 0 || panY !== 0) {
+               google.maps.event.addListenerOnce(map, "idle", () => map.panBy(panX, panY));
+            }
+         }
+      };
+
+      applyLayout(mobileQuery.matches);
+      // Перерахунок при зміні розміру вʼюпорта (devtools, оберт екрана)
+      // без перезавантаження сторінки — initMap() інакше відпрацьовує лише раз.
+      mobileQuery.addEventListener("change", (e) => applyLayout(e.matches));
 
       markers.forEach((m) => {
          new google.maps.Marker({
