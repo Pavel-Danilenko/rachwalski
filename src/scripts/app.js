@@ -163,6 +163,9 @@ async function loadModules() {
    if (document.querySelector("[data-hotspot]"))
       tasks.push(import("@scripts/init/treatments-hotspot"));
 
+   if (document.querySelector("[data-video]"))
+      tasks.push(import("@scripts/init/video"));
+
    if (document.querySelector(".post-body__cover"))
       tasks.push(import("@scripts/init/post-cover"));
 

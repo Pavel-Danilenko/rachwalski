@@ -1,0 +1,59 @@
+@use "@styles/utils" as *;
+
+.video-wrapper {
+   position: relative;
+   overflow: hidden;
+
+   // ── Aspect ratio — вмикається якщо передані width і height ────────────
+   &[style*="--aspect-ratio"] {
+      aspect-ratio: var(--aspect-ratio);
+   }
+
+   &__video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+   }
+
+   // ── Poster — лежить над відео, ховається після старту відтворення ─────
+   &__poster {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 1;
+      transition: opacity var(--transition-base);
+      pointer-events: none;
+
+      picture {
+         display: block;
+         width: 100%;
+         height: 100%;
+      }
+
+      img {
+         display: block;
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+      }
+   }
+
+   &.is-playing &__poster {
+      opacity: 0;
+   }
+
+   // ── object-fit варіанти ────────────────────────────────────────────────
+   &[data-object-fit="contain"] &__video,
+   &[data-object-fit="contain"] &__poster img {
+      object-fit: contain;
+   }
+   &[data-object-fit="fill"] &__video,
+   &[data-object-fit="fill"] &__poster img {
+      object-fit: fill;
+   }
+   &[data-object-fit="none"] &__video,
+   &[data-object-fit="none"] &__poster img {
+      object-fit: none;
+   }
+}

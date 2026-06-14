@@ -1,0 +1,125 @@
+---
+/**
+ * Video — гнучкий відео-компонент з підтримкою адаптивних відео та форматів
+ *
+ * @param {string}  src           - desktop fallback (mp4), обов'язковий
+ * @param {string}  webm          - desktop webm (опціонально, перший у списку <source>)
+ * @param {string}  srcMobile     - mobile fallback (mp4), опціонально
+ * @param {string}  webmMobile    - mobile webm, опціонально
+ * @param {ImageMetadata} poster  - poster-зображення через наш Img (опціонально)
+ * @param {string}  posterAlt     - alt для poster (дефолт "")
+ * @param {number}  mobileBreakpoint - межа mobile/desktop у px (дефолт 767)
+ * @param {number}  width         - ширина для aspect-ratio
+ * @param {number}  height        - висота для aspect-ratio
+ * @param {boolean} autoplay      - дефолт true
+ * @param {boolean} loop          - дефолт true
+ * @param {boolean} muted         - дефолт true
+ * @param {boolean} playsinline   - дефолт true
+ * @param {boolean} controls      - дефолт false
+ * @param {"none"|"metadata"|"auto"} preload - дефолт "metadata" (ігнорується якщо lazy)
+ * @param {"cover"|"contain"|"fill"|"none"} objectFit - дефолт "cover"
+ * @param {boolean} lazy          - підвантажувати тільки біля viewport (дефолт true)
+ * @param {string}  class         - клас на <video>
+ * @param {string}  wrapperClass  - клас на обгортці <div>
+ *
+ * Приклади:
+ * <Video src={heroMp4} webm={heroWebm} srcMobile={heroMobileMp4} webmMobile={heroMobileWebm} poster={heroPoster} width={1920} height={1080} />
+ * <Video src={demoMp4} controls autoplay={false} loop={false} muted={false} lazy={false} />
+ */
+
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import "@styles/components/media/_video.scss";
+
+interface Props {
+   src: string;
+   webm?: string;
+   srcMobile?: string;
+   webmMobile?: string;
+   poster?: ImageMetadata;
+   posterAlt?: string;
+   mobileBreakpoint?: number;
+   width?: number;
+   height?: number;
+   autoplay?: boolean;
+   loop?: boolean;
+   muted?: boolean;
+   playsinline?: boolean;
+   controls?: boolean;
+   preload?: "none" | "metadata" | "auto";
+   objectFit?: "cover" | "contain" | "fill" | "none";
+   lazy?: boolean;
+   class?: string;
+   wrapperClass?: string;
+   [key: string]: unknown;
+}
+
+const {
+   src,
+   webm,
+   srcMobile,
+   webmMobile,
+   poster,
+   posterAlt = "",
+   mobileBreakpoint = 767,
+   width,
+   height,
+   autoplay = true,
+   loop = true,
+   muted = true,
+   playsinline = true,
+   controls = false,
+   preload = "metadata",
+   objectFit = "cover",
+   lazy = true,
+   class: videoClass = "",
+   wrapperClass = "",
+   ...restProps
+} = Astro.props;
+
+const aspectRatio = width && height ? `${width}/${height}` : undefined;
+const hasResponsive = Boolean(srcMobile || webmMobile);
+---
+
+<div
+   class:list={["video-wrapper", wrapperClass]}
+   style={aspectRatio ? `--aspect-ratio: ${aspectRatio}` : undefined}
+   data-object-fit={objectFit !== "cover" ? objectFit : undefined}
+>
+   {
+      poster && (
+         <div class="video-wrapper__poster">
+            <Picture
+               src={poster}
+               alt={posterAlt}
+               widths={[400, 800, 1200]}
+               sizes="(max-width: 768px) 100vw, 1200px"
+               loading="eager"
+               class:list={["video-wrapper__poster-img"]}
+            />
+         </div>
+      )
+   }
+   <video
+      class:list={["video-wrapper__video", videoClass]}
+      autoplay={autoplay}
+      loop={loop}
+      muted={muted}
+      playsinline={playsinline}
+      controls={controls}
+      preload={lazy ? "none" : preload}
+      aria-hidden={!controls ? "true" : undefined}
+      tabindex={!controls ? -1 : undefined}
+      data-video
+      data-lazy={lazy ? "true" : "false"}
+      data-mobile-breakpoint={hasResponsive ? mobileBreakpoint : undefined}
+      data-webm={webm}
+      data-src={src}
+      data-webm-mobile={webmMobile}
+      data-src-mobile={srcMobile}
+      {...restProps}
+   >
+      {webm && <source src={webm} type="video/webm" />}
+      <source src={src} type="video/mp4" />
+   </video>
+</div>
