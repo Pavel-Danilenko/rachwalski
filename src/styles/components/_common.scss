@@ -551,7 +551,7 @@
       z-index: 2;
       @include fluid-space(height, 124, 222);
       background: var(--gradient-blog-hero-light);
-      @include fluid-space(bottom, -1, -96);
+      @include fluid-space(bottom, -32, -96);
    }
 }
 .topics__inner {

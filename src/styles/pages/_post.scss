@@ -19,6 +19,7 @@
       pointer-events: none;
       @include respond-to("md") {
          right: -4%;
+         max-height: 70%;
       }
 
       img {
@@ -29,6 +30,7 @@
          object-position: right bottom;
          @include respond-to("md") {
             translate: -1% 0%;
+            height: 100%;
          }
       }
    }
