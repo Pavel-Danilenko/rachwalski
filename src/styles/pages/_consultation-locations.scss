@@ -87,7 +87,7 @@
    // .cl-card__hours-block
    &__hours-block {
       display: grid;
-      grid-template-columns: max-content max-content;
+      grid-template-columns: max-content 1fr;
       column-gap: toRem(12);
       row-gap: toRem(4);
       &:not(:last-child) {
@@ -103,6 +103,10 @@
    }
 
    &__hours-day {
+   }
+
+   &__hours-time {
+      text-align: right;
    }
 
    // .cl-card__actions
