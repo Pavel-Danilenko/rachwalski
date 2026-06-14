@@ -22,6 +22,7 @@
          bottom: 0;
          right: 0;
          position: absolute;
+         z-index: 2;
       }
    }
    &__img-first {
@@ -42,6 +43,7 @@
          right: 0;
          height: 60%;
          position: absolute;
+         z-index: 2;
          background: linear-gradient(0deg, #0b111a 0%, #0b111a00 60%);
       }
    }
