@@ -113,6 +113,9 @@ async function loadModules() {
    if (document.querySelector("[data-google-map]"))
       tasks.push(import("@scripts/maps/google-map"));
 
+   if (document.querySelector("[data-location-card]"))
+      tasks.push(import("@scripts/maps/location-cards"));
+
    if (document.querySelector(".custom-search"))
       tasks.push(import("@scripts/init/custom-search"));
 

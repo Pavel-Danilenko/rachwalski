@@ -21,6 +21,11 @@
    display: flex;
    flex-direction: column;
    @include fluid-space(padding, 20, 40);
+   transition: border-color var(--transition-base);
+
+   &.is-active {
+      border-color: var(--color-blue);
+   }
    // .cl-card__top — назва + лого
    &__top {
       display: flex;
@@ -54,10 +59,19 @@
 
    // .cl-card__address-link
    &__address-link {
+      background: none;
+      border: none;
+      padding: 0;
+      text-align: left;
+      cursor: pointer;
       font-weight: 300;
       color: inherit;
       text-decoration: none;
       transition: color var(--transition-base);
+
+      @include respond-to(560) {
+         max-width: toRem(252);
+      }
 
       @media (any-hover: hover) {
          &:hover {

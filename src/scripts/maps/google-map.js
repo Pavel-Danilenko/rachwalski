@@ -1,6 +1,9 @@
 const API_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_KEY ?? "";
 const selector = "[data-google-map]";
 const instances = new WeakMap();
+// Якщо хтось викликає focusMarker() до того, як карта проініціювалась —
+// запам'ятовуємо індекс і застосовуємо одразу після initMap().
+const pendingFocus = new WeakMap();
 
 const MAP_STYLES = [
    // Base: майже чорний фон
@@ -170,10 +173,12 @@ function initMap(el) {
       const ICON_SIZE = { width: 44, height: 56 };
       const PIN_OPACITY = 0.8;
 
+      const markerObjs = [];
+
       // marker.setOpacity() — вбудований спосіб Maps API підсвітити пін,
       // без додаткових класів/DOM-хаків. Плавність додає CSS-перехід
       // на <img> маркерів (.gm-style img), бо сам setOpacity миттєвий.
-      markers.forEach((m, i) => {
+      markers.forEach((m) => {
          const iconUrl = m.icon ?? DEFAULT_PIN;
 
          const marker = new google.maps.Marker({
@@ -205,11 +210,42 @@ function initMap(el) {
                infoWindow.open(map, marker);
             });
          }
+
+         markerObjs.push(marker);
       });
 
-      instances.set(el, map);
+      instances.set(el, { map, markers: markerObjs, infoWindow });
+
+      const pendingIndex = pendingFocus.get(el);
+      if (pendingIndex !== undefined) {
+         pendingFocus.delete(el);
+         focusMarker(el, pendingIndex);
+      }
    });
 }
+
+// Центрує карту на маркері за індексом і відкриває його InfoWindow —
+// викликається кліком по картці локації (location-cards.js)
+// через подію "map:focus-location".
+function focusMarker(el, index) {
+   const data = instances.get(el);
+   if (!data) {
+      pendingFocus.set(el, index);
+      return;
+   }
+
+   const marker = data.markers[index];
+   if (!marker) return;
+
+   data.map.panTo(marker.getPosition());
+   google.maps.event.trigger(marker, "click");
+}
+
+document.addEventListener("map:focus-location", (e) => {
+   const el = document.querySelector(selector);
+   if (!el) return;
+   focusMarker(el, e.detail.index);
+});
 
 function initAllMaps() {
    document.querySelectorAll(selector).forEach(initMap);
