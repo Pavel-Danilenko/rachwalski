@@ -48,9 +48,11 @@
       flex-direction: column;
       justify-content: end;
       @include fluid-space(padding-bottom, 60, 106);
-      &.hero-full-vh {
-         min-height: 70vh;
-         min-height: 70svh;
+      @include respond-to("md") {
+         &.hero-full-vh {
+            min-height: 70vh;
+            min-height: 70svh;
+         }
       }
    }
 

@@ -2,9 +2,11 @@
 
 .post-hero {
    position: relative;
-   & .hero-full-vh {
-      min-height: 70vh;
-      min-height: 70svh;
+   @include respond-to("md") {
+      & .hero-full-vh {
+         min-height: 70vh;
+         min-height: 70svh;
+      }
    }
    &__img {
       position: absolute;
