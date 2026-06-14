@@ -165,17 +165,46 @@ function initMap(el) {
       // без перезавантаження сторінки — initMap() інакше відпрацьовує лише раз.
       mobileQuery.addEventListener("change", (e) => applyLayout(e.matches));
 
-      markers.forEach((m) => {
-         new google.maps.Marker({
+      const infoWindow = new google.maps.InfoWindow();
+
+      const ICON_SIZE = { width: 44, height: 56 };
+      const PIN_OPACITY = 0.8;
+
+      // marker.setOpacity() — вбудований спосіб Maps API підсвітити пін,
+      // без додаткових класів/DOM-хаків. Плавність додає CSS-перехід
+      // на <img> маркерів (.gm-style img), бо сам setOpacity миттєвий.
+      markers.forEach((m, i) => {
+         const iconUrl = m.icon ?? DEFAULT_PIN;
+
+         const marker = new google.maps.Marker({
             position: { lat: m.lat, lng: m.lng },
             map,
             title: m.title ?? "",
+            optimized: false,
+            opacity: PIN_OPACITY,
             icon: {
-               url: m.icon ?? DEFAULT_PIN,
-               scaledSize: new google.maps.Size(44, 56),
-               anchor: new google.maps.Point(22, 56),
+               url: iconUrl,
+               scaledSize: new google.maps.Size(ICON_SIZE.width, ICON_SIZE.height),
+               anchor: new google.maps.Point(ICON_SIZE.width / 2, ICON_SIZE.height),
             },
          });
+
+         marker.addListener("mouseover", () => marker.setOpacity(1));
+         marker.addListener("mouseout", () => marker.setOpacity(PIN_OPACITY));
+
+         if (m.url) {
+            marker.addListener("click", () => {
+               infoWindow.setContent(`
+                  <div class="gmap-info">
+                     <div class="gmap-info__title">${m.title ?? ""}</div>
+                     <a class="gmap-info__link" href="${m.url}" target="_blank" rel="noopener noreferrer">
+                        View on Google Maps
+                     </a>
+                  </div>
+               `);
+               infoWindow.open(map, marker);
+            });
+         }
       });
 
       instances.set(el, map);
