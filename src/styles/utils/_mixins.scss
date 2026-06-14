@@ -230,6 +230,28 @@ $_offset: #{"max(#{$_pad}px, calc((100vw - #{$max-width-container}px) / 2 + #{$_
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// fluid-unitless($property, $min, $max, $from, $to)
+//
+// Те саме що fluid(), але без одиниць — для unitless-властивостей
+// (scale, opacity, line-height, font-weight тощо).
+// calc() не дозволяє додавати vw (довжину) до простого числа, тому vw
+// переводиться у число через ділення (1vw / 1px) — типізована арифметика calc().
+//
+//   @include fluid-unitless(scale, 1.08, 1.05, 1200, bp("xxl"));
+//   → scale: clamp(1.05, calc(-0.0125 * (1vw / 1px) + 1.23), 1.08);
+// ─────────────────────────────────────────────────────────────────────────────
+@mixin fluid-unitless($property, $min, $max, $from: $mobile, $to: $pc) {
+   $slope: math.div($max - $min, $to - $from);
+   $intercept: $min - $slope * $from;
+   $preferred: "#{$slope * 100} * (1vw / 1px) + #{$intercept}";
+   @if $min <= $max {
+      #{$property}: clamp(#{$min}, calc(#{$preferred}), #{$max});
+   } @else {
+      #{$property}: clamp(#{$max}, calc(#{$preferred}), #{$min});
+   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // fluid-stops($property, $segments)
 //
 // Декілька НЕЗАЛЕЖНИХ fluid-діапазонів («сегментів») для однієї властивості —

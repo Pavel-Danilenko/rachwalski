@@ -198,6 +198,25 @@
       "description": "fluid-offset(property, base, min, max) → calc(base + clamp(min, ...vw..., max))",
    },
 
+   // ─── fluid-rem() — те саме що fluid(), але результат у rem ───────────────
+   "fluid-rem": {
+      "prefix": "frem",
+      "scope": "scss,css",
+      "body": [
+         "@include fluid-rem(${1|translate,padding-top,padding-bottom,margin-top,margin-bottom,gap,padding,width,height,top,bottom,left,right|}, ${2:min}, ${3:max});",
+      ],
+      "description": "fluid-rem(property, min, max) — fluid у rem від $mobile до $pc",
+   },
+
+   "fluid-rem custom bp": {
+      "prefix": "frembp",
+      "scope": "scss,css",
+      "body": [
+         "@include fluid-rem(${1|translate,padding-top,padding-bottom,margin-top,margin-bottom,gap,padding,width,height,top,bottom,left,right|}, ${2:min}, ${3:max}, ${4|bp(\"xs\"),bp(\"sm\"),bp(\"md\"),bp(\"lg\"),bp(\"xl\"),bp(\"xxl\"),320,480,768,1024,1200,1440,1920|}, ${5|bp(\"xl\"),bp(\"xxl\"),bp(\"lg\"),1200,1440,1920|});",
+      ],
+      "description": "fluid-rem з кастомними брейкпоінтами",
+   },
+
    "fluid-offset custom bp": {
       "prefix": "fobp",
       "scope": "scss,css",
@@ -205,6 +224,16 @@
          "@include fluid-offset(${1|height,width,padding-top,padding-bottom,margin-top,margin-bottom|}, ${2:100%}, ${3:min}, ${4:max}, ${5|bp(\"xs\"),bp(\"sm\"),bp(\"md\"),bp(\"lg\"),bp(\"xl\"),bp(\"xxl\"),320,480,768|}, ${6|bp(\"xl\"),bp(\"xxl\"),bp(\"lg\"),1200,1440,1920|});",
       ],
       "description": "fluid-offset з кастомними брейкпоінтами",
+   },
+
+   // ─── fluid-unitless() — для unitless властивостей (scale, opacity тощо) ──────
+   "fluid-unitless": {
+      "prefix": "funit",
+      "scope": "scss,css",
+      "body": [
+         "@include fluid-unitless(${1|scale,opacity,line-height,font-weight,z-index|}, ${2:min}, ${3:max}, ${4|320,480,768,1024,1200,1440,1920,bp(\"xs\"),bp(\"sm\"),bp(\"md\"),bp(\"lg\"),bp(\"xl\"),bp(\"xxl\")|}, ${5|bp(\"xl\"),bp(\"xxl\"),bp(\"lg\"),1200,1440,1920|});",
+      ],
+      "description": "fluid-unitless(property, min, max, from, to) — fluid без одиниць (scale, opacity, line-height тощо)",
    },
 
    // ─── fluid-stops() — окремі fluid-сегменти для телефону/планшету/пк ──────────
