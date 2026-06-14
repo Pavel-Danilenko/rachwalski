@@ -31,7 +31,7 @@
 
       @include respond-to("md") {
          max-width: 100%;
-         bottom: 2%;
+         bottom: 15%;
          left: -8%;
          width: 100%;
       }
@@ -53,7 +53,7 @@
       }
       @include respond-to("md") {
          max-height: none;
-         top: 40vh;
+         top: 55vh;
          right: -10%;
          width: 100%;
          max-width: 100%;
@@ -70,21 +70,6 @@
    &__inner {
       @include fluid-space(max-width, 700, 900);
       margin-inline: auto;
-   }
-
-   // .prices__title
-
-   &__title {
-   }
-
-   // .prices__text
-
-   &__text {
-   }
-
-   // .prices__tabs
-
-   &__tabs {
    }
 }
 
@@ -118,11 +103,6 @@
    &__inner {
       @include fluid-space(padding, 16, 32);
    }
-
-   // .pricess-tabs__panel
-
-   &__panel {
-   }
 }
 .prices-content {
 }
@@ -136,21 +116,6 @@
       align-items: center;
       gap: toRem(8) toRem(20);
       @include fluid-space(padding-bottom, 12, 20);
-   }
-
-   // .pricess-content__title
-
-   &__title {
-   }
-
-   // .pricess-content__accordion
-
-   &__accordion {
-   }
-
-   // .pricess-content__label
-
-   &__label {
    }
 }
 .prices-accordion {
@@ -226,11 +191,6 @@
 
    &__price {
       font-weight: var(--font-weight-body);
-   }
-
-   // .prices-accordion__content
-
-   &__content {
    }
 
    // .prices-accordion__body
