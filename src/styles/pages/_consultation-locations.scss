@@ -71,18 +71,23 @@
 
    // .cl-card__hours-block
    &__hours-block {
+      display: grid;
+      grid-template-columns: max-content max-content;
+      column-gap: toRem(12);
+      row-gap: toRem(4);
       &:not(:last-child) {
          @include fluid-space(margin-bottom, 20, 40);
       }
    }
 
    &__hours-title {
+      grid-column: 1 / -1;
       &:not(:last-child) {
          margin-bottom: toRem(8);
       }
    }
 
-   &__hours {
+   &__hours-day {
    }
 
    // .cl-card__actions

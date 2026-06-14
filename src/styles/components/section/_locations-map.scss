@@ -116,6 +116,10 @@
 
    // .location-card__section
    &__section {
+      display: grid;
+      grid-template-columns: max-content max-content;
+      column-gap: toRem(12);
+      row-gap: toRem(4);
       &:not(:last-child) {
          @include fluid-space(margin-bottom, 12, 20);
       }
@@ -123,10 +127,18 @@
 
    // .location-card__label
    &__label {
+      grid-column: 1 / -1;
       font-size: toRem(16);
+      &:not(:last-child) {
+         margin-bottom: toRem(8);
+      }
    }
 
-   // .location-card__hours
-   &__hours {
+   // .location-card__hours-day
+   &__hours-day {
+   }
+
+   // .location-card__hours-time
+   &__hours-time {
    }
 }
