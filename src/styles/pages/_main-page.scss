@@ -21,7 +21,9 @@
    // .main-about__column-right
 
    &__column-right {
-      align-content: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
    }
 
    &__img {
@@ -56,6 +58,8 @@
    // .main-about__label
 
    &__label {
+   }
+   &__text-inner {
       &:not(:last-child) {
          @include fluid-space(margin-bottom, 20, 32);
       }
