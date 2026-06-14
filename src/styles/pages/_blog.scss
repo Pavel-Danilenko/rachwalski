@@ -17,8 +17,8 @@
          object-position: right bottom;
       }
       @include respond-to(460) {
-         width: 70%;
-         bottom: 5%;
+         width: 64%;
+         bottom: -1%;
       }
    }
 
@@ -36,7 +36,7 @@
          bottom: 6%;
       }
       @include respond-to(480) {
-         top: 2%;
+         top: 7%;
          width: 30%;
       }
    }

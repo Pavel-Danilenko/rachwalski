@@ -69,18 +69,25 @@
       @include fluid(font-size, 16, 24);
 
       span {
-         opacity: 0.7;
          transition: opacity var(--transition-base);
       }
 
-      @media (any-hover: hover) {
-         &:hover span {
+      // На планшетах/телефонах немає hover — ефект приглушення
+      // залишаємо лише для ПК (від 1200px).
+      @include respond-from(1200) {
+         span {
+            opacity: 0.7;
+         }
+
+         @media (any-hover: hover) {
+            &:hover span {
+               opacity: 1;
+            }
+         }
+
+         &[aria-expanded="true"] span {
             opacity: 1;
          }
-      }
-
-      &[aria-expanded="true"] span {
-         opacity: 1;
       }
    }
    &__link {

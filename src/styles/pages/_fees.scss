@@ -163,30 +163,40 @@
       gap: toRem(8) toRem(12);
 
       .prices-accordion__label {
-         color: rgba(255, 255, 255, 0.7);
          transition: color var(--transition-base);
       }
 
       .prices-accordion__price {
-         opacity: 0.7;
          transition: opacity var(--transition-base);
          flex-shrink: 0;
       }
 
-      @media (any-hover: hover) {
-         &:hover .prices-accordion__label {
+      // На планшетах/телефонах немає hover — ефект приглушення
+      // залишаємо лише для ПК (від 1200px).
+      @include respond-from(1200) {
+         .prices-accordion__label {
+            color: rgba(255, 255, 255, 0.7);
+         }
+
+         .prices-accordion__price {
+            opacity: 0.7;
+         }
+
+         @media (any-hover: hover) {
+            &:hover .prices-accordion__label {
+               color: var(--color-text);
+            }
+            &:hover .prices-accordion__price {
+               opacity: 1;
+            }
+         }
+
+         &[aria-expanded="true"] .prices-accordion__label {
             color: var(--color-text);
          }
-         &:hover .prices-accordion__price {
+         &[aria-expanded="true"] .prices-accordion__price {
             opacity: 1;
          }
-      }
-
-      &[aria-expanded="true"] .prices-accordion__label {
-         color: var(--color-text);
-      }
-      &[aria-expanded="true"] .prices-accordion__price {
-         opacity: 1;
       }
    }
 
