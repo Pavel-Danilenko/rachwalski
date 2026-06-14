@@ -254,6 +254,12 @@
       overflow: hidden;
       border-radius: toRem(30);
       border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
+      @include respond-to("md") {
+         width: 100%;
+      }
+   }
+   &__button {
+      flex-grow: 1;
    }
    .tabs__indicator {
       height: 100%;
