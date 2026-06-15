@@ -1,12 +1,16 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
-import clinicAlphandImg from "@assets/img/about/clinic-alphand/clinic-alphand.jpg";
-import clinicAlphandImgMobile from "@assets/img/about/clinic-alphand/clinic-alphand-hero-mobile.jpg";
-import Icon from "@components/ui/Icon.astro";
 import "@styles/pages/_clinic-alphand.scss";
 import "@styles/pages/_main-page.scss";
+import "@styles/components/section/_video-hotspots.scss";
+import Icon from "@components/ui/Icon.astro";
 import Img from "@components/media/Img.astro";
+import Video from "@components/media/Video.astro";
+import videoIntro from "@assets/video/main/video-intro.mp4";
+import videoIntroWebm from "@assets/video/main/video-intro.webm";
+import videoIntroMobile from "@assets/video/main/Mobile-video-intro.mp4";
+import videoIntroMobileWebm from "@assets/video/main/Mobile-video-intro.webm";
 import aboutImg from "@assets/img/biography/martin.png";
 import PostsSection from "@components/section/PostsSection.astro";
 import PopularReviews from "@components/section/PopularReviews.astro";
@@ -130,21 +134,361 @@ const faqItems = [
    description="Test description of the homepage. Replace with actual text—this is what appears in Google search results and when sharing on social media. Recommended length: 120–155 characters."
    ogImage="/og-image.svg"
    footerBg={footerBg}
+   introVideo
 >
    <PageMain>
-      <section class="alphand-hero hero-circle">
-         <ResponsiveImg
-            srcDesktop={clinicAlphandImg}
-            srcMobile={clinicAlphandImgMobile}
-            alt="Hero"
-            quality={88}
-            breakpoint={768}
-            wrapperClass="alphand-hero__bg hero-gradient__bg hero-gradient__bg--height-100"
+      <section class="video-banner">
+         <Video
+            src={videoIntro}
+            webm={videoIntroWebm}
+            srcMobile={videoIntroMobile}
+            webmMobile={videoIntroMobileWebm}
+            mobileBreakpoint={1199}
+            loop={false}
+            lazy={false}
+            preload="auto"
+            showPlayButton={false}
+            pageIntro
+            wrapperClass="video-banner__video"
          />
 
-         <div class="alphand-hero__container hero-full-vh pt-180 pb-80">
-            <div class="alphand-hero__logo">
-               <Icon name="alphand-logo" />
+         <div class="video-banner__hotspots" data-video-hotspots>
+            <div
+               class="video-hotspot"
+               data-side="right"
+               style="--x: 51.5%; --y: 23%;"
+            >
+               <div class="video-hotspot__dot">
+                  <span class="video-hotspot__dot-ring"></span>
+               </div>
+               <div class="video-hotspot__popup">
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--normal"
+                     viewBox="0 0 280 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="26"
+                        y1="58"
+                        x2="58"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--flipped"
+                     viewBox="0 0 280 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="26"
+                        y1="58"
+                        x2="58"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <div class="video-hotspot__popup-box">
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Forehead lift <Icon name="arrow-link-top" />
+                     </a>
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Botox – forehead lines <Icon name="arrow-link-top" />
+                     </a>
+                  </div>
+               </div>
+            </div>
+
+            <div
+               class="video-hotspot"
+               data-side="right"
+               style="--x: 36%; --y: 42%;"
+            >
+               <div class="video-hotspot__dot">
+                  <span class="video-hotspot__dot-ring"></span>
+               </div>
+               <div class="video-hotspot__popup">
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--normal"
+                     viewBox="0 0 280 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="26"
+                        y1="58"
+                        x2="58"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--flipped"
+                     viewBox="0 0 280 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="26"
+                        y1="58"
+                        x2="58"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <div class="video-hotspot__popup-box">
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Brow lift <Icon name="arrow-link-top" />
+                     </a>
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Botox – frown lines <Icon name="arrow-link-top" />
+                     </a>
+                  </div>
+               </div>
+            </div>
+
+            <div
+               class="video-hotspot"
+               data-side="left"
+               style="--x: 47%; --y: 42%;"
+            >
+               <div class="video-hotspot__dot">
+                  <span class="video-hotspot__dot-ring"></span>
+               </div>
+               <div class="video-hotspot__popup">
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--normal"
+                     viewBox="0 0 260 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="234"
+                        y1="58"
+                        x2="202"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--flipped"
+                     viewBox="0 0 260 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="234"
+                        y1="58"
+                        x2="202"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <div class="video-hotspot__popup-box">
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Eyelid surgery <Icon name="arrow-link-top" />
+                     </a>
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Under-eye fillers <Icon name="arrow-link-top" />
+                     </a>
+                  </div>
+               </div>
+            </div>
+
+            <div
+               class="video-hotspot"
+               data-side="left"
+               style="--x: 60%; --y: 58%;"
+            >
+               <div class="video-hotspot__dot">
+                  <span class="video-hotspot__dot-ring"></span>
+               </div>
+               <div class="video-hotspot__popup">
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--normal"
+                     viewBox="0 0 260 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="234"
+                        y1="58"
+                        x2="202"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--flipped"
+                     viewBox="0 0 260 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="234"
+                        y1="58"
+                        x2="202"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <div class="video-hotspot__popup-box">
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Surgical nose correction <Icon name="arrow-link-top" />
+                     </a>
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Non-surgical nose enhancement <Icon
+                           name="arrow-link-top"
+                        />
+                     </a>
+                  </div>
+               </div>
+            </div>
+
+            <div
+               class="video-hotspot"
+               data-side="right"
+               style="--x: 46%; --y: 74%;"
+            >
+               <div class="video-hotspot__dot">
+                  <span class="video-hotspot__dot-ring"></span>
+               </div>
+               <div class="video-hotspot__popup">
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--normal"
+                     viewBox="0 0 280 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="26"
+                        y1="58"
+                        x2="58"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--flipped"
+                     viewBox="0 0 280 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="26"
+                        y1="58"
+                        x2="58"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <div class="video-hotspot__popup-box">
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Cheek fillers <Icon name="arrow-link-top" />
+                     </a>
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Lip augmentation <Icon name="arrow-link-top" />
+                     </a>
+                  </div>
+               </div>
+            </div>
+
+            <div
+               class="video-hotspot"
+               data-side="left"
+               style="--x: 61%; --y: 88%;"
+            >
+               <div class="video-hotspot__dot">
+                  <span class="video-hotspot__dot-ring"></span>
+               </div>
+               <div class="video-hotspot__popup">
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--normal"
+                     viewBox="0 0 260 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="234"
+                        y1="58"
+                        x2="202"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--flipped"
+                     viewBox="0 0 260 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="234"
+                        y1="58"
+                        x2="202"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <div class="video-hotspot__popup-box">
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Facelift <Icon name="arrow-link-top" />
+                     </a>
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Jawline contouring <Icon name="arrow-link-top" />
+                     </a>
+                  </div>
+               </div>
+            </div>
+
+            <div
+               class="video-hotspot"
+               data-side="right"
+               style="--x: 41%; --y: 89%;"
+            >
+               <div class="video-hotspot__dot">
+                  <span class="video-hotspot__dot-ring"></span>
+               </div>
+               <div class="video-hotspot__popup">
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--normal"
+                     viewBox="0 0 280 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="26"
+                        y1="58"
+                        x2="58"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <svg
+                     class="video-hotspot__line video-hotspot__line--flipped"
+                     viewBox="0 0 280 88"
+                     fill="none"
+                     aria-hidden="true"
+                  >
+                     <line
+                        x1="26"
+                        y1="58"
+                        x2="58"
+                        y2="10"
+                        stroke="rgba(255,255,255,0.6)"
+                        stroke-width="1"></line>
+                  </svg>
+                  <div class="video-hotspot__popup-box">
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Neck lift <Icon name="arrow-link-top" />
+                     </a>
+                     <a href="/rhinoplasty" class="video-hotspot__link">
+                        Skin tightening <Icon name="arrow-link-top" />
+                     </a>
+                  </div>
+               </div>
             </div>
          </div>
       </section>

@@ -220,12 +220,12 @@ $gradients: (
          transparent 100%
       ),
    prices-top-gradient: linear-gradient(
-         80deg,
+         160deg,
          rgba(1, 6, 16, 0.95) 0%,
-         rgba(1, 6, 16, 0.7) 20%,
-         rgba(1, 6, 16, 0.35) 45%,
-         rgba(1, 6, 16, 0.1) 68%,
-         rgba(1, 6, 16, 0) 100%
+         rgba(1, 6, 16, 0.7) 14%,
+         rgba(1, 6, 16, 0.35) 25%,
+         rgba(1, 6, 16, 0.1) 36%,
+         rgba(1, 6, 16, 0) 40%
       ),
    header-mask-dark-top: linear-gradient(
          165deg,
@@ -297,6 +297,12 @@ $gradients: (
          #b2c6de 23%,
          rgba(117, 140, 172, 1) 47%,
          rgba(35, 57, 86, 0) 100%
+      ),
+   video-banner-top-gradient: linear-gradient(180deg, #070a0d 0%, #0b111a 50%),
+   video-banner-fade-gradient: linear-gradient(
+         0deg,
+         #070a0d 0%,
+         rgba(7, 10, 13, 0) 12%
       ),
 );
 

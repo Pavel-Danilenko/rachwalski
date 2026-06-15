@@ -166,6 +166,12 @@ async function loadModules() {
    if (document.querySelector("[data-video]"))
       tasks.push(import("@scripts/init/video"));
 
+   if (document.querySelector("[data-video-hotspots]"))
+      tasks.push(import("@scripts/init/video-hotspots"));
+
+   if (document.querySelector("[data-music-toggle]"))
+      tasks.push(import("@scripts/init/music-toggle"));
+
    if (document.querySelector(".post-body__cover"))
       tasks.push(import("@scripts/init/post-cover"));
 

@@ -1,10 +1,19 @@
 // video.js — підтримка адаптивних <source> (mobile/desktop, webm/mp4),
 // lazy-завантаження через IntersectionObserver та prefers-reduced-motion.
 
+import { bodyLock, bodyUnlock, resetBodyLock } from "@scripts/global/block-scroll";
+
 const selectorAttr = "[data-video]";
 
 function prefersReducedMotion() {
    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+// Data Saver / повільне з'єднання (2g) — увімкнено користувачем або провайдером
+function isDataSaverOn() {
+   const conn = navigator.connection;
+   if (!conn) return false;
+   return Boolean(conn.saveData) || conn.effectiveType === "slow-2g" || conn.effectiveType === "2g";
 }
 
 // Обирає webm/mp4 джерела залежно від поточної ширини екрана
@@ -18,11 +27,12 @@ function getDesiredSources(video) {
    return { webm, src };
 }
 
-// Перебудовує <source> елементи, якщо потрібна інша пара (mobile ⇄ desktop)
+// Перебудовує <source> елементи, якщо потрібна інша пара (mobile ⇄ desktop).
+// Повертає true, якщо джерела дійсно змінились (відео перезавантажилось).
 function applySources(video) {
    const { webm, src } = getDesiredSources(video);
    const key = `${webm}|${src}`;
-   if (video.dataset.appliedSources === key) return;
+   if (video.dataset.appliedSources === key) return false;
 
    const wasPlaying = !video.paused && !video.ended;
    video.dataset.appliedSources = key;
@@ -43,11 +53,78 @@ function applySources(video) {
 
    video.load();
    if (wasPlaying) video.play().catch(() => {});
+   return true;
 }
 
 function tryAutoplay(video) {
    if (!video.autoplay || prefersReducedMotion()) return;
    video.play().catch(() => {});
+}
+
+// Заморожує відео на останньому кадрі (для повторних SPA-переходів на pageIntro-відео)
+// Слухаємо loadedmetadata, бо applySources() нижче викличе video.load() і скине readyState
+function freezeOnLastFrame(video) {
+   video.addEventListener(
+      "loadedmetadata",
+      () => {
+         if (video.duration) video.currentTime = video.duration;
+      },
+      { once: true },
+   );
+}
+
+// pageIntro-відео: на свіжому заході/reload — лок скролу + хедер прихований
+// (через клас "intro-video" на <html>, знятий на ended). При SPA-переході
+// клас уже відсутній — відео не грає, показуємо останній кадр.
+// Сигналізує іншим скриптам (напр. video-hotspots.js), що відео-інтро завершилось
+function markIntroDone() {
+   document.documentElement.dataset.introVideoDone = "true";
+   document.dispatchEvent(new CustomEvent("video-intro:done"));
+}
+
+// Блокує скрол і хедер на час відтворення pageIntro-відео, знімає лок на "ended"
+function lockForIntro(video) {
+   // Autoplay не відбудеться (Data Saver / prefers-reduced-motion) —
+   // одразу прибираємо лок і показуємо хедер, інакше вони "застрягнуть" назавжди
+   if (!video.autoplay || prefersReducedMotion()) {
+      document.documentElement.classList.remove("intro-video");
+      markIntroDone();
+      return;
+   }
+
+   bodyLock();
+   const finish = () => {
+      document.documentElement.classList.remove("intro-video");
+      bodyUnlock();
+      markIntroDone();
+   };
+   video.addEventListener("ended", finish, { once: true });
+
+   // Запобіжник: якщо autoplay все ж заблокували браузером — не лишаємо сайт заблокованим
+   setTimeout(() => {
+      if (video.paused && !video.ended) finish();
+   }, 1000);
+}
+
+function setupPageIntro(video) {
+   if (video.dataset.pageIntro !== "true") return;
+
+   if (document.documentElement.classList.contains("intro-video")) {
+      lockForIntro(video);
+   } else {
+      video.autoplay = false;
+      freezeOnLastFrame(video);
+   }
+}
+
+// Перезапуск інтро при заміні джерел відео (mobile ⇄ desktop) на resize —
+// відео грає з початку, тож хедер/доти/скрол повертаються в стан "до інтро"
+function restartIntro(video) {
+   document.documentElement.classList.add("intro-video");
+   document.documentElement.dataset.introVideoDone = "false";
+   document.dispatchEvent(new CustomEvent("video-intro:restart"));
+   video.play().catch(() => {});
+   lockForIntro(video);
 }
 
 function initVideo() {
@@ -61,12 +138,57 @@ function initVideo() {
       video.dataset.videoInit = "true";
 
       const wrapper = video.closest(".video-wrapper");
+      const playBtn = wrapper?.querySelector("[data-video-play]");
 
+      // Data Saver / повільне з'єднання — не запускаємо autoplay
+      if (video.dataset.respectDataSaver !== "false" && video.autoplay && isDataSaverOn()) {
+         video.autoplay = false;
+         video.pause();
+      }
+
+      // Poster ховається назавжди після першого старту відтворення
       video.addEventListener("playing", () => {
          wrapper?.classList.add("is-playing");
-      });
+      }, { once: true });
+
+      // Кнопка play видима тільки коли відео на паузі (і не приховане через offscreen-пауза)
+      if (playBtn) {
+         const syncPlayButton = () => {
+            const hidden = !video.paused || video.dataset.pausedOffscreen === "true";
+            playBtn.classList.toggle("is-hidden", hidden);
+         };
+         syncPlayButton();
+         video.addEventListener("play", syncPlayButton);
+         video.addEventListener("pause", syncPlayButton);
+         video.addEventListener("ended", syncPlayButton);
+
+         playBtn.addEventListener("click", () => {
+            applySources(video);
+            video.play().catch(() => {});
+         });
+      }
+
+      // Пауза коли відео виходить за межі екрана, продовження при поверненні
+      if (video.dataset.pauseOffscreen !== "false") {
+         const visibilityObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+               if (entry.isIntersecting) {
+                  if (video.dataset.pausedOffscreen === "true") {
+                     video.dataset.pausedOffscreen = "false";
+                     video.play().catch(() => {});
+                  }
+               } else if (!video.paused) {
+                  video.dataset.pausedOffscreen = "true";
+                  video.pause();
+               }
+            });
+         });
+         visibilityObserver.observe(video);
+      }
 
       if (video.dataset.mobileBreakpoint) responsiveVideos.push(video);
+
+      setupPageIntro(video);
 
       if (video.dataset.lazy === "true") {
          const observer = new IntersectionObserver(
@@ -96,7 +218,12 @@ function initVideo() {
             responsiveVideos.forEach((video) => {
                // До видимості (lazy, ще не в viewport) джерела не підміняємо
                if (video.dataset.lazy === "true" && !video.dataset.appliedSources) return;
-               applySources(video);
+               const changed = applySources(video);
+               // pageIntro-відео перезавантажилось (mobile ⇄ desktop) і грає з початку —
+               // повертаємо стан "до інтро" (хедер/доти сховані, скрол заблокований)
+               if (changed && video.dataset.pageIntro === "true") {
+                  restartIntro(video);
+               }
             });
          }, 200);
       });
@@ -110,3 +237,12 @@ if (document.readyState === "loading") {
 }
 
 document.addEventListener("page:ready", initVideo);
+
+// Якщо користувач пішов зі сторінки до завершення відео-інтро —
+// одразу повертаємо хедер і розблоковуємо скрол (інакше вони "застрягнуть")
+document.addEventListener("page:leave", () => {
+   if (document.documentElement.classList.contains("intro-video")) {
+      document.documentElement.classList.remove("intro-video");
+      resetBodyLock();
+   }
+});

@@ -24,6 +24,9 @@ pnpm-debug.log*
 # PHP mail config (contains SMTP credentials)
 public/api/mail.config.php
 
+# original (uncompressed) video backups — kept locally only, see npm run video:optimize
+src/assets/video/**/*.original.mp4
+
 # macOS-specific files
 .DS_Store
 **/.DS_Store

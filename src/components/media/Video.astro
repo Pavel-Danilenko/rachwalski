@@ -19,16 +19,35 @@
  * @param {"none"|"metadata"|"auto"} preload - дефолт "metadata" (ігнорується якщо lazy)
  * @param {"cover"|"contain"|"fill"|"none"} objectFit - дефолт "cover"
  * @param {boolean} lazy          - підвантажувати тільки біля viewport (дефолт true)
+ * @param {boolean} pauseOffscreen - ставити на пауза коли відео виходить за межі екрана, продовжувати при поверненні (дефолт true)
+ * @param {boolean} respectDataSaver - не запускати autoplay при ввімкненому Data Saver / повільному з'єднанні (дефолт true)
+ * @param {boolean} pageIntro       - відео як інтро сторінки (разом з <BaseLayout introVideo>): на першому
+ *                                     заході/reload грає один раз (хедер прихований, скрол заблокований,
+ *                                     по завершенню — розблокування і плавна поява хедера); при SPA-переході
+ *                                     на сторінку повторно не грає, показує останній кадр (дефолт false)
+ * @param {boolean} showPlayButton - кнопка play по центру (дефолт !controls)
+ * @param {string}  playIcon      - назва іконки зі спрайту (дефолт "play")
  * @param {string}  class         - клас на <video>
  * @param {string}  wrapperClass  - клас на обгортці <div>
  *
  * Приклади:
  * <Video src={heroMp4} webm={heroWebm} srcMobile={heroMobileMp4} webmMobile={heroMobileWebm} poster={heroPoster} width={1920} height={1080} />
  * <Video src={demoMp4} controls autoplay={false} loop={false} muted={false} lazy={false} />
+ * <Video src={demoMp4} autoplay={false} loop={false} muted={false} playIcon="custom-play" />
+ *
+ * Розмір кнопки play та іконки — без хардкоду, через CSS-змінні (з фолбеками):
+ * .video-wrapper__play {
+ *   --video-play-size: 4rem;
+ *   --video-play-icon-size: 1.5rem;
+ *   --video-play-bg: rgba(255, 255, 255, 0.2);
+ *   --video-play-bg-hover: rgba(255, 255, 255, 0.32);
+ *   --video-play-color: var(--color-white);
+ * }
  */
 
 import { Picture } from "astro:assets";
 import type { ImageMetadata } from "astro";
+import Icon from "@components/ui/Icon.astro";
 import "@styles/components/media/_video.scss";
 
 interface Props {
@@ -49,6 +68,11 @@ interface Props {
    preload?: "none" | "metadata" | "auto";
    objectFit?: "cover" | "contain" | "fill" | "none";
    lazy?: boolean;
+   pauseOffscreen?: boolean;
+   respectDataSaver?: boolean;
+   pageIntro?: boolean;
+   showPlayButton?: boolean;
+   playIcon?: string;
    class?: string;
    wrapperClass?: string;
    [key: string]: unknown;
@@ -72,6 +96,11 @@ const {
    preload = "metadata",
    objectFit = "cover",
    lazy = true,
+   pauseOffscreen = true,
+   respectDataSaver = true,
+   pageIntro = false,
+   showPlayButton = !controls,
+   playIcon = "play",
    class: videoClass = "",
    wrapperClass = "",
    ...restProps
@@ -112,14 +141,30 @@ const hasResponsive = Boolean(srcMobile || webmMobile);
       tabindex={!controls ? -1 : undefined}
       data-video
       data-lazy={lazy ? "true" : "false"}
+      data-pause-offscreen={pauseOffscreen ? "true" : "false"}
+      data-respect-data-saver={respectDataSaver ? "true" : "false"}
+      data-page-intro={pageIntro ? "true" : undefined}
       data-mobile-breakpoint={hasResponsive ? mobileBreakpoint : undefined}
       data-webm={webm}
       data-src={src}
       data-webm-mobile={webmMobile}
       data-src-mobile={srcMobile}
+      data-applied-sources={!lazy && !hasResponsive ? `${webm ?? ""}|${src}` : undefined}
       {...restProps}
    >
       {webm && <source src={webm} type="video/webm" />}
       <source src={src} type="video/mp4" />
    </video>
+   {
+      showPlayButton && (
+         <button
+            type="button"
+            class="video-wrapper__play"
+            data-video-play
+            aria-label="Play video"
+         >
+            <Icon name={playIcon} />
+         </button>
+      )
+   }
 </div>

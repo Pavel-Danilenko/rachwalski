@@ -1,6 +1,7 @@
 @use "@styles/utils" as *;
 
 .treatments {
+   background: var(--gradient-video-banner-top-gradient);
    &__container {
       display: flex;
       align-items: flex-start;

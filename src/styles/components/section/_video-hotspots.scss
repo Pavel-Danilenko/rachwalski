@@ -1,0 +1,264 @@
+@use "@styles/utils" as *;
+
+// ── Video banner hotspots ──────────────────────────────────────────────────
+// Нові, незалежні доти+попапи над відео-банером на головній. Позиція кожного
+// дота задається через --x/--y (відсотки, інлайн style) — відео покриває
+// контейнер через object-fit: cover, тож проценти = координати напряму,
+// без JS-розрахунків.
+
+.video-banner__hotspots {
+   position: absolute;
+   inset: 0;
+   z-index: 10;
+   pointer-events: none;
+}
+
+.video-hotspot {
+   position: absolute;
+   left: var(--x, 50%);
+   top: var(--y, 50%);
+   transform: translate(-50%, -30%) scale(0.3);
+   opacity: 0;
+   pointer-events: auto;
+   cursor: pointer;
+   user-select: none;
+   transition:
+      opacity 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+      transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+   .video-banner__hotspots.is-visible & {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+   }
+
+   // Стагер — доти з'являються по черзі
+   @for $i from 1 through 7 {
+      .video-banner__hotspots.is-visible &:nth-child(#{$i}) {
+         transition-delay: #{($i - 1) * 0.22}s;
+      }
+   }
+
+   // Без анімації (повторний візит / SPA-перехід) — доти видно одразу
+   .video-banner__hotspots.is-instant & {
+      transition: none;
+   }
+
+   &.is-open {
+      z-index: 50;
+   }
+
+   // ── Dot ──────────────────────────────────────────────────────────────
+   &__dot {
+      position: relative;
+      width: toRem(28);
+      height: toRem(28);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+      transition: box-shadow var(--transition-base);
+
+      &::before {
+         content: "";
+         position: absolute;
+         inset: toRem(10);
+         border-radius: 50%;
+         background: rgba(255, 255, 255, 0.2);
+         opacity: 0;
+         transition: opacity var(--transition-base);
+      }
+
+      &::after {
+         content: "";
+         position: absolute;
+         width: toRem(8);
+         height: toRem(8);
+         border-radius: 50%;
+         background: rgba(255, 255, 255, 0.9);
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+      }
+   }
+
+   &.is-open &__dot {
+      box-shadow: 0 0 0 toRem(10) rgba(255, 255, 255, 0.12);
+
+      &::before {
+         opacity: 1;
+      }
+   }
+
+   &__dot-ring {
+      position: absolute;
+      inset: toRem(-6);
+      border-radius: 50%;
+      border: toRem(1) solid rgba(255, 255, 255, 0.2);
+      animation: video-hotspot-pulse 2.4s ease-out infinite;
+   }
+
+   // ── Popup ────────────────────────────────────────────────────────────
+   // top/left: toRem(14) — popup-origin = центр крапки (dotHalf, як у JS
+   // нижньої секції), щоб усі offset-и __line/__popup-box рахувались від
+   // центру крапки, а не від кута 28px-бокса
+   &__popup {
+      position: absolute;
+      top: toRem(14);
+      left: toRem(14);
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.96);
+      transition:
+         opacity var(--transition-base),
+         transform var(--transition-base);
+   }
+
+   &.is-open &__popup {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+   }
+
+   // SVG-лінія, що з'єднує крапку з попапом — точні значення з
+   // _treatments-hotspot.scss (left/right:-4, bottom:-2, 280×88 / 260×88)
+   &__line {
+      position: absolute;
+      pointer-events: none;
+      overflow: visible;
+   }
+
+   &__line--flipped {
+      display: none;
+   }
+
+   &.is-flipped &__line--normal {
+      display: none;
+   }
+
+   &.is-flipped &__line--flipped {
+      display: block;
+   }
+
+   &[data-side="right"] &__line {
+      left: toRem(-4);
+      right: auto;
+      width: toRem(280);
+      height: toRem(88);
+   }
+
+   &[data-side="left"] &__line {
+      right: toRem(-4);
+      left: auto;
+      width: toRem(260);
+      height: toRem(88);
+   }
+
+   &__line--normal {
+      bottom: toRem(-2);
+      top: auto;
+   }
+
+   // Дзеркальне відображення лінії під крапкою (та ж геометрія, scaleY)
+   &__line--flipped {
+      top: toRem(-2);
+      bottom: auto;
+      transform: scaleY(-1);
+   }
+
+   &__popup-box {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      gap: toRem(4);
+      background: rgba(9, 12, 17, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: toRem(12);
+      padding: toRem(16) toRem(20);
+      white-space: nowrap;
+   }
+
+   &[data-side="right"] &__popup-box {
+      left: toRem(54);
+      right: auto;
+      bottom: toRem(80);
+   }
+
+   &[data-side="left"] &__popup-box {
+      right: toRem(54);
+      left: auto;
+      bottom: toRem(80);
+   }
+
+   &.is-flipped &__popup-box {
+      top: toRem(80);
+      bottom: auto;
+   }
+
+   &__link {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: toRem(5);
+      @include fluid(font-size, 14, 16);
+      font-weight: 400;
+      color: var(--color-text);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+
+      .icon {
+         font-size: toRem(8);
+         color: var(--color-white);
+         flex-shrink: 0;
+         transition: translate var(--transition-base);
+      }
+
+      @media (any-hover: hover) {
+         &:hover .icon {
+            translate: toRem(2) toRem(-2);
+         }
+      }
+   }
+
+   // ── sm: popup по центру з glass-ефектом (JS виставляє left/top) ─────────
+   @include respond-to("sm") {
+      &__popup {
+         top: 0;
+         left: 0;
+         right: auto;
+         transform: translate(-50%, -50%) scale(0.96);
+      }
+
+      &.is-open &__popup {
+         transform: translate(-50%, -50%) scale(1);
+      }
+
+      &__line {
+         display: none;
+      }
+
+      // Glass попап — скидаємо десктопне позиціонування, JS центрує
+      &__popup-box {
+         position: static;
+         bottom: auto;
+         right: auto;
+         left: auto;
+         padding: toRem(20) toRem(24);
+      }
+   }
+}
+
+@keyframes video-hotspot-pulse {
+   0% {
+      transform: scale(1);
+      opacity: 0.4;
+   }
+   70% {
+      transform: scale(1.8);
+      opacity: 0;
+   }
+   100% {
+      transform: scale(1.8);
+      opacity: 0;
+   }
+}

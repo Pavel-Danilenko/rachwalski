@@ -29,6 +29,9 @@ interface Props {
    namespace?: string;
    // Приховати Header, Footer та MobileBookingBar (для самостійних сторінок-заглушок)
    hideChrome?: boolean;
+   // Сторінка має відео-інтро (Video з pageIntro): хедер прихований до кінця відео,
+   // скрол заблокований, звичайний Preloader не показується
+   introVideo?: boolean;
 }
 
 const {
@@ -47,6 +50,7 @@ const {
    footerBg,
    namespace = "default",
    hideChrome = false,
+   introVideo = false,
 } = Astro.props;
 
 const siteOrigin = Astro.site ?? new URL(Astro.url.origin);
@@ -66,8 +70,19 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} class:list={[introVideo && "intro-video"]}>
    <head>
+      {
+         introVideo && (
+            // Якщо при релоаді сторінка з відео-інтро була проскролена —
+            // браузер відновлює попередню позицію скролу, і відео грає
+            // поза екраном. Примусово скидаємо на верх, де відео.
+            <script is:inline>
+               history.scrollRestoration = "manual";
+               window.scrollTo(0, 0);
+            </script>
+         )
+      }
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -106,7 +121,7 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
       }
    </head>
    <body>
-      <Preloader />
+      {!introVideo && <Preloader />}
       <IconSprite />
 
       <div class="wrapper" data-barba="wrapper">

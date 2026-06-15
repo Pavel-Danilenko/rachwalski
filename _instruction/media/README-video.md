@@ -1,0 +1,244 @@
+# Video — гнучкий відео-компонент
+
+Компонент для `<video>` з підтримкою webm/mp4, адаптивних mobile/desktop джерел, lazy-завантаження, poster-зображення (через `Img`) та кнопки play зі спрайту іконок.
+
+```
+src/components/media/Video.astro
+src/styles/components/media/_video.scss
+src/scripts/init/video.js
+src/icons/play.svg
+scripts/video-optimize.mjs
+```
+
+---
+
+## Стиснення відео (.mp4 + .webm)
+
+Просто покладіть оригінальний `.mp4` (з камери, монтажки тощо) в `src/assets/video/` і запустіть:
+
+```bash
+npm run video:optimize
+```
+
+Скрипт рекурсивно сканує `src/assets/video/**/*.mp4` (крім `*.original.mp4`) і для кожного файлу:
+
+1. **При першому запуску** — перейменовує оригінал у `name.original.mp4` (бекап, не видаляється, у git не комітиться — див. `.gitignore`).
+2. Генерує стиснений `name.mp4` (h264 + AAC) та `name.webm` (VP9 + Opus) з цього бекапу.
+
+Імпортуєте в компонент звичні `name.mp4` / `name.webm` — це вже стиснені файли, тому в білд потрапляють лише вони. `name.original.mp4` ніде не імпортується і в `dist` не йде.
+
+Повторний запуск нічого не ламає: якщо `name.mp4`/`name.webm` вже новіші за `name.original.mp4` — файл пропускається.
+
+> Якщо потрібно перестиснути з новими налаштуваннями — видаліть `name.mp4`/`name.webm` (або просто скиньте `--quality` і запустіть знову; скрипт перегенерує застарілі файли). `name.original.mp4` лишається джерелом для повторного стиснення.
+
+### Налаштування стиснення
+
+Як і `quality` у зображеннях — параметр `--quality` (0-100, дефолт `90`). Вище = краща якість і більший файл, нижче = сильніше стиснення.
+
+```bash
+npm run video:optimize                                    # дефолт quality=90
+npm run video:optimize -- --quality=70                    # сильніше стиснення, менший файл
+npm run video:optimize -- --quality=60 --audio-bitrate=64k --cpu-used=4
+```
+
+| Флаг | Дефолт | Опис |
+|---|---|---|
+| `--quality` | `90` | 0-100 → VP9 CRF 40…15, h264 CRF 35…16 (0 = сильне стиснення, 100 = найкраща якість) |
+| `--audio-bitrate` | `96k` | Бітрейт аудіо (Opus для webm, AAC для mp4) |
+| `--cpu-used` | `2` | Швидкість кодування: 0 (повільно/якісно) … 5 (швидко). Для h264 мапиться на preset `veryslow`…`veryfast` |
+
+```astro
+---
+import demoMp4 from "@assets/video/demo.mp4";   // стиснений npm run video:optimize
+import demoWebm from "@assets/video/demo.webm"; // стиснений npm run video:optimize
+---
+
+<Video src={demoMp4} webm={demoWebm} width={1920} height={1080} />
+```
+
+---
+
+## Сніпети
+
+| Prefix | Опис |
+|---|---|
+| `fvideo` | Звичайне відео з кнопкою play (autoplay вимкнено) |
+| `fvideo:banner` | Банерне відео (autoplay, loop, muted, webm+mp4, мобільні джерела, poster) |
+
+---
+
+## Підключення
+
+```astro
+---
+import Video from "@components/media/Video.astro";
+import demoMp4 from "@assets/video/demo.mp4";
+import demoWebm from "@assets/video/demo.webm";
+---
+```
+
+> Відео ОБОВ'ЯЗКОВО імпортувати через `import` — Vite скопіює файл у `dist` з хешем у імені.
+
+---
+
+## Базове використання
+
+```astro
+<Video src={demoMp4} webm={demoWebm} width={1920} height={1080} />
+```
+
+---
+
+## Всі пропси
+
+| Проп | Тип | Дефолт | Опис |
+|---|---|---|---|
+| `src` | `string` | — | **Обов'язковий.** Desktop fallback (mp4) |
+| `webm` | `string` | — | Desktop webm — буде першим у списку `<source>` (пріоритетний формат) |
+| `srcMobile` | `string` | — | Mobile fallback (mp4) |
+| `webmMobile` | `string` | — | Mobile webm |
+| `mobileBreakpoint` | `number` | `767` | Межа mobile/desktop у px (для `srcMobile`/`webmMobile`) |
+| `poster` | `ImageMetadata` | — | Poster-зображення, рендериться через `Picture` (`astro:assets`) |
+| `posterAlt` | `string` | `""` | Alt для poster |
+| `width` | `number` | — | Ширина — разом з `height` задає `aspect-ratio` |
+| `height` | `number` | — | Висота |
+| `autoplay` | `boolean` | `true` | Автозапуск (вимикається при `prefers-reduced-motion: reduce`) |
+| `loop` | `boolean` | `true` | Циклічне відтворення |
+| `muted` | `boolean` | `true` | Без звуку |
+| `playsinline` | `boolean` | `true` | Inline-відтворення на iOS |
+| `controls` | `boolean` | `false` | Нативні controls браузера |
+| `preload` | `"none"` \| `"metadata"` \| `"auto"` | `"metadata"` | Ігнорується якщо `lazy` |
+| `objectFit` | `"cover"` \| `"contain"` \| `"fill"` \| `"none"` | `"cover"` | CSS `object-fit` для відео і poster |
+| `lazy` | `boolean` | `true` | Підвантажувати джерела тільки біля viewport (IntersectionObserver) |
+| `pauseOffscreen` | `boolean` | `true` | Ставити відео на паузу, коли воно виходить за межі екрана, і продовжувати при поверненні (економія CPU/батареї) |
+| `respectDataSaver` | `boolean` | `true` | Не запускати autoplay, якщо у користувача увімкнено Data Saver або повільне з'єднання (`2g`/`slow-2g`) |
+| `showPlayButton` | `boolean` | `!controls` | Кнопка play по центру |
+| `playIcon` | `string` | `"play"` | Назва іконки зі спрайту (`src/icons/*.svg`) |
+| `class` | `string` | `""` | Клас на `<video>` |
+| `wrapperClass` | `string` | `""` | Клас на обгортці `<div>` |
+
+> Будь-які інші атрибути (`...restProps`) передаються прямо на `<video>`.
+
+---
+
+## Приклади
+
+### Банерне відео (декоративне, autoplay)
+```astro
+<Video
+   src={heroMp4}
+   webm={heroWebm}
+   srcMobile={heroMobileMp4}
+   webmMobile={heroMobileWebm}
+   poster={heroPoster}
+   width={1920}
+   height={1080}
+   wrapperClass="hero__video"
+/>
+```
+
+Autoplay + loop + muted + playsinline увімкнені за замовчуванням, кнопка play та controls — не показуються. На `prefers-reduced-motion: reduce` автозапуск не спрацює, відео покаже poster.
+
+### Звичайне відео з кнопкою play
+```astro
+<Video
+   src={demoMp4}
+   webm={demoWebm}
+   poster={demoPoster}
+   autoplay={false}
+   loop={false}
+   muted={false}
+   width={1920}
+   height={1080}
+/>
+```
+
+`controls={false}` (дефолт) → `showPlayButton` автоматично `true`. Клік по кнозі запускає відео.
+
+### Із нативними controls (без кнопки play)
+```astro
+<Video src={demoMp4} controls autoplay={false} loop={false} muted={false} lazy={false} />
+```
+
+### Автозапуск один раз, без повтору
+```astro
+<Video src={demoMp4} webm={demoWebm} loop={false} width={1920} height={1080} />
+```
+
+`autoplay` (дефолт `true`) і `loop` — незалежні пропси. Відео запуститься автоматично і зупиниться на останньому кадрі після завершення. Кнопка play з'явиться знову (через подію `ended`) — клік перезапустить відео з початку.
+
+### Вимкнути offscreen-паузу або Data Saver
+```astro
+<!-- Відео грає завжди, навіть поза екраном і на повільному з'єднанні -->
+<Video src={demoMp4} pauseOffscreen={false} respectDataSaver={false} width={1920} height={1080} />
+```
+
+За дефолтом обидва увімкнені:
+- `pauseOffscreen` — будь-яке відео (autoplay чи запущене вручну) ставиться на паузу при виході з viewport і продовжує при поверненні.
+- `respectDataSaver` — autoplay-відео не запуститься автоматично, якщо у користувача `navigator.connection.saveData` або `effectiveType` дорівнює `2g`/`slow-2g`; натомість покажеться poster + кнопка play для ручного запуску.
+
+### Кастомна іконка play зі спрайту
+```astro
+<!-- src/icons/my-play.svg буде доступний автоматично через IconSprite -->
+<Video src={demoMp4} autoplay={false} loop={false} muted={false} playIcon="my-play" />
+```
+
+---
+
+## Aspect ratio
+
+Якщо передати `width` і `height` — обгортка отримає `aspect-ratio` через CSS-змінну (запобігає layout shift).
+
+```astro
+<!-- aspect-ratio: 16/9 буде встановлено автоматично -->
+<Video src={demoMp4} width={1280} height={720} />
+```
+
+---
+
+## Структура HTML
+
+```html
+<div class="video-wrapper is-playing" style="--aspect-ratio: 16/9">
+   <div class="video-wrapper__poster">
+      <picture>...</picture>
+   </div>
+   <video class="video-wrapper__video" data-video data-lazy="true" ...>
+      <source type="video/webm" src="...">
+      <source type="video/mp4" src="...">
+   </video>
+   <button type="button" class="video-wrapper__play" data-video-play aria-label="Play video">
+      <span class="icon">...</span>
+   </button>
+</div>
+```
+
+- `.is-playing` додається після першого старту відтворення — ховає poster.
+- `.video-wrapper__play.is-hidden` — коли відео не на паузі (керується JS).
+
+---
+
+## Стилізація
+
+Базові стилі лежать в `_video.scss`, повторювати їх не потрібно. Розмір і кольори кнопки play — **без хардкоду**, через CSS-змінні з фолбеками. Перевизначай їх на своєму класі (`wrapperClass`):
+
+```scss
+.hero__video {
+   .video-wrapper__play {
+      --video-play-size: 5rem;       // розмір кнопки (дефолт 4rem)
+      --video-play-icon-size: 2rem;  // розмір іконки (дефолт 1.5rem, font-size для .icon = 1em)
+      --video-play-bg: rgba(0, 0, 0, 0.3);
+      --video-play-bg-hover: rgba(0, 0, 0, 0.5);
+      --video-play-color: var(--color-white);
+   }
+}
+```
+
+Розмір/позиція обгортки — звичайний CSS:
+
+```scss
+.hero__video {
+   width: 100%;
+   height: 100vh;
+}
+```

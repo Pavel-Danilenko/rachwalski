@@ -43,6 +43,40 @@
       opacity: 0;
    }
 
+   // ── Play button — центрована кнопка, ховається коли відео грає ─────────
+   // Розміри та кольори — через CSS-змінні (фолбеки нижче), ніякого хардкоду
+   &__play {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      z-index: 2;
+      width: var(--video-play-size, 4rem);
+      height: var(--video-play-size, 4rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: var(--video-play-icon-size, 1.5rem);
+      background: var(--video-play-bg, rgba(255, 255, 255, 0.2));
+      backdrop-filter: blur(4px);
+      color: var(--video-play-color, var(--color-white));
+      cursor: pointer;
+      transition:
+         opacity var(--transition-base),
+         background var(--transition-base);
+
+      @media (any-hover: hover) {
+         &:hover {
+            background: var(--video-play-bg-hover, rgba(255, 255, 255, 0.32));
+         }
+      }
+
+      &.is-hidden {
+         opacity: 0;
+         pointer-events: none;
+      }
+   }
+
    // ── object-fit варіанти ────────────────────────────────────────────────
    &[data-object-fit="contain"] &__video,
    &[data-object-fit="contain"] &__poster img {
