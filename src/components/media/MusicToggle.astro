@@ -1,0 +1,109 @@
+---
+/**
+ * MusicToggle — гнучка кнопка вкл/викл фонової музики (напр. для video-banner)
+ *
+ * @param {string}  src     - mp3-файл (fallback, найширша підтримка)
+ * @param {string}  ogg     - ogg-файл (опціонально, кращий стиск)
+ * @param {string}  webm    - webm-файл (опціонально, кращий стиск)
+ * @param {Track[]} tracks  - плейлист: масив { src, ogg?, webm? } — при кожному
+ *                            заході JS обирає випадковий трек. Якщо передано —
+ *                            src/ogg/webm вище ігноруються.
+ * @param {number}  volume  - цільова громкість 0..1 (дефолт 0.6)
+ * @param {number}  fade    - тривалість fade in/out у мс (дефолт 800)
+ * @param {string}  class   - додатковий клас на обгортку
+ *
+ * Якщо не передати ні src/ogg/webm, ні tracks — кнопка автоматично
+ * сховається (JS), поки аудіо-джерело не з'явиться.
+ *
+ * Приклади:
+ * <MusicToggle src="/audio/banner-music.mp3" class="video-banner__music" />
+ *
+ * <MusicToggle
+ *    webm={trackWebm}
+ *    ogg={trackOgg}
+ *    src={trackMp3}
+ *    volume={0.4}
+ *    fade={1200}
+ * />
+ *
+ * <MusicToggle
+ *    tracks={[
+ *       { src: track1Mp3, webm: track1Webm },
+ *       { src: track2Mp3, webm: track2Webm },
+ *    ]}
+ * />
+ *
+ * Позиція/розміри/кольори — через CSS-змінні (без хардкоду), перевизначай на класі:
+ * .video-banner__music {
+ *   --music-toggle-right: 1rem;
+ *   --music-toggle-bottom: 1rem;
+ *   --music-toggle-size: 3rem;
+ *   --music-toggle-icon-size: 1.25rem;
+ *   --music-toggle-bg: rgba(0, 0, 0, 0.3);
+ *   --music-toggle-bg-hover: rgba(0, 0, 0, 0.5);
+ *   --music-toggle-color: var(--color-white);
+ * }
+ */
+
+import Icon from "@components/ui/Icon.astro";
+import "@styles/components/media/_music-toggle.scss";
+
+interface Track {
+   src?: string;
+   ogg?: string;
+   webm?: string;
+}
+
+interface Props {
+   src?: string;
+   ogg?: string;
+   webm?: string;
+   tracks?: Track[];
+   volume?: number;
+   fade?: number;
+   class?: string;
+}
+
+const {
+   src,
+   ogg,
+   webm,
+   tracks,
+   volume = 0.6,
+   fade = 800,
+   class: className = "",
+} = Astro.props;
+
+const hasTracks = Array.isArray(tracks) && tracks.length > 0;
+
+// Порядок джерел: webm → ogg → mp3 (від найкращого стиску до найширшої підтримки)
+const sources = hasTracks
+   ? []
+   : ([
+        webm && { src: webm, type: "audio/webm" },
+        ogg && { src: ogg, type: "audio/ogg" },
+        src && { src, type: "audio/mpeg" },
+     ].filter(Boolean) as { src: string; type: string }[]);
+---
+
+<div
+   class:list={["music-toggle", className]}
+   data-music-toggle
+   data-volume={volume}
+   data-fade={fade}
+   data-tracks={hasTracks ? JSON.stringify(tracks) : undefined}
+>
+   <audio loop preload="none" data-music-toggle-audio>
+      {sources.map((s) => <source src={s.src} type={s.type} />)}
+   </audio>
+   <button
+      type="button"
+      class="music-toggle__btn"
+      data-music-toggle-btn
+      aria-label="Toggle background music"
+      aria-pressed="false"
+   >
+      <Icon name="volume" class="music-toggle__icon music-toggle__icon--on" />
+      <Icon name="volume-mute" class="music-toggle__icon music-toggle__icon--off" />
+   </button>
+</div>

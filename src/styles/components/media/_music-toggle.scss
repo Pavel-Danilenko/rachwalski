@@ -1,0 +1,58 @@
+@use "@styles/utils" as *;
+
+// ── Music toggle — кнопка вкл/викл фонової музики ───────────────────────────
+// Позиція/розміри/кольори — через CSS-змінні (фолбеки нижче), перевизначай їх
+// на класі обгортки (див. приклад у MusicToggle.astro), без хардкоду тут.
+.music-toggle {
+   position: absolute;
+   right: var(--music-toggle-right, #{toRem(20)});
+   bottom: var(--music-toggle-bottom, #{toRem(20)});
+   z-index: var(--music-toggle-z, 20);
+
+   @include respond-from("md") {
+      right: var(--music-toggle-right-md, var(--music-toggle-right, #{toRem(40)}));
+      bottom: var(--music-toggle-bottom-md, var(--music-toggle-bottom, #{toRem(40)}));
+   }
+
+   // Немає аудіо-джерела — кнопку приховує JS (music-toggle.js)
+   &[hidden] {
+      display: none;
+   }
+
+   &__btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--music-toggle-size, #{toRem(44)});
+      height: var(--music-toggle-size, #{toRem(44)});
+      border-radius: 50%;
+      background: var(--music-toggle-bg, rgba(255, 255, 255, 0.1));
+      backdrop-filter: blur(4px);
+      border: 1px solid var(--music-toggle-border, rgba(255, 255, 255, 0.1));
+      color: var(--music-toggle-color, var(--color-white));
+      cursor: pointer;
+      transition: background var(--transition-base);
+
+      @media (any-hover: hover) {
+         &:hover {
+            background: var(--music-toggle-bg-hover, rgba(255, 255, 255, 0.2));
+         }
+      }
+   }
+
+   &__icon {
+      font-size: var(--music-toggle-icon-size, #{toRem(18)});
+
+      &--on {
+         display: none;
+      }
+   }
+
+   &.is-playing &__icon--on {
+      display: block;
+   }
+
+   &.is-playing &__icon--off {
+      display: none;
+   }
+}
