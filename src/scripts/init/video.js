@@ -75,13 +75,15 @@ function tryAutoplay(video) {
 // Заморожує відео на останньому кадрі (для повторних SPA-переходів на pageIntro-відео)
 // Слухаємо loadedmetadata, бо applySources() нижче викличе video.load() і скине readyState
 function freezeOnLastFrame(video) {
-   video.addEventListener(
-      "loadedmetadata",
-      () => {
-         if (video.duration) video.currentTime = video.duration;
-      },
-      { once: true },
-   );
+   const seekToEnd = () => {
+      if (video.duration) video.currentTime = video.duration;
+   };
+   // readyState >= 1 (HAVE_METADATA) — метадані вже завантажені (Safari встигає до реєстрації listener)
+   if (video.readyState >= 1) {
+      seekToEnd();
+   } else {
+      video.addEventListener("loadedmetadata", seekToEnd, { once: true });
+   }
 }
 
 // pageIntro-відео: на свіжому заході/reload — лок скролу + хедер прихований
@@ -198,6 +200,11 @@ function initVideo() {
             });
          });
          visibilityObserver.observe(video);
+      }
+
+      if (video.dataset.playbackRate) {
+         const rate = parseFloat(video.dataset.playbackRate);
+         if (rate > 0) video.playbackRate = rate;
       }
 
       if (video.dataset.mobileBreakpoint) responsiveVideos.push(video);

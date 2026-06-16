@@ -71,6 +71,7 @@ interface Props {
    pauseOffscreen?: boolean;
    respectDataSaver?: boolean;
    pageIntro?: boolean;
+   playbackRate?: number;
    showPlayButton?: boolean;
    playIcon?: string;
    class?: string;
@@ -99,6 +100,7 @@ const {
    pauseOffscreen = true,
    respectDataSaver = true,
    pageIntro = false,
+   playbackRate = 1,
    showPlayButton = !controls,
    playIcon = "play",
    class: videoClass = "",
@@ -144,6 +146,7 @@ const hasResponsive = Boolean(srcMobile || webmMobile);
       data-pause-offscreen={pauseOffscreen ? "true" : "false"}
       data-respect-data-saver={respectDataSaver ? "true" : "false"}
       data-page-intro={pageIntro ? "true" : undefined}
+      data-playback-rate={playbackRate !== 1 ? playbackRate : undefined}
       data-mobile-breakpoint={hasResponsive ? mobileBreakpoint : undefined}
       data-webm={webm}
       data-src={src}
