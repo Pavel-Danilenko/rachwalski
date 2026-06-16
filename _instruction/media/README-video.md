@@ -112,6 +112,7 @@ import demoWebm from "@assets/video/demo.webm";
 | `lazy` | `boolean` | `true` | Підвантажувати джерела тільки біля viewport (IntersectionObserver) |
 | `pauseOffscreen` | `boolean` | `true` | Ставити відео на паузу, коли воно виходить за межі екрана, і продовжувати при поверненні (економія CPU/батареї) |
 | `respectDataSaver` | `boolean` | `true` | Не запускати autoplay, якщо у користувача увімкнено Data Saver або повільне з'єднання (`2g`/`slow-2g`) |
+| `playbackRate` | `number` | `1` | Швидкість відтворення. `0.5` — вдвічі повільніше (slow-motion), `2` — вдвічі швидше. Зручно для атмосферних фонових відео |
 | `showPlayButton` | `boolean` | `!controls` | Кнопка play по центру |
 | `playIcon` | `string` | `"play"` | Назва іконки зі спрайту (`src/icons/*.svg`) |
 | `class` | `string` | `""` | Клас на `<video>` |
@@ -182,6 +183,20 @@ Autoplay + loop + muted + playsinline увімкнені за замовчува
 <!-- src/icons/my-play.svg буде доступний автоматично через IconSprite -->
 <Video src={demoMp4} autoplay={false} loop={false} muted={false} playIcon="my-play" />
 ```
+
+### Зміна швидкості відтворення
+```astro
+<!-- Slow-motion: вдвічі повільніше — атмосферний ефект для фонових відео -->
+<Video src={bgMp4} webm={bgWebm} lazy={false} playbackRate={0.5} />
+
+<!-- Прискорене: вдвічі швидше -->
+<Video src={bgMp4} playbackRate={2} />
+```
+
+Значення `playbackRate`:
+- `< 1` — сповільнене (0.5 = 50% швидкості, `0.25` = 25%)
+- `1` — нормальна швидкість (дефолт)
+- `> 1` — прискорене (1.5 = 150%, `2` = 200%)
 
 ---
 
