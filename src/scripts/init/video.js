@@ -142,7 +142,10 @@ function lockForIntro(video) {
 
    const startIntro = () => {
       const rate = video.dataset.playbackRate ? parseFloat(video.dataset.playbackRate) : 1;
-      if (rate > 1) video.playbackRate = rate;
+      // Safari WebKit: playbackRate > 2 зависає навіть з частими keyframe-ами.
+      // Обмежуємо до 2 — максимально стабільне значення в Safari.
+      const safeRate = isSafari && rate > 2 ? 2 : rate;
+      if (safeRate > 1) video.playbackRate = safeRate;
       video.play().catch(() => {
          video.addEventListener("canplay", () => video.play().catch(() => {}), { once: true });
       });
