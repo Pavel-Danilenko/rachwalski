@@ -142,9 +142,7 @@ function lockForIntro(video) {
 
    const startIntro = () => {
       const rate = video.dataset.playbackRate ? parseFloat(video.dataset.playbackRate) : 1;
-      // Safari WebKit bug: playbackRate > 1 зависає незалежно від буфера — проблема декодера
-      // (відео застрягає між keyframe-ами). На Safari грає на 1×; Chrome/Firefox отримають rate.
-      if (rate > 1 && !isSafari) video.playbackRate = rate;
+      if (rate > 1) video.playbackRate = rate;
       video.play().catch(() => {
          video.addEventListener("canplay", () => video.play().catch(() => {}), { once: true });
       });
