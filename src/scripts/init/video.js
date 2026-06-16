@@ -142,31 +142,12 @@ function lockForIntro(video) {
 
    const startIntro = () => {
       const rate = video.dataset.playbackRate ? parseFloat(video.dataset.playbackRate) : 1;
-
-      const playWithRate = () => {
-         if (rate > 1) video.playbackRate = rate;
-         video.play().catch(() => {
-            video.addEventListener("canplay", () => video.play().catch(() => {}), { once: true });
-         });
-      };
-
-      // Safari: playbackRate > 1 викликає перебуферизацію навіть якщо встановлено до play().
-      // Рішення: fetch() завантажує відео повністю → blob URL → відтворення з пам'яті RAM.
-      // HTTP-кеш (preload="auto" вже завантажив) → fetch() майже instant (cache hit).
-      // З blob-ом Safari не може "підвантажувати" — весь файл вже в пам'яті, rate не стоп.
-      if (isSafari && rate > 1) {
-         const src = video.dataset.src || "";
-         fetch(src)
-            .then((r) => r.blob())
-            .then((blob) => {
-               video.src = URL.createObjectURL(blob);
-               video.addEventListener("canplay", playWithRate, { once: true });
-            })
-            .catch(playWithRate);
-         return;
-      }
-
-      playWithRate();
+      // Safari WebKit bug: playbackRate > 1 зависає незалежно від буфера — проблема декодера
+      // (відео застрягає між keyframe-ами). На Safari грає на 1×; Chrome/Firefox отримають rate.
+      if (rate > 1 && !isSafari) video.playbackRate = rate;
+      video.play().catch(() => {
+         video.addEventListener("canplay", () => video.play().catch(() => {}), { once: true });
+      });
    };
 
    // canplaythrough: браузер має достатньо буфера для відтворення до кінця (при 1×).
