@@ -27,6 +27,9 @@ public/api/mail.config.php
 # original (uncompressed) video backups — kept locally only, see npm run video:optimize
 src/assets/video/**/*.original.mp4
 
+# original (lossless) audio backups — kept locally only, see npm run audio:optimize
+src/assets/audio/**/*.original.*
+
 # macOS-specific files
 .DS_Store
 **/.DS_Store

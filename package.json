@@ -5,6 +5,7 @@
    "scripts": {
       "snippets": "node scripts/generate-snippets.js",
       "video:optimize": "node scripts/video-optimize.mjs",
+      "audio:optimize": "node scripts/audio-optimize.mjs",
       "predev": "node scripts/generate-snippets.js",
       "dev": "concurrently -n \"astro,php,mail,open\" -c \"cyan,yellow,magenta,green\" \"astro dev\" \"php -S localhost:8888 -t public/api\" \"mailhog\" \"sleep 4 && /usr/bin/open http://localhost:4321 && /usr/bin/open http://localhost:8025\"",
       "build": "astro build",

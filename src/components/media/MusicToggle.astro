@@ -3,16 +3,15 @@
  * MusicToggle — гнучка кнопка вкл/викл фонової музики (напр. для video-banner)
  *
  * @param {string}  src     - mp3-файл (fallback, найширша підтримка)
- * @param {string}  ogg     - ogg-файл (опціонально, кращий стиск)
- * @param {string}  webm    - webm-файл (опціонально, кращий стиск)
- * @param {Track[]} tracks  - плейлист: масив { src, ogg?, webm? } — при кожному
+ * @param {string}  webm    - webm-файл (опціонально, кращий стиск/якість)
+ * @param {Track[]} tracks  - плейлист: масив { src, webm? } — при кожному
  *                            заході JS обирає випадковий трек. Якщо передано —
- *                            src/ogg/webm вище ігноруються.
+ *                            src/webm вище ігноруються.
  * @param {number}  volume  - цільова громкість 0..1 (дефолт 0.6)
  * @param {number}  fade    - тривалість fade in/out у мс (дефолт 800)
  * @param {string}  class   - додатковий клас на обгортку
  *
- * Якщо не передати ні src/ogg/webm, ні tracks — кнопка автоматично
+ * Якщо не передати ні src/webm, ні tracks — кнопка автоматично
  * сховається (JS), поки аудіо-джерело не з'явиться.
  *
  * Приклади:
@@ -20,7 +19,6 @@
  *
  * <MusicToggle
  *    webm={trackWebm}
- *    ogg={trackOgg}
  *    src={trackMp3}
  *    volume={0.4}
  *    fade={1200}
@@ -50,13 +48,11 @@ import "@styles/components/media/_music-toggle.scss";
 
 interface Track {
    src?: string;
-   ogg?: string;
    webm?: string;
 }
 
 interface Props {
    src?: string;
-   ogg?: string;
    webm?: string;
    tracks?: Track[];
    volume?: number;
@@ -66,7 +62,6 @@ interface Props {
 
 const {
    src,
-   ogg,
    webm,
    tracks,
    volume = 0.6,
@@ -76,12 +71,11 @@ const {
 
 const hasTracks = Array.isArray(tracks) && tracks.length > 0;
 
-// Порядок джерел: webm → ogg → mp3 (від найкращого стиску до найширшої підтримки)
+// Порядок джерел: webm → mp3 (від кращого стиску/якості до найширшої підтримки)
 const sources = hasTracks
    ? []
    : ([
         webm && { src: webm, type: "audio/webm" },
-        ogg && { src: ogg, type: "audio/ogg" },
         src && { src, type: "audio/mpeg" },
      ].filter(Boolean) as { src: string; type: string }[]);
 ---

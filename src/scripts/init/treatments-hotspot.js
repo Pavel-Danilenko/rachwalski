@@ -66,44 +66,9 @@ function positionAllHotspots() {
    document.querySelectorAll("[data-hotspot]").forEach(positionHotspot);
 }
 
-// Parallax — картинка та крапки злегка рухаються за курсором (тільки desktop)
-function initTreatmentsParallax() {
-   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-   if (!window.matchMedia("(any-hover: hover)").matches) return;
-
-   document.querySelectorAll(".treatments__media").forEach((media) => {
-      if (media.dataset.parallaxInit) return;
-      media.dataset.parallaxInit = "true";
-
-      const img  = media.querySelector("img");
-      const dots = media.querySelectorAll(".treatments__dot");
-      if (!img) return;
-
-      media.addEventListener("mousemove", (e) => {
-         const rect = media.getBoundingClientRect();
-         const x = (e.clientX - rect.left) / rect.width - 0.5;
-         const y = (e.clientY - rect.top) / rect.height - 0.5;
-
-         img.style.transform = `translate(${x * -12}px, ${y * -12}px) scale(1.02)`;
-         dots.forEach((dot) => {
-            dot.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
-         });
-      });
-
-      media.addEventListener("mouseleave", () => {
-         img.style.transform = "";
-         dots.forEach((dot) => {
-            dot.style.transform = "";
-         });
-      });
-   });
-}
-
 function initTreatmentsHotspot() {
    const hotspots = document.querySelectorAll("[data-hotspot]");
    if (!hotspots.length) return;
-
-   initTreatmentsParallax();
 
    hotspots.forEach((hotspot) => {
       if (hotspot.dataset.hotspotInit) return;

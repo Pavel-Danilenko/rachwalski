@@ -302,7 +302,12 @@ $gradients: (
    video-banner-fade-gradient: linear-gradient(
          0deg,
          #070a0d 0%,
-         rgba(7, 10, 13, 0) 12%
+         rgba(7, 10, 13, 0) 2%
+      ),
+   video-banner-fade-gradient-mobile: linear-gradient(
+         0deg,
+         #070a0d 7%,
+         rgba(7, 10, 13, 0) 10%
       ),
 );
 

@@ -2025,24 +2025,22 @@
       ],
    },
 
-   // ─── MusicToggle — webm/ogg/mp3 fallback ───────────────────────────────────
+   // ─── MusicToggle — webm/mp3 fallback ───────────────────────────────────────
    "MusicToggle formats": {
       "prefix": "fmusic:formats",
       "scope": "astro,html",
-      "description": "MusicToggle — один трек з webm/ogg/mp3 fallback (кращий стиск)",
+      "description": "MusicToggle — один трек з webm/mp3 fallback (кращий стиск/якість)",
       "body": [
          "---",
          "import MusicToggle from \"@components/media/MusicToggle.astro\";",
          "import ${1:trackWebm} from \"@assets/audio/${2:banner-music.webm}\";",
-         "import ${3:trackOgg} from \"@assets/audio/${4:banner-music.ogg}\";",
-         "import ${5:trackMp3} from \"@assets/audio/${6:banner-music.mp3}\";",
+         "import ${3:trackMp3} from \"@assets/audio/${4:banner-music.mp3}\";",
          "---",
          "",
          "<MusicToggle",
          "\twebm={${1:trackWebm}}",
-         "\togg={${3:trackOgg}}",
-         "\tsrc={${5:trackMp3}}",
-         "\tclass=\"${7:video-banner__music}\"",
+         "\tsrc={${3:trackMp3}}",
+         "\tclass=\"${5:video-banner__music}\"",
          "/>",
          "$0",
       ],

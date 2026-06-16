@@ -19,11 +19,15 @@
          height: 100%;
          z-index: 1;
          background: var(--gradient-video-banner-fade-gradient);
+         @include respond-to("md") {
+            // background: var(--gradient-video-banner-fade-gradient-mobile);
+         }
       }
 
       @include respond-to("md") {
-         height: 80vh;
+         height: 100vh;
          height: 100svh;
+         // padding-bottom: toRem(50);
       }
    }
 }

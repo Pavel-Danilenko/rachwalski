@@ -4,7 +4,7 @@
 // в межах того ж сеансу (SPA-перехід назад) музика відновлюється автоматично.
 
 const STORAGE_KEY = "music-enabled";
-const TYPES = { webm: "audio/webm", ogg: "audio/ogg", src: "audio/mpeg" };
+const TYPES = { webm: "audio/webm", src: "audio/mpeg" };
 
 // Плавна зміна громкості (fade in/out), скасовує попередній fade при повторному викликy
 function fadeVolume(audio, to, duration) {
@@ -34,14 +34,14 @@ function fadeVolume(audio, to, duration) {
 }
 
 function trackKey(track) {
-   return track.src || track.ogg || track.webm || "";
+   return track.src || track.webm || "";
 }
 
-// Підставляє <source webm/ogg/mp3> треку в <audio>, запам'ятовує його key для exclude
+// Підставляє <source webm/mp3> треку в <audio>, запам'ятовує його key для exclude
 function applyTrack(audio, track) {
    audio.innerHTML = "";
 
-   ["webm", "ogg", "src"].forEach((key) => {
+   ["webm", "src"].forEach((key) => {
       if (!track[key]) return;
       const source = document.createElement("source");
       source.src = track[key];
@@ -93,7 +93,7 @@ function initMusicToggle() {
       }
 
       if (!hasSource) {
-         // Немає аудіо-джерела (ні src/ogg/webm, ні tracks) — ховаємо кнопку
+         // Немає аудіо-джерела (ні src/webm, ні tracks) — ховаємо кнопку
          wrapper.hidden = true;
          return;
       }

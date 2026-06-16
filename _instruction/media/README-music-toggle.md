@@ -8,6 +8,51 @@ src/styles/components/media/_music-toggle.scss
 src/scripts/init/music-toggle.js
 src/icons/volume.svg
 src/icons/volume-mute.svg
+scripts/audio-optimize.mjs
+```
+
+---
+
+## Стиснення аудіо (будь-який формат → mp3 + webm)
+
+Клієнти часто присилають музику у важких форматах (wav, flac, aiff — десятки MB). Покладіть такий файл в `src/assets/audio/` і запустіть:
+
+```bash
+npm run audio:optimize
+```
+
+Скрипт рекурсивно сканує `src/assets/audio/**/*` (`.wav`, `.flac`, `.aiff`, `.aif`, `.m4a`, `.wma`, `.aac`) і для кожного файлу:
+
+1. **При першому запуску** — перейменовує оригінал у `name.original.<ext>` (бекап, не видаляється, у git не комітиться — див. `.gitignore`).
+2. Генерує стиснені `name.mp3` (LAME) та `name.webm` (Opus) з цього бекапу.
+
+Імпортуєте в компонент `name.mp3` / `name.webm` — це вже стиснені файли, тому в білд потрапляють лише вони. `name.original.<ext>` ніде не імпортується і в `dist` не йде.
+
+Повторний запуск нічого не ламає: якщо `name.mp3`/`.webm` вже новіші за `name.original.<ext>` — файл пропускається.
+
+> Якщо потрібно перестиснути з новими налаштуваннями — видаліть `name.mp3`/`.webm` (або зробіть `touch` на `name.original.<ext>`). `name.original.<ext>` лишається джерелом для повторного стиснення.
+
+### Налаштування якості
+
+Як і `--quality` у `video:optimize` — 0-100, дефолт `90` (висока якість, "легка" музика для фону залишається невеликою за розміром навіть при високій якості завдяки Opus/LAME).
+
+```bash
+npm run audio:optimize                    # дефолт quality=90
+npm run audio:optimize -- --quality=70    # сильніше стиснення, менший файл
+```
+
+| Формат | quality=0 | quality=90 (дефолт) | quality=100 |
+|---|---|---|---|
+| `.mp3` (LAME) | `-q:a 9` (~65kbps) | `-q:a 1` (~220-260kbps) | `-q:a 0` (~245kbps, max) |
+| `.webm` (Opus) | `48k` | `178k` | `192k` |
+
+```astro
+---
+import trackMp3 from "@assets/audio/banner-music.mp3";   // стиснений npm run audio:optimize
+import trackWebm from "@assets/audio/banner-music.webm";  // стиснений npm run audio:optimize
+---
+
+<MusicToggle webm={trackWebm} src={trackMp3} class="video-banner__music" />
 ```
 
 ---
@@ -17,7 +62,7 @@ src/icons/volume-mute.svg
 | Prefix | Опис |
 |---|---|
 | `fmusic` | Базова кнопка з одним mp3-файлом |
-| `fmusic:formats` | Один трек з webm/ogg/mp3 fallback |
+| `fmusic:formats` | Один трек з webm/mp3 fallback |
 | `fmusic:playlist` | Плейлист — випадковий трек при кожному заході |
 | `fmusic:custom` | Кастомна позиція/розмір/громкість/fade через CSS-змінні |
 
@@ -39,7 +84,7 @@ import trackMp3 from "@assets/audio/banner-music.mp3";
 
 > Аудіо ОБОВ'ЯЗКОВО імпортувати через `import` (як відео/зображення) — Vite скопіює файл у `dist` з хешем у імені. Можна й просто `/audio/...` шлях у `public/`.
 
-**Якщо не передати ні `src`/`ogg`/`webm`, ні `tracks` — кнопка автоматично сховається** (керує JS, `wrapper.hidden = true`). Компонент можна лишати в розмітці заздалегідь — з'явиться сам, як тільки додасте аудіо-джерело.
+**Якщо не передати ні `src`/`webm`, ні `tracks` — кнопка автоматично сховається** (керує JS, `wrapper.hidden = true`). Компонент можна лишати в розмітці заздалегідь — з'явиться сам, як тільки додасте аудіо-джерело.
 
 ---
 
@@ -48,9 +93,8 @@ import trackMp3 from "@assets/audio/banner-music.mp3";
 | Проп | Тип | Дефолт | Опис |
 |---|---|---|---|
 | `src` | `string` | — | mp3-файл (fallback, найширша підтримка) |
-| `ogg` | `string` | — | ogg-файл (опціонально, кращий стиск) |
-| `webm` | `string` | — | webm-файл (опціонально, кращий стиск) |
-| `tracks` | `Track[]` | — | Плейлист: `{ src, ogg?, webm? }[]`. Якщо передано — `src`/`ogg`/`webm` вище ігноруються, JS обирає випадковий трек при кожному заході |
+| `webm` | `string` | — | webm-файл (опціонально, кращий стиск/якість) |
+| `tracks` | `Track[]` | — | Плейлист: `{ src, webm? }[]`. Якщо передано — `src`/`webm` вище ігноруються, JS обирає випадковий трек при кожному заході |
 | `volume` | `number` | `0.6` | Цільова громкість 0..1, до якої йде fade-in |
 | `fade` | `number` | `800` | Тривалість fade in/out у мс. `0` — миттєво, без анімації |
 | `class` | `string` | — | Додатковий клас на обгортку (для CSS-змінних) |
@@ -72,18 +116,16 @@ import trackMp3 from "@assets/audio/banner-music.mp3";
 
 ## Декілька форматів (краще стиснення)
 
-Порядок `<source>` всередині `<audio>`: **webm → ogg → mp3** (від найкращого стиску до найширшої підтримки браузерами).
+Порядок `<source>` всередині `<audio>`: **webm → mp3** (від кращого стиску/якості до найширшої підтримки браузерами). `webm` (Opus) дає менший файл при тій же якості, `mp3` — гарантований fallback для Safari/старих браузерів.
 
 ```astro
 ---
 import trackMp3 from "@assets/audio/banner-music.mp3";
 import trackWebm from "@assets/audio/banner-music.webm";
-import trackOgg from "@assets/audio/banner-music.ogg";
 ---
 
 <MusicToggle
    webm={trackWebm}
-   ogg={trackOgg}
    src={trackMp3}
    class="video-banner__music"
 />
