@@ -80,12 +80,12 @@ function freezeOnLastFrame(video) {
    const seekToEnd = () => {
       if (video.duration) video.currentTime = video.duration;
    };
-   // readyState >= 1 (HAVE_METADATA) — метадані вже завантажені (Safari встигає до реєстрації listener)
-   if (video.readyState >= 1) {
-      seekToEnd();
-   } else {
-      video.addEventListener("loadedmetadata", seekToEnd, { once: true });
-   }
+   // Якщо метадані вже є — шукаємо одразу (Safari native autoplay встигає до JS)
+   if (video.readyState >= 1) seekToEnd();
+   // Завжди реєструємо loadedmetadata як резерв: applySources нижче може перезавантажити
+   // відео при зміні mobile ⇄ desktop джерел, скинувши readyState і currentTime.
+   // Без цього listener seekToEnd не спрацює для нового src.
+   video.addEventListener("loadedmetadata", seekToEnd, { once: true });
 }
 
 // pageIntro-відео: на свіжому заході/reload — лок скролу + хедер прихований
