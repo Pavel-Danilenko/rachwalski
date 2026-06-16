@@ -141,13 +141,32 @@ function lockForIntro(video) {
    if (!video.paused) video.pause();
 
    const startIntro = () => {
-      if (video.dataset.playbackRate) {
-         const rate = parseFloat(video.dataset.playbackRate);
-         if (rate > 0) video.playbackRate = rate;
+      const rate = video.dataset.playbackRate ? parseFloat(video.dataset.playbackRate) : 1;
+
+      const playWithRate = () => {
+         if (rate > 1) video.playbackRate = rate;
+         video.play().catch(() => {
+            video.addEventListener("canplay", () => video.play().catch(() => {}), { once: true });
+         });
+      };
+
+      // Safari: playbackRate > 1 викликає перебуферизацію навіть якщо встановлено до play().
+      // Рішення: fetch() завантажує відео повністю → blob URL → відтворення з пам'яті RAM.
+      // HTTP-кеш (preload="auto" вже завантажив) → fetch() майже instant (cache hit).
+      // З blob-ом Safari не може "підвантажувати" — весь файл вже в пам'яті, rate не стоп.
+      if (isSafari && rate > 1) {
+         const src = video.dataset.src || "";
+         fetch(src)
+            .then((r) => r.blob())
+            .then((blob) => {
+               video.src = URL.createObjectURL(blob);
+               video.addEventListener("canplay", playWithRate, { once: true });
+            })
+            .catch(playWithRate);
+         return;
       }
-      video.play().catch(() => {
-         video.addEventListener("canplay", () => video.play().catch(() => {}), { once: true });
-      });
+
+      playWithRate();
    };
 
    // canplaythrough: браузер має достатньо буфера для відтворення до кінця (при 1×).
