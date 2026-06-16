@@ -46,6 +46,7 @@ npm run video:optimize -- --quality=60 --audio-bitrate=64k --cpu-used=4
 | `--quality` | `90` | 0-100 → VP9 CRF 40…15, h264 CRF 35…16 (0 = сильне стиснення, 100 = найкраща якість) |
 | `--audio-bitrate` | `96k` | Бітрейт аудіо (Opus для webm, AAC для mp4) |
 | `--cpu-used` | `2` | Швидкість кодування: 0 (повільно/якісно) … 5 (швидко). Для h264 мапиться на preset `veryslow`…`veryfast` |
+| `--keyframe-interval` | — | Кількість кадрів між keyframe-ами. **Потрібно для `playbackRate > 1` в Safari.** Рекомендовано `30` (1 keyframe/сек при 30fps). Без цього Safari зависає між keyframe-ами при прискоренні |
 
 ```astro
 ---
@@ -197,6 +198,21 @@ Autoplay + loop + muted + playsinline увімкнені за замовчува
 - `< 1` — сповільнене (0.5 = 50% швидкості, `0.25` = 25%)
 - `1` — нормальна швидкість (дефолт)
 - `> 1` — прискорене (1.5 = 150%, `2` = 200%)
+
+> **Safari і `playbackRate > 1`:** Safari WebKit зависає при `playbackRate > 2` (WebKit decoder bug).
+> JS автоматично обмежує значення до `2` на Safari — вказати можна будь-яке, браузер сам скоригує.
+>
+> Для `playbackRate > 1` відео **обов'язково** треба перекодувати з частими keyframe-ами, інакше
+> Safari застрягає між ними при прискореному відтворенні:
+> ```bash
+> # Видали перекодовані файли (оригінал .original.mp4 залишається)
+> rm src/assets/video/назва.mp4
+> rm src/assets/video/назва.webm
+>
+> # Перекодуй з keyframe кожну секунду (30 кадрів при 30fps)
+> npm run video:optimize -- --keyframe-interval=30
+> ```
+> Без цього при `playbackRate > 1` Safari може показувати чорний екран або frozen кадр.
 
 ---
 
