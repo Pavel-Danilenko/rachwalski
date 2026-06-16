@@ -25,6 +25,8 @@
  *                                     заході/reload грає один раз (хедер прихований, скрол заблокований,
  *                                     по завершенню — розблокування і плавна поява хедера); при SPA-переході
  *                                     на сторінку повторно не грає, показує останній кадр (дефолт false)
+ * @param {number}  playbackRate  - швидкість відтворення (дефолт 1). 0.5 — вдвічі повільніше,
+ *                                   2 — вдвічі швидше. Зручно для slow-motion фонових відео
  * @param {boolean} showPlayButton - кнопка play по центру (дефолт !controls)
  * @param {string}  playIcon      - назва іконки зі спрайту (дефолт "play")
  * @param {string}  class         - клас на <video>
@@ -34,6 +36,8 @@
  * <Video src={heroMp4} webm={heroWebm} srcMobile={heroMobileMp4} webmMobile={heroMobileWebm} poster={heroPoster} width={1920} height={1080} />
  * <Video src={demoMp4} controls autoplay={false} loop={false} muted={false} lazy={false} />
  * <Video src={demoMp4} autoplay={false} loop={false} muted={false} playIcon="custom-play" />
+ * <Video src={bgMp4} playbackRate={0.5} />
+ * <Video src={bgMp4} playbackRate={1.5} />
  *
  * Розмір кнопки play та іконки — без хардкоду, через CSS-змінні (з фолбеками):
  * .video-wrapper__play {
