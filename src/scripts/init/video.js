@@ -27,8 +27,16 @@ function getDesiredSources(video) {
    return { webm, src };
 }
 
-// Перебудовує <source> елементи, якщо потрібна інша пара (mobile ⇄ desktop).
-// Повертає true, якщо джерела дійсно змінились (відео перезавантажилось).
+// Safari повертає "maybe" для video/webm (canPlayType не гарантує роботу),
+// але реально WebM-відео або не грає, або грає без відеокадрів (known bug).
+// navigator.vendor === "Apple Computer, Inc." — надійний маркер Safari/WebKit на macOS і iOS.
+const isSafari = navigator.vendor === "Apple Computer, Inc.";
+const supportsWebm = !isSafari && !!document.createElement("video").canPlayType("video/webm");
+
+// Вибирає найкраще підтримуване джерело і встановлює video.src напряму.
+// Пряме video.src надійніше ніж динамічні <source>-елементи в Safari:
+// при <source> Safari може "застрягнути" на невідомому форматі і не перейти до наступного.
+// Повертає true, якщо джерело дійсно змінилось (відео перезавантажилось).
 function applySources(video) {
    const { webm, src } = getDesiredSources(video);
    const key = `${webm}|${src}`;
@@ -36,29 +44,32 @@ function applySources(video) {
 
    const wasPlaying = !video.paused && !video.ended;
    video.dataset.appliedSources = key;
+
+   // Пряме video.src= надійніше ніж <source>-елементи при динамічному управлінні в Safari.
+   // НЕ викликаємо video.load() — зміна src автоматично перезапускає завантаження,
+   // а нативний autoplay-атрибут спрацьовує без потреби в JS play() (Safari це дозволяє,
+   // але блокує programmatic play() без user gesture).
+   const bestSrc = (webm && supportsWebm) ? webm : src;
    video.innerHTML = "";
+   if (bestSrc) video.src = bestSrc;
 
-   if (webm) {
-      const source = document.createElement("source");
-      source.src  = webm;
-      source.type = "video/webm";
-      video.appendChild(source);
+   if (wasPlaying) {
+      video.play().catch(() => {
+         video.addEventListener("canplay", () => video.play().catch(() => {}), { once: true });
+      });
    }
-   if (src) {
-      const source = document.createElement("source");
-      source.src  = src;
-      source.type = "video/mp4";
-      video.appendChild(source);
-   }
-
-   video.load();
-   if (wasPlaying) video.play().catch(() => {});
    return true;
 }
 
 function tryAutoplay(video) {
    if (!video.autoplay || prefersReducedMotion()) return;
-   video.play().catch(() => {});
+   // Safari: play() може відхилитись якщо відео ще не буфернуло.
+   // Викликаємо play() завжди — це ж запускає буферизацію.
+   // Якщо відхилено — слухаємо canplay і повторюємо.
+   // Якщо знову відхилено — браузер заблокував autoplay, мовчки ігноруємо.
+   video.play().catch(() => {
+      video.addEventListener("canplay", () => video.play().catch(() => {}), { once: true });
+   });
 }
 
 // Заморожує відео на останньому кадрі (для повторних SPA-переходів на pageIntro-відео)
@@ -100,10 +111,12 @@ function lockForIntro(video) {
    };
    video.addEventListener("ended", finish, { once: true });
 
-   // Запобіжник: якщо autoplay все ж заблокували браузером — не лишаємо сайт заблокованим
-   setTimeout(() => {
+   // Запобіжник: якщо autoplay все ж заблокували браузером — не лишаємо сайт заблокованим.
+   // 4 с — достатньо для canplay на повільному з'єднанні; скасовується якщо відео запустилось.
+   const fallbackTimer = setTimeout(() => {
       if (video.paused && !video.ended) finish();
-   }, 1000);
+   }, 4000);
+   video.addEventListener("playing", () => clearTimeout(fallbackTimer), { once: true });
 }
 
 function setupPageIntro(video) {

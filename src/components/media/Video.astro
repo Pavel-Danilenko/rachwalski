@@ -149,11 +149,11 @@ const hasResponsive = Boolean(srcMobile || webmMobile);
       data-src={src}
       data-webm-mobile={webmMobile}
       data-src-mobile={srcMobile}
-      data-applied-sources={!lazy && !hasResponsive ? `${webm ?? ""}|${src}` : undefined}
+      data-applied-sources={!lazy ? `${webm ?? ""}|${src}` : undefined}
       {...restProps}
    >
-      {webm && <source src={webm} type="video/webm" />}
       <source src={src} type="video/mp4" />
+      {webm && <source src={webm} type="video/webm" />}
    </video>
    {
       showPlayButton && (

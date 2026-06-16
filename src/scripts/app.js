@@ -163,6 +163,12 @@ async function loadModules() {
    if (document.querySelector("[data-hotspot]"))
       tasks.push(import("@scripts/init/treatments-hotspot"));
 
+   if (document.querySelector("[data-parallax]"))
+      tasks.push(import("@scripts/init/parallax"));
+
+   if (document.querySelector("[data-scroll-parallax]"))
+      tasks.push(import("@scripts/init/scroll-parallax"));
+
    if (document.querySelector("[data-video]"))
       tasks.push(import("@scripts/init/video"));
 
