@@ -34,13 +34,10 @@
       @include fluid-space(gap, 16, 40);
    }
 
-   &__name {
-   }
-
    &__logo {
       @include fluid-space(height, 32, 64);
       .icon {
-         width: 100%;
+         width: auto;
          height: 100%;
       }
    }
