@@ -134,39 +134,23 @@ function lockForIntro(video) {
    const safeRate = isSafari && rate > 2 ? 2 : rate;
 
    if (safeRate > 1) {
-      // playbackRate > 1: зупиняємо native autoplay і чекаємо canplaythrough.
-      // Safari при зміні rate посередині відтворення перебуферовує (30с чорний екран).
-      // Рішення: встановити rate ДО першого play() — Safari не перебуферовує.
-      // preload="auto" продовжує завантаження навіть на паузі.
-      video.autoplay = false; // без цього Safari перестартовує autoplay після pause()
-      if (!video.paused) video.pause();
-
-      const startIntro = () => {
-         video.playbackRate = safeRate;
-         video.play().catch(() => {
-            video.addEventListener("canplay", () => video.play().catch(() => {}), { once: true });
-         });
-      };
-
+      // playbackRate > 1: застосовуємо rate через canplaythrough поки відео вже грає.
+      // НЕ зупиняємо — iOS Safari ігнорує preload="auto" на паузі, canplaythrough
+      // ніколи не стріляє і відео зависає на чорному екрані назавжди.
+      // Native autoplay продовжує грати на 1×, rate міняється коли буфер готовий.
+      const applyRate = () => { video.playbackRate = safeRate; };
       if (video.readyState >= 4) {
-         startIntro();
+         applyRate();
       } else {
-         video.addEventListener("canplaythrough", startIntro, { once: true });
+         video.addEventListener("canplaythrough", applyRate, { once: true });
       }
-
-      const fallbackTimer = setTimeout(() => {
-         video.removeEventListener("canplaythrough", startIntro);
-         if (video.paused && !video.ended) finish();
-      }, 8000);
-      video.addEventListener("playing", () => clearTimeout(fallbackTimer), { once: true });
-   } else {
-      // rate = 1: native autoplay грає без втручання, просто чекаємо ended.
-      // Запобіжник на 4с — якщо autoplay заблокований браузером.
-      const fallbackTimer = setTimeout(() => {
-         if (video.paused && !video.ended) finish();
-      }, 4000);
-      video.addEventListener("playing", () => clearTimeout(fallbackTimer), { once: true });
    }
+
+   // Запобіжник на 4с — якщо autoplay заблокований браузером.
+   const fallbackTimer = setTimeout(() => {
+      if (video.paused && !video.ended) finish();
+   }, 4000);
+   video.addEventListener("playing", () => clearTimeout(fallbackTimer), { once: true });
 }
 
 function setupPageIntro(video) {
@@ -187,8 +171,7 @@ function restartIntro(video) {
    document.documentElement.classList.add("intro-video");
    document.documentElement.dataset.introVideoDone = "false";
    document.dispatchEvent(new CustomEvent("video-intro:restart"));
-   // Якщо попередній lockForIntro (rate > 1) поставив autoplay = false — відновлюємо
-   video.autoplay = video.dataset.originalAutoplay !== "false";
+   video.play().catch(() => {});
    lockForIntro(video);
 }
 
