@@ -126,6 +126,7 @@ function setupPageIntro(video) {
       lockForIntro(video);
    } else {
       video.autoplay = false;
+      video.pause(); // Safari стартує native autoplay до виконання JS — примусово зупиняємо
       freezeOnLastFrame(video);
    }
 }
