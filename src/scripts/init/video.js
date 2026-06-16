@@ -256,14 +256,6 @@ function initVideo() {
          );
          observer.observe(video);
       } else {
-         // pageIntro на першому заході: скидаємо ключ, щоб applySources встановив video.src
-         // замість нативних <source> елементів. Safari має баг з playbackRate != 1
-         // при відтворенні через <source> + native autoplay — video.src + play() надійніший.
-         // На SPA-поверненні (клас відсутній) — ключ НЕ скидаємо: потрібен збіг для freeze-on-last-frame.
-         if (video.dataset.pageIntro === "true" &&
-             document.documentElement.classList.contains("intro-video")) {
-            delete video.dataset.appliedSources;
-         }
          applySources(video);
          tryAutoplay(video);
       }
