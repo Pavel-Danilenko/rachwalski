@@ -12,13 +12,17 @@
  *   npm run video:optimize -- --quality=90
  *   npm run video:optimize -- --quality=60 --audio-bitrate=64k --cpu-used=4
  *
- * --quality       0-100, як "quality" у зображеннях (дефолт 90).
- *                 Вище = краща якість і більший файл, нижче = сильніше стиснення.
- *                 VP9 CRF: 40 (quality=0) … 15 (quality=100).
- *                 h264 CRF: 35 (quality=0) … 16 (quality=100).
- * --audio-bitrate бітрейт аудіо (Opus для webm, AAC для mp4), напр. "96k" (дефолт 96k).
- * --cpu-used      швидкість кодування, 0 (повільно/якісно) … 5 (швидко), дефолт 2.
- *                 Для h264 мапиться на preset: veryslow…veryfast.
+ * --quality            0-100, як "quality" у зображеннях (дефолт 90).
+ *                       Вище = краща якість і більший файл, нижче = сильніше стиснення.
+ *                       VP9 CRF: 40 (quality=0) … 15 (quality=100).
+ *                       h264 CRF: 35 (quality=0) … 16 (quality=100).
+ * --audio-bitrate      бітрейт аудіо (Opus для webm, AAC для mp4), напр. "96k" (дефолт 96k).
+ * --cpu-used           швидкість кодування, 0 (повільно/якісно) … 5 (швидко), дефолт 2.
+ *                       Для h264 мапиться на preset: veryslow…veryfast.
+ * --keyframe-interval  кількість кадрів між keyframe-ами (дефолт: не встановлено = ffmpeg дефолт ~250).
+ *                       Менше = більше keyframe-ів = більший файл, але потрібно для playbackRate > 1 в Safari.
+ *                       Рекомендовано 30 (1 сек при 30fps) для відео з playbackRate > 1.
+ *                       Приклад: --keyframe-interval=30
  */
 
 import { execFileSync } from "node:child_process";
@@ -41,6 +45,7 @@ function getArg(name, fallback) {
 const QUALITY = Math.min(100, Math.max(0, Number(getArg("quality", "90"))));
 const AUDIO_BITRATE = getArg("audio-bitrate", "96k");
 const CPU_USED = Math.min(5, Math.max(0, Number(getArg("cpu-used", "2"))));
+const KEYFRAME_INTERVAL = getArg("keyframe-interval", null);
 
 // quality 0 → найсильніше стиснення, quality 100 → найкраща якість
 const VP9_CRF = Math.round(40 - (QUALITY / 100) * (40 - 15));
@@ -99,8 +104,10 @@ for (const mp4Path of mp4Files) {
       continue;
    }
 
+   const kiLabel = KEYFRAME_INTERVAL ? `, keyframe=${KEYFRAME_INTERVAL}` : "";
+
    if (mp4Outdated) {
-      console.log(`🎬 ${label} → .mp4 (quality=${QUALITY}, crf=${H264_CRF}, preset=${X264_PRESET}, audio=${AUDIO_BITRATE}) ...`);
+      console.log(`🎬 ${label} → .mp4 (quality=${QUALITY}, crf=${H264_CRF}, preset=${X264_PRESET}, audio=${AUDIO_BITRATE}${kiLabel}) ...`);
       const start = Date.now();
 
       execFileSync(
@@ -112,6 +119,10 @@ for (const mp4Path of mp4Files) {
             "-crf", String(H264_CRF),
             "-preset", X264_PRESET,
             "-pix_fmt", "yuv420p",
+            // keyframe-interval: частіші keyframe-и потрібні для playbackRate > 1 в Safari.
+            // За замовчуванням ffmpeg ставить ~250 кадрів (~8с при 30fps) — при 2.2× Safari
+            // "застрягає" між keyframe-ами. --keyframe-interval=30 = 1 keyframe/сек при 30fps.
+            ...(KEYFRAME_INTERVAL ? ["-g", KEYFRAME_INTERVAL, "-keyint_min", KEYFRAME_INTERVAL] : []),
             "-movflags", "+faststart",
             "-c:a", "aac",
             "-b:a", AUDIO_BITRATE,
@@ -125,7 +136,7 @@ for (const mp4Path of mp4Files) {
    }
 
    if (webmOutdated) {
-      console.log(`🎬 ${label} → .webm (quality=${QUALITY}, crf=${VP9_CRF}, audio=${AUDIO_BITRATE}) ...`);
+      console.log(`🎬 ${label} → .webm (quality=${QUALITY}, crf=${VP9_CRF}, audio=${AUDIO_BITRATE}${kiLabel}) ...`);
       const start = Date.now();
 
       execFileSync(
@@ -139,6 +150,7 @@ for (const mp4Path of mp4Files) {
             "-deadline", "good",
             "-cpu-used", String(CPU_USED),
             "-row-mt", "1",
+            ...(KEYFRAME_INTERVAL ? ["-g", KEYFRAME_INTERVAL] : []),
             "-c:a", "libopus",
             "-b:a", AUDIO_BITRATE,
             webmPath,
