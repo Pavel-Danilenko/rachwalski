@@ -101,7 +101,10 @@ function markIntroDone() {
 function lockForIntro(video) {
    // Autoplay не відбудеться (Data Saver / prefers-reduced-motion) —
    // одразу прибираємо лок і показуємо хедер, інакше вони "застрягнуть" назавжди
-   if (!video.autoplay || prefersReducedMotion()) {
+   // Перевіряємо originalAutoplay — lockForIntro сам встановлює video.autoplay = false
+   // щоб Safari не перестартував після pause(), тому video.autoplay вже може бути false.
+   const wantsAutoplay = video.dataset.originalAutoplay !== "false";
+   if (!wantsAutoplay || prefersReducedMotion()) {
       document.documentElement.classList.remove("intro-video");
       markIntroDone();
       return;
@@ -124,20 +127,44 @@ function lockForIntro(video) {
       markIntroDone();
    };
 
-   // Відео встигло закінчитись до реєстрації listener (наприклад, playbackRate > 1)
-   if (video.ended) {
-      finish();
-      return;
-   }
+   if (video.ended) { finish(); return; }
 
    video.addEventListener("ended", finish, { once: true });
    video.addEventListener("timeupdate", onTimeUpdate);
 
-   // Запобіжник: якщо autoplay заблокували браузером — не лишаємо сайт заблокованим.
-   // 4 с — достатньо для canplay на повільному з'єднанні; скасовується якщо відео запустилось.
+   // Зупиняємо native autoplay і чекаємо буфер перед стартом.
+   // Safari при зміні playbackRate > 1 посередині відтворення вимагає N× більше даних
+   // і "зависає" поки не добуферить — це і є причина 30-секундного чорного екрана.
+   // Рішення: встановити rate ДО першого play(), коли буфер уже готовий.
+   // preload="auto" продовжує завантаження навіть на паузі.
+   video.autoplay = false; // без цього Safari може перестартувати autoplay після pause()
+   if (!video.paused) video.pause();
+
+   const startIntro = () => {
+      if (video.dataset.playbackRate) {
+         const rate = parseFloat(video.dataset.playbackRate);
+         if (rate > 0) video.playbackRate = rate;
+      }
+      video.play().catch(() => {
+         video.addEventListener("canplay", () => video.play().catch(() => {}), { once: true });
+      });
+   };
+
+   // canplaythrough: браузер має достатньо буфера для відтворення до кінця (при 1×).
+   // На localhost завантажується майже миттєво; встановлення rate до play() означає
+   // що Safari не перебуферовує — він отримує rate ще до першого кадру.
+   if (video.readyState >= 4) {
+      startIntro();
+   } else {
+      video.addEventListener("canplaythrough", startIntro, { once: true });
+   }
+
+   // Запобіжник: якщо canplaythrough/play так і не відбувся (заблокований autoplay
+   // або дуже повільна мережа) — розблоковуємо сторінку щоб не зависла назавжди.
    const fallbackTimer = setTimeout(() => {
+      video.removeEventListener("canplaythrough", startIntro);
       if (video.paused && !video.ended) finish();
-   }, 4000);
+   }, 8000);
    video.addEventListener("playing", () => clearTimeout(fallbackTimer), { once: true });
 }
 
@@ -159,7 +186,8 @@ function restartIntro(video) {
    document.documentElement.classList.add("intro-video");
    document.documentElement.dataset.introVideoDone = "false";
    document.dispatchEvent(new CustomEvent("video-intro:restart"));
-   video.play().catch(() => {});
+   // lockForIntro раніше поставив video.autoplay = false — відновлюємо перед повторним викликом
+   video.autoplay = video.dataset.originalAutoplay !== "false";
    lockForIntro(video);
 }
 
@@ -181,6 +209,9 @@ function initVideo() {
          video.autoplay = false;
          video.pause();
       }
+
+      // Зберігаємо оригінальне значення autoplay після Data Saver (lockForIntro може його змінити)
+      video.dataset.originalAutoplay = video.autoplay ? "true" : "false";
 
       // Poster ховається назавжди після першого старту відтворення
       video.addEventListener("playing", () => {
@@ -223,13 +254,11 @@ function initVideo() {
          visibilityObserver.observe(video);
       }
 
-      if (video.dataset.playbackRate) {
+      // pageIntro: playbackRate встановлюється всередині lockForIntro (перед play())
+      if (video.dataset.playbackRate && video.dataset.pageIntro !== "true") {
          const rate = parseFloat(video.dataset.playbackRate);
          if (rate > 0) {
             const applyRate = () => { video.playbackRate = rate; };
-            // canplaythrough: браузер сигналізує що буфера достатньо для відтворення до кінця.
-            // Надійніше ніж setTimeout — не залежить від мережі і уникає зависання через
-            // брак буфера при rate > 1 (Safari вимагає N× більше даних в секунду).
             if (video.readyState >= 4) {
                applyRate();
             } else {
