@@ -111,13 +111,18 @@ function lockForIntro(video) {
       bodyUnlock();
       markIntroDone();
    };
+
+   // Відео встигло закінчитись до реєстрації listener (наприклад, playbackRate > 1)
+   if (video.ended) {
+      finish();
+      return;
+   }
+
    video.addEventListener("ended", finish, { once: true });
 
-   // Запобіжник: якщо autoplay все ж заблокували браузером — не лишаємо сайт заблокованим.
-   // 4 с — достатньо для canplay на повільному з'єднанні; скасовується якщо відео запустилось.
-   const fallbackTimer = setTimeout(() => {
-      if (video.paused && !video.ended) finish();
-   }, 4000);
+   // Запобіжник: якщо autoplay заблокували або відео ніколи не запустилось —
+   // після 4 с звільняємо сторінку. Скасовується як тільки відео почало грати.
+   const fallbackTimer = setTimeout(finish, 4000);
    video.addEventListener("playing", () => clearTimeout(fallbackTimer), { once: true });
 }
 
