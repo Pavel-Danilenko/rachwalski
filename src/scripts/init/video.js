@@ -106,7 +106,17 @@ function lockForIntro(video) {
    }
 
    bodyLock();
+
+   let finished = false;
+   // timeupdate — резерв для Safari: "ended" може не стрілити коли playbackRate != 1
+   // з <source> елементами (WebKit bug). Відстежуємо currentTime вручну.
+   const onTimeUpdate = () => {
+      if (video.duration && video.currentTime >= video.duration) finish();
+   };
    const finish = () => {
+      if (finished) return;
+      finished = true;
+      video.removeEventListener("timeupdate", onTimeUpdate);
       document.documentElement.classList.remove("intro-video");
       bodyUnlock();
       markIntroDone();
@@ -119,6 +129,7 @@ function lockForIntro(video) {
    }
 
    video.addEventListener("ended", finish, { once: true });
+   video.addEventListener("timeupdate", onTimeUpdate);
 
    // Запобіжник: якщо autoplay заблокували браузером — не лишаємо сайт заблокованим.
    // 4 с — достатньо для canplay на повільному з'єднанні; скасовується якщо відео запустилось.
