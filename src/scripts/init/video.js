@@ -204,8 +204,9 @@ function initVideo() {
          });
       }
 
-      // Пауза коли відео виходить за межі екрана, продовження при поверненні
-      if (video.dataset.pauseOffscreen !== "false") {
+      // Пауза коли відео виходить за межі екрана, продовження при поверненні.
+      // pageIntro-відео завжди fullscreen і повинно грати без перерв — observer не потрібен.
+      if (video.dataset.pauseOffscreen !== "false" && video.dataset.pageIntro !== "true") {
          const visibilityObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                if (entry.isIntersecting) {
@@ -225,15 +226,14 @@ function initVideo() {
       if (video.dataset.playbackRate) {
          const rate = parseFloat(video.dataset.playbackRate);
          if (rate > 0) {
-            // Не встановлювати rate ДО старту — Safari вимагає буфер під швидкість N×
-            // перш ніж почати відтворення, що призводить до зависання на темному екрані.
-            // Якщо native autoplay вже запустився (paused=false): відкладаємо на 100ms
-            // (відео встигне відрендерити перший кадр і стабілізуватись).
-            // Якщо ще не грає: встановлюємо на першій події playing.
-            if (!video.paused && !video.ended) {
-               setTimeout(() => { video.playbackRate = rate; }, 100);
+            const applyRate = () => { video.playbackRate = rate; };
+            // canplaythrough: браузер сигналізує що буфера достатньо для відтворення до кінця.
+            // Надійніше ніж setTimeout — не залежить від мережі і уникає зависання через
+            // брак буфера при rate > 1 (Safari вимагає N× більше даних в секунду).
+            if (video.readyState >= 4) {
+               applyRate();
             } else {
-               video.addEventListener("playing", () => { video.playbackRate = rate; }, { once: true });
+               video.addEventListener("canplaythrough", applyRate, { once: true });
             }
          }
       }
