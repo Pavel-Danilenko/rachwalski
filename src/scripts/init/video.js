@@ -63,8 +63,10 @@ function applySources(video) {
 
 function tryAutoplay(video) {
    if (!video.autoplay || prefersReducedMotion()) return;
-   // Safari: play() може відхилитись якщо відео ще не буфернуло.
-   // Викликаємо play() завжди — це ж запускає буферизацію.
+   // Safari: якщо native autoplay вже запустив відео до виконання JS — не викликаємо play()
+   // ще раз, щоб уникнути конфлікту (подвійний play() може призвести до стопу або зависання).
+   if (!video.paused) return;
+   // play() може відхилитись якщо відео ще не буфернуло.
    // Якщо відхилено — слухаємо canplay і повторюємо.
    // Якщо знову відхилено — браузер заблокував autoplay, мовчки ігноруємо.
    video.play().catch(() => {
@@ -222,7 +224,18 @@ function initVideo() {
 
       if (video.dataset.playbackRate) {
          const rate = parseFloat(video.dataset.playbackRate);
-         if (rate > 0) video.playbackRate = rate;
+         if (rate > 0) {
+            // Не встановлювати rate ДО старту — Safari вимагає буфер під швидкість N×
+            // перш ніж почати відтворення, що призводить до зависання на темному екрані.
+            // Якщо native autoplay вже запустився (paused=false): відкладаємо на 100ms
+            // (відео встигне відрендерити перший кадр і стабілізуватись).
+            // Якщо ще не грає: встановлюємо на першій події playing.
+            if (!video.paused && !video.ended) {
+               setTimeout(() => { video.playbackRate = rate; }, 100);
+            } else {
+               video.addEventListener("playing", () => { video.playbackRate = rate; }, { once: true });
+            }
+         }
       }
 
       if (video.dataset.mobileBreakpoint) responsiveVideos.push(video);
