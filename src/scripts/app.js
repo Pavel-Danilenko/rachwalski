@@ -178,6 +178,9 @@ async function loadModules() {
    if (document.querySelector("[data-music-toggle]"))
       tasks.push(import("@scripts/init/music-toggle"));
 
+   if (document.querySelector("[data-scroll-top]"))
+      tasks.push(import("@scripts/init/scroll-to-top"));
+
    if (document.querySelector(".post-body__cover"))
       tasks.push(import("@scripts/init/post-cover"));
 

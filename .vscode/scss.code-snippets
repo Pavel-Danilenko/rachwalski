@@ -507,4 +507,46 @@
       "body": "@media (any-hover: hover) {\n\t$0\n}",
       "description": "any-hover — обгортка без &:hover (для кастомних селекторів)"
    },
+
+   // ─── ScrollToTop — project styles ─────────────────────────────────────────
+   "scroll-top project styles": {
+      "prefix": "scroll-top",
+      "scope": "scss,css",
+      "body": [
+         "// ── ScrollToTop — project styles ─────────────────────────────────",
+         "// Базова анімація — в _scroll-to-top.scss, тут позиція/розмір/колір",
+         ".scroll-top {",
+         "\tdisplay: none;",
+         "",
+         "\t@include respond-to(\"md\") {",
+         "\t\tdisplay: flex;",
+         "\t\talign-items: center;",
+         "\t\tjustify-content: center;",
+         "",
+         "\t\tposition: fixed;",
+         "\t\tbottom: toRem(${1:76});",
+         "\t\tright: toRem(${2:16});",
+         "\t\tz-index: ${3:101};",
+         "",
+         "\t\twidth: toRem(${4:40});",
+         "\t\theight: toRem(${4:40});",
+         "\t\tborder-radius: 50%;",
+         "\t\tborder: 1px solid rgba(255, 255, 255, 0.2);",
+         "\t\tbackground: rgba(11, 17, 26, 0.3);",
+         "\t\tbackdrop-filter: blur(4px);",
+         "\t\t-webkit-backdrop-filter: blur(4px);",
+         "\t\tcolor: var(--color-white);",
+         "\t\tcursor: pointer;",
+         "\t\tfont-size: toRem(${5:18});",
+         "",
+         "\t\t@media (any-hover: hover) {",
+         "\t\t\t&:hover {",
+         "\t\t\t\tbackground: rgba(11, 17, 26, 0.55);",
+         "\t\t\t}",
+         "\t\t}",
+         "\t}",
+         "}"
+      ],
+      "description": "ScrollToTop project styles — позиція/розмір/колір для конкретного проекту"
+   },
 }

@@ -3,6 +3,7 @@ import Header from "@components/layout/Header.astro";
 import Footer from "@components/layout/Footer.astro";
 import Popups from "@components/popups/Popups.astro";
 import MobileBookingBar from "@components/ui/MobileBookingBar.astro";
+import ScrollToTop from "@components/ui/ScrollToTop.astro";
 import IconSprite from "@components/ui/IconSprite.astro";
 import Preloader from "@components/interactive/Preloader.astro";
 import "@styles/main.scss";
@@ -135,6 +136,7 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
 
       <Popups />
       {!hideChrome && <MobileBookingBar />}
+      {!hideChrome && <ScrollToTop />}
 
       <script>
          import "@scripts/app";

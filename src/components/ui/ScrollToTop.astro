@@ -1,0 +1,62 @@
+---
+/**
+ * ScrollToTop — універсальна кнопка "прокрутити вгору"
+ *
+ * Базовий компонент: тільки кнопка + JS-поведінка (show/hide + scroll).
+ * Стилі позиції, розміру та кольору — в стилях проекту (без хардкоду тут).
+ *
+ * @param {number} threshold  - скільки пікселів проскролити до появи (дефолт: 100vh)
+ * @param {string} icon       - назва іконки зі спрайту (дефолт: "arrow-up-scroll")
+ * @param {string} class      - додатковий клас на кнопку
+ *
+ * Приклади:
+ * <ScrollToTop />
+ * <ScrollToTop threshold={600} class="scroll-top--custom" />
+ * <ScrollToTop icon="arrow-up" />
+ *
+ * Анімація появи задається в CSS через клас .is-visible на кнопці.
+ * JS додає .is-visible коли scrollY > threshold.
+ *
+ * Підключення:
+ * import ScrollToTop from "@components/ui/ScrollToTop.astro";
+ * import "@styles/components/ui/_scroll-to-top.scss";
+ *
+ * Стилі проекту (позиція, розмір, колір):
+ * .scroll-top {
+ *    position: fixed;
+ *    bottom: 5rem;
+ *    right: 1.5rem;
+ *    z-index: 50;
+ *    width: 2.5rem;
+ *    height: 2.5rem;
+ *    border-radius: 50%;
+ *    background: rgba(0,0,0,0.4);
+ *    color: #fff;
+ * }
+ */
+
+import Icon from "@components/ui/Icon.astro";
+import "@styles/components/ui/_scroll-to-top.scss";
+
+interface Props {
+   threshold?: number;
+   icon?: string;
+   class?: string;
+}
+
+const {
+   threshold,
+   icon = "arrow-up-scroll",
+   class: className = "",
+} = Astro.props;
+---
+
+<button
+   type="button"
+   class:list={["scroll-top", className]}
+   data-scroll-top
+   data-threshold={threshold}
+   aria-label="Scroll to top"
+>
+   <Icon name={icon} />
+</button>

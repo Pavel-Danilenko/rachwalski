@@ -600,3 +600,40 @@
       }
    }
 }
+
+
+// ── ScrollToTop — project styles ─────────────────────────────────────────────
+// Базова анімація — в _scroll-to-top.scss, тут позиція/розмір/колір проекту
+.scroll-top {
+   display: none;
+
+   @include respond-to("md") {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      position: fixed;
+      // над MobileBookingBar (bottom: 16px + висота ~46px + gap 10px)
+      bottom: toRem(76);
+      right: toRem(15);
+      z-index: 101;
+
+      width: toRem(40);
+      height: toRem(40);
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(11, 17, 26, 0.3);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      color: var(--color-white);
+      cursor: pointer;
+
+      font-size: toRem(18);
+
+      @media (any-hover: hover) {
+         &:hover {
+            background: rgba(11, 17, 26, 0.55);
+         }
+      }
+   }
+}

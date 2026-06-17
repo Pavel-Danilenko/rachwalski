@@ -4,6 +4,9 @@
 // в межах того ж сеансу (SPA-перехід назад) музика відновлюється автоматично.
 
 const STORAGE_KEY = "music-enabled";
+const storage = sessionStorage;
+// Міграція: прибираємо старе значення з localStorage (раніше використовувався localStorage)
+localStorage.removeItem(STORAGE_KEY);
 const TYPES = { webm: "audio/webm", src: "audio/mpeg" };
 
 // Плавна зміна громкості (fade in/out), скасовує попередній fade при повторному викликy
@@ -21,7 +24,7 @@ function fadeVolume(audio, to, duration) {
    return new Promise((resolve) => {
       const step = (now) => {
          const t = Math.min((now - start) / duration, 1);
-         audio.volume = from + (to - from) * t;
+         audio.volume = Math.max(0, Math.min(1, from + (to - from) * t));
          if (t < 1) {
             audio._fadeRaf = requestAnimationFrame(step);
          } else {
@@ -73,6 +76,17 @@ function applyRandomTrack(audio, tracksJSON) {
    return applyTrack(audio, track);
 }
 
+function showToggles() {
+   document.querySelectorAll("[data-music-toggle]").forEach((el) => {
+      el.classList.add("is-visible");
+   });
+}
+
+function tryShowToggles() {
+   if (document.documentElement.classList.contains("intro-video")) return;
+   showToggles();
+}
+
 function initMusicToggle() {
    document.querySelectorAll("[data-music-toggle]").forEach((wrapper) => {
       if (wrapper.dataset.musicToggleInit) return;
@@ -118,14 +132,21 @@ function initMusicToggle() {
             .play()
             .then(() => {
                fadeVolume(audio, volume, fadeDuration);
-               localStorage.setItem(STORAGE_KEY, "true");
+               storage.setItem(STORAGE_KEY, "true");
             })
-            .catch(() => {});
+            .catch(() => {
+               // Chrome може відхилити Promise але audio реально грає (quirk при SPA).
+               // Даємо 200ms щоб браузер встиг стрілити pause-подію після blocked autoplay,
+               // тоді перевіряємо фактичний стан.
+               setTimeout(() => {
+                  if (audio.paused) setPlaying(false);
+               }, 200);
+            });
       };
 
       const pause = () => {
          fadeVolume(audio, 0, fadeDuration).then(() => audio.pause());
-         localStorage.setItem(STORAGE_KEY, "false");
+         storage.setItem(STORAGE_KEY, "false");
       };
 
       btn.addEventListener("click", () => {
@@ -142,17 +163,28 @@ function initMusicToggle() {
          });
       }
 
-      if (localStorage.getItem(STORAGE_KEY) === "true") play();
+      if (storage.getItem(STORAGE_KEY) === "true") play();
    });
 }
 
 if (document.readyState === "loading") {
-   document.addEventListener("DOMContentLoaded", initMusicToggle);
+   document.addEventListener("DOMContentLoaded", () => { initMusicToggle(); tryShowToggles(); });
 } else {
    initMusicToggle();
+   tryShowToggles();
 }
 
-document.addEventListener("page:ready", initMusicToggle);
+document.addEventListener("page:ready", () => { initMusicToggle(); tryShowToggles(); });
+
+// Відео завершилось → показуємо кнопку музики
+document.addEventListener("video-intro:done", showToggles);
+
+// Відео перезапустилось (resize) → ховаємо
+document.addEventListener("video-intro:restart", () => {
+   document.querySelectorAll("[data-music-toggle]").forEach((el) => {
+      el.classList.remove("is-visible");
+   });
+});
 
 // SPA-перехід на іншу сторінку — зупиняємо музику разом з відео-інтро
 document.addEventListener("page:leave", () => {

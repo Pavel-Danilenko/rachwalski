@@ -51,7 +51,7 @@
 
    // .post-card__date
    &__date {
-      font-size: toRem(12);
+      @include fluid(font-size, 12, 14);
       color: var(--color-black);
    }
 
@@ -60,11 +60,11 @@
       display: flex;
       align-items: center;
       gap: toRem(5);
-      font-size: toRem(12);
+      @include fluid(font-size, 12, 14);
       color: var(--color-black);
 
       .icon {
-         font-size: toRem(14);
+         @include fluid(font-size, 12, 14);
          flex-shrink: 0;
       }
    }

@@ -1,0 +1,19 @@
+// ── ScrollToTop — базові стилі компонента ───────────────────────────────────
+// Тільки анімація появи. Позиція, розмір, колір — в стилях проекту.
+
+.scroll-top {
+   // Прихований за замовчуванням — з'їжджає вправо і зменшується
+   opacity: 0;
+   pointer-events: none;
+   transform: translateX(150%) scale(0.4);
+   transition:
+      opacity 0.35s ease,
+      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+   // Видимий — повертається з пружинним ефектом scale
+   &.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0) scale(1);
+   }
+}

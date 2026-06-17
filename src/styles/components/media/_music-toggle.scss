@@ -1,17 +1,39 @@
 @use "@styles/utils" as *;
 
+@keyframes music-ping {
+   0%   {
+      box-shadow:
+         0 0 0 0   rgba(127, 141, 163, 0.45),
+         0 0 0 0   rgba(127, 141, 163, 0.2);
+   }
+   70%  {
+      box-shadow:
+         0 0 0 10px rgba(127, 141, 163, 0),
+         0 0 0 5px  rgba(127, 141, 163, 0.12);
+   }
+   100% {
+      box-shadow:
+         0 0 0 14px rgba(127, 141, 163, 0),
+         0 0 0 10px rgba(127, 141, 163, 0);
+   }
+}
+
 // ── Music toggle — кнопка вкл/викл фонової музики ───────────────────────────
 // Позиція/розміри/кольори — через CSS-змінні (фолбеки нижче), перевизначай їх
 // на класі обгортки (див. приклад у MusicToggle.astro), без хардкоду тут.
 .music-toggle {
-   position: absolute;
-   right: var(--music-toggle-right, #{toRem(20)});
-   bottom: var(--music-toggle-bottom, #{toRem(20)});
-   z-index: var(--music-toggle-z, 20);
+   // Прихована до появи — виїжджає справа зі spring-scale
+   opacity: 0;
+   pointer-events: none;
+   transform: translateX(150%) scale(0.4);
+   transition:
+      opacity 0.4s ease,
+      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-   @include respond-from("md") {
-      right: var(--music-toggle-right-md, var(--music-toggle-right, #{toRem(40)}));
-      bottom: var(--music-toggle-bottom-md, var(--music-toggle-bottom, #{toRem(40)}));
+   &.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0) scale(1);
    }
 
    // Немає аудіо-джерела — кнопку приховує JS (music-toggle.js)
@@ -20,39 +42,59 @@
    }
 
    &__btn {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: var(--music-toggle-size, #{toRem(44)});
-      height: var(--music-toggle-size, #{toRem(44)});
+      width: var(--music-toggle-size, #{toRem(40)});
+      height: var(--music-toggle-size, #{toRem(40)});
       border-radius: 50%;
-      background: var(--music-toggle-bg, rgba(255, 255, 255, 0.1));
+      background: var(--music-toggle-bg, rgba(11, 17, 26, 0.3));
       backdrop-filter: blur(4px);
-      border: 1px solid var(--music-toggle-border, rgba(255, 255, 255, 0.1));
-      color: var(--music-toggle-color, var(--color-white));
+      border: 1px solid var(--music-toggle-border, rgba(255, 255, 255, 0.2));
+      // Вимкнено — приглушений сіро-синій; ввімкнено — білий
+      color: var(--color-gray-blue);
       cursor: pointer;
-      transition: background var(--transition-base);
+      // Подвійне sonar-кільце через box-shadow (::after зайнятий лінією)
+      animation: music-ping 2.4s ease-out infinite;
+      transition:
+         background var(--transition-base),
+         color 0.35s ease;
+
+      // Diagonal mute line — draws bottom→top, erases top→bottom
+      &::after {
+         content: "";
+         position: absolute;
+         width: toRem(1.5);
+         height: 115%;
+         background: currentColor;
+         border-radius: toRem(1);
+         transform: rotate(-45deg);
+         clip-path: inset(0 0 0 0);
+         transition:
+            clip-path 0.4s ease,
+            background 0.35s ease;
+      }
 
       @media (any-hover: hover) {
          &:hover {
-            background: var(--music-toggle-bg-hover, rgba(255, 255, 255, 0.2));
+            background: var(--music-toggle-bg-hover, rgba(11, 17, 26, 0.5));
          }
       }
    }
 
    &__icon {
       font-size: var(--music-toggle-icon-size, #{toRem(18)});
+   }
 
-      &--on {
-         display: none;
+   // Playing — білий колір, лінія стирається, пульсація зупиняється
+   &.is-playing &__btn {
+      color: var(--music-toggle-color, var(--color-white));
+      animation: none;
+      box-shadow: none;
+
+      &::after {
+         clip-path: inset(100% 0 0 0);
       }
-   }
-
-   &.is-playing &__icon--on {
-      display: block;
-   }
-
-   &.is-playing &__icon--off {
-      display: none;
    }
 }

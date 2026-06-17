@@ -500,13 +500,12 @@
 }
 
 .nav-overlay__doctor-name {
-   font-size: toRem(16);
-   font-weight: 500;
+   @include fluid(font-size, 16, 22);
    color: var(--color-text);
 }
 
 .nav-overlay__doctor-title {
-   font-size: toRem(13);
+   @include fluid(font-size, 13, 16);
    color: var(--color-white);
 }
 
@@ -524,15 +523,17 @@
 }
 
 .nav-overlay__phone {
-   font-size: toRem(15);
+   font-size: toRem(16);
    color: var(--color-text);
    text-decoration: none;
    transition: color var(--transition-base);
    white-space: nowrap;
    cursor: pointer;
 
-   &:hover {
-      color: #fff;
+   @media (any-hover: hover) {
+      &:hover {
+         color: var(--color-blue);
+      }
    }
 }
 

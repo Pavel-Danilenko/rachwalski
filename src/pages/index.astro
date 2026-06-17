@@ -18,6 +18,9 @@ import Partners from "@components/section/Partners.astro";
 import TreatmentsHotspot from "@components/section/TreatmentsHotspot.astro";
 import { getCollection } from "astro:content";
 import footerBg from "@assets/img/footer/footer-bg-8.png";
+import MusicToggle from "@components/media/MusicToggle.astro";
+import audioMp3 from "@assets/audio/2005-instrumental-eric-heron-musicbed.mp3";
+import audioWebm from "@assets/audio/2005-instrumental-eric-heron-musicbed.webm";
 import ResponsiveImg from "@components/media/ResponsiveImg.astro";
 import LocationsMap from "@components/section/LocationsMap.astro";
 import SectionHeader from "@components/section/SectionHeader.astro";
@@ -149,7 +152,13 @@ const faqItems = [
             preload="auto"
             showPlayButton={false}
             pageIntro
-            wrapperClass="video-banner__video"
+            wrapperClass="video-banner__video hero-circle"
+         />
+
+         <MusicToggle
+            src={audioMp3}
+            webm={audioWebm}
+            class="video-banner__music"
          />
 
          <div class="video-banner__hotspots" data-video-hotspots>
