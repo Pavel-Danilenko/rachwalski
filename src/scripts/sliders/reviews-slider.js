@@ -72,9 +72,12 @@ function build(el) {
       },
    });
 
-   // Нові .swiper-slide пересоздані з originalCardsHTML — кнопки "Show more"
-   // в них ще не мають клік-хендлерів і ResizeObserver, бо initTextToggle()
-   // вже відпрацював на старих (видалених) вузлах. Реініціалізуємо.
+   // originalCardsHTML може містити data-text-toggle-init="true" (якщо initTextToggle
+   // вже відпрацював до build на page:ready). Стрипуємо прапорець, щоб initTextToggle
+   // не пропустив щойно пересоздані вузли (вони не мають click listeners).
+   wrapper.querySelectorAll("[data-text-toggle-init]").forEach((el) => {
+      delete el.dataset.textToggleInit;
+   });
    initTextToggle();
 }
 
