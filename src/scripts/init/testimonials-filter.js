@@ -101,7 +101,9 @@ export function initTestimonialsFilter() {
          150,
       );
    });
+
 }
 
 document.addEventListener("page:ready", initTestimonialsFilter);
 requestAnimationFrame(initTestimonialsFilter);
+

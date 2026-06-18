@@ -4,26 +4,37 @@
 // ── Hero / Section ────────────────────────────────────────────────────────────
 .reviews {
    position: relative;
+   overflow: clip;
+
+   &::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 toRem(-1) 0;
+      background: linear-gradient(to top, var(--color-bg) 0%, transparent 10%);
+      pointer-events: none;
+      z-index: 2;
+   }
+
    // .reviews__container
 
    &__img {
       position: absolute;
       right: 0;
-      bottom: 50%;
-      translate: 0 50%;
+      @include fluid-space(top, 240, 410);
       z-index: 1;
-      width: 80%;
-      height: 80%;
-      overflow: hidden;
+      width: 100%;
+      max-width: toRem(1500);
+      aspect-ratio: 1;
+
       img {
          object-fit: contain;
          object-position: right;
       }
+
       @include respond-to("md") {
-         width: 150%;
-         bottom: 0;
-         right: -75%;
-         translate: 0 -45%;
+         width: 180%;
+         right: -55%;
+         top: toRem(310);
       }
    }
    &__container {

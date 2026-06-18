@@ -513,7 +513,8 @@
 }
 
 .hero-gradient__bg--fees {
-   height: 100svh;
+   height: 100%;
+   max-height: 100svh;
 }
 
 .text-list {
