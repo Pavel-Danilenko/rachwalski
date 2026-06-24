@@ -157,12 +157,22 @@ function setupPageIntro(video) {
       // Ознака "прелоудер показується": клас preloader-loaded ще не додано до <html>.
       const preloaderPending = !document.documentElement.classList.contains("preloader-loaded");
       if (preloaderPending) {
-         video.autoplay = false; // блокуємо нативний autoplay браузера під час прелоудера
-         document.addEventListener("preloader:hidden", () => {
-            video.autoplay = true;
+         const preloaderEl = document.getElementById("preloader");
+         const preloaderActive = preloaderEl && preloaderEl.style.opacity === "1";
+
+         if (preloaderActive) {
+            // Прелоудер активний — блокуємо autoplay і чекаємо на його зникнення.
+            video.autoplay = false;
+            document.addEventListener("preloader:hidden", () => {
+               video.autoplay = true;
+               lockForIntro(video);
+               tryAutoplay(video);
+            }, { once: true });
+         } else {
+            // Прелоудер не показується (reload / повторний візит в межах сесії) —
+            // запускаємо відео одразу, без очікування події preloader:hidden.
             lockForIntro(video);
-            tryAutoplay(video);
-         }, { once: true });
+         }
       } else {
          lockForIntro(video);
       }

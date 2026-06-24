@@ -57,9 +57,12 @@ function initPreloader() {
          preloader.style.opacity = "0";
          preloader.style.visibility = "hidden";
 
+         // Dispatch when fade STARTS so underlying content (video intro) can begin
+         // playing behind the fading preloader — eliminates the 1-second black gap.
+         document.dispatchEvent(new CustomEvent("preloader:hidden"));
+
          setTimeout(() => {
             preloader.style.display = "none";
-            document.dispatchEvent(new CustomEvent("preloader:hidden"));
          }, fadeDuration + 50);
       }, remaining);
    }
