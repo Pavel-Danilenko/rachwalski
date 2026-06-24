@@ -39,6 +39,9 @@
       background-color: var(--color-surface-glas);
       flex-direction: column;
       align-items: center;
+      @include respond-to("md") {
+         min-height: toRem(168);
+      }
    }
 
    // .book-popup__option-media
@@ -46,7 +49,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: toRem(44);
+      height: toRem(30);
       &:not(:last-child) {
          @include fluid-space(margin-bottom, 14, 18);
       }

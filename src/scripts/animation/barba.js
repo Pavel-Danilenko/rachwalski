@@ -403,6 +403,10 @@ barba.init({
             const cfg = getConfig(next.namespace);
             // Overlay зникає після появи нової сторінки
             if (cfg.color) hideOverlay(cfg.duration.enter, cfg.ease.enter);
+            // Сигналізуємо чи є музика на новій сторінці — до page:ready,
+            // щоб music-toggle міг показати/сховати кнопку до рендеру
+            const hasMusic = Boolean(next.container.querySelector("[data-music-page]"));
+            document.dispatchEvent(new CustomEvent("page:music-status", { detail: { hasMusic } }));
             dispatchPageReady();
          },
       },

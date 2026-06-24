@@ -6,22 +6,18 @@ let _running = false;
 function initPreloader() {
    if (_running) return;
 
-   const navEntry = performance.getEntriesByType("navigation")[0];
-   const navType = navEntry ? navEntry.type : "navigate";
-   const isReload = navType === "reload";
-   const isFirstVisit = !sessionStorage.getItem("preloader_shown");
-
-   if (!isFirstVisit && !isReload) return;
-
-   _running = true;
-   // Set immediately so any redirect/navigation that happens during the animation
-   // doesn't cause a second preloader run on the new page load.
-   sessionStorage.setItem("preloader_shown", "true");
-
    const preloader = document.getElementById("preloader");
    const container = document.getElementById("preloaderLottie");
 
    if (!preloader || !container) return;
+
+   // Only animate if is:inline already made the preloader visible.
+   // is:inline sets opacity:1 only on first session visit and sets sessionStorage
+   // synchronously during parsing — before any deferred module script can run.
+   // If the preloader is hidden here, this session already saw it.
+   if (preloader.style.opacity !== "1") return;
+
+   _running = true;
 
    const fadeDuration = Number(preloader.dataset.fadeDuration) || 600;
    const minDisplayTime = Number(preloader.dataset.minDisplayTime) || 0;

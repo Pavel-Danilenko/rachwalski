@@ -1,19 +1,20 @@
 import { bodyLock, bodyUnlock } from "@scripts/global/block-scroll";
 
+let _running = false;
+
 function initPreloaderBasic() {
-   const navEntry = performance.getEntriesByType("navigation")[0];
-   const isReload = navEntry ? navEntry.type === "reload" : false;
-   const isFirstVisit = !sessionStorage.getItem("preloader_shown");
-
-   if (!isFirstVisit && !isReload) return;
-
-   sessionStorage.setItem("preloader_shown", "true");
+   if (_running) return;
 
    const preloader = document.getElementById("preloader");
    const numberEl = document.getElementById("preloaderNumber");
    const barEl = document.getElementById("preloaderBar");
 
    if (!preloader || !numberEl || !barEl) return;
+
+   // Only animate if is:inline already made the preloader visible.
+   if (preloader.style.opacity !== "1") return;
+
+   _running = true;
 
    const fadeDuration = Number(preloader.dataset.fadeDuration) || 600;
    const minDisplayTime = Number(preloader.dataset.minDisplayTime) || 0;

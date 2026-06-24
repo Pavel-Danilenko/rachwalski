@@ -9,6 +9,9 @@
       display: flex;
       gap: toRem(20) toRem(40);
       flex-wrap: wrap;
+      @include respond-to("md") {
+         flex-direction: column-reverse;
+      }
    }
 
    // .faq__column-left

@@ -48,10 +48,8 @@ const {
 </div>
 <script is:inline>
    (function () {
-      var nav = performance.getEntriesByType("navigation")[0];
-      var isReload = nav && nav.type === "reload";
-      var isFirstVisit = !sessionStorage.getItem("preloader_shown");
-      if (isFirstVisit || isReload) {
+      if (!sessionStorage.getItem("preloader_shown")) {
+         sessionStorage.setItem("preloader_shown", "true");
          var el = document.getElementById("preloader");
          if (el) el.style.cssText = "opacity:1;visibility:visible";
       }

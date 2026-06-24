@@ -13,7 +13,11 @@ function initScrollToTop() {
             : window.innerHeight;
 
       const update = () => {
-         btn.classList.toggle("is-visible", window.scrollY > threshold);
+         const visible = window.scrollY > threshold;
+         btn.classList.toggle("is-visible", visible);
+         document
+            .querySelector(".video-banner__music")
+            ?.classList.toggle("is-scroll-top-visible", visible);
       };
 
       window.addEventListener("scroll", update, { passive: true });

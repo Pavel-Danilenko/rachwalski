@@ -10,12 +10,6 @@
    z-index: var(--z-modal, 400);
    transition: transform 0.6s ease;
 
-   // Поки грає відео-інтро (Video pageIntro + BaseLayout introVideo) — хедер прихований,
-   // плавно з'являється зверху після завершення відео (ended знімає клас .intro-video)
-   .intro-video & {
-      transform: translateY(-120%);
-   }
-
    & .logo {
       position: relative;
       z-index: var(--z-sticky, 200);
