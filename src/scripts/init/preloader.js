@@ -1,13 +1,19 @@
 import lottie from "lottie-web";
 import { bodyLock, bodyUnlock } from "@scripts/global/block-scroll";
 
+let _running = false;
+
 function initPreloader() {
+   if (_running) return;
+
    const navEntry = performance.getEntriesByType("navigation")[0];
    const navType = navEntry ? navEntry.type : "navigate";
    const isReload = navType === "reload";
    const isFirstVisit = !sessionStorage.getItem("preloader_shown");
 
    if (!isFirstVisit && !isReload) return;
+
+   _running = true;
 
    const preloader = document.getElementById("preloader");
    const container = document.getElementById("preloaderLottie");
