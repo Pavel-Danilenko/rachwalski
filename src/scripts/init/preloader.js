@@ -14,6 +14,9 @@ function initPreloader() {
    if (!isFirstVisit && !isReload) return;
 
    _running = true;
+   // Set immediately so any redirect/navigation that happens during the animation
+   // doesn't cause a second preloader run on the new page load.
+   sessionStorage.setItem("preloader_shown", "true");
 
    const preloader = document.getElementById("preloader");
    const container = document.getElementById("preloaderLottie");
@@ -60,7 +63,6 @@ function initPreloader() {
 
          setTimeout(() => {
             preloader.style.display = "none";
-            sessionStorage.setItem("preloader_shown", "true");
             document.dispatchEvent(new CustomEvent("preloader:hidden"));
          }, fadeDuration + 50);
       }, remaining);

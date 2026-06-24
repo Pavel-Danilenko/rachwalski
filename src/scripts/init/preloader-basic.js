@@ -7,6 +7,8 @@ function initPreloaderBasic() {
 
    if (!isFirstVisit && !isReload) return;
 
+   sessionStorage.setItem("preloader_shown", "true");
+
    const preloader = document.getElementById("preloader");
    const numberEl = document.getElementById("preloaderNumber");
    const barEl = document.getElementById("preloaderBar");
@@ -79,7 +81,6 @@ function initPreloaderBasic() {
 
             setTimeout(() => {
                preloader.style.display = "none";
-               sessionStorage.setItem("preloader_shown", "true");
                document.dispatchEvent(new CustomEvent("preloader:hidden"));
             }, fadeDuration + 50);
          });
