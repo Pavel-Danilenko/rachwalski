@@ -48,7 +48,12 @@ const {
 </div>
 <script is:inline>
    (function () {
-      if (!sessionStorage.getItem("preloader_shown")) {
+      var nav = performance.getEntriesByType("navigation")[0];
+      var isReload = nav && nav.type === "reload";
+      // Показуємо прелоудер на першому візиті сесії АБО при reload (F5).
+      // sessionStorage ставиться синхронно тут — до будь-яких module-скриптів,
+      // тож повторний (deferred) запуск не може спричинити другий прелоудер.
+      if (!sessionStorage.getItem("preloader_shown") || isReload) {
          sessionStorage.setItem("preloader_shown", "true");
          var el = document.getElementById("preloader");
          if (el) el.style.cssText = "opacity:1;visibility:visible";
