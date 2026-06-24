@@ -1,30 +1,17 @@
 ---
-// Preloader.astro
 import "@styles/components/interactive/_preloader.scss";
+import { Picture } from "astro:assets";
+import bgFullHd from "@assets/img/preloader/Bg_fullHd.png";
+import bgStory from "@assets/img/preloader/Bg_Story.png";
 
 interface Props {
-   // Затримка перед зникненням після завантаження сторінки (мс)
-   hideDelay?: number;
-   // Тривалість fade out анімації (мс)
    fadeDuration?: number;
-   // Мінімальний час показу прелоадера (мс)
    minDisplayTime?: number;
-   // Час за який лічильник доходить до 90% (мс) — імітація швидкості завантаження
-   simulationDuration?: number;
-   // Логотип — текст або зображення (необов'язково)
-   logoText?: string;
-   logoSrc?: string;
-   logoAlt?: string;
 }
 
 const {
-   hideDelay = 500,
    fadeDuration = 600,
    minDisplayTime = 0,
-   simulationDuration = 800,
-   logoText,
-   logoSrc,
-   logoAlt = "Logo",
 } = Astro.props;
 ---
 
@@ -34,27 +21,42 @@ const {
    id="preloader"
    aria-hidden="true"
    style="opacity: 0; visibility: hidden;"
-   data-hide-delay={hideDelay}
    data-fade-duration={fadeDuration}
    data-min-display-time={minDisplayTime}
-   data-simulation-duration={simulationDuration}
 >
-   {(logoSrc || logoText) && (
-      <div class="preloader__logo">
-         {logoSrc
-            ? <img src={logoSrc} alt={logoAlt} class="preloader__logo-img" />
-            : <span class="preloader__logo-text">{logoText}</span>
-         }
-      </div>
-   )}
-   <div class="preloader__counter">
-      <span class="preloader__number" id="preloaderNumber">0</span>
-      <span class="preloader__percent">%</span>
-   </div>
-   <div class="preloader__bar">
-      <div class="preloader__bar-fill" id="preloaderBar"></div>
-   </div>
+   <Picture
+      src={bgFullHd}
+      alt=""
+      formats={["webp", "png"]}
+      widths={[768, 1280, 1920]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="preloader__bg preloader__bg--desktop"
+   />
+   <Picture
+      src={bgStory}
+      alt=""
+      formats={["webp", "png"]}
+      widths={[390, 768, 1200]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="preloader__bg preloader__bg--mobile"
+   />
+   <div class="preloader__lottie" id="preloaderLottie"></div>
 </div>
+<script is:inline>
+   (function () {
+      var nav = performance.getEntriesByType("navigation")[0];
+      var isReload = nav && nav.type === "reload";
+      var isFirstVisit = !sessionStorage.getItem("preloader_shown");
+      if (isFirstVisit || isReload) {
+         var el = document.getElementById("preloader");
+         if (el) el.style.cssText = "opacity:1;visibility:visible";
+      }
+   })();
+</script>
 <script>
    import "@scripts/init/preloader";
 </script>

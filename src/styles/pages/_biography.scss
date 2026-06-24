@@ -96,13 +96,14 @@
       background-color: var(--color-surface-glass);
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: space-evenly;
       gap: toRem(8) toRem(12);
       @include respond-from(630) {
          flex-direction: column;
       }
       @include respond-to("md") {
          flex-direction: row-reverse;
+         justify-content: space-between;
       }
    }
 

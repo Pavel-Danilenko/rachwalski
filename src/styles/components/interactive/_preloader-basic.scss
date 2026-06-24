@@ -1,0 +1,79 @@
+@use "@styles/utils" as *;
+
+.preloader-basic {
+   --preloader-bg:           var(--color-surface);
+   --preloader-color:        var(--color-text);
+   --preloader-color-muted:  color-mix(in srgb, var(--color-text) 40%, transparent);
+   --preloader-bar-track:    color-mix(in srgb, var(--color-text) 10%, transparent);
+   --preloader-bar-fill:     var(--color-text);
+
+   position: fixed;
+   inset: 0;
+   z-index: var(--z-modal, 400);
+   background-color: var(--preloader-bg);
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: toRem(32);
+
+   &__logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+   }
+
+   &__logo-img {
+      display: block;
+      max-height: toRem(40);
+      width: auto;
+   }
+
+   &__logo-text {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--preloader-color);
+      letter-spacing: -0.02em;
+      line-height: 1;
+   }
+
+   &__counter {
+      display: flex;
+      align-items: baseline;
+      gap: toRem(4);
+      line-height: 1;
+   }
+
+   &__number {
+      font-size: clamp(toRem(80), 15vw, toRem(160));
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--preloader-color);
+      letter-spacing: -0.04em;
+      min-width: 3ch;
+      text-align: right;
+   }
+
+   &__percent {
+      font-size: clamp(toRem(24), 4vw, toRem(48));
+      font-weight: 400;
+      color: var(--preloader-color-muted);
+      letter-spacing: -0.02em;
+   }
+
+   &__bar {
+      width: min(toRem(320), 60vw);
+      height: 1px;
+      background-color: var(--preloader-bar-track);
+      border-radius: 1px;
+      overflow: hidden;
+   }
+
+   &__bar-fill {
+      height: 100%;
+      width: 0%;
+      background-color: var(--preloader-bar-fill);
+      border-radius: 1px;
+      transition: width 0.1s linear;
+   }
+}

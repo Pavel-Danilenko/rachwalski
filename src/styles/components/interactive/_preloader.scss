@@ -1,88 +1,46 @@
 @use "@styles/utils" as *;
 
-// ── CSS-змінні прелоадера (перевизнач у проєкті якщо потрібні інші кольори) ──
-// Приклад: .preloader { --preloader-bg: var(--color-bg); --preloader-color: var(--color-text); }
-.preloader {
-   --preloader-bg:           var(--color-surface);
-   --preloader-color:        var(--color-text);
-   --preloader-color-muted:  color-mix(in srgb, var(--color-text) 40%, transparent);
-   --preloader-bar-track:    color-mix(in srgb, var(--color-text) 10%, transparent);
-   --preloader-bar-fill:     var(--color-text);
-}
-
-// ── Wrapper ───────────────────────────────────────────────────────────────────
 .preloader {
    position: fixed;
    inset: 0;
-   z-index: var(--z-modal, 400);
-   background-color: var(--preloader-bg);
+   z-index: 1000;
+   background-color: var(--color-surface);
    display: flex;
-   flex-direction: column;
    align-items: center;
    justify-content: center;
-   gap: toRem(32);
-   // transition задається динамічно через JS
 
-   // ── Лого ──────────────────────────────────────────────────────────────────
-   &__logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-   }
-
-   &__logo-img {
-      display: block;
-      max-height: toRem(40);
-      width: auto;
-   }
-
-   &__logo-text {
-      font-size: var(--text-xl);
-      font-weight: 700;
-      color: var(--preloader-color);
-      letter-spacing: -0.02em;
-      line-height: 1;
-   }
-
-   // ── Лічильник ─────────────────────────────────────────────────────────────
-   &__counter {
-      display: flex;
-      align-items: baseline;
-      gap: toRem(4);
-      line-height: 1;
-   }
-
-   &__number {
-      font-size: clamp(toRem(80), 15vw, toRem(160));
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      color: var(--preloader-color);
-      letter-spacing: -0.04em;
-      min-width: 3ch;
-      text-align: right;
-   }
-
-   &__percent {
-      font-size: clamp(toRem(24), 4vw, toRem(48));
-      font-weight: 400;
-      color: var(--preloader-color-muted);
-      letter-spacing: -0.02em;
-   }
-
-   // ── Прогрес-бар ───────────────────────────────────────────────────────────
-   &__bar {
-      width: min(toRem(320), 60vw);
-      height: 1px;
-      background-color: var(--preloader-bar-track);
-      border-radius: 1px;
-      overflow: hidden;
-   }
-
-   &__bar-fill {
+   &__bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
       height: 100%;
-      width: 0%;
-      background-color: var(--preloader-bar-fill);
-      border-radius: 1px;
-      transition: width 0.1s linear;
+      object-fit: cover;
+      object-position: center;
+      z-index: 0;
+
+      &--desktop {
+         @include respond-to(1199) {
+            display: none;
+         }
+      }
+
+      &--mobile {
+         @include respond-from(1200) {
+            display: none;
+         }
+      }
+   }
+
+   &__lottie {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+
+      svg {
+         width: 100% !important;
+         height: 100% !important;
+      }
    }
 }

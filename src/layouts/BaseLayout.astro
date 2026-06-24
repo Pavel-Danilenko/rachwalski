@@ -4,8 +4,10 @@ import Footer from "@components/layout/Footer.astro";
 import Popups from "@components/popups/Popups.astro";
 import MobileBookingBar from "@components/ui/MobileBookingBar.astro";
 import ScrollToTop from "@components/ui/ScrollToTop.astro";
+import MusicToggle from "@components/media/MusicToggle.astro";
 import IconSprite from "@components/ui/IconSprite.astro";
 import Preloader from "@components/interactive/Preloader.astro";
+import PreloaderBasic from "@components/interactive/PreloaderBasic.astro";
 import "@styles/main.scss";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -33,6 +35,11 @@ interface Props {
    // Сторінка має відео-інтро (Video з pageIntro): хедер прихований до кінця відео,
    // скрол заблокований, звичайний Preloader не показується
    introVideo?: boolean;
+   // Тип прелоадера: "default" = Lottie, "basic" = лічильник 0–100%, "none" = без прелоадера
+   preloader?: "default" | "basic" | "none";
+   // Фонова музика — передай src/webm щоб показати кнопку звуку (тільки на сторінках з відео)
+   musicSrc?: string;
+   musicWebm?: string;
 }
 
 const {
@@ -52,6 +59,9 @@ const {
    namespace = "default",
    hideChrome = false,
    introVideo = false,
+   preloader = "default",
+   musicSrc,
+   musicWebm,
 } = Astro.props;
 
 const siteOrigin = Astro.site ?? new URL(Astro.url.origin);
@@ -122,12 +132,25 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
       }
    </head>
    <body>
-      {!introVideo && <Preloader />}
+      {preloader === "default" && <Preloader />}
+      {preloader === "basic" && <PreloaderBasic />}
       <IconSprite />
 
       <div class="wrapper" data-barba="wrapper">
          {!hideChrome && <Header sticky={stickyHeader} />}
-         <div data-barba="container" data-barba-namespace={namespace} data-footer-bg={resolvedFooterBg.src}>
+         <div
+            data-barba="container"
+            data-barba-namespace={namespace}
+            data-footer-bg={resolvedFooterBg.src}
+         >
+            {(musicSrc || musicWebm) && (
+               <div
+                  data-music-page
+                  data-src={musicSrc || ""}
+                  data-webm={musicWebm || ""}
+                  hidden
+               />
+            )}
             <slot />
          </div>
 
@@ -137,6 +160,7 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
       <Popups />
       {!hideChrome && <MobileBookingBar />}
       {!hideChrome && <ScrollToTop />}
+      {!hideChrome && <MusicToggle class="video-banner__music" />}
 
       <script>
          import "@scripts/app";

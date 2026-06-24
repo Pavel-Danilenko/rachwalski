@@ -137,7 +137,7 @@ const hasResponsive = Boolean(srcMobile || webmMobile);
    }
    <video
       class:list={["video-wrapper__video", videoClass]}
-      autoplay={autoplay}
+      autoplay={pageIntro ? false : autoplay}
       loop={loop}
       muted={muted}
       playsinline={playsinline}

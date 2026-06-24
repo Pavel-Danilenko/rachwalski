@@ -1,379 +1,88 @@
-/**
- *
- * СИСТЕМА ПРЕЛОАДЕРА: Preloader.astro + preloader.js + _preloader.scss
- * ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
- *
- * 📍 ВИКОРИСТАННЯ (у Astro компоненті, найчастіше у BaseLayout.astro):
- * ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- *
- *   ✨ ПРОСТИЙ СПОСІБ (з дефолтними параметрами):
- *   ────────────────────────────────────────────
- *   import Preloader from "@components/interactive/Preloader.astro";
- *
- *   <Preloader />
- *
- *   ✨ З КАСТОМНИМИ ПАРАМЕТРАМИ:
- *   ─────────────────────────────
- *   <Preloader
- *     hideDelay={500}              // затримка перед зникненням (мс)
- *     fadeDuration={600}           // час fade-out анімації (мс)
- *     minDisplayTime={2000}        // мін. час показу прелоадера (мс)
- *     simulationDuration={400}     // час анімації від 0 до 90% (мс)
- *   />
- *
- * 📋 ВЛАСТИВОСТІ КОМПОНЕНТА (Props):
- * ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- *
- *   hideDelay?: number = 500
- *   └─ Затримка перед зникненням після того як сторінка завантажена
- *      Дає юзеру час на розуміння що завантаження завершено
- *
- *   fadeDuration?: number = 600
- *   └─ Тривалість fade-out анімації (opacity + visibility)
- *      Чим більше - тим плавніше зникає прелоадер
- *
- *   minDisplayTime?: number = 0
- *   └─ Мінімальний час показу прелоадера від моменту завантаження сторінки
- *      Навіть якщо сторінка завантажилась швидко - прелоадер буде видно вказаний час
- *      Типові значення: 1500-3000 мс для реалістичного ефекту
- *
- *   simulationDuration?: number = 800
- *   └─ Час за який лічильник доходить від 0 до 90%
- *      Чим менше - тим "швидше завантажується", чим більше - тим "повільніше"
- *
- * 🔄 ЯК ЦЕ ПРАЦЮЄ:
- * ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- *
- *   1️⃣ Astro компонент Preloader.astro:
- *      ├─ Приймає пропси (hideDelay, fadeDuration, мин, simulationDuration)
- *      ├─ Виводить HTML з id="preloader" та data-* атрибутів
- *      ├─ Імпортує стилі (_preloader.scss)
- *      └─ На виході: <script> import "@scripts/init/preloader" (цей файл)
- *
- *   2️⃣ Цей JS файл (preloader.js):
- *      ├─ Читає data-* атрибути з DOM елемента #preloader
- *      ├─ Обробляє завантаження та анімацію
- *      └─ Взаємодіє з Astro transitions (astro:after-swap)
- *
- *   3️⃣ При першому завантаженні:
- *      ├─ Показуємо прелоадер й блокуємо скрол (bodyLock)
- *      ├─ Анімуємо прогресбар від 0 до 90% за simulationDuration
- *      ├─ Чекаємо load event (завантаження вмісту)
- *      ├─ Добігаємо до 100%
- *      ├─ Розблоковуємо скрол (bodyUnlock)
- *      └─ Плавне зникнення за fadeDuration
- *
- *   4️⃣ При міжсторінкових переходах Astro:
- *      ├─ Прелоадер залишається прихованим
- *      ├─ sessionStorage = "preloader_shown" (юзер вже завантажив сайт)
- *      └─ Спрацьовує astro:after-swap подія
- *
- * 📌 ПРИМІТКИ:
- * ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- *
- *   • Прелоадер показується ТІЛЬКИ при першому завантаженні або перезавантаженні
- *   • Зберігається в sessionStorage, щоб не показати при переходах між сторінками
- *   • Автоматично інтегрується з Astro transitions (<ClientRouter />)
- *   • Налаштований для роботи з улюбленим переходом (flip3D тощо)
- *   • CSS класс "preloader-loaded" додається на <html> після закриття для стилів
- */
-
-// preloader.js
-
+import lottie from "lottie-web";
 import { bodyLock, bodyUnlock } from "@scripts/global/block-scroll";
 
 function initPreloader() {
-   // ════════════════════════════════════════════════════════════════════════════════════
-   // КРОК 1: Визначаємо тип навігації та чи потрібно показувати прелоадер
-   // ════════════════════════════════════════════════════════════════════════════════════
-
-   // Performance API розповідає нам як був завантажений документ
    const navEntry = performance.getEntriesByType("navigation")[0];
    const navType = navEntry ? navEntry.type : "navigate";
-
-   // Типи навігації:
-   // • "reload" = F5 / Ctrl+R (перезавантаження)
-   // • "navigate" = перший заход на сайт / посилання з зовні
-   // • "back_forward" = кнопка Back/Forward браузера
    const isReload = navType === "reload";
-
-   // Перевіряємо sessionStorage - зберігає факт показу прелоадера
-   // При переходах між сторінками Astro: sessionStorage залишається, тому не показуємо
-   // При перезавантаженні: sessionStorage чистяться, показуємо знову
    const isFirstVisit = !sessionStorage.getItem("preloader_shown");
 
-   // ЛОГІКА: показуємо прелоадер ТІЛЬКИ якщо це перший візит АБО перезавантаження
-   // При фоновому переході між сторінками Astro - виходимо без показу
    if (!isFirstVisit && !isReload) return;
 
-   // ════════════════════════════════════════════════════════════════════════════════════
-   // КРОК 2: Отримуємо DOM елементи та параметри конфігурації з Preloader.astro
-   // ════════════════════════════════════════════════════════════════════════════════════
-
-   // Ці ID'ники генеруються у Preloader.astro компоненті
    const preloader = document.getElementById("preloader");
-   const numberEl = document.getElementById("preloaderNumber");
-   const barEl = document.getElementById("preloaderBar");
+   const container = document.getElementById("preloaderLottie");
 
-   // Якщо компонент не був прорендерений - виходимо безпечно
-   if (!preloader || !numberEl || !barEl) return;
+   if (!preloader || !container) return;
 
-   // Читаємо параметри конфігурації з data-* атрибутів
-   // Вони були передані через пропси компоненту Preloader.astro
-   // Приклад: <Preloader simulationDuration={400} />
-   //          → <div data-simulation-duration="400" ...>
    const fadeDuration = Number(preloader.dataset.fadeDuration) || 600;
    const minDisplayTime = Number(preloader.dataset.minDisplayTime) || 0;
-   const simulationDuration =
-      Number(preloader.dataset.simulationDuration) || 800;
 
-   // ════════════════════════════════════════════════════════════════════════════════════
-   // КРОК 3: Ініціалізація прелоадера
-   // ════════════════════════════════════════════════════════════════════════════════════
-
-   // Робимо прелоадер видимим одразу (без transition щоб було різко видно)
    preloader.style.transition = "none";
    preloader.style.opacity = "1";
    preloader.style.visibility = "visible";
 
-   // Блокуємо скрол під час завантаження (запобігає дивним переміщенням контенту)
    bodyLock();
 
-   // Змінні для управління анімацією прогресбара
-   let currentValue = 0; // Поточне значення верств (0-100%)
-   let animationId = null; // ID requestAnimationFrame для скасування
-   let isFinishing = false; // Флаг щоб не викликати hidePreloader двічі
-   const startTime = Date.now(); // Час початку роботи прелоадера (для minDisplayTime)
+   const isMobile = window.matchMedia("(max-width: 1199px)").matches;
+   const lottiePath = isMobile ? "/lottie/mobile/data.json" : "/lottie/data.json";
 
-   /**
-    * ФУНКЦІЯ АНІМАЦІЇ: animateTo(target, duration, onComplete)
-    *
-    * Гладко анімує прогресбар від поточного значення до цільового
-    * Використовує cubic easing для природного сповільнення
-    *
-    * @param {number} target - цільове значення відсотків (0-100)
-    * @param {number} duration - час анімації в мс
-    * @param {Function} onComplete - callback, який викликається після завершення
-    */
-   function animateTo(target, duration, onComplete) {
-      // Скасовуємо попередню анімацію якщо вона ще йде
-      if (animationId) {
-         cancelAnimationFrame(animationId);
-         animationId = null;
-      }
+   const anim = lottie.loadAnimation({
+      container,
+      renderer: "svg",
+      loop: false,
+      autoplay: true,
+      path: lottiePath,
+   });
 
-      // Розраховуємо різницю між поточним і цільовим значенням
-      const from = currentValue;
-      const diff = target - from;
+   const startTime = Date.now();
+   let pageLoaded = false;
+   let animDone = false;
 
-      // Якщо уже на цільовому значенні - виконуємо callback і виходимо
-      if (diff <= 0) {
-         if (onComplete) onComplete();
-         return;
-      }
+   function tryHide() {
+      if (!pageLoaded || !animDone) return;
 
-      // Запам'ятовуємо час початку анімації (для розрахунку прогресу)
-      const startTs = performance.now();
-
-      /**
-       * ФУНКЦІЯ КРОКУ АНІМАЦІЇ
-       * Викликається requestAnimationFrame (~60fps залежно від браузера)
-       *
-       * Розраховує поточне значення на основі часу та easing функції
-       * Оновлює DOM (число і ширину бара)
-       * Продовжує анімацію поки не досягне цілі
-       */
-      function step(ts) {
-         // Розраховуємо прогрес анімації від 0 до 1
-         // Math.min запобігає перевищенню 1 у разі затримок браузера
-         const progress = Math.min((ts - startTs) / duration, 1);
-
-         // EASING ФУНКЦІЯ: cubic ease-out (1 - (1-x)³)
-         // Забезпечує природне сповільнення ближче до кінця
-         // Наприклад: 0.3s → 0.657, 0.5s → 0.875, 0.8s → 0.973, 1.0s → 1.000
-         const eased = 1 - Math.pow(1 - progress, 3);
-
-         // Розраховуємо поточне значення відсотків з easing функцією
-         // Наприклад: від 0 до 100, прогрес 0.5 (еased) → 50%
-         const value = Math.round(from + diff * eased);
-
-         // ОНОВЛЮЄМО DOM (це те, що бачить користувач)
-         currentValue = value;
-         numberEl.textContent = String(value); // Оновлюємо число (0-100)
-         barEl.style.width = value + "%"; // Оновлюємо ширину бара
-
-         // Якщо анімація ще не закінчилась - планую наступний крок
-         if (progress < 1) {
-            animationId = requestAnimationFrame(step);
-         } else {
-            // Анімація завершена - переконаємось що DOM має точні значення
-            animationId = null;
-            currentValue = target;
-            numberEl.textContent = String(target);
-            barEl.style.width = target + "%";
-            if (onComplete) onComplete();
-         }
-      }
-
-      // Запускаємо першу ітерацію анімації
-      animationId = requestAnimationFrame(step);
-   }
-
-   /**
-    * ФУНКЦІЯ ПРИХОВУВАННЯ: hidePreloader()
-    *
-    * Завершує анімацію прелоадера та плавно його ховає
-    *
-    * ПРОЦЕС:
-    * 1. Розраховуємо скільки часу прелоадер вже показується
-    * 2. Чекаємо до достатньо тривалого показу (minDisplayTime)
-    * 3. Розблоковуємо скрол (щоб користувач мав хорошу UX)
-    * 4. Добігаємо прогресбар до 100%
-    * 5. Додаємо CSS клас для стилів
-    * 6. Плавне зникнення прелоадера (fade-out)
-    */
-   function hidePreloader() {
-      // Забезпечуємо, що функція викликається тільки один раз
-      // (може спрацювати з load event або astro:after-swap)
-      if (isFinishing) return;
-      isFinishing = true;
-
-      // Розраховуємо скільки часу прелоадер вже показується
       const elapsed = Date.now() - startTime;
-
-      // Розраховуємо скільки часу ще залишилося до мінімального часу показу
-      // Math.max(0, ...) запобігає негативним значенням якщо завантаження повільне
       const remaining = Math.max(0, minDisplayTime - elapsed);
 
-      // Чекаємо залишок часу, щоб дотриматися minDisplayTime
-      // Це забезпечує, що навіть швидке завантаження матиме видимий прелоадер
       setTimeout(() => {
-         // ─────────────────────────────────────────────────────────────────────────────
-         // РОЗБЛОКУВАННЯ СКРОЛУ - виконуємо ПЕРЕД фіналіzavieаціє анімації
-         // ─────────────────────────────────────────────────────────────────────────────
-         //
-         // Важливо розблокувати скрол ДО того як прелоадер почне зникати!
-         // Якщо розблокувати після - буде видно стрибок скролбара
-         // А якщо розблокувати раніше - юзер буде скролити під прелоадером :)
-         //
-         // ЗОЛОТИЙ МОМЕНТ: перед добіганням до 100% і перед fade-out
          bodyUnlock();
+         document.documentElement.classList.add("preloader-loaded");
 
-         // ─────────────────────────────────────────────────────────────────────────────
-         // ДОБІГАННЯ ДО 100% - фінальна анімація прогресбара
-         // ─────────────────────────────────────────────────────────────────────────────
-         // Анімуємо від поточного значення до 100% за 300ms
-         //
-         // Це робить завантаження таким що виглядає завершеним
-         // А не просто зникає на якийсь випадковий відсоток
-         animateTo(100, 300, () => {
-            // ───────────────────────────────────────────────────────────────────────────
-            // ДОДАВАННЯ CSS КЛАСУ "preloader-loaded" на <html>
-            // ───────────────────────────────────────────────────────────────────────────
-            // Цей клас може використовуватися в стилях для:
-            // • Приховування елементів завантаження
-            // • Показування основного контенту
-            // • Інших переходів пов'язаних з завершенням завантаження
-            document.documentElement.classList.add("preloader-loaded");
+         preloader.style.transition = `opacity ${fadeDuration}ms ease, visibility ${fadeDuration}ms ease`;
+         preloader.style.opacity = "0";
+         preloader.style.visibility = "hidden";
 
-            // ───────────────────────────────────────────────────────────────────────────
-            // НАЛАШТУВАННЯ FADE-OUT АНІМАЦІЇ
-            // ───────────────────────────────────────────────────────────────────────────
-            // Встановлюємо transition для плавного зникнення
-            // Використовуємо передану конфігурацію fadeDuration
-            preloader.style.transition = `opacity ${fadeDuration}ms ease, visibility ${fadeDuration}ms ease`;
-            preloader.style.opacity = "0"; // Прозорість до 0 (невидимо)
-            preloader.style.visibility = "hidden"; // Невидимість для скролу
-
-            // ───────────────────────────────────────────────────────────────────────────
-            // ОСТАТОЧНЕ ОЧИЩЕННЯ ПІСЛЯ FADE-OUT
-            // ───────────────────────────────────────────────────────────────────────────
-            // Чекаємо завершення fade-out анімації (+50ms буфер)
-            // Потім остаточно приховуємо елемент (display: none)
-            setTimeout(() => {
-               // Остаточно приховуємо прелоадер від DOM
-               // (display: none запобігає займання місця у document flow)
-               preloader.style.display = "none";
-
-               // Позначаємо в sessionStorage що прелоадер уже показувався
-               // При наступних переходах mezi сторінками це запобіжить повторному показу
-               sessionStorage.setItem("preloader_shown", "true");
-            }, fadeDuration + 50);
-         });
+         setTimeout(() => {
+            preloader.style.display = "none";
+            sessionStorage.setItem("preloader_shown", "true");
+            document.dispatchEvent(new CustomEvent("preloader:hidden"));
+         }, fadeDuration + 50);
       }, remaining);
    }
 
-   // ════════════════════════════════════════════════════════════════════════════════════
-   // КРОК 4: ОСНОВНА АНІМАЦІЯ ПРОГРЕСБАРА (0% → 90%)
-   // ════════════════════════════════════════════════════════════════════════════════════
-   //
-   // Анімуємо від 0 до 90% під час завантаження сторінки
-   // Чому до 90%?
-   // └─ На 90% чекаємо на load event - завантаження вмісту
-   // └─ На 100% добігаємо після load event
-   // └─ Це забезпечує реалістичну симуляцію: немов система знає коли завантаження завершено
-   //
-   // simulationDuration:
-   // └─ Чим менше ms - тим швидше "завантажується" (400ms = швидко)
-   // └─ Чим більше ms - тим повільніше (2000ms = повільно)
-   animateTo(90, simulationDuration, null);
+   anim.addEventListener("DOMLoaded", () => {
+      const svg = container.querySelector("svg");
+      if (svg) svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
+   });
 
-   // ════════════════════════════════════════════════════════════════════════════════════
-   // КРОК 5: ОЧІКУВАННЯ ЗАВАНТАЖЕННЯ СТОРІНКИ (load event)
-   // ════════════════════════════════════════════════════════════════════════════════════
-   //
-   // Коли весь контент завантажений - запускаємо hidePreloader()
-   // Це гарантує, що користувач не бачить незавантаженого контенту
-   //
-   // Перевіряємо document.readyState:
-   // • "loading" = документ ще завантажується
-   // • "interactive" = DOM готовий, але асинхронні ресурси ще завантажуються
-   // • "complete" = все завантажено (images, stylesheets, scripts)
-   //
+   anim.addEventListener("complete", () => {
+      animDone = true;
+      tryHide();
+   });
+
+   anim.addEventListener("data_failed", () => {
+      animDone = true;
+      tryHide();
+   });
+
    if (document.readyState === "complete") {
-      // Якщо сторінка вже завантажена - одразу закриваємо прелоадер
-      // Це може статися якщо JS завантажується дуже швидко або це кеші браузера
-      hidePreloader();
+      pageLoaded = true;
    } else {
-      // Очікуємо load event щоб гарантувати завантаження всіх ресурсів
-      // { once: true } запобігає повторним викликам при resize або інших подіях
-      window.addEventListener("load", hidePreloader, { once: true });
+      window.addEventListener("load", () => {
+         pageLoaded = true;
+         tryHide();
+      }, { once: true });
    }
 }
 
-// ════════════════════════════════════════════════════════════════════════════════════
-// ЗАПУСК ПРЕЛОАДЕРА
-// ════════════════════════════════════════════════════════════════════════════════════
-// 
-// Ініціалізуємо систему прелоадера коли скрипт завантажений
-// Це викликається автоматично коли Preloader.astro компонент прорендерюється
 initPreloader();
-
-/**
- * ════════════════════════════════════════════════════════════════════════════════════
- * ОБРОБКА МІЖСТОРІНКОВИХ ПЕРЕХОДІВ ASTRO
- * ════════════════════════════════════════════════════════════════════════════════════
- * 
- * ASTRO TRANSITIONS (ClientRouter):
- * └─ У BaseLayout.astro є <ClientRouter /> - це дозволяє плавні переходи без перезав 
- * 
- * astro:after-swap подія:
- * └─ Спрацьовує ПІСЛЯ завершенення фонового завантаження нової сторінки
- * └─ HTML вже заміняється в DOM, але isReady() ще = false
- * 
- * ХОЧЕМО РОБИТИ:
- * └─ При переходах між сторінками прелоадер НЕ показується
- * └─ sessionStorage = "preloader_shown" - юзер вже завантажив сайт
- * └─ Перехід має бути плавним без прелоадера
- * └─ Прелоадер показується ТІЛЬКИ при F5 / Ctli+R (перезавантаженні)
- * 
- * ТИПОВІ СЦЕНАРІЇ:
- * ───────────────
- * ✅ Перший заход: /home → показати прелоадер
- * ✅ Перезавантаження: /home [F5] → показати прелоадер, очистити sessionStorage
- * ✅ Переход: /home → /about (Astro) → НЕ показувати прелоадер, плавний перехід
- * ✅ Натиск Back: /about → /home → НЕ показувати прелоадер (це back_forward)
- */
-// З Barba.js preloader живе поза [data-barba="container"] і не замінюється при переходах.
-// Він прихований після першого завантаження через sessionStorage логіку вище.
-// page:ready додає preloader-loaded клас через app.js.

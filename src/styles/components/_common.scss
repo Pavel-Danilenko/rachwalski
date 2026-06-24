@@ -18,14 +18,14 @@
    }
 }
 .pt-180 {
-   @include fluid-space(padding-top, 88, 180);
+   @include fluid-space(padding-top, 88, 164);
 }
 .pb-80 {
-   @include fluid-space(padding-bottom, 40, 100);
+   @include fluid-space(padding-bottom, 40, 80);
 }
 
 .pt-80 {
-   @include fluid-space(padding-top, 40, 100);
+   @include fluid-space(padding-top, 40, 80);
 }
 
 .pb-60 {
@@ -105,14 +105,10 @@
    cursor: pointer;
    text-align: center;
    border-radius: var(--radius-xl);
-   line-height: 1.4;
+   line-height: 1.1;
    @include respond-to("md") {
       width: 100%;
    }
-}
-
-.btn--sm {
-   padding: toRem(8) toRem(24);
 }
 
 .outline-btn {
@@ -602,7 +598,6 @@
    }
 }
 
-
 // ── ScrollToTop — project styles ─────────────────────────────────────────────
 // Базова анімація — в _scroll-to-top.scss, тут позиція/розмір/колір проекту
 .scroll-top {
@@ -633,8 +628,15 @@
    }
 
    @include respond-to("md") {
-      // над MobileBookingBar на мобілі
-      bottom: toRem(76);
       right: toRem(15);
+      bottom: toRem(30);
+      transition:
+         opacity 0.35s ease,
+         transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+         bottom 0.4s ease;
+
+      &.bar-lifted {
+         bottom: toRem(76);
+      }
    }
 }

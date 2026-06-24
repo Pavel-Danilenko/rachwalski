@@ -1,7 +1,6 @@
 // video.js — підтримка адаптивних <source> (mobile/desktop, webm/mp4),
 // lazy-завантаження через IntersectionObserver та prefers-reduced-motion.
 
-import { bodyLock, bodyUnlock, resetBodyLock } from "@scripts/global/block-scroll";
 
 const selectorAttr = "[data-video]";
 
@@ -107,8 +106,6 @@ function lockForIntro(video) {
       return;
    }
 
-   bodyLock();
-
    let finished = false;
    // timeupdate — резерв для Safari: "ended" може не стрілити коли playbackRate != 1
    // з <source> елементами (WebKit bug). Відстежуємо currentTime вручну.
@@ -120,7 +117,6 @@ function lockForIntro(video) {
       finished = true;
       video.removeEventListener("timeupdate", onTimeUpdate);
       document.documentElement.classList.remove("intro-video");
-      bodyUnlock();
       markIntroDone();
    };
 
@@ -157,11 +153,38 @@ function setupPageIntro(video) {
    if (video.dataset.pageIntro !== "true") return;
 
    if (document.documentElement.classList.contains("intro-video")) {
-      lockForIntro(video);
+      // Якщо прелоудер ще не завершився — відкладаємо старт відео до його зникнення.
+      // Ознака "прелоудер показується": клас preloader-loaded ще не додано до <html>.
+      const preloaderPending = !document.documentElement.classList.contains("preloader-loaded");
+      if (preloaderPending) {
+         video.autoplay = false; // блокуємо нативний autoplay браузера під час прелоудера
+         document.addEventListener("preloader:hidden", () => {
+            video.autoplay = true;
+            lockForIntro(video);
+            tryAutoplay(video);
+         }, { once: true });
+      } else {
+         lockForIntro(video);
+      }
    } else {
       video.autoplay = false;
-      video.pause(); // Safari стартує native autoplay до виконання JS — примусово зупиняємо
-      freezeOnLastFrame(video);
+      video.pause();
+      // Ховаємо відео до завершення seek щоб не було видно "перемотки"
+      video.style.visibility = "hidden";
+      const revealAfterSeek = () => { video.style.visibility = ""; };
+      const doSeekToEnd = () => {
+         if (video.duration) {
+            video.currentTime = video.duration;
+            video.addEventListener("seeked", revealAfterSeek, { once: true });
+         } else {
+            revealAfterSeek();
+         }
+      };
+      if (video.readyState >= 1) {
+         doSeekToEnd();
+      } else {
+         video.addEventListener("loadedmetadata", doSeekToEnd, { once: true });
+      }
    }
 }
 
@@ -304,10 +327,9 @@ if (document.readyState === "loading") {
 document.addEventListener("page:ready", initVideo);
 
 // Якщо користувач пішов зі сторінки до завершення відео-інтро —
-// одразу повертаємо хедер і розблоковуємо скрол (інакше вони "застрягнуть")
+// знімаємо клас щоб хедер знову показався на наступній сторінці
 document.addEventListener("page:leave", () => {
    if (document.documentElement.classList.contains("intro-video")) {
       document.documentElement.classList.remove("intro-video");
-      resetBodyLock();
    }
 });

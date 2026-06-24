@@ -18,7 +18,6 @@ import Partners from "@components/section/Partners.astro";
 import TreatmentsHotspot from "@components/section/TreatmentsHotspot.astro";
 import { getCollection } from "astro:content";
 import footerBg from "@assets/img/footer/footer-bg-8.png";
-import MusicToggle from "@components/media/MusicToggle.astro";
 import audioMp3 from "@assets/audio/2005-instrumental-eric-heron-musicbed.mp3";
 import audioWebm from "@assets/audio/2005-instrumental-eric-heron-musicbed.webm";
 import ResponsiveImg from "@components/media/ResponsiveImg.astro";
@@ -137,6 +136,8 @@ const faqItems = [
    description="Test description of the homepage. Replace with actual text—this is what appears in Google search results and when sharing on social media. Recommended length: 120–155 characters."
    ogImage="/og-image.svg"
    footerBg={footerBg}
+   musicSrc={audioMp3}
+   musicWebm={audioWebm}
    introVideo
 >
    <PageMain>
@@ -150,15 +151,9 @@ const faqItems = [
             loop={false}
             lazy={false}
             preload="auto"
+            pageIntro={true}
             showPlayButton={false}
-            pageIntro
             wrapperClass="video-banner__video hero-circle"
-         />
-
-         <MusicToggle
-            src={audioMp3}
-            webm={audioWebm}
-            class="video-banner__music"
          />
 
          <div class="video-banner__hotspots" data-video-hotspots>
@@ -501,6 +496,7 @@ const faqItems = [
             </div>
          </div>
       </section>
+
       <TreatmentsHotspot />
       <Partners />
       <section class="main-about bg-white mt-1">
@@ -562,20 +558,20 @@ const faqItems = [
          viewAllHref="/testimonials"
          class="dark-gradient__bottom mt-1"
       />
+
+      <section class="contact-map pt-80 pb-80">
+         <div class="contact-map__container mb-40">
+            <SectionHeader>
+               <h2 slot="left">Your consultation, your convenience</h2>
+               <div slot="right">
+                  Dr. Martin Rachwalski welcomes patients in multiple locations
+                  to make your visit as comfortable as possible.
+               </div>
+            </SectionHeader>
+         </div>
+         <LocationsMap />
+      </section>
+
+      <Faq items={faqItems} class="pb-80" />
    </PageMain>
-
-   <section class="contact-map pt-80 pb-80">
-      <div class="contact-map__container mb-40">
-         <SectionHeader>
-            <h2 slot="left">Your consultation, your convenience</h2>
-            <div slot="right">
-               Dr. Martin Rachwalski welcomes patients in multiple locations to
-               make your visit as comfortable as possible.
-            </div>
-         </SectionHeader>
-      </div>
-      <LocationsMap />
-   </section>
-
-   <Faq items={faqItems} />
 </BaseLayout>

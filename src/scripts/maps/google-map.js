@@ -201,7 +201,7 @@ function initMap(el) {
             marker.addListener("click", () => {
                infoWindow.setContent(`
                   <div class="gmap-info">
-                     <div class="gmap-info__title">${m.title ?? ""}</div>
+                     <div class="gmap-info__title">${m.title ?? ""}${m.subtitle ? `<br>${m.subtitle}` : ""}</div>
                      <a class="gmap-info__link" href="${m.url}" target="_blank" rel="noopener noreferrer">
                         View on Google Maps
                      </a>

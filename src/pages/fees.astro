@@ -73,8 +73,9 @@ const faqItems = [
             quality={90}
          />
 
-         <Img src={pricesPlanet} alt="Опис" wrapperClass="prices__img-bottom" />
-         <Img src={pricesPlanetTop} alt="Опис" wrapperClass="prices__img-top" />
+         <div class="prices__sphere-track">
+            <Img src={pricesPlanetTop} alt="" wrapperClass="prices__img-top" />
+         </div>
 
          <div class="prices__container pb-80 pt-180">
             <div class="prices__inner mb-40">
@@ -2487,6 +2488,6 @@ const faqItems = [
          </div>
       </section>
 
-      <Faq items={faqItems} />
+      <Faq items={faqItems} class="pt-80 pb-80" />
    </PageMain>
 </BaseLayout>

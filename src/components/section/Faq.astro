@@ -10,13 +10,14 @@ interface Props {
       question: string;
       answer: string;
    }[];
+   class?: string;
 }
 
-const { items } = Astro.props;
+const { items, class: className = "" } = Astro.props;
 ---
 
 <section class="faq">
-   <div class="faq__container pt-80 pb-80">
+   <div class:list={["faq__container", className]}>
       <h2 class="faq__title mb-40">FAQ</h2>
       <div class="faq__row">
          <div class="faq__column-left">

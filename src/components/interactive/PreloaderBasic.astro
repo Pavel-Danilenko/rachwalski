@@ -1,0 +1,62 @@
+---
+import "@styles/components/interactive/_preloader-basic.scss";
+
+interface Props {
+   fadeDuration?: number;
+   minDisplayTime?: number;
+   simulationDuration?: number;
+   logoText?: string;
+   logoSrc?: string;
+   logoAlt?: string;
+}
+
+const {
+   fadeDuration = 600,
+   minDisplayTime = 0,
+   simulationDuration = 800,
+   logoText,
+   logoSrc,
+   logoAlt = "Logo",
+} = Astro.props;
+---
+
+<div
+   class="preloader-basic"
+   data-lock
+   id="preloader"
+   aria-hidden="true"
+   style="opacity: 0; visibility: hidden;"
+   data-fade-duration={fadeDuration}
+   data-min-display-time={minDisplayTime}
+   data-simulation-duration={simulationDuration}
+>
+   {(logoSrc || logoText) && (
+      <div class="preloader-basic__logo">
+         {logoSrc
+            ? <img src={logoSrc} alt={logoAlt} class="preloader-basic__logo-img" />
+            : <span class="preloader-basic__logo-text">{logoText}</span>
+         }
+      </div>
+   )}
+   <div class="preloader-basic__counter">
+      <span class="preloader-basic__number" id="preloaderNumber">0</span>
+      <span class="preloader-basic__percent">%</span>
+   </div>
+   <div class="preloader-basic__bar">
+      <div class="preloader-basic__bar-fill" id="preloaderBar"></div>
+   </div>
+</div>
+<script is:inline>
+   (function () {
+      var nav = performance.getEntriesByType("navigation")[0];
+      var isReload = nav && nav.type === "reload";
+      var isFirstVisit = !sessionStorage.getItem("preloader_shown");
+      if (isFirstVisit || isReload) {
+         var el = document.getElementById("preloader");
+         if (el) el.style.cssText = "opacity:1;visibility:visible";
+      }
+   })();
+</script>
+<script>
+   import "@scripts/init/preloader-basic";
+</script>

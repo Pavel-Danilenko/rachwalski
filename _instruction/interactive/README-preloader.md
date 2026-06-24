@@ -1,81 +1,105 @@
 # Preloader
 
-Повноекранний прелоадер з лічильником відсотків і прогрес-баром. Показується тільки при першому завантаженні або F5, при переходах між сторінками Astro — не показується.
+Два варіанти прелоадера. Підключається автоматично через `BaseLayout.astro`.
 
 ```
 src/
-├── components/interactive/Preloader.astro        — компонент (розміщується в BaseLayout)
-├── scripts/init/preloader.js                     — логіка (анімація, hide, sessionStorage)
-└── styles/components/interactive/_preloader.scss — стилі
+├── components/interactive/
+│   ├── Preloader.astro          ← Lottie (кастомна анімація)
+│   └── PreloaderBasic.astro     ← Базовий (лічильник 0–100%)
+├── scripts/init/
+│   ├── preloader.js             ← Lottie логіка
+│   └── preloader-basic.js       ← Базова логіка
+└── styles/components/interactive/
+    ├── _preloader.scss          ← Стилі Lottie
+    └── _preloader-basic.scss    ← Стилі базового
 ```
-
-## Сніпети VS Code
-
-| Префікс | Опис |
-|---|---|
-| `fpreloader` | Вставити `<Preloader />` з усіма пропами |
 
 ---
 
-## Підключення
+## Перемикання
 
-Розміщується **один раз** у `BaseLayout.astro` — до закриття `</body>`:
+У `BaseLayout.astro` є проп `preloader`:
+
+| Значення | Результат |
+|---|---|
+| `"default"` | Lottie-анімація з `/public/lottie/data.json` |
+| `"basic"` | Лічильник 0–100% + прогресбар |
+| `"none"` | Без прелоадера |
 
 ```astro
----
-import Preloader from "@components/interactive/Preloader.astro";
----
+<!-- Lottie (активний на поточному проєкті) -->
+<BaseLayout preloader="default">
 
-<Preloader />
+<!-- Базовий лічильник -->
+<BaseLayout preloader="basic">
+
+<!-- Без прелоадера -->
+<BaseLayout preloader="none">
 ```
 
 ---
 
-## Props
+## Lottie прелоадер (`preloader="default"`)
+
+Підхоплює JSON-анімацію з `/public/lottie/data.json` (і зображення з `/public/lottie/images/`).
+
+### Props (Preloader.astro)
 
 | Prop | Тип | Default | Опис |
 |---|---|---|---|
-| `hideDelay` | `number` | `500` | Затримка перед зникненням після завантаження (мс) |
 | `fadeDuration` | `number` | `600` | Тривалість fade-out анімації (мс) |
-| `minDisplayTime` | `number` | `0` | Мінімальний час показу (мс). `0` = зникає одразу після load |
+| `minDisplayTime` | `number` | `0` | Мінімальний час показу (мс) |
+
+### Підготовка Lottie файлів
+
+1. Експортуй анімацію з After Effects через Bodymovin у папку
+2. Скопіюй `data.json` → `/public/lottie/data.json`
+3. Скопіюй папку `images/` → `/public/lottie/images/`
+
+### Як це працює
+
+```
+Перший візит або F5?  →  НІ  →  exit (не показуємо)
+   ↓ ТАК
+bodyLock() + показати прелоадер
+   ↓
+Lottie анімація (autoplay, loop: false)
+   ↓
+Обидві умови виконані: анімація закінчилась + window.load
+   ↓
+bodyUnlock()
+html.classList.add("preloader-loaded")
+fade-out → display: none
+sessionStorage.set("preloader_shown", "true")
+document.dispatchEvent("preloader:hidden")
+```
+
+---
+
+## Базовий прелоадер (`preloader="basic"`)
+
+Лічильник від 0 до 100% з горизонтальним прогресбаром.
+
+### Props (PreloaderBasic.astro)
+
+| Prop | Тип | Default | Опис |
+|---|---|---|---|
+| `fadeDuration` | `number` | `600` | Тривалість fade-out анімації (мс) |
+| `minDisplayTime` | `number` | `0` | Мінімальний час показу (мс) |
 | `simulationDuration` | `number` | `800` | Час анімації лічильника від 0 до 90% (мс) |
+| `logoText` | `string` | — | Текст логотипу всередині прелоадера |
+| `logoSrc` | `string` | — | URL зображення логотипу |
+| `logoAlt` | `string` | `"Logo"` | Alt для зображення логотипу |
 
----
-
-## Приклади
-
-### Дефолт (швидкий)
 ```astro
-<Preloader />
+<PreloaderBasic minDisplayTime={2000} simulationDuration={1500} logoText="BRAND" />
 ```
 
-### З мінімальним часом показу (для ефекту)
-```astro
-<Preloader
-   minDisplayTime={2000}
-   simulationDuration={1500}
-   fadeDuration={800}
-/>
-```
-
-### Швидкий (майже непомітний)
-```astro
-<Preloader
-   simulationDuration={300}
-   fadeDuration={400}
-   hideDelay={200}
-/>
-```
-
----
-
-## Кастомізація кольорів
-
-За замовчуванням — темний фон, білий текст. Перевизнач CSS-змінні:
+### Кастомізація кольорів
 
 ```scss
-// Світлий прелоадер
-.preloader {
+.preloader-basic {
    --preloader-bg:          var(--color-bg);
    --preloader-color:       var(--color-text);
    --preloader-color-muted: var(--color-text-muted);
@@ -84,58 +108,44 @@ import Preloader from "@components/interactive/Preloader.astro";
 }
 ```
 
-```scss
-// Брендовий колір
-.preloader {
-   --preloader-bg:        var(--color-primary);
-   --preloader-color:     #fff;
-   --preloader-bar-fill:  #fff;
-}
-```
-
----
-
-## Як це працює
+### Як це працює
 
 ```
-DOMContentLoaded
-   ↓
 Перший візит або F5?  →  НІ  →  exit (не показуємо)
    ↓ ТАК
-Показати прелоадер (opacity: 1) + bodyLock()
+bodyLock() + показати прелоадер
    ↓
-Анімація 0% → 90% за simulationDuration
+анімація 0% → 90% → чекаємо window.load → 100%
    ↓
-window "load" event (всі ресурси завантажені)
-   ↓
-bodyUnlock() → анімація 90% → 100%
-   ↓
+bodyUnlock()
 html.classList.add("preloader-loaded")
-   ↓
-fade-out за fadeDuration → display: none
-   ↓
+fade-out → display: none
 sessionStorage.set("preloader_shown", "true")
+document.dispatchEvent("preloader:hidden")
 ```
-
-**При переходах між сторінками Astro** — `sessionStorage` зберігається, тому `!isFirstVisit && !isReload` → прелоадер не показується.  
-**При F5** — sessionStorage очищається браузером → прелоадер показується знову.
 
 ---
 
-## CSS клас `preloader-loaded`
+## Спільні особливості
 
-Після зникнення прелоадера на `<html>` додається клас `preloader-loaded`. Використовуй для анімацій входу:
+**Без flash при reload** — `<script is:inline>` всередині компонента одразу показує прелоадер синхронно під час парсингу HTML, до завантаження будь-яких бандлів.
+
+**Подія `preloader:hidden`** — диспатчиться після повного зникнення (після `display: none`). Використовується в `video.js` для старту pageIntro-відео після прелоадера.
+
+```js
+document.addEventListener("preloader:hidden", () => {
+   // прелоадер повністю зник
+});
+```
+
+**CSS клас `preloader-loaded`** — додається на `<html>` коли прелоадер починає зникати:
 
 ```scss
-// Елементи невидимі поки не закриється прелоадер
 .hero__title {
    opacity: 0;
-   transform: translateY(20px);
-   transition: opacity 0.6s ease, transform 0.6s ease;
+   transition: opacity 0.6s ease;
 }
-
 .preloader-loaded .hero__title {
    opacity: 1;
-   transform: translateY(0);
 }
 ```

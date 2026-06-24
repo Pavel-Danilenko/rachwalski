@@ -80,6 +80,15 @@
       flex-wrap: wrap;
       z-index: 3;
       position: relative;
+      &::before {
+         content: "";
+         position: absolute;
+         top: 0;
+         left: 50%;
+         translate: -50% 0;
+         width: calc(100% - 30px);
+         border-top: toRem(1) solid rgba(255, 255, 255, 0.2);
+      }
       @include respond-to("md") {
          justify-content: center;
          flex-direction: column-reverse;
@@ -140,7 +149,7 @@
       font-size: toRem(16);
       padding: toRem(8) toRem(14);
       color: var(--color-white);
-      min-height: toRem(53);
+      min-height: toRem(46);
       &::placeholder {
          color: inherit;
       }
@@ -200,6 +209,10 @@
 
 .footer__copyright {
    color: var(--color-text);
+}
+.footer__credit {
+   font-size: var(--text-sm);
+   transition: color var(--transition-base);
 }
 .footer__list {
    display: flex;

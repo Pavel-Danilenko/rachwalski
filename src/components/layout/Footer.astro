@@ -135,7 +135,11 @@ const copyrightText = copyright ?? `© ${year} RACHWALSKI. All rights reserved.`
                   </a>
                </div>
             </div>
-            <button type="button" data-popup-open="book" class="footer-contact__btn btn btn--medium white-btn">
+            <button
+               type="button"
+               data-popup-open="book"
+               class="footer-contact__btn btn btn--medium white-btn"
+            >
                Book consultation
             </button>
          </div>
@@ -145,7 +149,14 @@ const copyrightText = copyright ?? `© ${year} RACHWALSKI. All rights reserved.`
    <!-- Нижня панель — замінити через slot="bottom" або редагувати тут -->
    <div class="footer__bottom footer-copy__container">
       <slot name="bottom">
-         <p class="footer__copyright">{copyrightText}</p>
+         <a
+            href="https://8n.studio"
+            class="footer__credit"
+            target="_blank"
+            rel="noopener noreferrer"
+         >Website by 8n.studio</a>
+
+         <div class="footer__copyright">{copyrightText}</div>
 
          <div class="footer__list">
             <a href="#" class="footer__link">Privacy</a>

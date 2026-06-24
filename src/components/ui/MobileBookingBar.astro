@@ -1,16 +1,21 @@
 ---
+import Icon from "@components/ui/Icon.astro";
 import "@styles/components/ui/_mobile-booking-bar.scss";
 ---
 
 <div class="mobile-booking-bar" data-mobile-booking-bar>
-   <button
-      class="mobile-booking-bar__btn mobile-booking-bar__btn--primary"
-      data-popup-open="book"
-      type="button"
+   <a href="/" class="mobile-booking-bar__btn">
+      <Icon name="home" />
+   </a>
+   <a
+      href="https://www.doctolib.fr/chirurgie-maxillo-facial/paris/martin-rachwalski-paris"
+      class="mobile-booking-bar__btn mobile-booking-bar__btn--doctolib no-transition"
+      target="_blank"
+      rel="nofollow noopener noreferrer"
    >
-      Book appointment
-   </button>
-   <a href="/contact" class="mobile-booking-bar__btn mobile-booking-bar__btn--secondary">
-      Contact
+      <Icon name="doctolib" />
+   </a>
+   <a href="tel:+33000000000" class="mobile-booking-bar__btn">
+      <Icon name="phone-2" />
    </a>
 </div>
