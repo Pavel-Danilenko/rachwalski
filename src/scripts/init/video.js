@@ -211,8 +211,13 @@ function setupPageIntro(video) {
             // Прелоудер активний — блокуємо autoplay і чекаємо на його зникнення.
             video.autoplay = false;
             document.addEventListener("preloader:hidden", () => {
-               // Data Saver / 2g — відео не граємо, показуємо фінальний кадр + доти.
-               if (video.dataset.respectDataSaver !== "false" && isDataSaverOn()) {
+               const dataSaver = video.dataset.respectDataSaver !== "false" && isDataSaverOn();
+               // "Все або нічого": граємо відео ТІЛЬКИ якщо воно вже готове відтворюватись
+               // зараз (встигло буферизуватись поки крутився прелоудер). Інакше — одразу
+               // фінальний кадр + доти, і відео НЕ грає навіть якщо догрузиться пізніше
+               // (жодної перемотки назад на повільному інеті).
+               const ready = video.readyState >= 3; // HAVE_FUTURE_DATA (canplay)
+               if (dataSaver || !ready) {
                   document.dispatchEvent(new CustomEvent("video-intro:fallback"));
                   document.documentElement.classList.remove("intro-video");
                   markIntroDone();
