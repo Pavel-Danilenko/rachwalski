@@ -1,6 +1,6 @@
-// lottie_light — полегшена збірка (тільки SVG-renderer, який ми й використовуємо).
-// ~45% менша за повну lottie-web; прелоудер на критичному шляху, тож вага важлива.
-import lottie from "lottie-web/build/player/lottie_light";
+// УВАГА: повна lottie-web обов'язкова — анімація використовує ефекти Fill (ty:21),
+// які зафарбовують логотип. lottie_light їх ігнорує → логотип стає сірим. Не міняти.
+import lottie from "lottie-web";
 import { bodyLock, bodyUnlock } from "@scripts/global/block-scroll";
 
 let _running = false;
