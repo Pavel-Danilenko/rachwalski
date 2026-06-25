@@ -1,4 +1,6 @@
-import lottie from "lottie-web";
+// lottie_light — полегшена збірка (тільки SVG-renderer, який ми й використовуємо).
+// ~45% менша за повну lottie-web; прелоудер на критичному шляху, тож вага важлива.
+import lottie from "lottie-web/build/player/lottie_light";
 import { bodyLock, bodyUnlock } from "@scripts/global/block-scroll";
 
 let _running = false;
