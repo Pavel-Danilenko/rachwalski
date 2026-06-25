@@ -16,6 +16,38 @@
       }
    }
 
+   &__poster {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100svh;
+      z-index: -2;
+      pointer-events: none;
+   }
+
+   &__poster-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+
+      &--desktop {
+         @include respond-to(1199) {
+            display: none;
+         }
+      }
+
+      &--mobile {
+         @include respond-from(1200) {
+            display: none;
+         }
+      }
+   }
+
    &__video {
       width: 100%;
       height: 100vh;

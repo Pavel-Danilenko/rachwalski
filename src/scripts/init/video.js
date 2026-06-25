@@ -101,6 +101,7 @@ function lockForIntro(video) {
    // Autoplay не відбудеться (Data Saver / prefers-reduced-motion) —
    // одразу прибираємо лок і показуємо хедер, інакше вони "застрягнуть" назавжди
    if (!video.autoplay || prefersReducedMotion()) {
+      document.dispatchEvent(new CustomEvent("video-intro:fallback"));
       document.documentElement.classList.remove("intro-video");
       markIntroDone();
       return;
@@ -142,17 +143,63 @@ function lockForIntro(video) {
       }
    }
 
-   // Запобіжник на 4с — якщо autoplay заблокований браузером.
+   // Watchdog 3с — якщо відео не заграло (autoplay заблокований браузером АБО
+   // повільний/глючний інет не встиг буферизувати) — показуємо фінальний кадр + доти.
+   // Дивимось на ФАКТ відтворення, а не на ярлик з'єднання (Connection API бреше).
    const fallbackTimer = setTimeout(() => {
-      if (video.paused && !video.ended) finish();
-   }, 4000);
+      if (video.paused && !video.ended) {
+         document.dispatchEvent(new CustomEvent("video-intro:fallback"));
+         finish();
+      }
+   }, 3000);
    video.addEventListener("playing", () => clearTimeout(fallbackTimer), { once: true });
+}
+
+// pageIntro: ховаємо відео поки воно не заграло — під ним видно фінальний кадр (poster).
+// Як тільки відео реально стартувало (playing) — плавно проявляємо його поверх кадру.
+// Якщо інтро не заграло (повільний інет / Data Saver / помилка завантаження) — відео
+// лишається прихованим, видно фінальний кадр, доти проявляються через markIntroDone().
+function setupIntroReveal(video) {
+   if (video.dataset.introRevealInit) return;
+   video.dataset.introRevealInit = "true";
+
+   video.style.opacity = "0";
+   video.style.transition = "opacity 0.3s ease";
+
+   let aborted = false;
+
+   const reveal = () => {
+      if (aborted) return;
+      video.style.opacity = "1";
+   };
+   video.addEventListener("playing", reveal, { once: true });
+
+   const abort = () => {
+      if (aborted) return;
+      aborted = true;
+      video.removeEventListener("playing", reveal);
+      video.autoplay = false;
+      video.pause();
+      // Зупиняємо подальше завантаження — на повільному з'єднанні немає сенсу качати відео.
+      video.preload = "none";
+   };
+   document.addEventListener("video-intro:fallback", abort, { once: true });
+
+   // Помилка завантаження відео — той самий фолбек: кадр + доти.
+   video.addEventListener("error", () => {
+      abort();
+      document.documentElement.classList.remove("intro-video");
+      markIntroDone();
+   }, { once: true });
 }
 
 function setupPageIntro(video) {
    if (video.dataset.pageIntro !== "true") return;
 
    if (document.documentElement.classList.contains("intro-video")) {
+      // Ховаємо відео поки воно не заграло — під ним видно фінальний кадр (poster).
+      setupIntroReveal(video);
+
       // Якщо прелоудер ще не завершився — відкладаємо старт відео до його зникнення.
       // Ознака "прелоудер показується": клас preloader-loaded ще не додано до <html>.
       const preloaderPending = !document.documentElement.classList.contains("preloader-loaded");
@@ -164,13 +211,21 @@ function setupPageIntro(video) {
             // Прелоудер активний — блокуємо autoplay і чекаємо на його зникнення.
             video.autoplay = false;
             document.addEventListener("preloader:hidden", () => {
+               // Data Saver / 2g — відео не граємо, показуємо фінальний кадр + доти.
+               if (video.dataset.respectDataSaver !== "false" && isDataSaverOn()) {
+                  document.dispatchEvent(new CustomEvent("video-intro:fallback"));
+                  document.documentElement.classList.remove("intro-video");
+                  markIntroDone();
+                  return;
+               }
                video.autoplay = true;
                lockForIntro(video);
                tryAutoplay(video);
             }, { once: true });
          } else {
-            // Прелоудер не показується (reload / повторний візит в межах сесії) —
-            // запускаємо відео одразу, без очікування події preloader:hidden.
+            // Прелоудер не показується (повторний візит у межах сесії) —
+            // інтро не переграємо, показуємо фінальний кадр + доти (lockForIntro
+            // одразу зробить фолбек, бо autoplay-атрибут у pageIntro-відео вимкнено).
             lockForIntro(video);
          }
       } else {

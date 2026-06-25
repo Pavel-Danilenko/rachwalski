@@ -4,6 +4,7 @@ import PageMain from "@components/ui/PageMain.astro";
 import "@styles/pages/_clinic-alphand.scss";
 import "@styles/pages/_main-page.scss";
 import "@styles/components/section/_video-hotspots.scss";
+import { Picture } from "astro:assets";
 import Icon from "@components/ui/Icon.astro";
 import Img from "@components/media/Img.astro";
 import Video from "@components/media/Video.astro";
@@ -11,6 +12,8 @@ import videoIntro from "@assets/video/main/video-intro.mp4";
 import videoIntroWebm from "@assets/video/main/video-intro.webm";
 import videoIntroMobile from "@assets/video/main/Mobile-video-intro.mp4";
 import videoIntroMobileWebm from "@assets/video/main/Mobile-video-intro.webm";
+import introPoster from "@assets/img/main/intro-last-frame.png";
+import introPosterMobile from "@assets/img/main/intro-last-frame-mobile.png";
 import aboutImg from "@assets/img/biography/martin.png";
 import PostsSection from "@components/section/PostsSection.astro";
 import PopularReviews from "@components/section/PopularReviews.astro";
@@ -142,6 +145,31 @@ const faqItems = [
 >
    <PageMain>
       <section class="video-banner">
+         {/* Фінальний кадр відео — гарантований "стан спокою": видно одразу
+             під час буферизації відео, і лишається якщо інет не витягнув відео.
+             Доти прив'язані саме до цього кадру. */}
+         <div class="video-banner__poster" aria-hidden="true">
+            <Picture
+               src={introPoster}
+               alt=""
+               formats={["avif", "webp", "png"]}
+               widths={[768, 1280, 1920]}
+               sizes="100vw"
+               loading="eager"
+               fetchpriority="high"
+               class="video-banner__poster-img video-banner__poster-img--desktop"
+            />
+            <Picture
+               src={introPosterMobile}
+               alt=""
+               formats={["avif", "webp", "png"]}
+               widths={[390, 768, 1200]}
+               sizes="100vw"
+               loading="eager"
+               fetchpriority="high"
+               class="video-banner__poster-img video-banner__poster-img--mobile"
+            />
+         </div>
          <Video
             src={videoIntro}
             webm={videoIntroWebm}
