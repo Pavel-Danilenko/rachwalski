@@ -200,6 +200,12 @@ function setupPageIntro(video) {
       // Ховаємо відео поки воно не заграло — під ним видно фінальний кадр (poster).
       setupIntroReveal(video);
 
+      // У HTML preload="metadata" — щоб відео НЕ тримало window.load (інакше прелоудер
+      // не відрізнить "сторінка ще вантажиться" від "відео ще вантажиться"). Метадані
+      // вже завантажились під час парсингу → прапорець load знятий → бампимо до "auto"
+      // для повної буферизації (фора, поки крутиться прелоудер), не блокуючи load знову.
+      if (video.preload !== "auto") video.preload = "auto";
+
       // Якщо прелоудер ще не завершився — відкладаємо старт відео до його зникнення.
       // Ознака "прелоудер показується": клас preloader-loaded ще не додано до <html>.
       const preloaderPending = !document.documentElement.classList.contains("preloader-loaded");
