@@ -1,0 +1,162 @@
+@use "@styles/utils" as *;
+
+// Кастомний прелоудер: знак (4 ромби) → морф нижнього в R → дописування RACHWALSKI.
+// Анімація — чистий CSS + flubber (морф контуру). Таймінги керуються з JS через
+// CSS-змінні (--morph-dur, --ltr-dur, --recenter), значення приходять з data-атрибутів.
+.preloader {
+   position: fixed;
+   inset: 0;
+   z-index: 1000;
+   background-color: var(--color-surface);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   overflow: hidden;
+
+   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+   --morph-dur: 1500ms;
+   --ltr-dur: 1000ms;
+   --recenter: 1400ms;
+
+   &__bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 0;
+
+      &--desktop {
+         @include respond-to(1199) {
+            display: none;
+         }
+      }
+
+      &--mobile {
+         @include respond-from(1200) {
+            display: none;
+         }
+      }
+   }
+
+   &__stage {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: toRem(14);
+   }
+
+   // SVG масштабується через vw → уся анімація (знак, морф, літери) адаптивна разом
+   &__logo {
+      display: block;
+      width: clamp(240px, 42vw, 540px);
+      height: auto;
+      color: #eff2f8;
+      overflow: visible;
+
+      @include respond-to(1199) {
+         width: min(78vw, 460px);
+      }
+   }
+
+   // wordG: плавно з'їжджає до центру однією хвилею (transform задає JS)
+   &__wordG {
+      transition: transform var(--recenter) var(--ease);
+   }
+
+   // знак великий і центрований над місцем R; морф → identity (масштаб на місці)
+   &__markG {
+      transform: var(--bigT);
+      transform-origin: 0 0;
+      transition: transform var(--morph-dur) var(--ease);
+   }
+
+   &__petal {
+      opacity: 0;
+      transform: scale(0.5);
+      transform-box: fill-box;
+      transform-origin: center;
+      transition:
+         opacity 0.6s var(--ease),
+         transform 0.6s var(--ease);
+   }
+
+   &__morph {
+      opacity: 0;
+   }
+
+   // літери RACHWALSKI (крім R) — кожна плавно з'являється через opacity (JS керує)
+   &__ltr {
+      opacity: 0;
+      transition: opacity var(--ltr-dur) var(--ease);
+   }
+
+   &__subtitle {
+      font-size: clamp(13px, 1.4vw, 20px);
+      letter-spacing: 0.12em;
+      color: #eff2f8;
+      font-weight: 300;
+      opacity: 0;
+      transition: opacity 0.8s var(--ease);
+
+      @include respond-to(1199) {
+         font-size: clamp(12px, 3.4vw, 18px);
+      }
+   }
+
+   // ── Стадії (класи додає JS) ───────────────────────────────────────────────
+   &.s-in &__petal {
+      opacity: 1;
+      transform: scale(1);
+   }
+   &.s-in &__petal--top {
+      transition-delay: 0s;
+   }
+   &.s-in &__petal--left {
+      transition-delay: 0.12s;
+   }
+   &.s-in &__petal--right {
+      transition-delay: 0.24s;
+   }
+   &.s-in &__petal--bottom {
+      transition-delay: 0.36s;
+   }
+
+   &.s-collapse &__petal--top,
+   &.s-collapse &__petal--left,
+   &.s-collapse &__petal--right {
+      opacity: 0;
+      transform: scale(0.4);
+      transition-delay: 0s;
+   }
+
+   &.s-morph &__petal {
+      opacity: 0 !important;
+      transition: opacity 0.12s;
+   }
+   &.s-morph &__markG {
+      transform: translate(0, 0) scale(1);
+   }
+   &.s-morph &__morph {
+      opacity: 1;
+      transition: opacity 0.12s;
+   }
+
+   &.show-sub &__subtitle {
+      opacity: 1;
+   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+   .preloader--logo {
+      .preloader__petal,
+      .preloader__ltr,
+      .preloader__subtitle {
+         transition: none;
+         opacity: 1;
+      }
+   }
+}
