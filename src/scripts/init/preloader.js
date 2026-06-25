@@ -21,6 +21,9 @@ function initPreloader() {
 
    const fadeDuration = Number(preloader.dataset.fadeDuration) || 600;
    const minDisplayTime = Number(preloader.dataset.minDisplayTime) || 0;
+   // Стеля очікування window.load: важкі ресурси (відео-інтро з preload="auto")
+   // тримають подію load на повільному з'єднанні — не чекаємо їх вічно.
+   const maxWait = Number(preloader.dataset.maxWait) || 5000;
 
    preloader.style.transition = "none";
    preloader.style.opacity = "1";
@@ -89,6 +92,15 @@ function initPreloader() {
          pageLoaded = true;
          tryHide();
       }, { once: true });
+      // Запобіжник: якщо load не настав за maxWait (відео-інтро delay-ить його на
+      // повільному інеті) — вважаємо сторінку готовою і ховаємо прелоудер. Відео при
+      // цьому ще не буферизоване → video.js покаже фінальний кадр (all-or-nothing).
+      setTimeout(() => {
+         if (!pageLoaded) {
+            pageLoaded = true;
+            tryHide();
+         }
+      }, maxWait);
    }
 }
 

@@ -19,6 +19,9 @@ function initPreloaderBasic() {
    const fadeDuration = Number(preloader.dataset.fadeDuration) || 600;
    const minDisplayTime = Number(preloader.dataset.minDisplayTime) || 0;
    const simulationDuration = Number(preloader.dataset.simulationDuration) || 800;
+   // Стеля очікування window.load: важкі ресурси (відео-інтро з preload="auto")
+   // тримають подію load на повільному з'єднанні — не чекаємо їх вічно.
+   const maxWait = Number(preloader.dataset.maxWait) || 5000;
 
    preloader.style.transition = "none";
    preloader.style.opacity = "1";
@@ -94,6 +97,8 @@ function initPreloaderBasic() {
       hidePreloader();
    } else {
       window.addEventListener("load", hidePreloader, { once: true });
+      // Запобіжник: не чекаємо вічно на важкі ресурси (відео-інтро delay-ить load).
+      setTimeout(hidePreloader, maxWait);
    }
 }
 
