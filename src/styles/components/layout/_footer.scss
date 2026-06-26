@@ -222,6 +222,10 @@
    display: flex;
    flex-wrap: wrap;
    gap: toRem(12) toRem(24);
+   @include respond-to("md") {
+      width: 100%;
+      justify-content: space-between;
+   }
 }
 .footer__link {
    @include fluid-space(font-size, 14, 16);

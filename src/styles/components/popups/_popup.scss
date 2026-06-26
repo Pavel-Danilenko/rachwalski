@@ -91,7 +91,6 @@ html.form-modal-open body::before {
 @include respond-to("md") {
    .popup__content {
       padding: toRem(20) toRem(16);
-      border-radius: var(--radius-md);
    }
 }
 

@@ -9,6 +9,11 @@
 .t-balance {
    text-wrap: balance;
 }
+.d-none-mobile.d-none-mobile {
+   @include respond-to("md") {
+      display: none;
+   }
+}
 .hero-full-vh {
    min-height: 100vh;
    min-height: 100svh;
