@@ -1,8 +1,14 @@
 ---
 import "@styles/components/section/_step-banner.scss";
+
+interface Props {
+   class?: string;
+}
+
+const { class: className = "" } = Astro.props;
 ---
 
-<div class="step-banner__row br-20 glass">
+<div class:list={["step-banner__row br-20 glass", className]}>
    <div class="step-banner__column-left">
       <h2 class="step-banner__title mb-12">Ready to take the next step?</h2>
       <div class="step-banner__text">
