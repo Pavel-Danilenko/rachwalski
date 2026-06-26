@@ -73,6 +73,7 @@
             width: toRem(74) !important;
             height: toRem(22) !important;
             font-size: unset;
+            margin-top: toRem(-1);
          }
       }
 
@@ -81,5 +82,10 @@
             opacity: 0.7;
          }
       }
+   }
+}
+.mobile-booking-bar__btn--home {
+   .icon {
+      font-size: toRem(20);
    }
 }
