@@ -257,13 +257,10 @@ document.addEventListener("page:music-status", ({ detail }) => {
    }
 });
 
-// Відео-інтро завершилось → показуємо кнопку (тільки якщо є музика на сторінці)
-document.addEventListener("video-intro:done", () => {
-   if (getPageMusicSources()) showToggles();
+// Прелоудер зник → показуємо кнопку з невеликою затримкою
+document.addEventListener("preloader:hidden", () => {
+   setTimeout(() => { if (getPageMusicSources()) showToggles(); }, 400);
 });
-
-// Відео перезапустилось (resize) → ховаємо
-document.addEventListener("video-intro:restart", hideToggles);
 
 // SPA-перехід починається — зупиняємо музику і ховаємо кнопку
 document.addEventListener("page:leave", () => {

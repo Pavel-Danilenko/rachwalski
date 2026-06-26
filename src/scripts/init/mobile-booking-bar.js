@@ -29,11 +29,9 @@ function initMobileBookingBar() {
 initMobileBookingBar();
 document.addEventListener("page:ready", initMobileBookingBar);
 
-// Відео завершилось → показуємо панель
-document.addEventListener("video-intro:done", showAll);
+// Прелоудер зник → показуємо панель з невеликою затримкою
+document.addEventListener("preloader:hidden", () => setTimeout(showAll, 400));
 
-// Відео перезапустилось (resize mobile↔desktop) → ховаємо до наступного done
-document.addEventListener("video-intro:restart", hideAll);
 
 // SPA: при виході ховаємо
 document.addEventListener("page:leave", hideAll);
