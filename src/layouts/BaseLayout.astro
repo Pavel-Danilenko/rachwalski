@@ -42,6 +42,17 @@ interface Props {
    // Фонова музика — передай src/webm щоб показати кнопку звуку (тільки на сторінках з відео)
    musicSrc?: string;
    musicWebm?: string;
+   // ── Перехід між сторінками (Barba) — керується АТРИБУТАМИ, без правки barba.config.js ──
+   // Назва анімації: "fade" | "slide-up" | "blur" | "clip" | "iris" | "morph" | ... (див. barba.config.js)
+   transition?: string;
+   // Тривалість (секунди). Дефолти нижче — глобальні; перевизнач на сторінці за потреби.
+   transitionLeave?: number;
+   transitionEnter?: number;
+   // GSAP ease, напр. "power2.in" / "power2.out" / "expo.out"
+   transitionEaseLeave?: string;
+   transitionEaseEnter?: string;
+   // Колір overlay між сторінками (для шторок/iris). Напр. "#000" | "var(--color-primary)"
+   transitionColor?: string;
 }
 
 const {
@@ -64,6 +75,14 @@ const {
    preloader = "default",
    musicSrc,
    musicWebm,
+   // Глобальний дефолт анімації переходу для всього сайту (міняєш тут одним словом).
+   transition = "fade",
+   // Глобальні дефолти тривалості переходу (трохи довші — щоб стилі встигали застосуватись).
+   transitionLeave = 0.8,
+   transitionEnter = 1,
+   transitionEaseLeave,
+   transitionEaseEnter,
+   transitionColor,
 } = Astro.props;
 
 const siteOrigin = Astro.site ?? new URL(Astro.url.origin);
@@ -79,7 +98,11 @@ const googleFontsUrl = buildGoogleFontsUrl(googleFonts);
 // [SEO] Назва сайту для og:site_name — замін на реальну
 const siteName = "Назва сайту";
 
-const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, format: "webp", quality: 90 });
+const resolvedFooterBg = await getImage({
+   src: footerBg ?? footerBgDefault,
+   format: "webp",
+   quality: 90,
+});
 ---
 
 <!doctype html>
@@ -91,8 +114,7 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
             // браузер відновлює попередню позицію скролу, і відео грає
             // поза екраном. Примусово скидаємо на верх, де відео.
             <script is:inline>
-               history.scrollRestoration = "manual";
-               window.scrollTo(0, 0);
+               history.scrollRestoration = "manual"; window.scrollTo(0, 0);
             </script>
          )
       }
@@ -145,15 +167,23 @@ const resolvedFooterBg = await getImage({ src: footerBg ?? footerBgDefault, form
             data-barba="container"
             data-barba-namespace={namespace}
             data-footer-bg={resolvedFooterBg.src}
+            data-tr-animation={transition}
+            data-tr-leave={transitionLeave}
+            data-tr-enter={transitionEnter}
+            data-tr-ease-leave={transitionEaseLeave}
+            data-tr-ease-enter={transitionEaseEnter}
+            data-tr-color={transitionColor}
          >
-            {(musicSrc || musicWebm) && (
-               <div
-                  data-music-page
-                  data-src={musicSrc || ""}
-                  data-webm={musicWebm || ""}
-                  hidden
-               />
-            )}
+            {
+               (musicSrc || musicWebm) && (
+                  <div
+                     data-music-page
+                     data-src={musicSrc || ""}
+                     data-webm={musicWebm || ""}
+                     hidden
+                  />
+               )
+            }
             <slot />
          </div>
 

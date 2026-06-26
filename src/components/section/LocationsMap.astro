@@ -3,6 +3,16 @@ import "@styles/components/section/_locations-map.scss";
 import GoogleMap from "@components/ui/GoogleMap.astro";
 import Icon from "@components/ui/Icon.astro";
 
+type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
+
+interface Props {
+   // Приховати бічну панель нижче вказаного брейкпоінту (max-width).
+   // Напр. hidePanelBelow="md" — сховати на мобільному/планшеті.
+   hidePanelBelow?: Breakpoint;
+}
+
+const { hidePanelBelow } = Astro.props;
+
 const markers = [
    {
       lat: 48.87526474042614,
@@ -25,7 +35,7 @@ const markers = [
 const center = { lat: 48.8779, lng: 2.2999 };
 ---
 
-<div class="locations-map">
+<div class="locations-map" data-hide-panel-below={hidePanelBelow}>
    <div class="locations-map__container">
       <div class="locations-map__panel br-12">
          <!-- Cabinet Paris 08 -->

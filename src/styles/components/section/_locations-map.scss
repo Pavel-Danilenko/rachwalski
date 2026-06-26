@@ -9,6 +9,16 @@
       }
    }
 
+   // Приховати бічну панель нижче вказаного брейкпоінту (проп hidePanelBelow).
+   // Напр. data-hide-panel-below="md" → панель прихована на ≤md.
+   @each $bp in ("xs", "sm", "md", "lg", "xl") {
+      &[data-hide-panel-below="#{$bp}"] .locations-map__panel {
+         @include respond-to($bp) {
+            display: none;
+         }
+      }
+   }
+
    // .locations-map__panel
    &__panel {
       width: 100%;
@@ -22,7 +32,6 @@
       display: flex;
       flex-direction: column;
       @include respond-to("md") {
-         display: none;
          max-width: 100%;
          &:not(:last-child) {
             margin-bottom: toRem(20);

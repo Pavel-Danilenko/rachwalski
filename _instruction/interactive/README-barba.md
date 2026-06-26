@@ -32,7 +32,63 @@ import "@scripts/animation/barba";
 
 ---
 
-## Як підключити анімацію для конкретної сторінки
+## Два способи керування переходом
+
+| Спосіб | Коли | Де |
+|---|---|---|
+| **1. Пропси на `<BaseLayout>`** ⭐ | швидко змінити перехід для сторінки, без правки JS | у файлі сторінки |
+| **2. `namespace` + `barba.config.js`** | іменовані пресети для перевикористання | у конфігу |
+
+**Пріоритет:** атрибути (пропси) **>** namespace-конфіг **>** `default`.
+
+---
+
+## Спосіб 1 — пропси на BaseLayout (рекомендовано) ⭐
+
+Нічого не чіпаєш у JS — усе через пропси сторінки.
+
+```astro
+<BaseLayout
+   transition="iris"                 // назва анімації (список нижче)
+   transitionLeave={0.5}             // тривалість виходу (сек)
+   transitionEnter={0.8}             // тривалість входу (сек)
+   transitionEaseLeave="power2.in"   // GSAP ease виходу
+   transitionEaseEnter="expo.out"    // GSAP ease входу
+   transitionColor="#000"            // overlay-колір для шторок/iris (опц.)
+>
+```
+
+Усі пропси **опціональні** — що не вказав, береться з `barba.config.js` (`default` або namespace).
+
+| Проп | Що | Приклад |
+|---|---|---|
+| `transition` | назва анімації | `"fade"`, `"iris"`, `"morph"` |
+| `transitionLeave` | тривалість виходу (сек) | `0.5` |
+| `transitionEnter` | тривалість входу (сек) | `0.8` |
+| `transitionEaseLeave` | ease виходу | `"power2.in"` |
+| `transitionEaseEnter` | ease входу | `"expo.out"` |
+| `transitionColor` | overlay-колір | `"#000"`, `"var(--color-primary)"` |
+
+**Глобальні дефолти переходу** задані прямо в `BaseLayout` — міняєш в одному місці для всього сайту, без правки `barba.config.js`:
+
+```ts
+transition       = "fade"   // анімація за замовчуванням для всього сайту
+transitionLeave  = 0.7      // тривалість виходу (сек)
+transitionEnter  = 0.9      // тривалість входу (сек)
+```
+
+> Оскільки ці дефолти завжди віддаються як атрибути, вони мають пріоритет над `animation`/`duration` з `barba.config.js`. Тобто щоб увімкнути інший ефект глобально — змінюєш `transition = "fade"` на потрібний (напр. `"vortex"`) прямо в `BaseLayout`. Для однієї сторінки — проп `transition`.
+
+```astro
+<!-- швидкий приклад: одна сторінка з iris + чорним overlay -->
+<BaseLayout transition="iris" transitionEnter={1} transitionEaseEnter="expo.out" transitionColor="#000">
+```
+
+> Технічно: пропси віддаються як `data-tr-*` атрибути на barba-контейнер, а `barba.js` (`getConfig`) накладає їх поверх namespace-конфігу. Сам `barba.js` чіпати не треба.
+
+---
+
+## Спосіб 2 — namespace + barba.config.js (іменовані пресети)
 
 Потрібно зробити **два кроки**:
 
@@ -234,6 +290,8 @@ color: "#1a1a2e",                 // кастомний HEX
 | `cinematic` | Важкий blur + zoom — як у кіно |
 | `shatter` | Розліт — стара "вибухає", нова збирається |
 | `dive` | Стара тоне в глибину, нова спливає — 3D perspective |
+| `vortex` ⚡ | Вихор — стара закручується в точку, нова розкручується назад (spin + scale + blur) |
+| `door` ⚡ | 3D-двері — стара як стулка зліва, нова в'їжджає справа |
 
 ---
 

@@ -1,7 +1,13 @@
 /**
- * barba.config.js — налаштування переходів між сторінками
+ * barba.config.js — іменовані пресети переходів (за namespace)
  * ─────────────────────────────────────────────────────────
- * Редагуй тільки цей файл. barba.js не чіпай.
+ * ⚡ Швидко змінити перехід для сторінки можна БЕЗ цього файлу — через пропси
+ *    на <BaseLayout>: transition, transitionLeave, transitionEnter,
+ *    transitionEaseLeave, transitionEaseEnter, transitionColor.
+ *    Пріоритет: пропси > namespace-конфіг (тут) > default.
+ *    Деталі: _instruction/interactive/README-barba.md
+ *
+ * Цей файл — для перевикористовуваних пресетів за namespace. barba.js не чіпай.
  *
  * ── animation (список всіх варіантів) ─────────────────────
  *   Базові:   "none" | "fade"
@@ -10,6 +16,7 @@
  *   Blur:     "blur"
  *   Clip:     "clip" | "clip-up" | "curtain"
  *   Вау:      "iris" | "flip" | "flip-x" | "morph" | "push" | "glitch"
+ *   Вау ⚡:    "vortex" (вихор) | "door" (3D-двері)
  *
  * ── ease (GSAP) ───────────────────────────────────────────
  *   "power1/2/3/4.out"    — стандарт (більша цифра = різкіше)

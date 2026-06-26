@@ -197,6 +197,40 @@ const ANIMATIONS = {
       leave: (el, d, e) => gsap.to(el,   { clipPath: "inset(50% 0 50% 0)", opacity: 0, duration: d, ease: e }),
       enter: (el, d, e) => gsap.from(el, { clipPath: "inset(50% 0 50% 0)", opacity: 0, duration: d, ease: e }),
    },
+
+   // ── ВАУ ⚡ ─────────────────────────────────────────────────────────────────
+
+   // Вихор — стара закручується в точку, нова розкручується назад (spin + scale + blur)
+   vortex: {
+      leave: (el, d, e) => {
+         const tl = gsap.timeline();
+         tl.to(el, {
+            scale: 0.15, rotation: 75, opacity: 0, filter: "blur(12px)",
+            transformOrigin: "50% 50%", duration: d, ease: e,
+         });
+         return tl;
+      },
+      enter: (el, d, e) => {
+         const tl = gsap.timeline();
+         tl.from(el, {
+            scale: 0.15, rotation: -75, opacity: 0, filter: "blur(12px)",
+            transformOrigin: "50% 50%", duration: d, ease: e,
+         });
+         return tl;
+      },
+   },
+
+   // 3D-двері — стара розчиняється як стулка (ліва завіса), нова в'їжджає справа
+   door: {
+      leave: (el, d, e) => gsap.to(el, {
+         rotationY: -105, opacity: 0, transformOrigin: "left center",
+         transformPerspective: 1400, duration: d, ease: e,
+      }),
+      enter: (el, d, e) => gsap.from(el, {
+         rotationY: 105, opacity: 0, transformOrigin: "right center",
+         transformPerspective: 1400, duration: d, ease: e,
+      }),
+   },
 };
 
 // ── Overlay — кольоровий фон між сторінками ───────────────────────────────
@@ -238,8 +272,29 @@ function hideOverlay(duration, ease) {
 }
 
 // ── Отримати конфіг для поточного переходу ────────────────────────────────
-function getConfig(namespace) {
-   return { ...config.default, ...(config[namespace] ?? {}) };
+// Пріоритет: data-атрибути контейнера (з пропсів сторінки) > namespace-конфіг > default.
+// Тобто керувати переходом можна прямо через атрибути, не чіпаючи barba.config.js.
+function getConfig(next) {
+   const base = { ...config.default, ...(config[next.namespace] ?? {}) };
+   const el = next.container;
+   if (!el) return base;
+
+   const d = el.dataset;
+   const cfg = {
+      ...base,
+      duration: { ...base.duration },
+      ease: { ...base.ease },
+   };
+
+   if (d.trAnimation) cfg.animation = d.trAnimation;
+   if (d.trColor) cfg.color = d.trColor;
+   if (d.trLeave) cfg.duration.leave = Number(d.trLeave);
+   if (d.trEnter) cfg.duration.enter = Number(d.trEnter);
+   if (d.trEaseLeave) cfg.ease.leave = d.trEaseLeave;
+   if (d.trEaseEnter) cfg.ease.enter = d.trEaseEnter;
+   if (d.trFooter != null) cfg.animateFooter = d.trFooter === "true";
+
+   return cfg;
 }
 
 // ── Cleanup ───────────────────────────────────────────────────────────────
@@ -345,7 +400,7 @@ barba.init({
          name: "page-transition",
 
          async leave({ current, next }) {
-            const cfg    = getConfig(next.namespace);
+            const cfg    = getConfig(next);
             const anim   = ANIMATIONS[cfg.animation] ?? ANIMATIONS.fade;
             const footer = document.querySelector(".footer");
 
@@ -388,7 +443,7 @@ barba.init({
          },
 
          async enter({ next }) {
-            const cfg    = getConfig(next.namespace);
+            const cfg    = getConfig(next);
             const anim   = ANIMATIONS[cfg.animation] ?? ANIMATIONS.fade;
             const footer = document.querySelector(".footer");
 
@@ -400,7 +455,7 @@ barba.init({
          },
 
          afterEnter({ next }) {
-            const cfg = getConfig(next.namespace);
+            const cfg = getConfig(next);
             // Overlay зникає після появи нової сторінки
             if (cfg.color) hideOverlay(cfg.duration.enter, cfg.ease.enter);
             // Сигналізуємо чи є музика на новій сторінці — до page:ready,
