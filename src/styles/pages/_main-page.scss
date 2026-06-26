@@ -25,6 +25,14 @@
       height: 100svh;
       z-index: -2;
       pointer-events: none;
+      transition: opacity 0.2s ease;
+
+      // Інтро зобов'язалось грати (video.js додає клас) — ховаємо останній кадр,
+      // щоб він не мигав у розриві до першого кадру відео (особливо на iOS).
+      // На fallback клас знімається — poster знову видно.
+      :root.intro-video-playing & {
+         opacity: 0;
+      }
    }
 
    &__poster-img {

@@ -178,6 +178,10 @@ function setupIntroReveal(video) {
       if (aborted) return;
       aborted = true;
       video.removeEventListener("playing", reveal);
+      // Відео не заграє — ховаємо його назад і повертаємо poster (останній кадр —
+      // коректний стан спокою для fallback).
+      video.style.opacity = "0";
+      document.documentElement.classList.remove("intro-video-playing");
       video.autoplay = false;
       video.pause();
       // Зупиняємо подальше завантаження — на повільному з'єднанні немає сенсу качати відео.
@@ -237,6 +241,11 @@ function setupPageIntro(video) {
                   return;
                }
                video.autoplay = true;
+               // Зобов'язались грати інтро → ховаємо poster (останній кадр відео).
+               // Інакше на iOS у розриві між play() і першим кадром крізь прозоре
+               // відео мигав би останній кадр, а потім відео стартує з першого —
+               // «не той кадр». Поки відео не проявилось, видно темний фон банера.
+               document.documentElement.classList.add("intro-video-playing");
                lockForIntro(video);
                tryAutoplay(video);
             }, { once: true });
