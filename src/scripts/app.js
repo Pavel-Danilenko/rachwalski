@@ -44,6 +44,9 @@ async function loadModules() {
    if (document.querySelector("[data-scroll-nav]"))
       tasks.push(import("@scripts/init/scroll-nav"));
 
+   if (document.querySelector("[data-prices-nav]"))
+      tasks.push(import("@scripts/init/prices-nav"));
+
    if (document.querySelector("[data-toc]"))
       tasks.push(import("@scripts/init/toc"));
 
