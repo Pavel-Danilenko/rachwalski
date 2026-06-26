@@ -92,6 +92,7 @@
       @include respond-to("md") {
          justify-content: center;
          flex-direction: column-reverse;
+         padding: toRem(16) 0 toRem(60);
       }
    }
 
@@ -104,6 +105,9 @@
 .footer-newsletter {
    &:not(:last-child) {
       margin-bottom: toRem(40);
+      @include respond-to("md") {
+         margin-bottom: toRem(100);
+      }
    }
    &__icon {
       @include fluid-space(width, 180, 270);
@@ -184,7 +188,7 @@
       &:not(:last-child) {
          margin-bottom: toRem(20);
       }
-      @include fluid-space(width, 180, 220);
+      @include fluid-space(width, 210, 220);
    }
 
    &__socials {
@@ -197,7 +201,7 @@
       }
    }
    &__link {
-      font-size: toRem(28);
+      @include fluid(font-size, 24, 28);
       color: var(--color-light-blue);
       transition: color var(--transition-base);
       cursor: pointer;

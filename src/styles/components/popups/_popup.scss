@@ -35,7 +35,7 @@ html.form-modal-open body::before {
 .popup {
    position: fixed;
    inset: 0;
-   padding: toRem(20) toRem(16);
+   padding: toRem(20) toRem(15);
    scrollbar-gutter: stable;
    visibility: hidden;
    pointer-events: none;
@@ -43,6 +43,9 @@ html.form-modal-open body::before {
    overflow-y: auto;
    overscroll-behavior: none;
    transition: visibility var(--transition-base);
+   @include respond-to("md") {
+      padding-inline: 0;
+   }
 
    &--open {
       visibility: visible;
@@ -86,10 +89,6 @@ html.form-modal-open body::before {
 
 // ── Responsive ───────────────────────────────────────────────────────────────
 @include respond-to("md") {
-   .popup {
-      padding: toRem(8);
-   }
-
    .popup__content {
       padding: toRem(20) toRem(16);
       border-radius: var(--radius-md);
