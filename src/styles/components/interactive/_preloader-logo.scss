@@ -18,6 +18,11 @@
    --ltr-dur: 1000ms;
    --recenter: 1400ms;
 
+   // Вимикає всі переходи на момент виставлення стартових трансформів (без "в'їзду" збоку)
+   &.is-init * {
+      transition: none !important;
+   }
+
    &__bg {
       position: absolute;
       inset: 0;

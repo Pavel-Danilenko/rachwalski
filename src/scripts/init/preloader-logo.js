@@ -40,6 +40,10 @@ function initPreloaderLogo() {
    root.style.setProperty("--morph-dur", morphMs + "ms");
    root.style.setProperty("--ltr-dur", ltrMs + "ms");
 
+   // Виставляємо стартові трансформи БЕЗ переходу (інакше знак "в'їжджає" збоку,
+   // бо на wordG/markG висить transition). is-init вимикає переходи на цю мить.
+   preloader.classList.add("is-init");
+
    // великий центрований стан знаку (морф -> identity)
    markG.style.setProperty("--bigT",
       `translate(${(RCX - markScale * MCX).toFixed(2)}px, ${(VB_CENTER_Y - markScale * MCY).toFixed(2)}px) scale(${markScale})`);
@@ -82,7 +86,10 @@ function initPreloaderLogo() {
    const T_WORD = T_MORPH + morphMs + 200;
    const seqEnd = T_WORD + (letters.length - 1) * stepMs + ltrMs + 300;
 
+   void preloader.offsetWidth; // зафіксувати стартові трансформи без анімації
+
    requestAnimationFrame(() => {
+      preloader.classList.remove("is-init"); // вмикаємо переходи назад
       setTimeout(() => preloader.classList.add("s-in"), T_IN);
       setTimeout(() => preloader.classList.add("s-collapse"), T_COLLAPSE);
       setTimeout(() => { preloader.classList.add("s-morph"); runMorph(); }, T_MORPH);
