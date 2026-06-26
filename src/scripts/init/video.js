@@ -222,7 +222,14 @@ function setupPageIntro(video) {
                // зараз (встигло буферизуватись поки крутився прелоудер). Інакше — одразу
                // фінальний кадр + доти, і відео НЕ грає навіть якщо догрузиться пізніше
                // (жодної перемотки назад на повільному інеті).
-               const ready = video.readyState >= 3; // HAVE_FUTURE_DATA (canplay)
+               //
+               // ВИНЯТОК — Safari/iOS (увесь iOS — WebKit, включно з Chrome): WebKit
+               // ігнорує preload="auto" і НЕ буферизує відео наперед (тільки метадані),
+               // доки не викликано play(). Тому readyState там майже завжди 1 і gate
+               // завжди провалювався → відео ніколи не грало, одразу показувався кадр.
+               // На iOS muted inline autoplay працює і відео буферизується під час
+               // відтворення — тож пропускаємо gate (watchdog 3с у lockForIntro лишається).
+               const ready = isSafari || video.readyState >= 3; // HAVE_FUTURE_DATA (canplay)
                if (dataSaver || !ready) {
                   document.dispatchEvent(new CustomEvent("video-intro:fallback"));
                   document.documentElement.classList.remove("intro-video");
