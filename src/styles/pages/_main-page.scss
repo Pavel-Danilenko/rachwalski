@@ -79,17 +79,21 @@
 
    &__music {
       position: fixed;
-      @include fluid-space(right, 15, 80);
+      right: toRem(15);
       bottom: toRem(30);
       z-index: 103;
+      transition:
+         opacity 0.4s ease,
+         transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+         bottom 0.4s ease;
+
+      &.is-scroll-top-visible {
+         bottom: toRem(85);
+      }
 
       @include respond-to("md") {
          right: toRem(15);
          bottom: toRem(80);
-         transition:
-            opacity 0.4s ease,
-            transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-            bottom 0.4s ease;
 
          &.is-scroll-top-visible {
             bottom: toRem(124);
