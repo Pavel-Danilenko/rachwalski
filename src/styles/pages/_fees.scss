@@ -50,38 +50,12 @@
    }
 }
 
-.prices-tabs {
-   // .prices-tabs__button
-
-   &__button {
-      position: relative;
-      z-index: 2;
-      color: var(--color-text);
-      transition: color var(--transition-base);
-      @include fluid-space(padding, 10, 12);
-      @include respond-to(375) {
-         @include fluid-type(10, 12, 320, 375);
-      }
-      @include fluid-space(font-size, 12, 16);
-      &[aria-selected="true"] {
-         color: var(--color-black);
-      }
-   }
-
-   // .prices-tabs__panel
-
-   &__panel {
-   }
-}
-
 .pricess-tabs {
    // .pricess-tabs__inner
 
    &__inner {
       @include fluid-space(padding, 16, 32);
    }
-}
-.prices-content {
 }
 .pricess-content {
    // .pricess-content__row
@@ -187,41 +161,6 @@
       @include fluid-space(margin-bottom, 14, 16);
    }
 }
-.accordion {
-   // .accordion__body
-
-   &__body {
-   }
-}
-.prices-tabs {
-   .tabs__nav-wrapper {
-      justify-content: center;
-      &:not(:last-child) {
-         @include fluid-space(margin-bottom, 32, 40);
-      }
-   }
-   .tabs__nav {
-      justify-content: center;
-      flex-grow: initial;
-      flex-basis: auto;
-      overflow: hidden;
-      border-radius: toRem(30);
-      border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
-      @include respond-to("md") {
-         width: 100%;
-      }
-   }
-   &__button {
-      flex-grow: 1;
-   }
-   .tabs__indicator {
-      height: 100%;
-      background: var(--color-blue);
-      border: var(--border-sm) solid rgba(255, 255, 255, 0.2);
-      border-radius: toRem(30);
-   }
-}
-
 .prices-banner {
    @include fluid-space(padding, 20, 32);
    display: flex;

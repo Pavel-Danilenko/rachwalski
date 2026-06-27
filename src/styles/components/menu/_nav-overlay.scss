@@ -182,6 +182,12 @@
 }
 
 // ── Desktop layout: primary + absolute submenu panel ─────────────────────────
+// Рівно одна панель показується через JS-клас .is-open (контролер у
+// menu-active-links.js). Свідомо НЕ використовуємо :has()/:hover для показу:
+// на Safari це давало накладання панелей, мерехтіння та фриз фону —
+// :has() перераховувався на кожен рух миші й перемальовував glass/backdrop-filter,
+// а лічильник :hover розсинхронізовувався (Safari губить mouseleave при зміні
+// pointer-events під курсором).
 @include respond-from("md") {
    .nav-overlay__body {
       position: relative;
@@ -204,76 +210,15 @@
       height: 100%;
    }
 
-   .nav-overlay[data-menu-open="true"] .nav-sub:hover > .nav-sub__row,
-   .nav-overlay[data-menu-open="true"]
-      .nav-sub:has(.is-active)
-      > .nav-sub__row {
+   .nav-overlay[data-menu-open="true"] .nav-sub.is-open > .nav-sub__row {
       opacity: 1;
       pointer-events: auto;
       transform: translateX(0);
    }
 
-   // Ховаємо активну панель коли інший nav-sub в hover
-   // has-any-sub-hover — JS-клас, надійніший ніж :has(.nav-sub:hover) після Barba-переходів
-   .nav-overlay[data-menu-open="true"]
-      .nav-overlay__list.has-any-sub-hover
-      .nav-sub:not(:hover):has(.is-active)
-      > .nav-sub__row {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateX(#{toRem(-10)});
-   }
-
-   .nav-overlay[data-menu-open="true"] .nav-sub:hover > .nav-sub__trigger,
-   .nav-overlay[data-menu-open="true"]
-      .nav-sub:has(.is-active)
-      > .nav-sub__trigger {
+   .nav-overlay[data-menu-open="true"] .nav-sub.is-open > .nav-sub__trigger {
       background: var(--color-blue);
       color: var(--color-black);
-   }
-
-   // Скидаємо активний тригер коли інший nav-sub в hover
-   .nav-overlay[data-menu-open="true"]
-      .nav-overlay__list.has-any-sub-hover
-      .nav-sub:not(:hover):has(.is-active)
-      > .nav-sub__trigger {
-      background: transparent;
-      color: var(--color-text);
-   }
-
-   // First item active by default (home page / no active category) — hidden when another item is hovered
-   .nav-overlay[data-menu-open="true"]
-      .nav-overlay__list:not(.suppress-first-active)
-      .nav-sub:first-child
-      > .nav-sub__row {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(0);
-   }
-
-   .nav-overlay[data-menu-open="true"]
-      .nav-overlay__list:not(.suppress-first-active)
-      .nav-sub:first-child
-      > .nav-sub__trigger {
-      background: var(--color-blue);
-      color: var(--color-black);
-   }
-
-   .nav-overlay[data-menu-open="true"]
-      .nav-overlay__list:not(.suppress-first-active).has-non-first-hover
-      .nav-sub:first-child
-      > .nav-sub__row {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateX(#{toRem(-10)});
-   }
-
-   .nav-overlay[data-menu-open="true"]
-      .nav-overlay__list:not(.suppress-first-active).has-non-first-hover
-      .nav-sub:first-child
-      > .nav-sub__trigger {
-      background: transparent;
-      color: var(--color-text);
    }
 }
 
@@ -297,8 +242,13 @@
          }
       }
    }
-   &:has(.is-active) .nav-sub__trigger {
-      @extend %nav-item-active;
+   // Лише на мобільному: підсвічуємо категорію, що містить активну сторінку
+   // (на десктопі цим керує JS-клас .is-open, щоб не світилось дві вкладки).
+   @include respond-to("md") {
+      &:has(.is-active) .nav-sub__trigger {
+         background: var(--color-blue);
+         color: var(--color-black);
+      }
    }
 }
 

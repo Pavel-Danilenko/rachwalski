@@ -38,7 +38,11 @@ const { class: className = "", sticky = false } = Astro.props;
          >
 
          <MenuCustom>
-            <div data-menu-overlay class="nav-overlay">
+            <div
+               data-menu-overlay
+               data-hover-delay="150"
+               class="nav-overlay"
+            >
                <div class="nav-overlay__bg">
                   <Img
                      src={navBG}
