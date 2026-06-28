@@ -1,5 +1,6 @@
 ---
 import "@styles/components/section/_coming-soon.scss";
+import "@styles/animations/_split.scss"; // inline-block для літер scatter (data-split)
 import ResponsiveImg from "@components/media/ResponsiveImg.astro";
 import imgDesktop from "@assets/img/other/bg.jpg";
 import imgMobile from "@assets/img/other/mobile-gradient.jpg";
@@ -24,6 +25,6 @@ const { title = "This page is coming soon" } = Astro.props;
    />
 
    <div class="coming-soon__container hero-full-vh pt-180 pb-80">
-      <h1 class="coming-soon__title">{title}</h1>
+      <h1 class="coming-soon__title" data-split data-watch-once>{title}</h1>
    </div>
 </section>

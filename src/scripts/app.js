@@ -15,6 +15,13 @@ document.addEventListener("page:leave", () =>
 document.addEventListener("page:ready", () =>
    document.documentElement.classList.add("page-loaded"),
 );
+// Catch-up: статичний import "page-lifecycle" (вище) міг емітнути page:ready
+// ЩЕ ДО реєстрації слухача вище (на редоді, коли DOM уже готовий). Тоді клас
+// не додався б → DataWatch ніколи не стартує. Тож на першому завантаженні
+// додаємо клас вручну, якщо DOM уже не "loading".
+if (document.readyState !== "loading") {
+   document.documentElement.classList.add("page-loaded");
+}
 
 // ── Авто-реєстрація слайдерів ─────────────────────────────────────────────
 // Щоб додати новий слайдер — створи src/scripts/sliders/назва.js
@@ -186,6 +193,9 @@ async function loadModules() {
 
    if (document.querySelector(".post-body__cover"))
       tasks.push(import("@scripts/init/post-cover"));
+
+   if (document.querySelector("[data-image-fx], [data-reveal]"))
+      tasks.push(import("@scripts/init/image-fx"));
 
    await Promise.all(tasks);
 }

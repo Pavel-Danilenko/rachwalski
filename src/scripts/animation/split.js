@@ -5,9 +5,20 @@
  * SPLIT-TEXT.JS — ТУТОРІАЛ
  * ============================================================
  *
- * Підключення в компоненті:
+ * ⚠️ ПІДКЛЮЧЕННЯ (обов'язково):
  * --------------------------
- * import "../scripts/animations/split-text.js";
+ * 1. Скрипт — НЕ треба підключати вручну: app.js вантажить split.js умовно,
+ *    якщо на сторінці є [data-split].
+ *
+ * 2. Стилі — ТРЕБА підключити ВРУЧНУ в компоненті/сторінці, де є [data-split].
+ *    Без них літери лишаються inline і scatter (розліт через transform) НЕ діє —
+ *    виглядає як проста поява:
+ *       import "@styles/animations/_split.scss";
+ *
+ *    Чому вручну: в Astro CSS прив'язується до сторінки на етапі білда. Імпорт
+ *    SCSS у самому JS зробив би CSS глобальним (на всіх сторінках). Імпорт у
+ *    компоненті тримає його умовним — лише там, де ефект використовується.
+ *    (Хочеш 0 ручних імпортів — підключи _split.scss глобально в BaseLayout.)
  *
  *
  * ============================================================
@@ -215,6 +226,14 @@ class SplitText {
 
    initTrigger() {
       if (this.config.isWatch) {
+         // Клас міг бути доданий DataWatch ще ДО ініціалізації split (елемент
+         // одразу у viewport, напр. hero). MutationObserver ловить лише майбутні
+         // зміни, тож наявний клас перевіряємо вручну — інакше текст лишиться
+         // «розібраним» (opacity 0) назавжди.
+         if (this.element.classList.contains("_watcher-view")) {
+            this.isVisible = true;
+            this.setGathered(true);
+         }
          this._watchObserver = new MutationObserver(() => {
             const isVisible = this.element.classList.contains("_watcher-view");
             if (isVisible && !this.isVisible) {

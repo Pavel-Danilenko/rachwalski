@@ -26,6 +26,7 @@ class DataWatch {
 
       this.observers = new Map();
       this.timeouts = new WeakMap();
+      this.pendingTimeouts = new Set(); // id відкладених enter — щоб скасувати в destroy
 
       this.init();
    }
@@ -113,10 +114,12 @@ class DataWatch {
       };
 
       if (config.delay > 0) {
-         this.timeouts.set(
-            element,
-            setTimeout(addClassAndDispatch, config.delay),
-         );
+         const id = setTimeout(() => {
+            this.pendingTimeouts.delete(id);
+            addClassAndDispatch();
+         }, config.delay);
+         this.timeouts.set(element, id);
+         this.pendingTimeouts.add(id);
       } else {
          addClassAndDispatch();
       }
@@ -124,7 +127,9 @@ class DataWatch {
 
    handleLeave(element, config) {
       if (this.timeouts.has(element)) {
-         clearTimeout(this.timeouts.get(element));
+         const id = this.timeouts.get(element);
+         clearTimeout(id);
+         this.pendingTimeouts.delete(id);
          this.timeouts.delete(element);
       }
       if (config.once) return;
@@ -147,6 +152,10 @@ class DataWatch {
    destroy() {
       this.observers.forEach((observer) => observer.disconnect());
       this.observers.clear();
+      // Скасовуємо відкладені enter-таймери, щоб вони не додавали клас
+      // вже на видалені (barba) елементи.
+      this.pendingTimeouts.forEach((id) => clearTimeout(id));
+      this.pendingTimeouts.clear();
       this.timeouts = new WeakMap();
    }
 }
@@ -159,6 +168,8 @@ function startDataWatch() {
 // Чекаємо поки обидва класи є на <html>:
 // preloader-loaded — прелоадер завершився
 // page-loaded — перехід між сторінками завершився
+let pendingMO = null; // один спільний очікувач — щоб не накопичувались при кількох page:ready
+
 function waitAndStart() {
    const html = document.documentElement;
    const hasPreloader = () => document.querySelector("#preloader") !== null;
@@ -174,19 +185,26 @@ function waitAndStart() {
       }
    };
 
+   // Прибираємо попередній очікувач (напр. кілька page:ready підряд) — без витоку.
+   if (pendingMO) {
+      pendingMO.disconnect();
+      pendingMO = null;
+   }
+
    if (isReady()) {
       startDataWatch();
       return;
    }
 
-   const mo = new MutationObserver(() => {
+   pendingMO = new MutationObserver(() => {
       if (isReady()) {
-         mo.disconnect();
+         pendingMO.disconnect();
+         pendingMO = null;
          startDataWatch();
       }
    });
 
-   mo.observe(html, {
+   pendingMO.observe(html, {
       attributes: true,
       attributeFilter: ["class"],
    });
