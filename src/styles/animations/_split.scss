@@ -5,6 +5,14 @@
    overflow-wrap: normal;
 }
 
+// Ховаємо текст, ПОКИ split.js його не «розібрав» (ставить data-split-built).
+// Інакше на повільному (некешованому) Barba-переході зібраний текст блимає
+// перед тим, як скрипт встигне розкидати літери. visibility зберігає місце
+// (без стрибка layout); далі скрипт керує появою через opacity літер.
+[data-split]:not([data-split-built]) {
+   visibility: hidden;
+}
+
 .split-text {
    &__word {
       display: inline-block;
