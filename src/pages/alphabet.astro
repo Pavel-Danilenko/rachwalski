@@ -2,6 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
 import "@styles/pages/_alphabet.scss";
+import "@styles/components/_image-fx.scss";
 import Icon from "@components/ui/Icon.astro";
 import "@styles/pages/_clinic-alphand.scss";
 import footerBg from "@assets/img/footer/footer-bg-1.png";
@@ -33,11 +34,15 @@ import imgMobile from "@assets/img/other/mobile-gradient.jpg";
             quality={90}
          />
          <div class="alphabet__container pt-180 pb-80">
-            <h1 class="alphabet__title fs-36v t-center mb-40">Lexicon</h1>
+            <h1 class="alphabet__title fs-36 t-center mb-40">Lexicon</h1>
 
             <!-- Letter A -->
-            <div class="alphabet__row">
-               <div class="alphabet__column-left glass-dark br-12">
+            <div class="alphabet__row" data-reveal>
+               <div
+                  class="alphabet__column-left glass-dark br-12"
+                  data-image-fx
+                  data-fx-tilt="20"
+               >
                   <Img
                      src={alphabetImg1}
                      alt="Letter A"
@@ -89,8 +94,12 @@ import imgMobile from "@assets/img/other/mobile-gradient.jpg";
             </div>
 
             <!-- Letter B -->
-            <div class="alphabet__row">
-               <div class="alphabet__column-left glass-dark br-12">
+            <div class="alphabet__row" data-reveal>
+               <div
+                  class="alphabet__column-left glass-dark br-12"
+                  data-image-fx
+                  data-fx-tilt="20"
+               >
                   <Img
                      src={alphabetImg2}
                      alt="Letter B"
@@ -122,8 +131,12 @@ import imgMobile from "@assets/img/other/mobile-gradient.jpg";
             </div>
 
             <!-- Letter C -->
-            <div class="alphabet__row">
-               <div class="alphabet__column-left glass-dark br-12">
+            <div class="alphabet__row" data-reveal>
+               <div
+                  class="alphabet__column-left glass-dark br-12"
+                  data-image-fx
+                  data-fx-tilt="20"
+               >
                   <Img
                      src={alphabetImg3}
                      alt="Letter C"

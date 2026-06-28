@@ -33,11 +33,15 @@
    }
 
    // .alphabet__img
+   // 3D-нахил + лупа тут дає переносний модуль image-fx (data-image-fx на картці).
+   // Тут лишається тільки layout картинки.
 
    &__img {
       width: 100%;
       padding: toRem(10);
       height: 100%;
+      border-radius: toRem(12);
+
       & img {
          object-fit: contain;
          object-position: center;

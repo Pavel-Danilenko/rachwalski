@@ -1,0 +1,94 @@
+@use "@styles/utils" as *;
+
+// Стилі переносного модуля ефектів (керується image-fx.js):
+//   [data-reveal]    — поява при скролі
+//   [data-image-fx]  — 3D-нахил картинки + лупа-магніфікатор + розмиття поза лупою
+// Усі числові налаштування приходять через кастомні властивості / атрибути (див.
+// image-fx.js та _instruction/README-image-fx.md).
+
+// ── Поява при скролі ──────────────────────────────────────────────────────────
+// Прихований стан вмикається лише коли JS додав .is-armed (без JS — все видно).
+[data-reveal].is-armed {
+   opacity: 0;
+   transform: translateY(var(--reveal-y, #{toRem(28)}));
+   transition:
+      opacity var(--reveal-dur, 0.7s) ease,
+      transform var(--reveal-dur, 0.7s) cubic-bezier(0.22, 1, 0.36, 1);
+   transition-delay: var(--reveal-delay, 0s);
+
+   &.is-revealed {
+      opacity: 1;
+      transform: none;
+   }
+
+   @media (prefers-reduced-motion: reduce) {
+      transform: none;
+      transition: opacity 0.4s ease;
+   }
+}
+
+// ── 3D-нахил + лупа ───────────────────────────────────────────────────────────
+[data-image-fx] {
+   perspective: 900px; // глибина для 3D-нахилу обгортки картинки
+}
+
+// Обгортка картинки (клас додає JS) — її й нахиляємо.
+.fx-stage {
+   position: relative;
+   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+   transition: transform 0.2s ease;
+   will-change: transform;
+
+   img {
+      transition: filter 0.3s ease;
+   }
+}
+
+// Розмиття картинки поза лупою («фокус») — лише коли лупа реально створена.
+[data-image-fx].fx-has-lens:hover .fx-stage img {
+   filter: blur(var(--fx-blur, #{toRem(2.5)}));
+}
+
+// Лупа — бокс виставляє JS (рівно над <img>).
+.fx-lens {
+   position: absolute;
+   pointer-events: none;
+   opacity: 0;
+   transition: opacity 0.25s ease;
+   // М'який край: суцільно в центрі, плавне згасання до краю кола.
+   $lens-mask: radial-gradient(
+      circle var(--lens-r, 0px) at var(--lx, 50%) var(--ly, 50%),
+      #000 var(--fx-lens-edge, 72%),
+      transparent 100%
+   );
+   -webkit-mask: $lens-mask;
+   mask: $lens-mask;
+   will-change: mask;
+
+   &__inner {
+      position: absolute;
+      inset: 0;
+      // Два шари: ЛІТЕРА (--fx-lens-img, contain) НАД ЗАЛИВКОЮ (--fx-lens-fill —
+      // опційний градієнт, cover). Знизу — суцільний колір (--fx-lens-bg), щоб під
+      // лупою не просвічувала прозора картинка. Градієнт-заливку вмикає
+      // data-fx-lens-bg="linear-gradient(...)" — для злиття з градієнтним фоном картки.
+      background-color: var(--fx-lens-bg, var(--color-bg));
+      background-image: var(--fx-lens-img, none), var(--fx-lens-fill, none);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain, cover; // літера: contain (як object-fit); заливка: cover
+      transform: scale(var(--fx-zoom, 1.5));
+      transform-origin: var(--lx, 50%) var(--ly, 50%);
+      will-change: transform;
+   }
+}
+
+[data-image-fx]:hover .fx-lens {
+   opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+   .fx-stage {
+      transform: none;
+   }
+}
