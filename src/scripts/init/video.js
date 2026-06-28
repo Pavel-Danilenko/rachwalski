@@ -261,6 +261,21 @@ function setupPageIntro(video) {
    } else {
       video.autoplay = false;
       video.pause();
+
+      // Інтро не грає на цьому показі (SPA-повернення на головну) — повертаємо
+      // poster у стан спокою. Клас intro-video-playing (що ховає poster) міг
+      // лишитись на <html> від попереднього програвання інтро й не зніматись.
+      document.documentElement.classList.remove("intro-video-playing");
+
+      // iOS/Safari WebKit НЕ малює кадр у <video> після seek без відтворення →
+      // на SPA-поверненні на головну був би ЧОРНИЙ екран. Тому на Safari ховаємо
+      // відео — під ним показується poster (останній кадр як картинка, надійний
+      // на всіх платформах). Інші браузери seek-кадр малюють коректно (нижче).
+      if (isSafari) {
+         video.style.opacity = "0";
+         return;
+      }
+
       // Ховаємо відео до завершення seek щоб не було видно "перемотки"
       video.style.visibility = "hidden";
       const revealAfterSeek = () => { video.style.visibility = ""; };
