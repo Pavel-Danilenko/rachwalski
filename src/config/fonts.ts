@@ -38,6 +38,12 @@ export const googleFonts: GoogleFont[] = [
       subsets: ["latin", "cyrillic"],
       display: "swap",
    },
+   {
+      family: "Bai Jamjuree",
+      weights: [500],
+      subsets: ["latin"],
+      display: "swap",
+   },
    // {
    //    family: "Playfair Display",
    //    weights: [400, 700],

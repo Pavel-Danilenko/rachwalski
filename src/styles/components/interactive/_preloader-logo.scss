@@ -101,9 +101,10 @@
 
    &__subtitle {
       @include fluid-space(font-size, 18, 26);
-      letter-spacing: 0.12em;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-weight: 500;
+      line-height: 1.28;
       color: #eff2f8;
-      font-weight: 300;
       opacity: 0;
       transition: opacity 0.8s var(--ease);
    }
