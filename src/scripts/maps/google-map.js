@@ -13,7 +13,7 @@ const MAP_STYLES = [
    { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
 
    // Дрібні дороги — приховані
-   { featureType: "road.local", stylers: [{ visibility: "off" }] },
+   { featureType: "road.local", stylers: [{ visibility: "on" }] },
 
    // Базовий колір усіх доріг
    {
@@ -96,6 +96,18 @@ const MAP_STYLES = [
       elementType: "geometry",
       stylers: [{ color: "#090c12" }],
    },
+
+   // Будівлі: заливка = колір фону, контури проступають лише через stroke
+   {
+      featureType: "landscape.man_made",
+      elementType: "geometry.fill",
+      stylers: [{ color: "#0b111a" }],
+   },
+   {
+      featureType: "landscape.man_made",
+      elementType: "geometry.stroke",
+      stylers: [{ color: "#2a3446" }, { weight: 0.5 }],
+   },
 ];
 
 // Пін за замовчуванням якщо маркер не має свого icon URL
@@ -125,10 +137,13 @@ function initMap(el) {
    el.dataset.googleMapInitialized = "true";
 
    const markers = JSON.parse(el.dataset.gmMarkers || "[]");
-   const center  = JSON.parse(el.dataset.gmCenter  || "null") || { lat: 48.874, lng: 2.296 };
-   const zoom    = parseInt(el.dataset.gmZoom  || "13", 10);
-   const panX    = parseInt(el.dataset.gmPanX ?? "0", 10);
-   const panY    = parseInt(el.dataset.gmPanY ?? "0", 10);
+   const center = JSON.parse(el.dataset.gmCenter || "null") || {
+      lat: 48.874,
+      lng: 2.296,
+   };
+   const zoom = parseInt(el.dataset.gmZoom || "13", 10);
+   const panX = parseInt(el.dataset.gmPanX ?? "0", 10);
+   const panY = parseInt(el.dataset.gmPanY ?? "0", 10);
 
    loadApi().then(() => {
       if (!document.contains(el)) return;
@@ -158,7 +173,9 @@ function initMap(el) {
             map.setCenter(center);
             map.setZoom(zoom);
             if (panX !== 0 || panY !== 0) {
-               google.maps.event.addListenerOnce(map, "idle", () => map.panBy(panX, panY));
+               google.maps.event.addListenerOnce(map, "idle", () =>
+                  map.panBy(panX, panY),
+               );
             }
          }
       };
@@ -189,8 +206,14 @@ function initMap(el) {
             opacity: PIN_OPACITY,
             icon: {
                url: iconUrl,
-               scaledSize: new google.maps.Size(ICON_SIZE.width, ICON_SIZE.height),
-               anchor: new google.maps.Point(ICON_SIZE.width / 2, ICON_SIZE.height),
+               scaledSize: new google.maps.Size(
+                  ICON_SIZE.width,
+                  ICON_SIZE.height,
+               ),
+               anchor: new google.maps.Point(
+                  ICON_SIZE.width / 2,
+                  ICON_SIZE.height,
+               ),
             },
          });
 
