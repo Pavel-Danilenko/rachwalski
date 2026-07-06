@@ -1,8 +1,9 @@
 @use "@styles/utils" as *;
 
-// Кастомний прелоудер: знак (4 ромби) → морф нижнього в R → дописування RACHWALSKI.
-// Анімація — чистий CSS + flubber (морф контуру). Таймінги керуються з JS через
-// CSS-змінні (--morph-dur, --ltr-dur, --recenter), значення приходять з data-атрибутів.
+// Кастомний прелоудер: знак (4 ромби + паличка) → ромби зникають → R домальовується
+// від палички → знак їде на місце в слові → дописування RACHWALSKI.
+// Анімація — чистий CSS (opacity/transform/clip-path). Таймінги керуються з JS через
+// CSS-змінні (--draw-dur, --place-dur, --ltr-dur, --recenter), значення приходять з data-атрибутів.
 .preloader {
    position: fixed;
    inset: 0;
@@ -14,7 +15,13 @@
    overflow: hidden;
 
    --ease: cubic-bezier(0.22, 1, 0.36, 1);
-   --morph-dur: 1500ms;
+   // м'яка S-крива для чистих fade-ів (повільний старт і фініш — без «стрибка»)
+   --ease-soft: cubic-bezier(0.45, 0.05, 0.35, 1);
+   --petal-dur: 600ms;
+   --petal-step: 120ms;
+   --dissolve-dur: 800ms;
+   --draw-dur: 1500ms;
+   --place-dur: 1000ms;
    --ltr-dur: 1000ms;
    --recenter: 1400ms;
 
@@ -54,13 +61,15 @@
       gap: toRem(14);
    }
 
-   // SVG масштабується через vw → уся анімація (знак, морф, літери) адаптивна разом
+   // SVG масштабується через vw → уся анімація (знак, R, літери) адаптивна разом
    &__logo {
       display: block;
       width: clamp(240px, 42vw, 540px);
       height: auto;
       color: #eff2f8;
       overflow: visible;
+      // без хінтингу тонкі строки не «мерехтять» під час scale-анімацій
+      shape-rendering: geometricPrecision;
 
       @include respond-to(1199) {
          width: min(78vw, 460px);
@@ -72,25 +81,40 @@
       transition: transform var(--recenter) var(--ease);
    }
 
-   // знак великий і центрований над місцем R; морф → identity (масштаб на місці)
+   // знак великий і центрований; після домальовування R їде на місце в слові (s-place)
    &__markG {
       transform: var(--bigT);
       transform-origin: 0 0;
-      transition: transform var(--morph-dur) var(--ease);
+      transition: transform var(--place-dur) var(--ease);
    }
 
+   // ромби: заливка-«стрічка» + тонкий строк по обох контурах.
+   // З'являються хаотично тільки через opacity — випадкові затримки
+   // (--in-delay) роздає JS на кожен показ.
    &__petal {
       opacity: 0;
-      transform: scale(0.5);
-      transform-box: fill-box;
-      transform-origin: center;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill-opacity: 1;
+      will-change: opacity;
       transition:
-         opacity 0.6s var(--ease),
-         transform 0.6s var(--ease);
+         opacity var(--petal-dur) var(--ease-soft),
+         fill-opacity var(--petal-dur) var(--ease-soft);
+      transition-delay: var(--in-delay, 0s);
    }
 
-   &__morph {
+   // паличка (ніжка R): прихована на старті, проявляється коли нижній ромб
+   // лишається самим контуром (s-collapse)
+   &__leg {
       opacity: 0;
+      will-change: opacity;
+      transition: opacity var(--petal-dur) var(--ease-soft);
+   }
+
+   // R "добудовується" від палички вліво — clip-маска відкривається справа наліво
+   &__rletter {
+      clip-path: inset(0 0 0 100%);
+      transition: clip-path var(--draw-dur) var(--ease);
    }
 
    // літери RACHWALSKI (крім R) — кожна плавно з'являється через opacity (JS керує)
@@ -112,39 +136,40 @@
    // ── Стадії (класи додає JS) ───────────────────────────────────────────────
    &.s-in &__petal {
       opacity: 1;
-      transform: scale(1);
-   }
-   &.s-in &__petal--top {
-      transition-delay: 0s;
-   }
-   &.s-in &__petal--left {
-      transition-delay: 0.12s;
-   }
-   &.s-in &__petal--right {
-      transition-delay: 0.24s;
-   }
-   &.s-in &__petal--bottom {
-      transition-delay: 0.36s;
    }
 
+   // 3 ромби зникають; у нижнього гасне заливка (лишається строк)
+   // + паралельно проявляється паличка. Зникнення швидше за появу (60%),
+   // щоб довгий м'який fade-in не розтягував вихід.
    &.s-collapse &__petal--top,
    &.s-collapse &__petal--left,
    &.s-collapse &__petal--right {
       opacity: 0;
-      transform: scale(0.4);
+      transition-duration: calc(var(--petal-dur) * 0.6);
       transition-delay: 0s;
    }
-
-   &.s-morph &__petal {
-      opacity: 0 !important;
-      transition: opacity 0.12s;
+   &.s-collapse &__petal--bottom {
+      fill-opacity: 0;
+      transition-duration: calc(var(--petal-dur) * 0.6);
+      transition-delay: 0s;
    }
-   &.s-morph &__markG {
-      transform: translate(0, 0) scale(1);
-   }
-   &.s-morph &__morph {
+   &.s-collapse &__leg {
       opacity: 1;
-      transition: opacity 0.12s;
+   }
+
+   // контур нижнього ромба «розпилюється» — шумовий displacement-фільтр рве його
+   // на фрагменти (силу розпилення анімує JS: runDissolve), поки він тане
+   &.s-draw &__petal--bottom {
+      opacity: 0;
+      filter: url(#preloader-dissolve);
+      transition: opacity var(--dissolve-dur) var(--ease);
+   }
+   &.s-draw &__rletter {
+      clip-path: inset(0 0 0 0);
+   }
+
+   &.s-place &__markG {
+      transform: translate(0, 0) scale(1);
    }
 
    &.show-sub &__subtitle {
@@ -155,10 +180,15 @@
 @media (prefers-reduced-motion: reduce) {
    .preloader--logo {
       .preloader__petal,
+      .preloader__leg,
       .preloader__ltr,
       .preloader__subtitle {
          transition: none;
          opacity: 1;
+      }
+      .preloader__rletter {
+         transition: none;
+         clip-path: none;
       }
    }
 }
