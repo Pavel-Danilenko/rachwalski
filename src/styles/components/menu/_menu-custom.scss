@@ -19,10 +19,17 @@
       border: toRem(1) solid var(--color-black);
       transition:
          color var(--transition-base),
-         border-color var(--transition-base);
+         border-color var(--transition-base),
+         background-color var(--transition-base);
       // iOS: прибирає затримку 300ms і синій flash при тапі
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+
+      @media (any-hover: hover) {
+         &:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+         }
+      }
 
       span {
          display: block;
@@ -53,6 +60,12 @@
 .menu-open .menu-custom__burger {
    color: var(--color-white);
    border-color: rgba(255, 255, 255, 0.3);
+
+   @media (any-hover: hover) {
+      &:hover {
+         background-color: rgba(255, 255, 255, 0.08);
+      }
+   }
 }
 
 // ── Dropdown (accordion в меню) ───────────────────────────────────────────────

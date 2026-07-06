@@ -188,16 +188,18 @@
       &:not(:last-child) {
          margin-bottom: toRem(20);
       }
-      @include fluid-space(width, 210, 220);
+      max-width: toRem(218);
+      width: 100%;
    }
 
    &__socials {
       display: flex;
       flex-wrap: wrap;
-      gap: toRem(22);
+      gap: toRem(20);
       @include respond-to("md") {
          width: 100%;
-         justify-content: center;
+         max-width: toRem(216);
+         justify-content: space-between;
       }
    }
    &__link {
