@@ -89,6 +89,15 @@
       margin-bottom: toRem(12);
    }
 }
+
+.btn-label-style {
+   padding: toRem(8) toRem(16);
+   display: inline-flex;
+   align-items: center;
+   text-decoration: none;
+   justify-content: center;
+   gap: toRem(8);
+}
 .btn--medium {
    padding: toRem(12) toRem(24);
 }

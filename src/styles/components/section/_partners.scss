@@ -26,14 +26,13 @@
    &__container {
       position: relative;
       z-index: 1;
+      display: flex;
+      flex-direction: column;
       @include fluid-space(padding-top, 48, 100);
       @include fluid-space(padding-bottom, 60, 200);
    }
    &__title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: toRem(10);
+      margin-inline: auto;
       @include fluid(font-size, 16, 36);
       &:not(:last-child) {
          @include fluid-space(margin-bottom, 40, 100);
