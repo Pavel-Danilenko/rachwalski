@@ -72,8 +72,9 @@
 
    // ── Нижня панель: 2-колонна (Copyright | Links) ──────────────────────────────
    &__bottom {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
       align-items: center;
       gap: toRem(32);
       padding: toRem(30) 0;
@@ -89,14 +90,14 @@
          border-top: toRem(1) solid rgba(255, 255, 255, 0.2);
       }
       @include respond-to("md") {
-         grid-template-columns: 1fr;
-         gap: toRem(20);
-         padding: toRem(16) 0 toRem(60);
+         justify-content: center;
+         gap: toRem(16);
+         padding: toRem(16) 0 toRem(66);
       }
    }
 
    &__copyright {
-      font-size: var(--text-sm);
+      @include fluid-space(font-size, 12, 16);
       color: var(--color-text-muted, #888);
    }
 }
@@ -215,17 +216,18 @@
 .footer__copyright {
    color: var(--color-text);
 }
+
 .footer__list {
    display: flex;
    flex-wrap: wrap;
    gap: toRem(12) toRem(24);
    @include respond-to("md") {
       width: 100%;
-      justify-content: space-between;
+      justify-content: space-around;
    }
 }
 .footer__link {
-   @include fluid-space(font-size, 14, 16);
+   @include fluid-space(font-size, 12, 16);
    position: relative;
 
    &::before {

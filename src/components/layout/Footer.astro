@@ -1,6 +1,5 @@
 ---
 import "@styles/components/layout/_footer.scss";
-import NavItem from "@components/menu/NavItem.astro";
 import ContactForm from "@components/forms/ContactForm.astro";
 import Icon from "@components/ui/Icon.astro";
 import Logo from "@components/ui/Logo.astro";
@@ -146,7 +145,7 @@ const copyrightText = copyright ?? `© ${year} RACHWALSKI. All rights reserved.`
       </div>
    </div>
 
-   <!-- Нижня панель: 2-колонна (Copyright + Links) — замінити через slot="bottom" або редагувати тут -->
+   <!-- Нижня панель: 2-колонна (Copyright | Links) — замінити через slot="bottom" або редагувати тут -->
    <div class="footer__bottom footer-copy__container">
       <slot name="bottom">
          <div class="footer__copyright">{copyrightText}</div>
@@ -155,6 +154,12 @@ const copyrightText = copyright ?? `© ${year} RACHWALSKI. All rights reserved.`
             <a href="#" class="footer__link">Privacy</a>
             <a href="#" class="footer__link">Legal Mentions</a>
             <a href="#" class="footer__link">Cookies</a>
+            <a
+               href="https://8n.studio"
+               class="footer__link"
+               target="_blank"
+               rel="noopener noreferrer">Website by 8n.studio</a
+            >
          </div>
       </slot>
    </div>
