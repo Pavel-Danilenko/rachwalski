@@ -13,7 +13,13 @@ function initScrollToTop() {
             : window.innerHeight;
 
       const update = () => {
-         const visible = window.scrollY > threshold;
+         const belowThreshold = window.scrollY > threshold;
+         // Ховаємо кнопку якщо близько до footer (60px від дна)
+         const distanceToBottom =
+            document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+         const nearFooter = distanceToBottom < 60;
+
+         const visible = belowThreshold && !nearFooter;
          btn.classList.toggle("is-visible", visible);
          document
             .querySelector(".video-banner__music")

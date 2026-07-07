@@ -227,12 +227,36 @@ function stopAllAudio() {
    });
 }
 
+// ── Приховування поблизу footer ──────────────────────────────────────────────
+
+let _footerCheckInit = false;
+
+function initFooterProximityCheck() {
+   if (_footerCheckInit) return;
+   _footerCheckInit = true;
+
+   window.addEventListener("scroll", () => {
+      const distanceToBottom =
+         document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+      const nearFooter = distanceToBottom < 60;
+
+      document.querySelectorAll("[data-music-toggle]").forEach((el) => {
+         if (nearFooter) {
+            el.classList.remove("is-visible");
+         } else if (el.dataset.musicToggleInit === "full" && !el.hidden) {
+            el.classList.add("is-visible");
+         }
+      });
+   }, { passive: true });
+}
+
 // ── Ініціалізація ─────────────────────────────────────────────────────────────
 
 function initOnLoad() {
    if (getPageMusicSources()) {
       initMusicToggle();
       tryShowToggles();
+      initFooterProximityCheck();
    }
    // Немає музики на сторінці — toggle залишається прихованим (hidden за замовчуванням)
 }
@@ -249,6 +273,7 @@ document.addEventListener("page:music-status", ({ detail }) => {
    if (detail.hasMusic) {
       initMusicToggle();
       tryShowToggles();
+      initFooterProximityCheck();
    } else {
       hideToggles();
       document.querySelectorAll("[data-music-toggle-audio]").forEach((audio) => {
