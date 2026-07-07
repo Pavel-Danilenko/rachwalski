@@ -25,6 +25,14 @@
          position: absolute;
          z-index: 2;
       }
+
+      // Левітація (тільки тач): анімуємо ОБГОРТКУ — градієнтні тіні (::before/
+      // ::after) їдуть разом з картинкою, край не вилазить з-під фейду.
+      // transform самого img вільний — на десктопі його займає mouse-паралакс.
+      @media (any-hover: none) {
+         animation: treatments-float 7s ease-in-out infinite;
+         will-change: transform;
+      }
    }
    &__img-first {
       &::before {
@@ -46,6 +54,14 @@
          position: absolute;
          z-index: 2;
          background: linear-gradient(0deg, #0b111a 0%, #0b111a00 60%);
+      }
+
+      // шприц плаває повільніше і стартує пізніше — картки не гойдаються синхронно.
+      // Затримка ДОДАТНА: при від'ємній JS міряв би картинку вже зсунутою
+      // і поставив би крапки з запеченим офсетом.
+      @media (any-hover: none) {
+         animation-duration: 8.5s;
+         animation-delay: 2s;
       }
    }
 
@@ -113,6 +129,28 @@
          transition: transform 0.4s ease-out;
          will-change: transform;
       }
+
+      // Glow-пульс (всі пристрої): drop-shadow читає альфа-канал — світіння йде
+      // точно по контуру об'єкта, а не прямокутником.
+      // Фільтр на <picture>, а НЕ на img: у PNG знизу запечена тінь до самого
+      // краю файла, і drop-shadow обводив би її прямокутний край. Тому img
+      // ріжемо маскою до прозорості внизу, а фільтр батька бачить уже
+      // замасковану альфу — квадрата немає. Зріз ховається під градієнт-фейдом.
+      // На десктопі не конфліктує з mouse-паралаксом: він рухає transform
+      // самого img, а glow — filter на picture.
+      img {
+         -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 95%);
+         mask-image: linear-gradient(to bottom, #000 72%, transparent 95%);
+      }
+      picture {
+         animation: treatments-glow 6s ease-in-out infinite;
+      }
+   }
+
+   // друга картка світиться у протифазі (filter не впливає на геометрію,
+   // тому від'ємна затримка тут безпечна — крапки міряються без зсуву)
+   &__card--2 &__media picture {
+      animation-delay: -3s;
    }
 
    // ── Hotspot ────────────────────────────────────────────────────────────────
@@ -330,3 +368,33 @@
       opacity: 0;
    }
 }
+
+// Левітація: об'єкт повільно "плаває" по вертикалі з ледь помітним нахилом
+@keyframes treatments-float {
+   0%,
+   100% {
+      transform: translateY(0) rotate(0deg);
+   }
+   50% {
+      transform: translateY(toRem(-8)) rotate(0.4deg);
+   }
+}
+
+// Glow-пульс: холодне світіння по силуету "дихає" — то ледь помітне, то ширше
+@keyframes treatments-glow {
+   0%,
+   100% {
+      filter: drop-shadow(0 0 toRem(12) rgba(126, 165, 255, 0.16));
+   }
+   50% {
+      filter: drop-shadow(0 0 toRem(26) rgba(148, 184, 255, 0.38));
+   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+   .treatments__img,
+   .treatments__media picture {
+      animation: none;
+   }
+}
+
