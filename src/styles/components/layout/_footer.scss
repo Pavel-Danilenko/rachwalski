@@ -70,14 +70,13 @@
       margin-bottom: toRem(4);
    }
 
-   // ── Нижня панель: копірайт + соціалки ────────────────────────────────────
+   // ── Нижня панель: 2-колонна (Copyright | Links) ──────────────────────────────
    &__bottom {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       align-items: center;
-      justify-content: space-between;
-      gap: toRem(16);
+      gap: toRem(32);
       padding: toRem(30) 0;
-      flex-wrap: wrap;
       z-index: 3;
       position: relative;
       &::before {
@@ -90,8 +89,8 @@
          border-top: toRem(1) solid rgba(255, 255, 255, 0.2);
       }
       @include respond-to("md") {
-         justify-content: center;
-         flex-direction: column-reverse;
+         grid-template-columns: 1fr;
+         gap: toRem(20);
          padding: toRem(16) 0 toRem(60);
       }
    }
@@ -215,10 +214,6 @@
 
 .footer__copyright {
    color: var(--color-text);
-}
-.footer__credit {
-   font-size: var(--text-sm);
-   transition: color var(--transition-base);
 }
 .footer__list {
    display: flex;

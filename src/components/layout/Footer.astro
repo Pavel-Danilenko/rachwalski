@@ -146,16 +146,9 @@ const copyrightText = copyright ?? `© ${year} RACHWALSKI. All rights reserved.`
       </div>
    </div>
 
-   <!-- Нижня панель — замінити через slot="bottom" або редагувати тут -->
+   <!-- Нижня панель: 2-колонна (Copyright + Links) — замінити через slot="bottom" або редагувати тут -->
    <div class="footer__bottom footer-copy__container">
       <slot name="bottom">
-         <a
-            href="https://8n.studio"
-            class="footer__credit"
-            target="_blank"
-            rel="noopener noreferrer"
-         >Website by 8n.studio</a>
-
          <div class="footer__copyright">{copyrightText}</div>
 
          <div class="footer__list">
