@@ -32,7 +32,7 @@ interface Props {
    // Приховати Header, Footer та MobileBookingBar (для самостійних сторінок-заглушок)
    hideChrome?: boolean;
    // Сторінка має відео-інтро (Video з pageIntro): хедер прихований до кінця відео,
-   // скрол заблокований, звичайний Preloader не показується
+   // скрол заблокований, звичайний прелоадер не показується
    introVideo?: boolean;
    // Тип прелоадера: "default" = кастомний знак→RACHWALSKI, "none" = без прелоадера
    preloader?: "default" | "none";
@@ -157,10 +157,16 @@ const resolvedFooterBg = await getImage({
          preloader === "default" && (
             <PreloaderLogo
                collapseAt={1100}
-               drawAt={1600}
+               dockAt={1350}
+               dockDuration={850}
+               dockScale={1.5}
+               waveAt={2000}
+               waveDuration={1300}
+               legAt={2400}
+               drawAt={2900}
                petalDuration={800}
                petalStep={80}
-               dissolveDuration={600}
+               dissolveDuration={900}
                drawDuration={1000}
                placeDuration={700}
             />
