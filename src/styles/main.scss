@@ -39,9 +39,12 @@ $container-selector: null !default;
 
 @mixin container {
    width: 100%;
-   max-width: toRem($container-width); // ← 1200 → 75rem (масштабується!)
-   padding-left: toRem(math.div($container-padding, 2)); // 0.9375rem
-   padding-right: toRem(math.div($container-padding, 2));
+   // Ширину/падінги читаємо зі змінних (fallback — стандарт із settings).
+   // Модифікатори (.container--wide, .container-pad--roomy) лише ЗАДАЮТЬ
+   // змінні — жодного перезапису властивостей у каскаді.
+   max-width: var(--container-w, #{toRem($container-width)});
+   padding-left: var(--container-pad, #{toRem(math.div($container-padding, 2))}); // 15px
+   padding-right: var(--container-pad, #{toRem(math.div($container-padding, 2))});
    margin: 0 auto;
 
    // Адаптив ($responsive-type: 2 — рекомендую ввімкнути)
@@ -86,4 +89,23 @@ $container-selector: null !default;
 
 #{$container-selector} {
    @include container;
+}
+
+// Додаткові ширини контейнера ($container-sizes у settings.scss) — модифікатор
+// навішується ДОДАТКОВИМ класом поверх будь-якого *__container, напр.:
+//   <div class="nav-overlay__container container--wide">
+// Задає лише змінну --container-w (її читає базове правило контейнера) —
+// без конфліктів специфічності й перезапису max-width.
+@each $name, $width in $container-sizes {
+   .container--#{$name} {
+      --container-w: #{toRem($width)};
+   }
+}
+
+// Аналогічно для бокових падінгів ($container-paddings у settings.scss):
+//   <div class="hero__container container-pad--roomy">
+@each $name, $pad in $container-paddings {
+   .container-pad--#{$name} {
+      --container-pad: #{toRem($pad)};
+   }
 }

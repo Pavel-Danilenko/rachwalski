@@ -20,7 +20,7 @@ const { class: className = "", sticky = false } = Astro.props;
 ---
 
 <header class:list={["header", className]}>
-   <div class="header__container">
+   <div class="header__container container--wide">
       <Logo href="/" imageSrc="/img/logo.svg" imageAlt="Rachwalski" />
 
       <div class="header__column-right">
@@ -65,7 +65,7 @@ const { class: className = "", sticky = false } = Astro.props;
                </div>
                <div class="nav-overlay__body">
                   <!-- Content -->
-                  <div class="nav-overlay__container">
+                  <div class="nav-overlay__container container--wide">
                      <div class="nav-overlay__body">
                         <!-- Left: primary nav -->
                         <nav
