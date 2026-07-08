@@ -158,10 +158,6 @@
          --dur: 15s;
          --del: 8.8s;
       }
-
-      @include respond-to("sm") {
-         display: none;
-      }
    }
 
    &__arrow {
@@ -169,10 +165,12 @@
       opacity: 0.7;
    }
 
-   // 3×3 grid — обмежена ширина щоб не було пустого місця
+   // 3×3 grid — width:100% тримає повну ширину (інакше flex-контейнер стискає
+   // сітку до контенту і розкид лого злипається)
    &__grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      width: 100%;
       @include fluid-space(row-gap, 48, 80);
       column-gap: toRem(16);
       margin-inline: auto;
@@ -230,7 +228,7 @@
       }
 
       @include respond-to("sm") {
-         // Сходинки на мобілці
+         // Сходинки на мобілці (одна колонка)
          &:nth-child(3n + 1) {
             justify-self: start;
             transform: translateX(toRem(16));

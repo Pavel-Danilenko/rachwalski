@@ -30,20 +30,13 @@
          opacity: 0;
          background: linear-gradient(
             to bottom,
-            rgb(11, 17, 26) 4%,
+            rgb(11, 17, 26) 8%,
+            rgba(11, 17, 26, 0.9) 60%,
+            rgba(11, 17, 26, 0.8) 70%,
+            rgba(11, 17, 26, 0.6) 88%,
             rgba(11, 17, 26, 0) 100%
          );
          transition: opacity var(--transition-base);
-         @include respond-to("lg") {
-            background: linear-gradient(
-               to bottom,
-               rgb(11, 17, 26) 8%,
-               rgba(11, 17, 26, 0.9) 60%,
-               rgba(11, 17, 26, 0.8) 70%,
-               rgba(11, 17, 26, 0.6) 88%,
-               rgba(11, 17, 26, 0) 100%
-            );
-         }
       }
 
       &.is-stuck::before {
