@@ -387,8 +387,18 @@ if (!file_exists($configFile)) {
 }
 $config = require $configFile;
 
-// CORS Headers
-header("Access-Control-Allow-Origin: *");
+// CORS — тільки для дозволених джерел (allowed_origins у mail.config.php).
+// Дефолт — localhost dev-порти. Прод same-origin ("/api/send-email.php")
+// працює завжди без ACAO-заголовка. `*` прибрано, щоб чужі сайти не могли
+// дьоргати ендпоінт через браузер відвідувача.
+$allowedOrigins = isset($config["allowed_origins"]) && is_array($config["allowed_origins"])
+   ? $config["allowed_origins"]
+   : ["http://localhost:4321", "http://localhost:8888"];
+$origin = $_SERVER["HTTP_ORIGIN"] ?? "";
+if ($origin !== "" && in_array($origin, $allowedOrigins, true)) {
+   header("Access-Control-Allow-Origin: " . $origin);
+   header("Vary: Origin");
+}
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
@@ -437,16 +447,16 @@ $email = isset($_POST["email"]) ? trim($_POST["email"]) : "";
 $form_key = isset($_POST["form_key"]) ? trim($_POST["form_key"]) : "";
 $form_emails = isset($config["form_emails"]) ? $config["form_emails"] : [];
 
+// Отримувач — ВИКЛЮЧНО з серверного конфіга (form_key → email, або fallback).
+// НЕ беремо з $_POST: інакше будь-хто міг би вказати довільну адресу і
+// перетворити ендпоінт на відкритий спам-релей (open mail relay).
 $recipient_email =
    ($form_key && isset($form_emails[$form_key])
       ? $form_emails[$form_key]
       : null) ?:
-   (isset($_POST["recipient_email"]) ? $_POST["recipient_email"] : null) ?:
    $config["recipient_email"];
 
-$recipient_name = isset($_POST["recipient_name"])
-   ? $_POST["recipient_name"]
-   : $config["recipient_name"];
+$recipient_name = $config["recipient_name"];
 $sender_name = isset($_POST["sender_name"])
    ? $_POST["sender_name"]
    : $config["from_name"];
