@@ -133,7 +133,9 @@
    }
 
    .custom-select__value {
-      font-size: toRem(16);
+      // той самий fluid-розмір, що й у табів FilterTabs (12→16), щоб не було
+      // розбіжності на вужчих екранах
+      @include fluid-space(font-size, 12, 16);
       color: var(--color-text);
       white-space: nowrap;
    }

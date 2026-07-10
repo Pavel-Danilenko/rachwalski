@@ -96,12 +96,17 @@
       text-align: center;
       color: var(--color-text);
       margin-inline: auto;
+      gap: toRem(8);
       @include fluid-space(margin-bottom, 20, 32);
 
       .icon {
          font-size: toRem(12);
-         color: var(--color-white);
-         transition: translate var(--transition-base);
+         // currentColor → стрілка завжди кольору тексту кнопки: білий у спокої,
+         // темний на hover разом із текстом (white-btn), без окремих правил.
+         color: currentColor;
+         transition:
+            translate var(--transition-base),
+            color var(--transition-base);
       }
 
       @media (any-hover: hover) {

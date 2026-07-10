@@ -92,6 +92,12 @@
       margin-bottom: toRem(12);
    }
 }
+.btn-24 {
+   @include fluid(font-size, 16, 24);
+}
+.btn-16 {
+   font-size: toRem(16);
+}
 
 .btn-label-style {
    padding: toRem(8) toRem(16);
@@ -100,6 +106,9 @@
    text-decoration: none;
    justify-content: center;
    gap: toRem(8);
+}
+.btn--big {
+   padding: toRem(16) toRem(24);
 }
 .btn--medium {
    padding: toRem(12) toRem(24);

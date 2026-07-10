@@ -33,13 +33,18 @@
    }
    &__title {
       margin-inline: auto;
-      @include fluid(font-size, 16, 36);
+      gap: toRem(8);
+      // розмір шрифта задає клас .btn-24 у розмітці (прибрано власний fluid)
       &:not(:last-child) {
          @include fluid-space(margin-bottom, 40, 100);
       }
       & .icon {
          @include fluid-space(font-size, 12, 16);
-         transition: translate var(--transition-base);
+         // currentColor → стрілка кольору тексту: темніє на hover разом з текстом
+         color: currentColor;
+         transition:
+            translate var(--transition-base),
+            color var(--transition-base);
       }
       @media (any-hover: hover) {
          &:hover .icon {
