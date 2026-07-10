@@ -188,22 +188,24 @@ function initMap(el) {
       const infoWindow = new google.maps.InfoWindow();
 
       const ICON_SIZE = { width: 44, height: 56 };
-      const PIN_OPACITY = 0.8;
 
       const markerObjs = [];
 
-      // marker.setOpacity() — вбудований спосіб Maps API підсвітити пін,
-      // без додаткових класів/DOM-хаків. Плавність додає CSS-перехід
-      // на <img> маркерів (.gm-style img), бо сам setOpacity миттєвий.
+      // Ховер маркерів — плавне потемніння. Google кладе поверх піна прозорий
+      // clickable-<img>, тому CSS :hover на пін не ловиться. Але JS-івент
+      // mouseover спрацьовує → знаходимо видимий пін у DOM (за назвою файла в
+      // src, назви пінів унікальні) і ставимо filter inline; плавність дає
+      // CSS-transition на цих <img> (див. _google-map.scss).
       markers.forEach((m) => {
          const iconUrl = m.icon ?? DEFAULT_PIN;
+         const iconFile = iconUrl.split("/").pop();
+         const findPinImg = () => el.querySelector(`img[src*="${iconFile}"]`);
 
          const marker = new google.maps.Marker({
             position: { lat: m.lat, lng: m.lng },
             map,
             title: m.title ?? "",
             optimized: false,
-            opacity: PIN_OPACITY,
             icon: {
                url: iconUrl,
                scaledSize: new google.maps.Size(
@@ -217,8 +219,14 @@ function initMap(el) {
             },
          });
 
-         marker.addListener("mouseover", () => marker.setOpacity(1));
-         marker.addListener("mouseout", () => marker.setOpacity(PIN_OPACITY));
+         marker.addListener("mouseover", () => {
+            const img = findPinImg();
+            if (img) img.style.filter = "brightness(0.9)";
+         });
+         marker.addListener("mouseout", () => {
+            const img = findPinImg();
+            if (img) img.style.filter = "";
+         });
 
          if (m.url) {
             marker.addListener("click", () => {

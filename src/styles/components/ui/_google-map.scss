@@ -20,11 +20,11 @@
       margin-right: toRem(16) !important;
    }
 
-   // Плавна зміна opacity маркерів при hover (marker.setOpacity()
-   // в google-map.js) — сам setOpacity миттєвий, transition додає
-   // нашу базову плавність.
-   .gm-style img {
-      transition: opacity var(--transition-base);
+   // Ховер маркерів: плавне потемніння (filter ставить JS на mouseover —
+   // CSS :hover не працює через прозорий clickable-шар Google поверх піна).
+   // Тут лише transition, щоб зміна filter була плавна. Ціль — тільки піни.
+   .gm-style img[src*="pin"] {
+      transition: filter var(--transition-base);
    }
 }
 

@@ -17,7 +17,10 @@ function enable(el) {
       speed: 600,
       observer: true,
       observeParents: true,
-      autoHeight: true,
+      // autoHeight підганяє висоту під активний слайд (стрибає). Прапорець
+      // data-equal-height вимикає його → всі слайди тягнуться до найвищого
+      // (flex-stretch, слайди мають height:auto у _cards-slider.scss).
+      autoHeight: !el.hasAttribute("data-equal-height"),
       slidesPerView: parseFloat(el.dataset.slidesPerView ?? "1.2"),
       spaceBetween: 12,
       navigation: {
