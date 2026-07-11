@@ -11,9 +11,6 @@
 
    // .alphabet__title
 
-   &__title {
-   }
-
    // .alphabet__row
 
    &__row {
@@ -31,10 +28,6 @@
 
    &__column-left {
    }
-
-   // .alphabet__img
-   // 3D-нахил + лупа тут дає переносний модуль image-fx (data-image-fx на картці).
-   // Тут лишається тільки layout картинки.
 
    &__img {
       width: 100%;
