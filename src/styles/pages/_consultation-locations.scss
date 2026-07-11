@@ -38,18 +38,19 @@
    // SVG заповнює див (width/height 100%) — без width:auto, який ламав Safari
    // (не рахував intrinsic-розмір з viewBox і розтягував лого).
    &__logo {
-      @include fluid-space(height, 42, 82);
+      @include fluid-space(height, 42, 70); // спільна: обидва viewBox-висотою 70
       .icon {
          width: 100%;
          height: 100%;
       }
    }
 
+   // Ширина = height × (viewBox-ширина / 70). На max-висоті 70 лого 1:1 (натуральне).
    &__logo--1 {
-      @include fluid-space(width, 78, 153);
+      @include fluid-space(width, 92, 153); // RACHWALSKI — viewBox 153×70
    }
    &__logo--2 {
-      @include fluid-space(width, 101, 198);
+      @include fluid-space(width, 119, 199); // Alphand — viewBox 199×70
    }
 
    // .cl-card__address
