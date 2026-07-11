@@ -34,12 +34,22 @@
       @include fluid-space(gap, 16, 40);
    }
 
+   // Розміри задає ДІВ (висота спільна тут, ширина індивідуальна нижче).
+   // SVG заповнює див (width/height 100%) — без width:auto, який ламав Safari
+   // (не рахував intrinsic-розмір з viewBox і розтягував лого).
    &__logo {
-      @include fluid-space(height, 32, 64);
+      @include fluid-space(height, 42, 82);
       .icon {
-         width: auto;
+         width: 100%;
          height: 100%;
       }
+   }
+
+   &__logo--1 {
+      @include fluid-space(width, 78, 153);
+   }
+   &__logo--2 {
+      @include fluid-space(width, 101, 198);
    }
 
    // .cl-card__address
@@ -98,7 +108,6 @@
          margin-bottom: toRem(8);
       }
    }
-
 
    // .cl-card__actions
    &__actions {
