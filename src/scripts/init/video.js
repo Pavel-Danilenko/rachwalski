@@ -259,39 +259,19 @@ function setupPageIntro(video) {
          lockForIntro(video);
       }
    } else {
+      // SPA-повернення на головну: НЕ програємо і НЕ перематуємо відео — просто
+      // ховаємо <video> (opacity 0), під ним лишається poster (останній кадр як
+      // картинка, z-index нижче). Так немає видимого "докручування" відео на
+      // ЖОДНОМУ браузері. Раніше лише Safari так робив, а на інших відео
+      // перематувалось у кінець і встигало блимнути залишком відтворення.
       video.autoplay = false;
       video.pause();
+      video.preload = "none";
 
-      // Інтро не грає на цьому показі (SPA-повернення на головну) — повертаємо
-      // poster у стан спокою. Клас intro-video-playing (що ховає poster) міг
-      // лишитись на <html> від попереднього програвання інтро й не зніматись.
+      // Клас intro-video-playing (що ховає poster) міг лишитись від попереднього
+      // програвання інтро — знімаємо, щоб poster був видимий.
       document.documentElement.classList.remove("intro-video-playing");
-
-      // iOS/Safari WebKit НЕ малює кадр у <video> після seek без відтворення →
-      // на SPA-поверненні на головну був би ЧОРНИЙ екран. Тому на Safari ховаємо
-      // відео — під ним показується poster (останній кадр як картинка, надійний
-      // на всіх платформах). Інші браузери seek-кадр малюють коректно (нижче).
-      if (isSafari) {
-         video.style.opacity = "0";
-         return;
-      }
-
-      // Ховаємо відео до завершення seek щоб не було видно "перемотки"
-      video.style.visibility = "hidden";
-      const revealAfterSeek = () => { video.style.visibility = ""; };
-      const doSeekToEnd = () => {
-         if (video.duration) {
-            video.currentTime = video.duration;
-            video.addEventListener("seeked", revealAfterSeek, { once: true });
-         } else {
-            revealAfterSeek();
-         }
-      };
-      if (video.readyState >= 1) {
-         doSeekToEnd();
-      } else {
-         video.addEventListener("loadedmetadata", doSeekToEnd, { once: true });
-      }
+      video.style.opacity = "0";
    }
 }
 
@@ -301,6 +281,10 @@ function restartIntro(video) {
    document.documentElement.classList.add("intro-video");
    document.documentElement.dataset.introVideoDone = "false";
    document.dispatchEvent(new CustomEvent("video-intro:restart"));
+   // Відео могло бути прихованим (opacity 0) з попереднього SPA-повернення на
+   // цю сторінку без перезаходу (див. гілку "else" у lockForIntro) — без цього
+   // скидання воно грало б невидимо під постером.
+   video.style.opacity = "1";
    video.play().catch(() => {});
    lockForIntro(video);
 }
