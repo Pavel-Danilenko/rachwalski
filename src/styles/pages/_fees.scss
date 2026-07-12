@@ -62,11 +62,15 @@
 
    &__row {
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: toRem(8) toRem(20);
+      row-gap: toRem(8);
+      @include fluid(column-gap, 14, 20);
       @include fluid-space(padding-bottom, 12, 20);
+   }
+
+   &__label {
+      flex-shrink: 0;
    }
 }
 .prices-accordion {
