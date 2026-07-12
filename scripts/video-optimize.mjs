@@ -23,6 +23,12 @@
  *                       Менше = більше keyframe-ів = більший файл, але потрібно для playbackRate > 1 в Safari.
  *                       Рекомендовано 30 (1 сек при 30fps) для відео з playbackRate > 1.
  *                       Приклад: --keyframe-interval=30
+ * --max-width          максимальна ширина у px (дефолт: не встановлено = нативна роздільність джерела).
+ *                       Джерело ШИРШЕ за max-width — масштабується вниз (висота рахується пропорційно).
+ *                       Джерело ВУЖЧЕ або дорівнює — лишається як є, апскейлу ніколи не буде.
+ *                       Один прапорець безпечно покриває одразу desktop (4K→cap) і mobile
+ *                       (portrait 1080px не чіпається, бо він вже менший за типовий cap).
+ *                       Приклад: --max-width=1920
  */
 
 import { execFileSync } from "node:child_process";
@@ -46,6 +52,7 @@ const QUALITY = Math.min(100, Math.max(0, Number(getArg("quality", "90"))));
 const AUDIO_BITRATE = getArg("audio-bitrate", "96k");
 const CPU_USED = Math.min(5, Math.max(0, Number(getArg("cpu-used", "2"))));
 const KEYFRAME_INTERVAL = getArg("keyframe-interval", null);
+const MAX_WIDTH = getArg("max-width", null);
 
 // quality 0 → найсильніше стиснення, quality 100 → найкраща якість
 const VP9_CRF = Math.round(40 - (QUALITY / 100) * (40 - 15));
@@ -53,6 +60,11 @@ const H264_CRF = Math.round(35 - (QUALITY / 100) * (35 - 16));
 
 const X264_PRESETS = ["veryslow", "slower", "slow", "medium", "fast", "veryfast"];
 const X264_PRESET = X264_PRESETS[CPU_USED];
+
+// min(iw,MAX_WIDTH) — масштабує вниз лише якщо джерело ширше за cap, інакше не чіпає
+// (апскейл вузьких/portrait джерел на кшталт mobile не станеться). -2 — висота рахується
+// пропорційно і завжди округлюється до парного числа (вимога yuv420p).
+const SCALE_FILTER = MAX_WIDTH ? `scale='min(iw,${MAX_WIDTH})':-2` : null;
 
 // ── Пошук вихідних файлів ───────────────────────────────────────────────
 function findMp4Files(dir) {
@@ -105,9 +117,10 @@ for (const mp4Path of mp4Files) {
    }
 
    const kiLabel = KEYFRAME_INTERVAL ? `, keyframe=${KEYFRAME_INTERVAL}` : "";
+   const mwLabel = MAX_WIDTH ? `, max-width=${MAX_WIDTH}` : "";
 
    if (mp4Outdated) {
-      console.log(`🎬 ${label} → .mp4 (quality=${QUALITY}, crf=${H264_CRF}, preset=${X264_PRESET}, audio=${AUDIO_BITRATE}${kiLabel}) ...`);
+      console.log(`🎬 ${label} → .mp4 (quality=${QUALITY}, crf=${H264_CRF}, preset=${X264_PRESET}, audio=${AUDIO_BITRATE}${kiLabel}${mwLabel}) ...`);
       const start = Date.now();
 
       execFileSync(
@@ -115,6 +128,7 @@ for (const mp4Path of mp4Files) {
          [
             "-y",
             "-i", originalPath,
+            ...(SCALE_FILTER ? ["-vf", SCALE_FILTER] : []),
             "-c:v", "libx264",
             "-crf", String(H264_CRF),
             "-preset", X264_PRESET,
@@ -136,7 +150,7 @@ for (const mp4Path of mp4Files) {
    }
 
    if (webmOutdated) {
-      console.log(`🎬 ${label} → .webm (quality=${QUALITY}, crf=${VP9_CRF}, audio=${AUDIO_BITRATE}${kiLabel}) ...`);
+      console.log(`🎬 ${label} → .webm (quality=${QUALITY}, crf=${VP9_CRF}, audio=${AUDIO_BITRATE}${kiLabel}${mwLabel}) ...`);
       const start = Date.now();
 
       execFileSync(
@@ -144,6 +158,7 @@ for (const mp4Path of mp4Files) {
          [
             "-y",
             "-i", originalPath,
+            ...(SCALE_FILTER ? ["-vf", SCALE_FILTER] : []),
             "-c:v", "libvpx-vp9",
             "-crf", String(VP9_CRF),
             "-b:v", "0",
