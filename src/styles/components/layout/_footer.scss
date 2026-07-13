@@ -112,7 +112,7 @@
    &__icon {
       @include fluid-space(width, 180, 270);
       aspect-ratio: 270/180;
-      color: var(--color-light-blue);
+      color: var(--color-text);
 
       svg {
          width: 100% !important;

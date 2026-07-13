@@ -97,12 +97,12 @@
       color: var(--color-text);
       margin-inline: auto;
       gap: toRem(8);
-      @include fluid-space(margin-bottom, 20, 32);
+      &:not(:last-child) {
+         margin-bottom: toRem(64);
+      }
 
       .icon {
          font-size: toRem(12);
-         // currentColor → стрілка завжди кольору тексту кнопки: білий у спокої,
-         // темний на hover разом із текстом (white-btn), без окремих правил.
          color: currentColor;
          transition:
             translate var(--transition-base),
@@ -144,11 +144,24 @@
       // На десктопі не конфліктує з mouse-паралаксом: він рухає transform
       // самого img, а glow — filter на picture.
       img {
-         -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 95%);
+         -webkit-mask-image: linear-gradient(
+            to bottom,
+            #000 72%,
+            transparent 95%
+         );
          mask-image: linear-gradient(to bottom, #000 72%, transparent 95%);
+         // Safari іноді інакше трактує mask без явного no-repeat — фіксуємо,
+         // щоб маска завжди читалась однаково з Chrome.
+         -webkit-mask-repeat: no-repeat;
+         mask-repeat: no-repeat;
       }
       picture {
          animation: treatments-glow 6s ease-in-out infinite;
+         // Примусовий композитний шар — без цього Safari іноді не перераховує
+         // альфа-межі для drop-shadow, коли дочірній img замаскований, і glow
+         // просто не рендериться (не "інакше", а повністю відсутній).
+         will-change: filter;
+         transform: translateZ(0);
       }
    }
 
@@ -168,12 +181,18 @@
 
    &__dot {
       position: relative;
+      z-index: 2;
       width: toRem(28);
       height: toRem(28);
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(4px);
       box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+      // Дефолт — прихована. Burst-цикл (hotspot-burst.js) сам показує через
+      // GSAP, коли треба. Без цього дефолту, поки JS (динамічний import) ще
+      // не встиг завантажитись, усі крапки на мить видно — "спалах" перед тим
+      // як черга очікування ховається.
+      opacity: 0;
       transition:
          box-shadow var(--transition-base),
          transform 0.4s ease-out;
@@ -222,6 +241,24 @@
       border-radius: 50%;
       border: toRem(1) solid rgba(255, 255, 255, 0.2);
       animation: hotspot-pulse 2.4s ease-out infinite;
+   }
+
+   // ── Burst — canvas з "вибух"-ефектом (той самий, що в Partners), крапка
+   // циклічно виринає/ховається через нього; зона кліку (весь __hotspot) не
+   // залежить від цього і лишається активною завжди.
+   &__burst {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      translate: -50% -50%;
+      width: toRem(160);
+      height: toRem(160);
+      pointer-events: none;
+      z-index: 1;
+
+      canvas {
+         width: 100%;
+         height: 100%;
+      }
    }
 
    // ── Popup — прихований, показується на hover/tap ─────────────────────────
@@ -402,4 +439,3 @@
       animation: none;
    }
 }
-
