@@ -32,7 +32,7 @@
    }
 
    // Стагер — доти з'являються по черзі
-   @for $i from 1 through 7 {
+   @for $i from 1 through 10 {
       .video-banner__hotspots.is-visible &:nth-child(#{$i}) {
          transition-delay: #{($i - 1) * 0.22}s;
       }
