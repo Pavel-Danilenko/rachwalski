@@ -83,6 +83,10 @@ export function runIndependentDotCycle(canvas, dotEl, growDot, onCycleEnd) {
       cancelled = true;
       removeFrame(frame);
       gsap.killTweensOf(dotEl);
+      // Одразу ховаємо крапку, а не лишаємо на тому opacity, де застала
+      // відміна — інакше при рестарті групи (повернення з фону) старі
+      // крапки лишаються видимими аж до своєї черги за стагером.
+      gsap.set(dotEl, growDot ? { opacity: 0, scale: 0.7 } : { opacity: 0 });
       ctx.clearRect(0, 0, W, H);
       activeCancels.delete(cancel);
    }
@@ -91,7 +95,6 @@ export function runIndependentDotCycle(canvas, dotEl, growDot, onCycleEnd) {
    function cleanup() {
       cancel();
       done = true;
-      gsap.set(dotEl, growDot ? { opacity: 0, scale: 0.7 } : { opacity: 0 });
       onCycleEnd();
    }
 
