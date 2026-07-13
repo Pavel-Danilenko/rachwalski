@@ -60,8 +60,13 @@ function revealHotspots(container, animated) {
 }
 
 // Закриває один hotspot (прибирає is-open і повертає крапку в звичайний burst-цикл)
+// ⚠️ is-flipped навмисно НЕ чіпаємо тут — CSS читає цей клас для top/bottom
+// позиції попапу, і миттєве прибирання під час close() смикало б попап у
+// звичайну позицію ще поки триває fade-out (0.7s), даючи видимий "стрибок
+// вгору". Клас і так свіжо перераховується на кожному відкритті (рядок нижче
+// в обробнику кліку), тож прибирати його при закритті зайве.
 function closeHotspot(hotspot) {
-   hotspot.classList.remove("is-open", "is-flipped");
+   hotspot.classList.remove("is-open");
    hotspot._burstCycle?.releaseForce();
 }
 
