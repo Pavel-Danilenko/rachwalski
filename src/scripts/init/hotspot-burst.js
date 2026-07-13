@@ -6,8 +6,14 @@
 // Архітектура — прямий аналог partners.js: кожна крапка йде по колу повністю
 // НЕЗАЛЕЖНО від інших (з'явилась → потрималась → зникла → пауза → знову),
 // стартово розкидані по часу (як startStaggered у Partners), без жодної
-// координації "скільки видно одночасно" — саме так просив: просто безперервне
-// по колу, темп як у Partners, без обмежень в кількості.
+// координації "скільки видно одночасно".
+//
+// ⚠️ Один суцільний requestAnimationFrame-цикл на крапку (не setTimeout для
+// фаз) — саме так зроблено в partners.js, і не випадково: setTimeout-таймери
+// браузер притримує на згорнутій вкладці й може "вистрелити" кількома одразу
+// при поверненні (звідси був баг "усі крапки одночасно зникають/з'являються"
+// після перемикання вкладки). rAF + явна компенсація прихованого часу
+// (visibilitychange, той самий прийом що в partners.js) — цього позбавлені.
 
 import gsap from "gsap";
 import {
@@ -26,19 +32,33 @@ const DOT_GROW    = 1200;  // 0    → 1200 : малий світний дот �
 const STAR_BURST  = 3000;  // 1200 → 3000 : зірка росте і вибухає
 const NEBULA_END  = 5000;  // 3000 → 5000 : туманність розвіюється
 const HOLD_END    = 10000; // 5000 → 10000: крапка видно (5s)
-const HIDE_END    = 10600; // 10000 → 10600: крапка зникає
-const WAIT_END    = 12600; // 10600 → 12600: 2s пауза, потім цикл повторюється
+const WAIT_END    = 12600; // 10000 → 12600: зникає + 2s пауза, потім цикл повторюється
 const DOT_FADE_AT = 2600;  // сам dotEl починає з'являтись під час STAR_BURST
 
 function ease(t) { return 1 - Math.pow(1 - t, 3); }
 
-// Один прогін вибуху (грав/зірка/туманність) — до NEBULA_END, дот сам фейдиться
-// in на DOT_FADE_AT. Повертає { fadeOut, forceVisible } для контролю зовні.
-function drawBurst(canvas, dotEl, growDot) {
+// Повний незалежний цикл ОДНІЄЇ крапки — вибух → dotEl фейдиться in →
+// тримається → фейдиться out → пауза → onCycleEnd() (виклик перезапускає
+// цикл заново, як runIndependent у Partners).
+export function runIndependentDotCycle(canvas, dotEl, growDot, onCycleEnd) {
    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
    const W = canvas.offsetWidth;
    const H = canvas.offsetHeight;
-   if (!W || !H) return null;
+
+   if (!W || !H) {
+      // Canvas ще без розмірів (напр. прихований предок) — пробуємо наступний кадр.
+      let retryCancelled = false;
+      let inner = null;
+      requestAnimationFrame(() => {
+         if (retryCancelled) return;
+         inner = runIndependentDotCycle(canvas, dotEl, growDot, onCycleEnd);
+      });
+      return {
+         cancel: () => { retryCancelled = true; if (inner) inner.cancel(); },
+         forceVisible: () => { if (inner) inner.forceVisible(); },
+         releaseForce: () => { if (inner) inner.releaseForce(); },
+      };
+   }
 
    canvas.width  = W * dpr;
    canvas.height = H * dpr;
@@ -48,17 +68,47 @@ function drawBurst(canvas, dotEl, growDot) {
    const cy = H / 2;
 
    const puffs = buildPuffs();
-   const start = performance.now();
+   let start = performance.now();
+
+   let done = false;
    let cancelled = false;
-   let canvasDone = false;
+   let forcedOpen = false;
+   let fadeStarted = false;
+   let hideStarted = false;
 
    gsap.set(dotEl, growDot ? { opacity: 0, scale: 0.7 } : { opacity: 0 });
 
-   function cancelDraw() {
+   // ── Page Visibility: компенсуємо час поки вкладка прихована — той самий
+   // прийом, що в partners.js. Без цього при поверненні на вкладку "ms"
+   // стрибає на весь час простою одразу, і всі фази (фейд-ін/аут/рестарт)
+   // тригеряться миттєво одна за одною замість природного плину.
+   let hiddenAt = null;
+   const onVisibility = () => {
+      if (document.hidden) {
+         hiddenAt = performance.now();
+      } else if (hiddenAt !== null) {
+         start += performance.now() - hiddenAt;
+         hiddenAt = null;
+      }
+   };
+   document.addEventListener("visibilitychange", onVisibility);
+
+   function cancel() {
       if (cancelled) return;
       cancelled = true;
       removeFrame(frame);
+      document.removeEventListener("visibilitychange", onVisibility);
+      gsap.killTweensOf(dotEl);
       ctx.clearRect(0, 0, W, H);
+      activeCancels.delete(cancel);
+   }
+   activeCancels.add(cancel);
+
+   function cleanup() {
+      cancel();
+      done = true;
+      gsap.set(dotEl, growDot ? { opacity: 0, scale: 0.7 } : { opacity: 0 });
+      onCycleEnd();
    }
 
    let nebulaBaked = null;
@@ -86,15 +136,31 @@ function drawBurst(canvas, dotEl, growDot) {
    }
 
    function frame(now) {
-      if (cancelled || canvasDone) return;
-      if (document.hidden) { addFrame(frame); return; }
-
+      if (done || cancelled) return;
+      if (hiddenAt !== null) { // вкладка прихована — не малюємо, чекаємо повернення
+         addFrame(frame);
+         return;
+      }
       const ms = now - start;
 
+      if (!forcedOpen && !fadeStarted && ms >= DOT_FADE_AT) {
+         fadeStarted = true;
+         gsap.to(dotEl, growDot
+            ? { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
+            : { opacity: 1, duration: 0.5, ease: "power2.out" });
+      }
+      if (!forcedOpen && !hideStarted && ms >= HOLD_END) {
+         hideStarted = true;
+         gsap.to(dotEl, growDot
+            ? { opacity: 0, scale: 0.7, duration: 0.3, ease: "power2.in" }
+            : { opacity: 0, duration: 0.3, ease: "power2.in" });
+      }
+
+      if (ms >= WAIT_END) { cleanup(); return; }
+
+      // Idle-фаза (HOLD + WAIT) — canvas вже порожній, знижуємо частоту до ~2fps
       if (ms >= NEBULA_END) {
-         canvasDone = true;
-         removeFrame(frame);
-         ctx.clearRect(0, 0, W, H);
+         setTimeout(() => { if (!done && !cancelled) addFrame(frame); }, 500);
          return;
       }
 
@@ -120,64 +186,6 @@ function drawBurst(canvas, dotEl, growDot) {
    }
 
    addFrame(frame);
-   return { cancelDraw };
-}
-
-// Повний незалежний цикл ОДНІЄЇ крапки — точний аналог partners.js runCycle:
-// вибух → dotEl фейдиться in на DOT_FADE_AT → тримається до HOLD_END →
-// фейдиться out до HIDE_END → пауза до WAIT_END → onCycleEnd() (виклик
-// перезапускає цикл заново, як runIndependent у Partners).
-export function runIndependentDotCycle(canvas, dotEl, growDot, onCycleEnd) {
-   const draw = drawBurst(canvas, dotEl, growDot);
-   if (!draw) {
-      // Canvas ще без розмірів — пробуємо наступний кадр.
-      let retryCancelled = false;
-      const raf = requestAnimationFrame(() => {
-         if (retryCancelled) return;
-         inner = runIndependentDotCycle(canvas, dotEl, growDot, onCycleEnd);
-      });
-      let inner = null;
-      return {
-         cancel: () => { retryCancelled = true; cancelAnimationFrame(raf); if (inner) inner.cancel(); },
-         forceVisible: () => { if (inner) inner.forceVisible(); },
-         releaseForce: () => { if (inner) inner.releaseForce(); },
-      };
-   }
-
-   let forcedOpen = false;
-   let cancelled = false;
-   const cycleStart = performance.now();
-   const timers = [];
-
-   function cancel() {
-      if (cancelled) return;
-      cancelled = true;
-      timers.forEach(clearTimeout);
-      draw.cancelDraw();
-      gsap.killTweensOf(dotEl);
-      activeCancels.delete(cancel);
-   }
-   activeCancels.add(cancel);
-
-   timers.push(setTimeout(() => {
-      if (cancelled || forcedOpen) return;
-      gsap.to(dotEl, growDot
-         ? { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
-         : { opacity: 1, duration: 0.5, ease: "power2.out" });
-   }, DOT_FADE_AT));
-
-   timers.push(setTimeout(() => {
-      if (cancelled || forcedOpen) return;
-      gsap.to(dotEl, growDot
-         ? { opacity: 0, scale: 0.7, duration: 0.3, ease: "power2.in" }
-         : { opacity: 0, duration: 0.3, ease: "power2.in" });
-   }, HOLD_END));
-
-   timers.push(setTimeout(() => {
-      if (cancelled) return;
-      activeCancels.delete(cancel);
-      onCycleEnd();
-   }, WAIT_END));
 
    function forceVisible() {
       forcedOpen = true;
@@ -186,8 +194,8 @@ export function runIndependentDotCycle(canvas, dotEl, growDot, onCycleEnd) {
    }
    function releaseForce() {
       forcedOpen = false;
-      const elapsed = performance.now() - cycleStart;
-      const shouldBeHidden = elapsed >= HOLD_END || elapsed < DOT_FADE_AT;
+      const ms = performance.now() - start;
+      const shouldBeHidden = ms >= HOLD_END || ms < DOT_FADE_AT;
       if (shouldBeHidden) {
          gsap.to(dotEl, growDot
             ? { opacity: 0, scale: 0.7, duration: 0.3, ease: "power2.in" }
