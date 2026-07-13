@@ -87,7 +87,15 @@ export function runIndependentDotCycle(canvas, dotEl, growDot, onCycleEnd) {
       if (document.hidden) {
          hiddenAt = performance.now();
       } else if (hiddenAt !== null) {
-         start += performance.now() - hiddenAt;
+         const elapsed = performance.now() - hiddenAt;
+         // Реальне (не миттєве alt-tab) згортання — компенсація зсуває ВСІ
+         // крапки на ОДНАКОВУ дельту, тож на мить вони синхронно потрапляють
+         // в однакову відносну фазу циклу (видно як "всі разом вилізли, всі
+         // разом зникли", доки природний розкид знову не розійдеться). Для
+         // довгих простоїв додаємо ще й випадковий джиттер поверх реального
+         // часу — гарантує різну фазу одразу, а не лише після кількох циклів.
+         const jitter = elapsed > 1000 ? Math.random() * WAIT_END : 0;
+         start += elapsed + jitter;
          hiddenAt = null;
       }
    };
