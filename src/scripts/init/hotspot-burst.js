@@ -78,34 +78,10 @@ export function runIndependentDotCycle(canvas, dotEl, growDot, onCycleEnd) {
 
    gsap.set(dotEl, growDot ? { opacity: 0, scale: 0.7 } : { opacity: 0 });
 
-   // ── Page Visibility: компенсуємо час поки вкладка прихована — той самий
-   // прийом, що в partners.js. Без цього при поверненні на вкладку "ms"
-   // стрибає на весь час простою одразу, і всі фази (фейд-ін/аут/рестарт)
-   // тригеряться миттєво одна за одною замість природного плину.
-   let hiddenAt = null;
-   const onVisibility = () => {
-      if (document.hidden) {
-         hiddenAt = performance.now();
-      } else if (hiddenAt !== null) {
-         const elapsed = performance.now() - hiddenAt;
-         // Реальне (не миттєве alt-tab) згортання — компенсація зсуває ВСІ
-         // крапки на ОДНАКОВУ дельту, тож на мить вони синхронно потрапляють
-         // в однакову відносну фазу циклу (видно як "всі разом вилізли, всі
-         // разом зникли", доки природний розкид знову не розійдеться). Для
-         // довгих простоїв додаємо ще й випадковий джиттер поверх реального
-         // часу — гарантує різну фазу одразу, а не лише після кількох циклів.
-         const jitter = elapsed > 1000 ? Math.random() * WAIT_END : 0;
-         start += elapsed + jitter;
-         hiddenAt = null;
-      }
-   };
-   document.addEventListener("visibilitychange", onVisibility);
-
    function cancel() {
       if (cancelled) return;
       cancelled = true;
       removeFrame(frame);
-      document.removeEventListener("visibilitychange", onVisibility);
       gsap.killTweensOf(dotEl);
       ctx.clearRect(0, 0, W, H);
       activeCancels.delete(cancel);
@@ -145,10 +121,6 @@ export function runIndependentDotCycle(canvas, dotEl, growDot, onCycleEnd) {
 
    function frame(now) {
       if (done || cancelled) return;
-      if (hiddenAt !== null) { // вкладка прихована — не малюємо, чекаємо повернення
-         addFrame(frame);
-         return;
-      }
       const ms = now - start;
 
       if (!forcedOpen && !fadeStarted && ms >= DOT_FADE_AT) {
@@ -221,7 +193,7 @@ export function runHotspotGroup(hotspots, getCanvas, getDot, growDot = true) {
    if (!n) return { stopAll() {} };
 
    const step = WAIT_END / n;
-   const pendingTimeouts = [];
+   let pendingTimeouts = [];
 
    function startOne(idx, delay) {
       const hotspot = hotspots[idx];
@@ -241,15 +213,48 @@ export function runHotspotGroup(hotspots, getCanvas, getDot, growDot = true) {
       else begin();
    }
 
-   hotspots.forEach((_, i) => startOne(i, i * step));
+   function startAllStaggered() {
+      hotspots.forEach((_, i) => startOne(i, i * step));
+   }
+
+   function stopAll() {
+      pendingTimeouts.forEach(clearTimeout);
+      pendingTimeouts = [];
+      hotspots.forEach((h) => {
+         h._burstCycle?.cancel();
+         h._burstCycle = null;
+      });
+   }
+
+   startAllStaggered();
+
+   // Реальне (не миттєве alt-tab) згортання вкладки/додатку — простіше й
+   // надійніше повністю перезапустити групу зі свіжим розкидом, ніж
+   // намагатись компенсувати/зберігати точну фазу кожної крапки: та
+   // компенсація й так давала збій (усі крапки на мить синхронно потрапляли
+   // в однакову фазу циклу — "всі разом вилізли, всі разом зникли").
+   let hiddenAt = null;
+   const onVisibility = () => {
+      if (document.hidden) {
+         hiddenAt = performance.now();
+      } else if (hiddenAt !== null) {
+         const wasHiddenLong = performance.now() - hiddenAt > 1000;
+         hiddenAt = null;
+         if (wasHiddenLong) {
+            stopAll();
+            startAllStaggered();
+         }
+      }
+   };
+   document.addEventListener("visibilitychange", onVisibility);
+   const removeVisibilityListener = () => document.removeEventListener("visibilitychange", onVisibility);
+   activeCancels.add(removeVisibilityListener);
 
    return {
       stopAll() {
-         pendingTimeouts.forEach(clearTimeout);
-         hotspots.forEach((h) => {
-            h._burstCycle?.cancel();
-            h._burstCycle = null;
-         });
+         stopAll();
+         removeVisibilityListener();
+         activeCancels.delete(removeVisibilityListener);
       },
    };
 }
