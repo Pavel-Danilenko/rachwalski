@@ -117,14 +117,38 @@ function lockForIntro(video) {
       if (finished) return;
       finished = true;
       video.removeEventListener("timeupdate", onTimeUpdate);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       document.documentElement.classList.remove("intro-video");
+      // Ховаємо живий <video> і лишаємо статичний poster (той самий кадр,
+      // підтверджено пікселем-в-піксель) — так само як при SPA-поверненні
+      // нижче в setupPageIntro(). На відміну від <video>, статичну картинку
+      // мобільний браузер не може "скинути" на кадр з початку джерела після
+      // тривалого перебування вкладки у фоні — а живе відео може, навіть уже
+      // після "ended" (звідси репорт "наче відео перемоталось" після return).
+      video.pause();
+      video.autoplay = false;
+      video.preload = "none";
+      document.documentElement.classList.remove("intro-video-playing");
+      video.style.opacity = "0";
       markIntroDone();
+   };
+
+   // Вкладку згорнули посеред відтворення — браузер ставить відео на паузу
+   // (щоб не витрачати ресурси у фоні) на довільному, часто "перехідному"
+   // кадрі — звідси при поверненні видно кострубату позу замість фінальної.
+   // Просто завершуємо інтро (той самий finish(), що ховає відео і показує
+   // коректний poster), а не намагаємось "оживити" play() з випадкової точки.
+   const onVisibilityChange = () => {
+      if (!document.hidden && !finished && video.paused && !video.ended) {
+         finish();
+      }
    };
 
    if (video.ended) { finish(); return; }
 
    video.addEventListener("ended", finish, { once: true });
    video.addEventListener("timeupdate", onTimeUpdate);
+   document.addEventListener("visibilitychange", onVisibilityChange);
 
    const rate = video.dataset.playbackRate ? parseFloat(video.dataset.playbackRate) : 1;
    // Safari WebKit: playbackRate > 2 зависає. Обмежуємо до 2.
