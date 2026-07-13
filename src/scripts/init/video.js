@@ -143,15 +143,18 @@ function lockForIntro(video) {
       }
    }
 
-   // Watchdog 3с — якщо відео не заграло (autoplay заблокований браузером АБО
+   // Watchdog 4.5с — якщо відео не заграло (autoplay заблокований браузером АБО
    // повільний/глючний інет не встиг буферизувати) — показуємо фінальний кадр + доти.
    // Дивимось на ФАКТ відтворення, а не на ярлик з'єднання (Connection API бреше).
+   // Було 3с — на мобільному інеті встигало спрацювати ще до того як відео
+   // реально буферизувалось і почало грати (доти з'являлись передчасно поверх
+   // ще не завершеного відео).
    const fallbackTimer = setTimeout(() => {
       if (video.paused && !video.ended) {
          document.dispatchEvent(new CustomEvent("video-intro:fallback"));
          finish();
       }
-   }, 3000);
+   }, 4500);
    video.addEventListener("playing", () => clearTimeout(fallbackTimer), { once: true });
 }
 
