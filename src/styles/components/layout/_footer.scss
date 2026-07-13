@@ -135,7 +135,7 @@
    &:not(:last-child) {
       margin-bottom: toRem(40);
       @include respond-to("md") {
-         margin-bottom: toRem(60);
+         margin-bottom: toRem(90);
       }
    }
 
