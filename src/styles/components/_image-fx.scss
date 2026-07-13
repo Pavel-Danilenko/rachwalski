@@ -28,14 +28,17 @@
 }
 
 // ── 3D-нахил + лупа ───────────────────────────────────────────────────────────
-[data-image-fx] {
-   perspective: 900px; // глибина для 3D-нахилу обгортки картинки
-}
+// Перспектива навмисно НЕ на [data-image-fx] як окрема властивість — якщо
+// контейнер має backdrop-filter (напр. .glass-dark), Safari неправильно
+// композитить 3D-простір для нащадків і нахил виходить кривим. Замість цього
+// perspective() вбудований прямо в transform обгортки нижче (.fx-stage) —
+// працює однаково коректно в Chrome і Safari незалежно від backdrop-filter
+// на батьківському елементі.
 
 // Обгортка картинки (клас додає JS) — її й нахиляємо.
 .fx-stage {
    position: relative;
-   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
    transition: transform 0.2s ease;
    will-change: transform;
 
