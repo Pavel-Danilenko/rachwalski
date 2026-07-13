@@ -2,8 +2,9 @@
 // від TreatmentsHotspot елементи з тим самим функціоналом). Позиція кожного дота —
 // чистий CSS через --x/--y (відео покриває контейнер через object-fit: cover).
 //
-// Responsive координати: data-x-lg/data-y-lg (≤1199px), data-x-md/data-y-md (≤768px),
-// data-x-sm/data-y-sm (≤480px). Якщо атрибут не заданий — береться ширший breakpoint.
+// Responsive координати: data-x-lg/data-y-lg — планшет (768-1199px включно),
+// data-x-md/data-y-md — телефон (<768px), data-x-sm/data-y-sm (<480px).
+// Якщо атрибут не заданий — береться ширший breakpoint.
 // Приклад: <div class="video-hotspot" style="--x:51%;--y:23%" data-x-lg="55%" data-y-lg="28%">
 
 const BP_LG = 1199;
@@ -14,13 +15,25 @@ function applyResponsiveCoords(hotspots) {
    const w = window.innerWidth;
    hotspots.forEach((h) => {
       const d = h.dataset;
+
+      // Дефолтна (desktop) позиція задана інлайново в HTML (style="--x:...;--y:...").
+      // setProperty() нижче перезаписує той самий style-об'єкт, тож зберігаємо
+      // оригінал один раз — інакше при поверненні на desktop (жоден брейкпоінт
+      // не підходить) позиція лишиться "застряглою" на останній mobile/tablet.
+      if (d.defaultX === undefined) {
+         d.defaultX = h.style.getPropertyValue("--x");
+         d.defaultY = h.style.getPropertyValue("--y");
+      }
+
       let x, y;
-      if (w <= BP_SM && (d.xSm || d.ySm)) {
+      if (w < BP_SM && (d.xSm || d.ySm)) {
          x = d.xSm; y = d.ySm;
-      } else if (w <= BP_MD && (d.xMd || d.yMd)) {
+      } else if (w < BP_MD && (d.xMd || d.yMd)) {
          x = d.xMd; y = d.yMd;
       } else if (w <= BP_LG && (d.xLg || d.yLg)) {
          x = d.xLg; y = d.yLg;
+      } else {
+         x = d.defaultX; y = d.defaultY;
       }
       if (x) h.style.setProperty("--x", x);
       if (y) h.style.setProperty("--y", y);
