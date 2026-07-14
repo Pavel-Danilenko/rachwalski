@@ -43,6 +43,7 @@ add_action('wp_enqueue_scripts', 'rachwalski_assets');
 
 require_once get_theme_file_path('inc/acf-fields.php');
 require_once get_theme_file_path('inc/cpt-social-links.php');
+require_once get_theme_file_path('inc/cpt-treatment.php');
 require_once get_theme_file_path('inc/footer-settings.php');
 
 /**

@@ -1,16 +1,458 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageMain from "@components/ui/PageMain.astro";
-import footerBg from "@assets/img/footer/footer-bg-7.png";
-import ComingSoon from "@components/section/ComingSoon.astro";
+import "@styles/pages/_rhinoplasty.scss";
+import Img from "@components/media/Img.astro";
+import heroImg from "@assets/img/services/rhinoplasty/rhinoplasty-bg.png";
+import author from "@assets/img/services/rhinoplasty/author-small.png";
+import servicesContentLeft from "@assets/img/services/rhinoplasty/services-img-1.png";
+import servicesContentRight from "@assets/img/services/rhinoplasty/services-img-2.png";
+import Icon from "@components/ui/Icon.astro";
+import CardsSlider from "@/components/sliders/CardsSlider.astro";
+import Faq from "@components/section/Faq.astro";
+import SliderTopics from "@/components/sliders/SliderTopics.astro";
+import StepBanner from "@/components/section/StepBanner.astro";
+import footerBg from "@assets/img/footer/footer-bg.png";
+import ResponsiveImg from "@components/media/ResponsiveImg.astro";
+import heroDesktop from "@assets/img/services/rhinoplasty/rhinoplasty-bg.png";
+import heroMobile from "@assets/img/services/rhinoplasty/rhinoplasty-bg-mobile.png";
+const faqItems = [
+   {
+      question: "How long is the recovery time after a facelift?",
+      answer:
+         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+   },
+   {
+      question: "Who is Dr. Martin Rachwalski?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What are his main areas of expertise?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he perform aesthetic surgical procedures?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What non-surgical aesthetic treatments are available?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Where are the consultation locations?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his academic and research background?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "Does he treat complex congenital conditions?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "How can I book a consultation?",
+      answer: "Lorem ipsum...",
+   },
+   {
+      question: "What is his professional affiliation in France?",
+      answer: "Lorem ipsum...",
+   },
+];
 ---
 
 <BaseLayout
    title="Lip Filler"
-   description="Lip Filler page — coming soon."
+   description="Про нашу команду"
    footerBg={footerBg}
 >
    <PageMain>
-      <ComingSoon />
+      <section class="rhinoplasty-hero hero-circle">
+         <ResponsiveImg
+            srcDesktop={heroDesktop}
+            srcMobile={heroMobile}
+            alt="Hero"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={90}
+            wrapperClass="rhinoplasty-hero__img hero-mask hero-mask-top"
+         />
+
+         <div class="rhinoplasty-hero__container hero-full-vh">
+            <h1 class="rhinoplasty-hero__title t-center">
+               Lip Filler
+            </h1>
+         </div>
+      </section>
+
+      <section class="services-info dark-gradient__top">
+         <div class="services-info__container pb-80">
+            <div class="services-info__item br-20 glass">
+               <div class="services-info__row">
+                  <div class="services-info__column-left">
+                     <Img
+                        src={author}
+                        alt="Опис зображення"
+                        width={50}
+                        height={50}
+                        loading="lazy"
+                        wrapperClass="services-info__img"
+                     />
+                     <div class="services-info__description">
+                        <div class="services-info__name fw-600">
+                           Dr. Martin Rachwalski’s opinion
+                        </div>
+                        <div class="services-info__text fs-14">
+                           Specialist in blepharoplasty and eyelid surgery
+                        </div>
+                     </div>
+                  </div>
+                  <div class="services-info__column-right">
+                     <button
+                        type="button"
+                        class="services-info__btn white-btn btn--medium btn btn-16"
+                        data-popup-open="book">Book consultation</button
+                     >
+                  </div>
+               </div>
+               <div class="services-content__description">
+                  <p>
+                     “Lower blepharoplasty must be adapted to each facial
+                     structure. The transconjunctival approach is ideal for
+                     treating bags and reshaping the tear trough, while pinch
+                     blepharoplasty tightens the skin without affecting deeper
+                     structures. When properly selected, each technique provides
+                     an elegant, natural result that respects the expression of
+                     the eyes”
+                  </p>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="services-content bg-white light-gradientp-top">
+         <div class="services-content__container pb-80">
+            <div class="services-content__row ct-black">
+               <div class="services-content__column-left">
+                  <div
+                     class="services-content__inner mb-60"
+                     id="procedure-overview"
+                     data-toc-section
+                  >
+                     <h2 class="services-content__title mb-12">
+                        Procedure overview
+                     </h2>
+                     <div class="services-content__text t-style mb-40">
+                        <p>
+                           Your journey begins with a detailed consultation,
+                           during which Dr. Martin Rachwalski will assess your
+                           facial structure, listen to your goals, and create a
+                           customized surgical plan.
+                        </p>
+                        <p>
+                           The procedure is performed under safe, controlled
+                           conditions with the latest surgical techniques. Most
+                           patients can return to light activities within a
+                           week, with final results gradually refining over the
+                           following months.
+                        </p>
+                     </div>
+                     <div class="services-content__images mb-40">
+                        <Img
+                           src={servicesContentLeft}
+                           alt="Опис зображення"
+                           width={450}
+                           height={450}
+                           loading="lazy"
+                           wrapperClass="services-content__img br-8"
+                        />
+                        <Img
+                           src={servicesContentRight}
+                           alt="Опис зображення"
+                           width={450}
+                           height={450}
+                           loading="lazy"
+                           wrapperClass="services-content__img br-8"
+                        />
+                     </div>
+                     <h3 class="services-content__subtitle mb-12 fs-24">
+                        Subtitle
+                     </h3>
+                     <div class="services-content__text t-style mb-40">
+                        <p>
+                           Lorem ipsum dolor sit amet, consectetur adipiscing
+                           elit, sed do eiusmod tempor incididunt ut labore et
+                           dolore magna aliqua. Ut enim ad minim veniam, quis
+                           nostrud exercitation ullamco laboris nisi ut aliquip
+                           ex ea commodo consequat. Duis aute irure dolor in
+                           reprehenderit in voluptate velit esse cillum dolore
+                           eu fugiat nulla pariatur. Excepteur sint occaecat
+                           cupidatat non proident, sunt in culpa qui officia
+                           deserunt mollit anim id est laborum.
+                        </p>
+                        <p>
+                           Lorem ipsum dolor sit amet, consectetur adipiscing
+                           elit, sed do eiusmod tempor incididunt ut labore .
+                        </p>
+                     </div>
+                     <h3 class="services-content__subtitle mb-12 fs-24">
+                        Subtitle
+                     </h3>
+                     <div class="services-content__text t-style">
+                        <p>
+                           Lorem ipsum dolor sit amet, consectetur adipiscing
+                           elit, sed do eiusmod tempor incididunt ut labore et
+                           dolore magna aliqua. Ut enim ad minim veniam, quis
+                           nostrud exercitation ullamco laboris nisi ut aliquip
+                           ex ea commodo consequat. Duis aute irure dolor in
+                           reprehenderit in voluptate velit esse cillum dolore
+                           eu fugiat nulla pariatur. Excepteur sint occaecat
+                           cupidatat non proident, sunt in culpa qui officia
+                           deserunt mollit anim id est laborum.
+                        </p>
+                     </div>
+                  </div>
+                  <div
+                     class="services-content__inner services-facts mb-60"
+                     id="quick-facts"
+                     data-toc-section
+                  >
+                     <h2 class="services-content__title mb-40">Quick facts</h2>
+                     <div class="services-facts__row">
+                        <div
+                           class="services-facts__inner bg-white-medium br-20"
+                        >
+                           <div class="services-facts__icon">
+                              <Icon name="clock" />
+                           </div>
+                           <div class="services-facts__description">
+                              <div class="services-facts__text">
+                                 Surgery Duration
+                              </div>
+                              <div class="services-facts__time fs-20 fw-400">
+                                 1hr 30min - 2hrs
+                              </div>
+                           </div>
+                        </div>
+                        <div
+                           class="services-facts__inner bg-white-medium br-20"
+                        >
+                           <div class="services-facts__icon">
+                              <Icon name="bed" />
+                           </div>
+                           <div class="services-facts__description">
+                              <div class="services-facts__text">
+                                 Hospitalization
+                              </div>
+                              <div class="services-facts__time fs-20 fw-400">
+                                 Not needed
+                              </div>
+                           </div>
+                        </div>
+                        <div
+                           class="services-facts__inner bg-white-medium br-20"
+                        >
+                           <div class="services-facts__icon">
+                              <Icon name="clinick" />
+                           </div>
+                           <div class="services-facts__description">
+                              <div class="services-facts__text">
+                                 Clinic Visit
+                              </div>
+                              <div class="services-facts__time fs-20 fw-400">
+                                 2-3 times
+                              </div>
+                           </div>
+                        </div>
+                        <div
+                           class="services-facts__inner bg-white-medium br-20"
+                        >
+                           <div class="services-facts__icon">
+                              <Icon name="injection" />
+                           </div>
+                           <div class="services-facts__description">
+                              <div class="services-facts__text">
+                                 Anaesthesia
+                              </div>
+                              <div class="services-facts__time fs-20 fw-400">
+                                 General/Sedative
+                              </div>
+                           </div>
+                        </div>
+                        <div
+                           class="services-facts__inner bg-white-medium br-20"
+                        >
+                           <div class="services-facts__icon">
+                              <Icon name="face" />
+                           </div>
+                           <div class="services-facts__description">
+                              <div class="services-facts__text">
+                                 Stich Removal
+                              </div>
+                              <div class="services-facts__time fs-20 fw-400">
+                                 1-2 weeks after
+                              </div>
+                           </div>
+                        </div>
+                        <div
+                           class="services-facts__inner bg-white-medium br-20"
+                        >
+                           <div class="services-facts__icon">
+                              <Icon name="work" />
+                           </div>
+                           <div class="services-facts__description">
+                              <div class="services-facts__text">
+                                 Recovery Period
+                              </div>
+                              <div class="services-facts__time fs-20 fw-400">
+                                 Return to daily activities in 2 weeks
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div
+                     class="services-content__inner services-technology mb-60"
+                     id="technology"
+                     data-toc-section
+                  >
+                     <h2 class="services-content__title mb-40">
+                        Technology & techniques
+                     </h2>
+                     <CardsSlider />
+                  </div>
+                  <div
+                     class="services-content__inner services-goals mb-60"
+                     id="benefits"
+                     data-toc-section
+                  >
+                     <h2 class="services-content__title mb-40">
+                        Benefits & goals
+                     </h2>
+                     <div class="services-goals__row">
+                        <div
+                           class="services-goals__inner bg-white-medium br-20"
+                        >
+                           <div class="services-goals__number fs-24">/01</div>
+                           <div class="services-goals__description">
+                              <div class="services-goals__title fs-20">
+                                 Primary Rhinoplasty
+                              </div>
+                              <div class="services-goals__text">
+                                 First-time nose reshaping.
+                              </div>
+                           </div>
+                        </div>
+                        <div
+                           class="services-goals__inner bg-white-medium br-20"
+                        >
+                           <div class="services-goals__number fs-24">/02</div>
+                           <div class="services-goals__description">
+                              <div class="services-goals__title fs-20">
+                                 Secondary / Revision rhinoplasty
+                              </div>
+                              <div class="services-goals__text">
+                                 Correction of previous surgery.
+                              </div>
+                           </div>
+                        </div>
+                        <div
+                           class="services-goals__inner bg-white-medium br-20"
+                        >
+                           <div class="services-goals__number fs-24">/03</div>
+                           <div class="services-goals__description">
+                              <div class="services-goals__title fs-20">
+                                 Ethnic Rhinoplasty
+                              </div>
+                              <div class="services-goals__text">
+                                 Tailored approach respecting ethnic features.
+                              </div>
+                           </div>
+                        </div>
+                        <div
+                           class="services-goals__inner bg-white-medium br-20"
+                        >
+                           <div class="services-goals__number fs-24">/04</div>
+                           <div class="services-goals__description">
+                              <div class="services-goals__title fs-20">
+                                 Cleft-related rhinoplasty
+                              </div>
+                              <div class="services-goals__text">
+                                 Reconstructive correction.
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="services-content__column-right">
+                  <div
+                     class="services-content__table services-table br-20 glass"
+                     data-toc
+                  >
+                     <div class="services-table__title fs-24 mb-20">
+                        Table of contents
+                     </div>
+                     <div class="services-table__list" data-slide-nav>
+                        <a
+                           href="#procedure-overview"
+                           data-goto="#procedure-overview"
+                           class="services-table__link"
+                        >
+                           Procedure overview
+                        </a>
+                        <a
+                           href="#quick-facts"
+                           data-goto="#quick-facts"
+                           class="services-table__link"
+                        >
+                           Quick facts
+                        </a>
+                        <a
+                           href="#technology"
+                           data-goto="#technology"
+                           class="services-table__link"
+                        >
+                           Technology & techniques
+                        </a>
+                        <a
+                           href="#benefits"
+                           data-goto="#benefits"
+                           class="services-table__link"
+                        >
+                           Benefits & goals
+                        </a>
+                        <span
+                           class="services-table__indicator"
+                           data-slide-indicator></span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="topics dark-gradient__bottom mt-1">
+         <div class="topics__container pt-80 pb-80">
+            <div class="topics__inner mb-40">
+               <h2 class="topics__title ct-black mb-12">
+                  Explore related topics
+               </h2>
+               <div class="topics__text ct-black fs-20">
+                  Relevant medical topics for deeper understanding
+               </div>
+            </div>
+            <SliderTopics />
+         </div>
+      </section>
+
+      <Faq items={faqItems} class="pt-80 pb-80" />
+
+      <section class="step-banner">
+         <div class="step-banner__container pt-80 pb-80">
+            <StepBanner />
+         </div>
+      </section>
    </PageMain>
 </BaseLayout>

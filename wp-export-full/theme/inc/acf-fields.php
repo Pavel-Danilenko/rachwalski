@@ -104,4 +104,39 @@ if (function_exists('acf_add_local_field_group')) {
          ],
       ],
    ]);
+
+   // ── Поля для CPT "Treatment" — фіксована частина шаблону (hero) ──────────
+   // Все інше нижче на сторінці — вільний контент через the_content() (Gutenberg
+   // + власні ACF Blocks), навмисно НЕ окремі ACF-поля тут — див. пам'ять проєкту.
+   acf_add_local_field_group([
+      'key'    => 'group_treatment_hero',
+      'title'  => 'Treatment hero',
+      'fields' => [
+         [
+            'key'           => 'field_treatment_hero_image',
+            'label'         => 'Hero image (desktop)',
+            'name'          => 'hero_image',
+            'type'          => 'image',
+            'return_format' => 'url',
+         ],
+         [
+            'key'           => 'field_treatment_hero_image_mobile',
+            'label'         => 'Hero image (mobile)',
+            'name'          => 'hero_image_mobile',
+            'type'          => 'image',
+            'instructions'  => 'Якщо порожньо — на мобільному теж використовується десктопне зображення.',
+            'return_format' => 'url',
+         ],
+      ],
+      'location' => [
+         [
+            [
+               'param'    => 'post_type',
+               'operator' => '==',
+               'value'    => 'treatment',
+            ],
+         ],
+      ],
+      'position' => 'acf_after_title',
+   ]);
 }

@@ -6147,3 +6147,381 @@ html.form-modal-open body::before {
   padding-right: 0.9375rem;
   margin: 0 auto;
 }
+
+/* ── Treatment/Service pages (single-treatment.php) ──────────────────────
+   Скопійовано з dist-wp/css/rhinoplasty*.css (npm run build-wp) — Astro/Vite
+   коректно резолвить @styles-аліаси, чого не робить голий sass CLI. Цей
+   шаблон спільний для всіх Treatment-записів, тож стилі — тут, глобально.
+   Джерело: src/styles/pages/_rhinoplasty.scss + компоненти (CardsSlider/
+   SliderTopics), винесені Vite в окремі чанки. */
+.topics-slider {
+  position: relative;
+}
+.topics-slider__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: absolute;
+  right: 0;
+  z-index: 2;
+  top: -6rem;
+}
+@media (max-width: 47.99875em) {
+  .topics-slider__controls {
+    position: relative;
+    top: initial;
+    justify-content: center;
+  }
+  .topics-slider__controls:not(:first-child) {
+    margin-top: 1.5rem;
+  }
+}
+.topics-slider__arrow {
+  position: static;
+  width: clamp(38px, (1.8449503708vw + 23.8311501421px), 48px);
+  height: clamp(38px, (1.8449503708vw + 23.8311501421px), 48px);
+  border-radius: 50%;
+  gap: clamp(20px, (1.8449503708vw + 5.8311501421px), 30px);
+  border: solid 0.0625rem var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 47.99875em) {
+  .topics-slider__arrow {
+    border: solid 0.0625rem var(--color-white);
+    color: var(--color-white);
+  }
+}
+
+.topics-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  padding: clamp(20px, (0.7379801483vw + 14.3324600568px), 24px);
+}
+.topics-card:hover .topics-card__icon {
+  translate: 0.25rem -0.25rem;
+}
+.topics-card__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: clamp(8px, (1.4759602967vw + -3.3350798864px), 16px);
+}
+.topics-card__icon {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  color: var(--color-light-blue);
+  transition: translate var(--transition-base);
+}
+.rhinoplasty-hero {
+  position: relative;
+}
+.rhinoplasty-hero__img {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.rhinoplasty-hero__img img {
+  object-position: top;
+}
+.rhinoplasty-hero__container {
+  position: relative;
+  padding-top: clamp(90px, (7.0108114092vw + 36.1583705398px), 128px);
+}
+@media (max-width: 47.9375em) {
+  .rhinoplasty-hero__container {
+    padding-bottom: clamp(1.25rem, (4.4742729306vw + 0.3551454139rem), 2.5rem);
+  }
+}
+@media (min-width: 48em) and (max-width: 74.9375em) {
+  .rhinoplasty-hero__container {
+    padding-bottom: clamp(3.125rem, (2.3201856148vw + 2.0113109049rem), 3.75rem);
+  }
+}
+@media (min-width: 75em) {
+  .rhinoplasty-hero__container {
+    padding-bottom: clamp(4.375rem, (4.1666666667vw + 1.25rem), 5rem);
+  }
+}
+@media (max-width: 47.9375em) {
+  .rhinoplasty-hero__container {
+    margin-bottom: clamp(1.25rem, (4.4742729306vw + 0.3551454139rem), 2.5rem);
+  }
+}
+@media (min-width: 48em) and (max-width: 74.9375em) {
+  .rhinoplasty-hero__container {
+    margin-bottom: clamp(3.125rem, (2.3201856148vw + 2.0113109049rem), 3.75rem);
+  }
+}
+@media (min-width: 75em) {
+  .rhinoplasty-hero__container {
+    margin-bottom: clamp(4.375rem, (4.1666666667vw + 1.25rem), 5rem);
+  }
+}
+.rhinoplasty-hero__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  z-index: 3;
+}
+
+.services-info {
+  position: relative;
+}
+.services-info__container {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 47.99875em) {
+  .services-info__container {
+    padding-top: 2.5rem;
+  }
+}
+.services-info__item {
+  position: relative;
+}
+@media (min-width: 47.99875em) {
+  .services-info__item {
+    margin-top: clamp(-80px, (-7.3798014833vw + 16.6753994318px), -40px);
+  }
+}
+.services-info__item {
+  padding: clamp(20px, (2.213940445vw + 2.9973801705px), 32px);
+}
+.services-info__row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.services-info__row:not(:last-child) {
+  margin-bottom: clamp(20px, (0.7379801483vw + 14.3324600568px), 24px);
+}
+.services-info__column-left {
+  display: flex;
+  align-items: center;
+  column-gap: 0.75rem;
+}
+.services-info__img {
+  flex-shrink: 0;
+  width: 3.125rem;
+  height: 3.125rem;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+.services-info__description {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.25rem;
+}
+@media (max-width: 47.99875em) {
+  .services-info__column-right {
+    flex-grow: 1;
+  }
+}
+
+.services-content__description {
+  font-size: clamp(14px, (1.8449503708vw + -0.1688498579px), 24px);
+  font-style: italic;
+}
+
+.services-content {
+  position: relative;
+}
+.services-content__container {
+  position: relative;
+  z-index: 2;
+}
+.services-content__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+@media (max-width: 47.99875em) {
+  .services-content__row {
+    flex-direction: column-reverse;
+  }
+}
+.services-content__column-left {
+  flex: 1;
+  flex-basis: 30rem;
+  align-items: flex-start;
+  width: 100%;
+}
+.services-content__images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(8px, (0.7379801483vw + 2.3324600568px), 12px);
+}
+.services-content__img {
+  overflow: hidden;
+  width: 100%;
+}
+.services-content__column-right {
+  flex-shrink: 0;
+  flex-basis: 20rem;
+}
+@media (max-width: 53.375em) {
+  .services-content__column-right {
+    flex-grow: 1;
+    flex-basis: auto;
+  }
+}
+
+.services-facts__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: clamp(8px, (0.7379801483vw + 2.3324600568px), 12px);
+}
+@media (max-width: 68.75em) {
+  .services-facts__row {
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+  }
+}
+@media (max-width: 30em) {
+  .services-facts__row {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+}
+.services-facts__inner {
+  padding: clamp(20px, (0.7379801483vw + 14.3324600568px), 24px);
+  display: flex;
+  align-items: center;
+  column-gap: clamp(12px, (1.1069702225vw + 3.4986900852px), 18px);
+}
+.services-facts__icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.services-table {
+  padding: 1rem;
+  position: sticky;
+  top: 1.25rem;
+  color: var(--color-black);
+}
+.services-table__list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.25rem;
+  position: relative;
+}
+.services-table__link {
+  font-size: 1rem;
+  color: var(--color-black);
+  padding-block: clamp(8px, (0.3689900742vw + 5.1662300284px), 10px);
+  padding-inline: clamp(10px, (0.7379801483vw + 4.3324600568px), 14px);
+  font-weight: 400;
+  position: relative;
+  z-index: 1;
+}
+.services-table__indicator {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
+  border-radius: var(--radius-xl);
+  transition: var(--transition-slow);
+  background-color: var(--color-overlay-medium);
+}
+
+.services-goals__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(21.25rem, 1fr));
+  gap: clamp(8px, (0.7379801483vw + 2.3324600568px), 12px);
+}
+@media (max-width: 68.75em) {
+  .services-goals__row {
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+  }
+}
+@media (max-width: 30em) {
+  .services-goals__row {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+}
+.services-goals__inner {
+  padding: clamp(20px, (0.7379801483vw + 14.3324600568px), 24px);
+  display: flex;
+  align-items: flex-start;
+  column-gap: clamp(12px, (1.1069702225vw + 3.4986900852px), 18px);
+}
+.services-goals__description {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.25rem;
+}
+
+@media (min-width: 48em) and (max-width: 62.5em) {
+  .cards-slider .swiper-wrapper {
+    flex-wrap: wrap;
+  }
+}.cards-slider {
+  position: relative;
+}
+.cards-slider__card {
+  padding: clamp(20px, (0.7379801483vw + 14.3324600568px), 24px);
+  flex-grow: 1;
+}
+
+@media (max-width: 47.99875em) {
+  .cards-slider .swiper {
+    margin-right: -0.9375rem;
+  }
+}
+
+@media (min-width: 47.99875em) {
+  .cards-slider .swiper-wrapper {
+    display: flex;
+    gap: 0.75rem;
+  }
+}
+
+.cards-slider .swiper-slide {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: auto;
+}
+@media (min-width: 47.99875em) {
+  .cards-slider .swiper-slide {
+    flex-shrink: unset;
+  }
+}
+
+.cards-slider .slider__arrow {
+  position: relative;
+  top: auto;
+  font-size: 0.75rem;
+  left: initial;
+  right: initial;
+  transform: translateY(0%);
+  z-index: 2;
+  background-color: transparent;
+  color: var(--color-secondary);
+  border: solid var(--color-secondary) var(--border-sm);
+}
+
+.cards-slider__controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.cards-slider__controls:not(:first-child) {
+  margin-top: 0.75rem;
+}
+@media (min-width: 47.99875em) {
+  .cards-slider__controls {
+    display: none;
+  }
+}
