@@ -204,6 +204,15 @@ function initTreatmentsHotspot() {
    // При resize — перераховуємо позиції і закриваємо відкриті popup
    window.addEventListener("resize", () => {
       document.querySelectorAll("[data-hotspot].is-open").forEach(closeHotspot);
+      // Мобільна гілка кліку ставить inline left/top/transform для
+      // центрування "скляного" попапу — без цього скидання вони лишаються
+      // на елементі й перекривають десктопне позиціонування (яке рахує
+      // positionHotspot() нижче) після ресайзу через брейкпоінт без релоаду.
+      document.querySelectorAll(".treatments__popup").forEach((popup) => {
+         popup.style.left = "";
+         popup.style.top = "";
+         popup.style.transform = "";
+      });
       positionAllHotspots();
    });
 }

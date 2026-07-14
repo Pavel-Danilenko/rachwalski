@@ -219,6 +219,15 @@ function initVideoHotspots() {
 
    window.addEventListener("resize", () => {
       container.querySelectorAll(".video-hotspot.is-open").forEach(closeHotspot);
+      // Мобільна гілка кліку ставить inline left/top/transform для
+      // центрування "скляного" попапу — без цього скидання вони лишаються
+      // на елементі й перекривають десктопні CSS-позиції (top/left:14px)
+      // після ресайзу через брейкпоінт без релоаду сторінки.
+      container.querySelectorAll(".video-hotspot__popup").forEach((popup) => {
+         popup.style.left = "";
+         popup.style.top = "";
+         popup.style.transform = "";
+      });
       applyResponsiveCoords(hotspots);
    });
 }
