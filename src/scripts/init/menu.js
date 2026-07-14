@@ -276,6 +276,7 @@ class Menu {
       this.boundHandleOutsideClick = this.handleOutsideClickEvent.bind(this);
       this.boundHandleEscape = this.handleEscapeEvent.bind(this);
       this.boundFocusTrap = this.handleFocusTrap.bind(this);
+      this.boundHandleVisibility = this.handleVisibilityEvent.bind(this);
 
       // Скидаємо стан
       this.resetState();
@@ -368,6 +369,7 @@ class Menu {
       this.menu.addEventListener("click", this.menuClickHandler);
       document.addEventListener("click", this.boundHandleOutsideClick);
       document.addEventListener("keydown", this.boundHandleEscape);
+      document.addEventListener("visibilitychange", this.boundHandleVisibility);
    }
 
    removeEventListeners() {
@@ -377,6 +379,7 @@ class Menu {
       document.removeEventListener("click", this.boundHandleOutsideClick);
       document.removeEventListener("keydown", this.boundHandleEscape);
       document.removeEventListener("keydown", this.boundFocusTrap);
+      document.removeEventListener("visibilitychange", this.boundHandleVisibility);
    }
 
    // ==========================================
@@ -609,6 +612,17 @@ class Menu {
             e.preventDefault();
             first.focus();
          }
+      }
+   }
+
+   // Довге перебування вкладки у фоні може затримати/зупинити setTimeout,
+   // що знімає isAnimating (див. toggle()) — лишившись true назавжди, він
+   // блокує ВСІ подальші кліки по бургеру/хрестику. На поверненні у фокус
+   // 300мс анімація в реальному часі вже точно завершилась, тож розблоковуємо.
+   handleVisibilityEvent() {
+      if (!document.hidden && this.isAnimating) {
+         this.isAnimating = false;
+         this.trigger.classList.remove("is-animating");
       }
    }
 
