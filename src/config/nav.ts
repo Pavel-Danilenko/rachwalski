@@ -71,55 +71,19 @@ export const nav = {
    },
 
    // ── Facial Assessment (тимчасові плейсхолдери) ───────────────────────────
-   faUpperForeheadAnalysis:   { label: "Forehead analysis",      url: "/forehead-analysis" },
    faUpperBrowAssessment:     { label: "Brow assessment",        url: "/brow-assessment" },
    faUpperEyelidEvaluation:   { label: "Eyelid evaluation",      url: "/eyelid-evaluation" },
-
-   faMidCheekAssessment:      { label: "Cheek assessment",       url: "/cheek-assessment" },
-   faMidNasalEvaluation:      { label: "Nasal evaluation",       url: "/nasal-evaluation" },
-
-   faLowerJawline:            { label: "Jawline assessment",     url: "/jawline-assessment" },
-   faLowerChin:               { label: "Chin evaluation",        url: "/chin-evaluation" },
-   faLowerLip:                { label: "Lip analysis",           url: "/lip-analysis" },
-   faLowerNeck:               { label: "Neck assessment",        url: "/neck-assessment" },
-
-   faOtherEar:                { label: "Ear assessment",         url: "/ear-assessment" },
-   faOtherSkin:               { label: "Skin quality",           url: "/skin-quality" },
-   faOtherHarmony:            { label: "Overall harmony",        url: "/overall-harmony" },
-   faOtherSymmetry:           { label: "Facial symmetry",        url: "/facial-symmetry" },
 
    // ── Facial Surgery (тимчасові плейсхолдери) ──────────────────────────────
    fsNoseRhinoplasty:         { label: "Rhinoplasty",            url: "/rhinoplasty" },
    fsNoseSeptoplasty:         { label: "Septoplasty",            url: "/septoplasty" },
-   fsNoseTipRefinement:       { label: "Tip refinement",         url: "/tip-refinement" },
 
    fsEarsOtoplasty:           { label: "Otoplasty",              url: "/otoplasty" },
-   fsEarsEarlobeRepair:       { label: "Earlobe repair",         url: "/earlobe-repair" },
-
-   fsEyelidsUpper:            { label: "Upper blepharoplasty",   url: "/upper-blepharoplasty" },
-   fsEyelidsLower:            { label: "Lower blepharoplasty",   url: "/lower-blepharoplasty" },
-   fsEyelidsPtosis:           { label: "Ptosis correction",      url: "/ptosis-correction" },
-
-   fsFaceNeckFacelift:        { label: "Facelift",               url: "/facelift" },
-   fsFaceNeckNecklift:        { label: "Neck lift",              url: "/neck-lift" },
-   fsFaceNeckBrowLift:        { label: "Brow lift",              url: "/brow-lift" },
 
    // ── Aesthetic Medicine (тимчасові плейсхолдери) ───────────────────────────
    amBotoxForehead:           { label: "Forehead lines",         url: "/forehead-lines" },
-   amBotoxCrowsFeet:          { label: "Crow's feet",            url: "/crows-feet" },
-   amBotoxGlabellar:          { label: "Glabellar lines",        url: "/glabellar-lines" },
 
    amHaLipFiller:             { label: "Lip filler",             url: "/lip-filler" },
-   amHaCheekAugmentation:     { label: "Cheek augmentation",     url: "/cheek-augmentation" },
-   amHaNasolabial:            { label: "Nasolabial folds",       url: "/nasolabial-folds" },
-
-   amCollagenSculptra:        { label: "Sculptra",               url: "/sculptra" },
-   amCollagenRadiesse:        { label: "Radiesse",               url: "/radiesse" },
-   amCollagenProfhilo:        { label: "Profhilo",               url: "/profhilo" },
-
-   amRfMorpheus:              { label: "Morpheus8",              url: "/morpheus8" },
-   amRfSecretRf:              { label: "Secret RF",              url: "/secret-rf" },
-   amRfFractional:            { label: "Fractional RF",          url: "/fractional-rf" },
 
    // ── З дочірніми пунктами ──────────────────────────────────────────────
    // services: {

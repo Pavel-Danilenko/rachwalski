@@ -18,6 +18,11 @@ import { googleFonts, buildGoogleFontsUrl } from "@config/fonts";
 import type { ImageMetadata } from "astro";
 import { getImage } from "astro:assets";
 import footerBgDefault from "@assets/img/footer/footer-bg.png";
+// Дефолтний фоновий трек — тепер глобальний (кнопка на всіх сторінках, не
+// тільки на головній). musicSrc/musicWebm пропси лишаються як можливість
+// перевизначити трек на конкретній сторінці за потреби.
+import defaultAudioMp3 from "@assets/audio/2005-instrumental-eric-heron-musicbed.mp3";
+import defaultAudioWebm from "@assets/audio/2005-instrumental-eric-heron-musicbed.webm";
 
 interface Props {
    title?: string;
@@ -70,8 +75,8 @@ const {
    hideChrome = false,
    introVideo = false,
    preloader = "default",
-   musicSrc,
-   musicWebm,
+   musicSrc = defaultAudioMp3,
+   musicWebm = defaultAudioWebm,
    // Глобальний дефолт анімації переходу для всього сайту (міняєш тут одним словом).
    transition = "fade",
    // Глобальні дефолти тривалості переходу (трохи довші — щоб стилі встигали застосуватись).

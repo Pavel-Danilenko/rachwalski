@@ -27,12 +27,38 @@ function rachwalski_register_treatment_cpt() {
       'supports'     => ['title', 'editor', 'thumbnail', 'excerpt'],
       'has_archive'  => false, // немає /treatments/-архіву в URL, кожна сторінка окремо
       'rewrite'      => [
-         'slug'       => '', // плаский URL: /rhinoplasty, не /treatment/rhinoplasty
+         // '' тут НЕ працює — register_post_type() трактує порожній рядок як
+         // "не задано" (empty() у ядрі WP) і підставляє замість нього назву
+         // CPT. '/' — непорожній рядок, тому фолбек не спрацьовує, а сегмент
+         // залишається порожнім: /rhinoplasty, не /treatment/rhinoplasty.
+         'slug'       => '/',
          'with_front' => false,
       ],
    ]);
 }
 add_action('init', 'rachwalski_register_treatment_cpt');
+
+/**
+ * Плаский URL (rewrite slug: '/') резолвиться WP у query var "name" БЕЗ
+ * post_type — а WP_Query за замовчуванням шукає "name" лише серед звичайних
+ * post, тому CPT-записи так ніколи не знаходились (перевірено: пряме 404).
+ * Тут — якщо реально існує Treatment з таким slug, підставляємо post_type
+ * явно. Активується ТІЛЬКИ коли такий запис справді є, тож на звичайні
+ * сторінки/пости жодного впливу.
+ */
+function rachwalski_treatment_flat_url_request($query_vars) {
+   if (empty($query_vars['name']) || !empty($query_vars['post_type']) || !empty($query_vars['pagename'])) {
+      return $query_vars;
+   }
+
+   $treatment = get_page_by_path($query_vars['name'], OBJECT, 'treatment');
+   if ($treatment) {
+      $query_vars['post_type'] = 'treatment';
+   }
+
+   return $query_vars;
+}
+add_filter('request', 'rachwalski_treatment_flat_url_request');
 
 /**
  * Таксономія категорій — ієрархічна (як стандартні WP-категорії), для
