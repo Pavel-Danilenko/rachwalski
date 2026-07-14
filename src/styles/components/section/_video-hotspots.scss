@@ -129,6 +129,7 @@
       position: absolute;
       top: toRem(14);
       left: toRem(14);
+      z-index: 3;
       opacity: 0;
       pointer-events: none;
       transform: scale(0.96);
