@@ -142,11 +142,21 @@ function initVideoHotspots() {
             // перевернуту позицію і клас тригериться навпаки.
             const popupBox = hotspot.querySelector(".video-hotspot__popup-box");
             if (popupBox) {
-               hotspot.classList.remove("is-flipped");
+               // data-vertical="down" — для дотів, де попап краще виглядає
+               // знизу за замовчуванням (замість звичного "зверху"), з тим
+               // самим фолбеком у протилежний бік, якщо там нема місця.
+               const preferDown = hotspot.dataset.vertical === "down";
                const header = document.querySelector(".header");
                const minTop = header ? header.getBoundingClientRect().bottom : 0;
-               const overflowsTop = popupBox.getBoundingClientRect().top < minTop;
-               hotspot.classList.toggle("is-flipped", overflowsTop);
+
+               hotspot.classList.toggle("is-flipped", preferDown);
+               if (preferDown) {
+                  const overflowsBottom = popupBox.getBoundingClientRect().bottom > window.innerHeight;
+                  if (overflowsBottom) hotspot.classList.remove("is-flipped");
+               } else {
+                  const overflowsTop = popupBox.getBoundingClientRect().top < minTop;
+                  hotspot.classList.toggle("is-flipped", overflowsTop);
+               }
 
                // Те саме по горизонталі: спочатку повертаємо на авторську
                // (назовні) сторону, міряємо, і якщо попап вилазить за межі
