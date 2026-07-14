@@ -117,19 +117,7 @@ function lockForIntro(video) {
       if (finished) return;
       finished = true;
       video.removeEventListener("timeupdate", onTimeUpdate);
-      document.removeEventListener("visibilitychange", onVisibilityChange);
       document.documentElement.classList.remove("intro-video");
-      // Ховаємо живий <video> і лишаємо статичний poster (той самий кадр,
-      // підтверджено пікселем-в-піксель) — так само як при SPA-поверненні
-      // нижче в setupPageIntro(). На відміну від <video>, статичну картинку
-      // мобільний браузер не може "скинути" на кадр з початку джерела після
-      // тривалого перебування вкладки у фоні — а живе відео може, навіть уже
-      // після "ended" (звідси репорт "наче відео перемоталось" після return).
-      video.pause();
-      video.autoplay = false;
-      video.preload = "none";
-      document.documentElement.classList.remove("intro-video-playing");
-      video.style.opacity = "0";
       markIntroDone();
    };
 
@@ -137,20 +125,35 @@ function lockForIntro(video) {
    // може лишитись на довільному, часто "перехідному" кадрі (кострубата
    // поза), а на деяких мобільних браузерах video.paused при цьому й не
    // стає true (декодер просто заморожений/скинутий), тож перевіряти стан
-   // відео ненадійно. Просто завершуємо інтро (finish() ховає відео і
-   // показує коректний poster) щоразу як вкладка знову стала видимою, поки
-   // інтро ще не завершилось — надійніше, ніж намагатись "оживити" play().
+   // відео ненадійно. Просто завершуємо інтро щоразу як вкладка знову стала
+   // видимою, поки інтро ще не завершилось.
+   //
+   // Якщо інтро вже завершилось РАНІШЕ і відео просто лишається видимим на
+   // останньому кадрі (звичайний, коректний стан спокою) — довге реальне
+   // перебування у фоні може змусити мобільний браузер скинути декодований
+   // буфер на кадр з початку джерела при поверненні. НЕ підміняємо відео
+   // окремою статичною картинкою (вона візуально не завжди 1-в-1 збігається
+   // з реальним останнім кадром — темніший фон на десктопі, помітний
+   // "стрибок" при КОЖНОМУ завершенні інтро) — натомість просто перемотуємо
+   // те саме відео назад на його справжній останній кадр.
    const onVisibilityChange = () => {
-      if (!document.hidden && !finished) {
-         finish();
-      }
+      if (document.hidden) return;
+      if (!finished) finish();
+      // Незалежно від того, щойно завершили інтро вище чи воно вже давно
+      // було завершене — перемотуємо на справжній останній кадр щоразу як
+      // вкладка знову видима (сам виклик дешевий і безпечний навіть якщо
+      // currentTime вже там, де треба).
+      if (video.duration) video.currentTime = video.duration;
    };
 
-   if (video.ended) { finish(); return; }
+   if (video.ended) { finish(); }
 
    video.addEventListener("ended", finish, { once: true });
    video.addEventListener("timeupdate", onTimeUpdate);
    document.addEventListener("visibilitychange", onVisibilityChange);
+   // Живе довше за finish() (навмисно — виправляє скинутий кадр і після
+   // завершення інтро), тож прибираємо його самі на page:leave нижче.
+   video._introVisibilityHandler = onVisibilityChange;
 
    const rate = video.dataset.playbackRate ? parseFloat(video.dataset.playbackRate) : 1;
    // Safari WebKit: playbackRate > 2 зависає. Обмежуємо до 2.
@@ -452,4 +455,10 @@ document.addEventListener("page:leave", () => {
    if (document.documentElement.classList.contains("intro-video")) {
       document.documentElement.classList.remove("intro-video");
    }
+   document.querySelectorAll(selectorAttr).forEach((video) => {
+      if (video._introVisibilityHandler) {
+         document.removeEventListener("visibilitychange", video._introVisibilityHandler);
+         video._introVisibilityHandler = null;
+      }
+   });
 });
